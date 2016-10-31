@@ -18,7 +18,7 @@ install:
 
 script:
   - python src/manage.py test feedback
-  - coverage run --omit="*/migrations*" --source="." manage.py test feedback
+  - coverage run --omit="*/migrations*" --source="." src/manage.py test feedback
 
 after_success:
   coveralls
