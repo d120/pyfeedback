@@ -1,0 +1,58 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[newdimens]{labels}
+\usepackage{ngerman}
+\usepackage[utf8]{inputenc}
+\input ean13
+\LabelCols=2
+\LabelRows=6
+\LeftPageMargin=9mm
+\RightPageMargin=9mm
+\TopPageMargin=22mm
+\BottomPageMargin=22mm
+\InterLabelColumn=2mm
+\InterLabelRow=2mm
+\LeftLabelBorder=1mm
+\RightLabelBorder=1mm
+\TopLabelBorder=1mm
+\BottomLabelBorder=5mm
+\LabelInfotrue
+
+\newcommand{\mylabel}[2]{\addresslabel[\fboxsep=3pt]
+{\begin{tiny}
+\underline{
+#1
+}
+\end{tiny}
+
+\vspace{5mm}
+#2
+}
+}
+
+\newcommand{\sendlabel}[1]{\mylabel{Fachschaft Informatik, Feedback, Hochschulstr. 10, S202 - D120}{#1}}
+
+% #1 Empfänger 
+% #2 Anschrift
+% #3 Veranstaltungen
+% #4 Kennung
+\newcommand{\labelpack}[4]{
+\mylabel{#3}{
+\begin{minipage}{3cm}
+\barheight=1.9cm
+\EAN #4
+\end{minipage}
+\begin{minipage}{3cm}
+\barheight=1.9cm
+\EAN #4
+\end{minipage}
+}
+\sendlabel{Hauspost\\
+#1
+\\#2
+\\#3}}
+%\adrentry{Emp Fänger}{S202 D120}{Grundlagen der Agrarphilosophie I}{1337}{en}{Vorlesung und Übung}{2000000001005}{Mi, 18:00 Uhr}{42}
+\newcommand{\adrentry}[9]{\labelpack{#1}{#2}{#3}{#7}}
+
+\begin{document}
+\input{veranstalter.adr}
+\end{document}

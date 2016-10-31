@@ -1,0 +1,96 @@
+\documentclass[accentcolor=tud7a]{tudletter}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{url}
+\usepackage{wasysym}
+\usepackage{enumitem}
+\usepackage{etex}
+\input ean13
+
+\setkomavar{frominstitution}{Fachschaft Informatik}
+\setkomavar{fromlogo}{\includegraphics{das-wesen-der-informatik}}
+\setkomavar{fromname}{Feedbackteam}
+\setkomavar{fromaddress}{Hochschulstr. 10\\64289 Darmstadt}
+\setkomavar{fromphone}{06151 16-25522}
+\setkomavar{fromemail}{feedback@d120.de}
+
+\setkomavar{signature}{i.A. Fachschaft Informatik}
+
+\setkomavar{shortfromname}{Feedbackteam}
+
+% definierte Parameter:
+% Name des Empfängers #1
+% Adresse des Empfängers #2
+% Veranstaltungsname #3
+% Anzahl Fragebögen #4 Nicht in Verwendung
+% Sprache Fragebögen #5
+% Typ #6 Nicht in Verwendung
+% Kennung #7
+% Termin der Übung #8
+% Kennziffer der Übung #9
+
+\begin{document}
+\renewcommand*{\adrentry}[9]{%in eckigen Klammern Anzahl der Parameter
+\setkomavar{myref}{#7}
+\setkomavar{subject}[]{Evaluation Übung \textbf{#3}}
+\begin{letter}{Hauspost\\#1\\$\mathrm{^c\!/\!_o}$ #2\\#3\\
+\barheight=1cm
+\EAN #7
+}
+
+\opening{Liebe*r Tutor*in, liebe*r Übungsbetreuer*in,}
+
+dieses Anschreiben sollten Sie von der Lehrkraft zusammen mit ausreichend Fragebögen zur Evaluation der Lehre am Fachbereich Informatik für Ihre Übungsgruppen erhalten haben. In diesem Schreiben haben wir alle wichtigen Informationen für Sie zusammengefasst.\\
+
+\noindent\textbf{Disclaimer:}
+\begin{itemize}[partopsep=0pt, topsep=-\parskip, parsep=0pt, itemsep=0pt, leftmargin=*, rightmargin=130px]
+\item{}Evaluation bitte in der Woche \input{erhebungswoche.inc}durchführen
+\item{}Evaluationsrichtlinien der TU Darmstadt untersagen eigene Auswertungen
+\item{}Wenn die Bögen erst nach der Evaluationswoche bei uns eingehen, kann die Bearbeitung länger dauern.
+\end{itemize}
+\vspace{5mm}
+\textbf{Termin der Übungsgruppe: #8}\\
+\textbf{zugehörige Kennziffer: #9}\\
+\\
+\textbf{Checklist:}
+\begin{itemize}[partopsep=0pt, topsep=-\parskip, parsep=0pt, itemsep=0pt, leftmargin=*, rightmargin=130px]
+\item[\Square]Studierenden \underline{vorab} genauen Evaluationstermin Ihrer Übungsgruppe mitteilen
+\item[\Square]zur individuellen Auswertung müssen die Studierenden die Kennziffer der Übungsgruppe angeben
+\item[\Square]bei kleinen Übungsgruppen die Studierenden auffordern, zur Wahrung der Anonymität, die Angabe zum Geschlecht nicht auszufüllen
+\item[\Square]\underline{vor dem Austeilen} der Fragebögen zwei Studierende finden, welche alle Bögen zur Fachschaft Informatik (Gebäude S2|02 Raum D120) zurückbringen (sollte niemand im Fachschaftsraum sein, Bögen in den Briefkasten des Studiensekretariats vor C117 werfen)
+\item[\Square]leere Fragebögen bitte ebenfalls an uns zurücksenden
+\end{itemize}
+\vspace{5mm}
+\textbf{Bitte Wenden}
+
+\encl{Übungsfragebögen, Sprache: #5} %taucht auch auf Seite zwei auf
+\end{letter}
+
+\setkomavar{myref}{#7}
+\setkomavar{subject}[Betreff: ]{Antwort: \textbf{#3}}
+
+
+\begin{letter}{Hauspost -- \textbf {Antwort}\\
+Fachschaft Informatik\\
+z.Hd. Feedback-Team\\
+S2 02 -- D120\\
+#3\\
+\barheight=1cm
+\EAN #7
+}
+
+\opening{}
+
+\noindent Diese Seite bitte für das Zurücksenden der ausgefüllten und \underline{leeren} Bögen oben auf den Stapel legen. Wir benötigen den Barcode!
+\\\\
+\noindent Weitere Informationen finden Sie auf unserer Webseite\\ \url{http://d120.de/feedback-new/} \\
+Mit Fragen oder Anregungen wenden Sie sich bitte per E-Mail an\\
+\url{feedback@d120.de}\\
+\closing{Vielen Dank für Ihre Mühe,}
+
+\encl{Übungsfragebögen, Sprache: #5}
+\end{letter}
+}
+
+\input{veranstalter_tutor.adr}
+\end{document}

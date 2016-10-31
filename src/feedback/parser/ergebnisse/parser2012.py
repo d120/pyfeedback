@@ -1,0 +1,62 @@
+# coding = utf-8
+
+from feedback.models import Fragebogen2012
+from feedback.parser.ergebnisse.parser import Parser
+
+
+class Parser2012(Parser):
+    @classmethod
+    def create_fragebogen(cls, veranst, frageb):
+        Fragebogen2012.objects.create(
+            veranstaltung = veranst,
+            fach = cls.parse_fach(frageb[1]),
+            abschluss = cls.parse_abschluss(frageb[3]),
+            semester = cls.parse_semester(frageb[4]),
+            geschlecht = cls.parse_geschlecht(frageb[5]),
+            studienberechtigung = cls.parse_studienberechtigung(frageb[6]),
+            v_wie_oft_besucht = cls.parse_int(frageb[7]),
+            v_besuch_ueberschneidung = cls.parse_boolean(frageb[8]),
+            v_besuch_qualitaet = cls.parse_boolean(frageb[9]),
+            v_besuch_verhaeltnisse = cls.parse_boolean(frageb[10]),
+            v_besuch_privat = cls.parse_boolean(frageb[11]),
+            v_besuch_sonstiges = cls.parse_boolean(frageb[12]),
+            v_4 = cls.parse_int(frageb[14]),
+            v_5 = cls.parse_int(frageb[15]),
+            v_6 = cls.parse_int(frageb[16]),
+            v_7 = cls.parse_int(frageb[17]),
+            v_8 = cls.parse_int(frageb[18]),
+            v_9 = cls.parse_int(frageb[19]),
+            v_10 = cls.parse_int(frageb[20]),
+            v_10a = cls.parse_geschwindigkeit(frageb[21]),
+            v_11 = cls.parse_int(frageb[22]),
+            v_12 = cls.parse_int(frageb[23]),
+            v_13 = cls.parse_int(frageb[24]),
+            v_14 = cls.parse_int(frageb[25]),
+            v_15 = cls.parse_int(frageb[26]),
+            v_16 = cls.parse_int(frageb[27]),
+            v_gesamt = cls.parse_int(frageb[28]),
+            ue_wie_oft_besucht = cls.parse_int(frageb[29]),
+            ue_besuch_ueberschneidung = cls.parse_boolean(frageb[30]),
+            ue_besuch_qualitaet = cls.parse_boolean(frageb[31]),
+            ue_besuch_verhaeltnisse = cls.parse_boolean(frageb[32]),
+            ue_besuch_privat = cls.parse_boolean(frageb[33]),
+            ue_besuch_sonstiges = cls.parse_boolean(frageb[34]),
+            ue_4 = cls.parse_int(frageb[36]),
+            ue_5 = cls.parse_int(frageb[37]),
+            ue_6 = cls.parse_int(frageb[38]),
+            ue_7 = cls.parse_int(frageb[39]),
+            ue_8 = cls.parse_int(frageb[40]),
+            ue_9 = cls.parse_int(frageb[41]),
+            ue_10 = cls.parse_int(frageb[42]),
+            ue_11 = cls.parse_int(frageb[43]),
+            ue_12 = cls.parse_int(frageb[44]),
+            ue_13 = cls.parse_int(frageb[45]),
+            ue_13a = cls.parse_niveau(frageb[46]),
+            ue_14 = cls.parse_int(frageb[47]),
+            ue_15 = cls.parse_int(frageb[48]),
+            ue_gesamt = cls.parse_int(frageb[49]),
+            zusaetzliche_zeit = cls.parse_int(frageb[50]),
+            vorwissen_aussreichend = cls.parse_int(frageb[51]),
+            empfehlung = cls.parse_int(frageb[52]),
+            gesamt = cls.parse_int(frageb[55]),
+        )

@@ -1,0 +1,30 @@
+{% extends "bestellung_base.html" %}
+
+{% block title %}Anschreiben erzeugen{% endblock %}
+
+{% block content %}
+<h1>Anschreiben erzeugen</h1>
+
+<p>Das Anschreiben ist ein Brief an die Veranstalter, der den Fragebögen beigefügt wird.</p>
+<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+<p>
+{% include 'includes/semesterauswahl.html' %}<br />
+<label for="abgabedatum">Erhebungswoche:</label> <input type="text" id="erhebungswoche" name="erhebungswoche" value="{{erhebungswoche}}"></input><br />
+</p>
+<p>Zu erzeugende Datei:
+<fieldset>
+<input type="radio" id="anschreiben" name="vorlage" value="Anschreiben"><label for="anschreiben"> Anschreiben</label><br>
+<input type="radio" id="aufkleber" name="vorlage" value="Aufkleber"><label for="aufkleber"> Aufkleber</label><br>
+<input type="radio" id="grosseaufkleber" name="vorlage" value="Grossaufkleber"><label for="grosseaufkleber"> Aufkleber (nur für große Veranstaltungen >= 85)</label><br>
+</fieldset>
+<p>
+<input type="submit" name="submit" value="PDF erzeugen" />
+</p>
+</form>
+
+{% if texlog %}
+<h2>Fehler bei der Ausführung von pdflatex</h2>
+<pre>{{texlog}}</pre>
+{% endif %}
+
+{% endblock %}

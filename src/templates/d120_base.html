@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>{% load static %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<head>
+	<title>{% block title %}Leere Seite{% endblock %} - Evaluation der Lehre</title>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+
+	<link rel="stylesheet" type="text/css" href="/d120de/css/head.css" />
+	<link rel="stylesheet" type="text/css" href="/d120de/css/layout.css" />
+	<link rel="stylesheet" type="text/css" href="/d120de/css/typography.css" />
+	<link rel="stylesheet" type="text/css" media="print" href="/d120de/css/print.css" />
+	<!--<link rel="stylesheet" type="text/css" href="/d120de/css/form.css" />-->
+	<link rel="stylesheet" type="text/css" href="{% static 'ranking.css' %}" /> {% block extra_header %}{% endblock %}
+</head>
+
+<body>
+
+	<div id="Header">
+		<a href="/das-wesen/"><img src="/d120de/images/das-wesen-der-informatik.png" id="wesen" title="Das Wesen der Informatik" alt="Das Wesen der Informatik" /></a>
+		<a href="http://www.tu-darmstadt.de/"><img src="/d120de/images/athene.png" alt="Athene der TU Darmstadt" title="Athene der TU Darmstadt" id="athene" /></a>
+
+		<h1>Fachschaft Informatik</h1>
+		<h2>Evaluation der Lehre / Feedback</h2>
+	</div>
+
+	<div id="Subheader">
+		<ul id="Menu1">
+			<li class="section"><a href="/startseite/">Startseite</a></li>
+			<li class="link"><a href="http://daswesentliche.d120.de/">das Wesentliche</a></li>
+			<li class="link"><a href="/forum/">Forum</a></li>
+		</ul>
+		<div id="MenuSpacerLeft"></div>
+		<div id="MenuSpacerRight"></div>
+
+		<ul id="Submenu">
+			<li class="link"><a href="/fachschaft/" title="Gehe zur Seite &quot;Fachschaft&quot;">Fachschaft</a></li>
+			<li class="section"><a href="/studenten/" title="Gehe zur Seite &quot;Studenten&quot;">Studenten</a></li>
+			<li class="link"><a href="/studienanfaenger/" title="Gehe zur Seite &quot;Studienanfänger&quot;">Studienanfänger</a></li>
+			<li class="link"><a href="/schueler/" title="Gehe zur Seite &quot;Schüler&quot;">Schüler</a></li>
+			<li class="link"><a href="/dozenten/" title="Gehe zur Seite &quot;Dozenten&quot;">Dozenten</a></li>
+			<li class="link"><a href="/firmen/" title="Gehe zur Seite &quot;Firmen&quot;">Firmen</a></li>
+			<li class="link"><a href="https://www.fachschaft.informatik.tu-darmstadt.de/buchaktion/" title="Gehe zur Seite &quot;Buchaktion&quot;">Buchaktion</a></li>
+			<li class="link"><a href="/verein/" title="Gehe zur Seite &quot;Verein&quot;">Verein</a></li>
+		</ul>
+	</div>
+
+	<div id="ContentContainer">
+
+		<div id="leftSidebar">
+			<ul class="leftSidebarBox" id="Menu2">
+				<li class="link">
+					<a href="/feedback-new/" title="Gehe zur Seite &quot;Feedback&quot;">Feedback</a>
+				</li>
+
+				<li>
+					<ul id="Menu3">
+						<li class="link">
+							<a href="/feedback-faq/" title="Zeige Seite FAQ">FAQ</a>
+						</li>
+						<li class="link">
+							<a href="/hall-of-fame/" title="Zeige Seite Hall of Fame">Hall of Fame</a>
+						</li>
+						<li class="{% block section_ergebnisse %}link{% endblock %}">
+							<a href="{% if request.user.is_superuser %}{% url 'intern-ergebnisse' %}{% else %}{% url 'public-results' %}{% endif %}" title="Zeige Seite Ergebnisse">Ergebnisse</a>
+						</li>
+						<li class="{% block section_veranstalter %}link{% endblock %}">
+							<a href="{% url 'veranstalter-index' %}" title="Zeige Seite Webinterface">Webinterface</a>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+
+		<div id="Content" class="typography">
+
+			{% if request.session.orig_uid %}
+			<div class="breadcrumbs">
+				Du nutzt momentan die Rechte der Veranstalter von {{veranstaltung}}. <a href="{% url 'rechte_zuruecknehmen' %}">Zu meinem Account zurückkehren.</a>
+			</div>
+			{% endif %} {% if messages %}
+			<ul class="messagelist">
+				{% for message in messages %}
+				<li class="{{ message.tags }}">{{ message }}</li>
+				{% endfor %}
+			</ul>
+			{% endif %} {% block content %}{% endblock %}
+			<br /> {% block backlink %}{% endblock %}
+		</div>
+	</div>
+	<div id="Footer">
+		<div class="Footer_wesen"><img src="/d120de/images/das-wesen-der-informatik_unten.png" alt="Das Wesen der Informatik" /></div>
+		<p>Fachschaft Informatik der Technischen Universität Darmstadt
+			<br />
+			<a href="/kontakt">Kontakt</a> &bull;
+			<a href="/kontakt">Impressum</a></p>
+	</div>
+</body>
+
+</html>

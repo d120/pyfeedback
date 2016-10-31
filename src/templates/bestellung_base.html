@@ -1,0 +1,5 @@
+{% extends "d120_base.html" %} {% block section_veranstalter %}current{% endblock %} {% block backlink %} {% if request.user.is_superuser %}
+<p><a href="{% url 'intern-index' %}">zurück zum internen Bereich</a></p>
+{% else %}
+<p><a href="{% url 'veranstalter-index' %}">zurück zum Veranstalterbereich</a></p>
+{% endif %} {% endblock %}

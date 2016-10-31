@@ -1,0 +1,49 @@
+{% extends "bestellung_base.html" %}{% load staticfiles %} {% block title %}Veranstalterbereich{% endblock %} {% block content %}
+
+<p>
+	eingeloggt für <strong>{{veranstaltung.name}} ({{veranstaltung.semester.short}})</strong><br />
+	<a href="{% url 'django.contrib.auth.views.logout' %}">ausloggen</a>
+</p>
+
+<h2>Fragebogenbestellung Schritt 5 von 5</h2>
+<h3>Ablauf</h3>
+<ol>
+	<li>Basisdaten</li>
+	<li>Datenüberprüfung</li>
+	<li>Freie Fragen</li>
+	<li>Details zur Übung{% if not object.has_uebung %} (Übersprungen){% endif %}</li>
+	<li><strong>Zusammenfassung</strong></li>
+</ol>
+{% if not object.has_uebung %}
+<h2>Hinweis</h2>
+<p>Schritt 4 wurde übersprungen, da Ihre Veranstaltung keine Übung hat.</p>
+{% endif %}
+<h2>Zusammenfassung Ihrer Bestellung</h2>
+<p>Folgende Daten wurden gespeichert:</p>
+
+<ul>
+	<li>Veranstaltungsname: {{ object.name }}</li>
+	<li>Typ: {{ object.get_typ_display }}</li>
+	<li>Sprache der Fragebögen: {{ object.get_sprache_display }}</li>
+	<li>Anzahl der Fragebögen: {{ object.anzahl }}{% if object.has_uebung %} * 2 (Für Vorlesung und Übung werden getrennte Bögen verschickt){% endif %}</li>
+	<li>Verantwortlich:
+		<ul>
+			<li>Name: {{ object.verantwortlich }}</li>
+			<li>Anschrift: {{ object.verantwortlich.anschrift }}</li>
+			<li>Fachgebiet: {{ object.verantwortlich.fachgebiet }}</li>
+		</ul>
+	</li>
+	<li>Empfänger der Ergebnisse:
+		<ul>{% for empf in object.ergebnis_empfaenger.all %}
+			<li>{{ empf }}</li>
+			{% endfor %}</ul>
+	</li>
+	<li>1. Freie Frage: {{ object.freiefrage1|default:"Keine Frage angegeben" }}</li>
+	<li>2. Freie Frage: {{ object.freiefrage2|default:"Keine Frage angegeben" }}</li>
+	{% if object.has_uebung %}
+	<li>Kleingruppen: {{ object.kleingruppen|linenumbers|linebreaks}}</li>{% endif %}
+</ul>
+<p>Vielen Dank, Ihre Bestellung wurde gespeichert! Sie können sich jetzt <a href="{% url 'django.contrib.auth.views.logout' %}">ausloggen</a>.</p>
+<p><a href="{% url 'veranstalter-index' %}">Daten der Bestellung ändern.</a></p>
+{% endblock %} {% block backlink %}
+<!-- kein Backlink -->{% endblock %}

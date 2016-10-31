@@ -1,0 +1,176 @@
+#Content {
+	width: 750px;
+}
+
+#Content form textarea.fullwidth {
+	width: auto;
+}
+
+.ranking_header {
+	clear: both;
+}
+
+	.ranking_header .label {
+		padding-left: 5px;
+		width: 371px;
+		height: 20px;
+		float: left;
+		border-bottom: 1px solid #666;
+	}
+	
+	.ranking_header .label.last {
+		width: 370px;
+		height: 21px;
+		border-bottom: none;
+		border-right: 1px solid #666;
+	}
+	
+	.ranking_header .label.selected {
+		/* background-color: #bbb; */
+		font-weight: bold;
+	}
+	
+	.ranking_header .spacer {
+		float: left;
+	}
+	
+		.ranking_header .spacer.horizontal {
+			width: 31px;
+			height: 20px;
+			border-bottom: 1px solid #666;
+		}
+	
+		.ranking_header .spacer.vertical {
+			width: 30px;
+			height: 21px;
+			border-right: 1px solid #666;
+		}
+
+.ranking_table {
+	border-collapse: collapse;	
+	padding: 0;
+}
+
+.ranking_table a {
+	color: black;
+}
+
+.ranking_row td {
+	border: none;
+	border-right: 1px solid #666;
+	border-bottom: 1px solid #666;
+}
+
+.border td {
+	border-bottom: 1px solid black;
+}
+
+.ranking_row.row1, .cycle.row1 {
+	background-color: #dadada;
+}
+
+.ranking_row.row2, .cycle.row2 {
+}
+
+.ranking_row .selected {
+	background-color: #bbb;
+}
+
+.ranking_row .label {
+	width: 370px;
+	padding-left: 5px;
+	padding-right: 0;
+}
+
+.ranking_row .data {
+	width: 30px;
+	padding-left: 0;
+	padding-right: 0;
+	text-align: center;
+}
+
+.invalid {
+	color: #888;
+}
+
+#ranking_details th {
+	padding-left: 5px;
+	padding-right: 5px;
+	text-align: left;
+}
+
+#ranking_details td {
+	text-align: center;
+}
+
+.clear {
+	clear: both;
+}
+
+fieldset {
+	margin-bottom: 20px;
+}
+
+legend {
+	font-weight: bold;
+}
+
+
+/*
+Die folgenden Definitionen basieren auf dem Django-Quelltext. Lizenz:
+
+Copyright (c) Django Software Foundation and individual contributors.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
+
+    1. Redistributions of source code must retain the above copyright notice, 
+       this list of conditions and the following disclaimer.
+    
+    2. Redistributions in binary form must reproduce the above copyright 
+       notice, this list of conditions and the following disclaimer in the
+       documentation and/or other materials provided with the distribution.
+
+    3. Neither the name of Django nor the names of its contributors may be used
+       to endorse or promote products derived from this software without
+       specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+
+ul.messagelist {
+    padding: 0 0 5px 0;
+    margin: 0;
+}
+
+ul.messagelist li, ul.errorlist li {
+    font-size: 12px;
+    display: block;
+    padding: 4px 5px 4px 25px;
+    margin: 0 0 3px 0;
+    border-bottom: 1px solid #ddd;
+    color: #666;
+    background: #ffc 5px .3em no-repeat;
+}
+
+ul.messagelist li.success{
+    background-image: url(/feedback_admin_media/img/admin/icon_success.gif);
+}
+
+ul.messagelist li.warning{
+    background-image: url(/feedback_admin_media/img/admin/icon_alert.gif);
+}
+
+ul.messagelist li.error, ul.errorlist li {
+    background-image: url(/feedback_admin_media/img/admin/icon_error.gif);
+}

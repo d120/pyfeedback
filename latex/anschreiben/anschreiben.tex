@@ -1,0 +1,104 @@
+\documentclass[accentcolor=tud7a]{tudletter}
+\usepackage{etex}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{url}
+\usepackage{wasysym}
+\usepackage{enumitem}
+\usepackage{ifthen}
+\input ean13
+\usepackage{courier}
+\setkomavar{frominstitution}{Fachschaft Informatik}
+\setkomavar{fromlogo}{\includegraphics{das-wesen-der-informatik}}
+\setkomavar{fromname}{Feedbackteam}
+\setkomavar{fromaddress}{Hochschulstr. 10\\64289 Darmstadt}
+\setkomavar{fromphone}{06151 16-25522}
+\setkomavar{fromemail}{feedback@d120.de}
+
+\setkomavar{signature}{i.A. Fachschaft Informatik}
+
+\setkomavar{shortfromname}{Feedbackteam}
+
+% definierte Parameter:
+% Name des Empfängers #1
+% Adresse des Empfängers #2
+% Veranstaltungsname #3
+% Anzahl Fragebögen #4
+% Sprache Fragebögen #5
+% Typ #6
+% Kennung #7
+% Freie Frage1 #8
+% Freie Frage2 #9
+
+\begin{document}
+\renewcommand*{\adrentry}[9]{%in eckigen Klammern Anzahl der Parameter
+\setkomavar{myref}{#7}
+\setkomavar{subject}[]{Evaluation \textbf{#6: #3}}
+\begin{letter}{Hauspost\\#1\\#2\\#3\\
+\barheight=1cm
+%\X=0.396mm
+\EAN #7
+}
+
+\opening{Sehr geehrte Damen und Herren,}
+
+als Anlage zu diesem Schreiben finden Sie die Fragebögen zur Evaluation der Lehre am Fachbereich 
+Informatik. In diesem Schreiben haben wir alle wichtigen Informationen für Sie zusammengefasst.\\
+
+\noindent\textbf{Disclaimer:}
+\begin{itemize}[partopsep=0pt, topsep=-\parskip, parsep=0pt, itemsep=0pt, leftmargin=*, rightmargin=130px]
+\item{}Evaluation bitte in der Woche \input{erhebungswoche.inc}durchführen
+\item{}Evaluationsrichtlinien der TU Darmstadt untersagen eigene Auswertung
+\item{}Wenn die Bögen nicht per Hauspost zurückgebracht werden, die leeren Bögen außerhalb des Umschlages transportieren.
+\item{}Wenn die Bögen erst nach der Evaluationswoche bei uns eingehen, kann die Bearbeitung länger dauern.
+\end{itemize}
+%\vspace{5mm}
+\textbf{Checklist:}
+\begin{itemize}[partopsep=0pt, topsep=-\parskip, parsep=0pt, itemsep=0pt, leftmargin=*, rightmargin=130px]
+\ifthenelse{\equal{#6}{Vorlesung und Übung}}{
+\item[\Square]\textit{Vorlesung mit individueller Tutorenevaluation}: Übungsbögen und Anschreiben an Tutoren verteilen, in Übungsstunden evaluieren lassen, Rückgabe pro Gruppe}{}
+\item[\Square]Studierenden \underline{vorab} genauen Evaluationstermin Ihrer Veranstaltung mitteilen
+\item[\Square]möglichst in der ersten Veranstaltung in der Erhebungswoche evaluieren
+\item[\Square]Rückseite des Anschreibens enthält unsere Anschrift für die Rücksendung, bzw. beiliegendes Etikett über das vorhandene kleben
+\item[\Square]Studierenden bei der Evaluation die freien Fragen (siehe Rückseite) mitteilen (per Tafel, Beamer etc.)
+\item[\Square]bei kleinen Veranstaltungen die Studierenden auffordern, zur Wahrung der Anonymität, die Angabe zum Geschlecht nicht auszufüllen
+\item[\Square]\underline{vor dem Austeilen} der Fragebögen zwei Studierende finden, welche alle Bögen zur Fachschaft Informatik (Gebäude S2|02 Raum D120) zurückbringen (sollte niemand im Fachschaftsraum sein, Bögen in den Briefkasten des Studiensekretariats vor C117 werfen) \textbf{oder}
+ausgefüllte Fragebögen \underline{direkt} per Hauspost im Umschlag an uns zurücksenden
+\item[\Square]leere Fragebögen bitte ebenfalls an uns zurücksenden
+\end{itemize}
+\vspace{5mm}
+\textbf{Bitte Wenden}
+
+\encl{Typ: #6, Fragebögen: \ifthenelse{\equal{#6}{Vorlesung mit Übung}}{je }{}#4, Sprache: #5}
+\end{letter}
+
+\setkomavar{myref}{#7}
+\setkomavar{subject}[Betreff: ]{Antwort: \textbf{#3}}
+
+\begin{letter}{Hauspost -- \textbf {Antwort}\\
+Fachschaft Informatik\\
+z.Hd. Feedback-Team\\
+S2 02 -- D120\\
+#3\\
+\barheight=1cm
+\EAN #7
+}
+
+\opening{}
+
+\noindent Freie Frage 1: #8\\
+\noindent Freie Frage 2: #9\\
+\\
+\noindent Diese Seite bitte für das Zurücksenden der ausgefüllten und \underline{leeren} Bögen oben auf den Stapel legen. Wir benötigen den Barcode!\\
+\\
+\noindent Weitere Informationen finden Sie auf unserer Webseite\\ \url{http://d120.de/feedback-new/} \\
+Mit Fragen oder Anregungen wenden Sie sich bitte per E-Mail an\\
+\url{feedback@d120.de}\\
+\closing{Vielen Dank für Ihre Mühe,}
+
+\encl{Typ: #6, Fragebögen: \ifthenelse{\equal{#6}{Vorlesung mit Übung}}{je }{}#4, Sprache: #5}
+\end{letter}
+}
+
+\input{veranstalter.adr}
+\end{document}

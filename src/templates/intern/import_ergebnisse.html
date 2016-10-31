@@ -1,0 +1,19 @@
+{% extends "bestellung_base.html" %}
+
+{% block title %}Ergebnisse aus EvaSys importieren{% endblock %}
+
+{% block content %}
+<h1>Ergebnisse aus EvaSys importieren</h1>
+
+<p>
+Hier können die von EvaSys gescannten und eingelesenen Fragebögen in Form einer CSV-Datei (kann in EvaSys erstellt werden) hochgeladen werden.
+</p>
+
+<p>
+<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+{% include 'includes/semesterauswahl.html' %}<br />
+{{ form }}
+<input type="submit" name="submit" value="Hochladen" /> 
+</form>
+</p>
+{% endblock %}

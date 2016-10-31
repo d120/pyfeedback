@@ -1,0 +1,11 @@
+{% extends "d120_base.html" %}{% load i18n %}
+{% block title %}{% trans "Auswertungstermine für das aktuelle Semester" %}{% endblock %}
+{% block content %}
+    <h2>{% trans "Auswertungstermine für das aktuelle Semester" %}</h2>
+    <p>{% trans "Dein ausgefüllter Fragebogen muss bis zu diesem Tag in der Fachschaft eingegangen sein, damit er erfasst wird." %}</p>
+    <ul>
+        {% for veranstaltung in object_list %}
+            <li>{{ veranstaltung.name }}: {{ veranstaltung.auswertungstermin }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

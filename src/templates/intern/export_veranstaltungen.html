@@ -1,0 +1,15 @@
+{% extends "bestellung_base.html" %}
+
+{% block title %}Veranstaltungen exportieren{% endblock %}
+
+{% block content %}
+<h1>Veranstaltungen exportieren</h1>
+
+<p>Hier kann eine alle evaluierten Veranstaltungen des gewählten Semesters enthaltende XML-Datei erzeugt werden, die in EvaSys importiert werden kann.</p>
+<p>
+<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+{% include 'includes/semesterauswahl.html' %}
+<input type="submit" name="submit" value="XML erzeugen" /> 
+</form>
+</p>
+{% endblock %}

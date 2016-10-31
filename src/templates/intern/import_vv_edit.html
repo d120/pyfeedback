@@ -1,0 +1,162 @@
+{% extends "bestellung_base.html" %}{% load static %}
+
+{% block extra_header %}
+<link rel="stylesheet" type="text/css" href="{% static 'jquery/jquery-ui-1.8.6.custom.css' %}" />
+<style type="text/css">
+h2.ui-accordion-header, h3.ui-accordion-header, h4.ui-accordion-header,
+h5.ui-accordion-header h6.ui-accordion-header
+{ margin-bottom: 0 }
+
+.mark_unmark { margin-bottom: 0.9em; margin-top: -0.9em; font-size: 80% }
+
+.foo { border: 1px solid green; }
+</style>
+
+<script type="text/javascript" src="{% static 'jquery/jquery-1.4.2.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'jquery/jquery-ui-1.8.6.custom.min.js' %}"></script>
+<script type="text/javascript">
+<!--
+function check_checkboxes(event, checked) {
+	$(event.target).parent().parent().find("input:checkbox").attr('checked', checked);
+	event.preventDefault();	
+}
+
+$(function() {
+	$(".accordion").accordion({ autoHeight: false, collapsible: true, active: false });
+	
+	$("a.markall").click(function(event) { check_checkboxes(event, true); });
+	$("a.unmarkall").click(function(event) { check_checkboxes(event, false); });
+});
+//-->
+</script>
+{% endblock %}
+	
+{% block title %}Vorlesungsverzeichnis importieren{% endblock %}
+
+{% block content %}
+<h1>Vorlesungsverzeichnis importieren</h1>
+
+<noscript>
+	<p>Bitte JavaScript aktivieren, um bequemer durch das Verzeichnis navigieren und Veranstaltungen auswählen zu können!</p>
+</noscript>
+
+<p>Im Folgenden können die zu importierenden Veranstaltungen ausgewählt werden.</p>
+
+<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+
+<p>
+{% include 'includes/semesterauswahl.html' %}<br />
+Falls das Semester, für das Veranstaltungen importiert werden sollen, nicht in der Auswahlliste steht, muss es zunächst über die Datenbank-Administration hinzugefügt werden.
+</p>
+
+<div class="accordion">
+{% for cat2 in vv.importcategory_set.all %}
+{% if cat2.importcategory_set.all or cat2.importveranstaltung_set.all %}
+<h2><a href="#">{{ cat2.name }}</a></h2>
+<div>
+	<div class="mark_unmark"><a href="#" class="markall">alle markieren</a> | <a href="#" class="unmarkall">Markierungen aufheben</a></div>
+	<div class="accordion">
+	{% for cat3 in cat2.importcategory_set.all %}
+	{% if cat3.importcategory_set.all or cat3.importveranstaltung_set.all %}
+	<h3><a href="#">{{ cat3.name }}</a></h3>
+	<div>
+		<div class="mark_unmark"><a href="#" class="markall">alle markieren</a> | <a href="#" class="unmarkall">Markierungen aufheben</a></div>
+		<div class="accordion">
+		{% for cat4 in cat3.importcategory_set.all %}
+		{% if cat4.importcategory_set.all or cat4.importveranstaltung_set.all %}
+		<h4><a href="#">{{ cat4.name }}</a></h4>
+		<div>
+			<div class="mark_unmark"><a href="#" class="markall">alle markieren</a> | <a href="#" class="unmarkall">Markierungen aufheben</a></div>
+			<div class="accordion">
+			{% for cat5 in cat4.importcategory_set.all %}
+			{% if cat5.importcategory_set.all or cat5.importveranstaltung_set.all %}
+			<h5><a href="#">{{ cat4.name }}</a></h5>
+			<div>
+				<div class="mark_unmark"><a href="#" class="markall">alle markieren</a> | <a href="#" class="unmarkall">Markierungen aufheben</a></div>
+				<div class="accordion">
+				{% for cat6 in cat5.importcategory_set.all %}
+				{% if cat6.importcategory_set.all or cat6.importveranstaltung_set.all %}
+				<h6><a href="#">{{ cat6.name }}</a></h6>
+				<div>
+					{% if cat6.importveranstaltung_set.all %}
+					<ul>
+						{% for iv in cat6.importveranstaltung_set.all %}
+						<li style="list-style-type: none">
+							<input type="checkbox" id="v{{iv.id}}" name="v" value="{{iv.id}}" />
+							<label for="v{{iv.id}}">{{ iv }}</label>
+						</li>
+						{% endfor %}
+					</ul>
+					{% endif %}
+				</div>
+				{% endif %}
+				{% endfor %}
+				</div>
+
+				{% if cat5.importveranstaltung_set.all %}
+				<ul>
+					{% for iv in cat5.importveranstaltung_set.all %}
+					<li style="list-style-type: none">
+						<input type="checkbox" id="v{{iv.id}}" name="v" value="{{iv.id}}" />
+						<label for="v{{iv.id}}">{{ iv }}</label>
+					</li>
+					{% endfor %}
+				</ul>
+				{% endif %}
+			</div>
+			{% endif %}
+			{% endfor %}
+			</div>
+			
+			{% if cat4.importveranstaltung_set.all %}
+			<ul>
+				{% for iv in cat4.importveranstaltung_set.all %}
+				<li style="list-style-type: none">
+					<input type="checkbox" id="v{{iv.id}}" name="v" value="{{iv.id}}" />
+					<label for="v{{iv.id}}">{{ iv }}</label>
+				</li>
+				{% endfor %}
+			</ul>
+			{% endif %}
+		</div>
+		{% endif %}
+		{% endfor %}
+		</div>
+
+		{% if cat3.importveranstaltung_set.all %}
+		<ul>
+			{% for iv in cat3.importveranstaltung_set.all %}
+			<li style="list-style-type: none">
+				<input type="checkbox" id="v{{iv.id}}" name="v" value="{{iv.id}}" />
+				<label for="v{{iv.id}}">{{ iv }}</label>
+			</li>
+			{% endfor %}
+		</ul>
+		{% endif %}
+	</div>
+	{% endif %}
+	{% endfor %}
+	</div>
+
+	{% if cat2.importveranstaltung_set.all %}
+	<ul>
+		{% for iv in cat2.importveranstaltung_set.all %}
+		<li style="list-style-type: none">
+			<input type="checkbox" id="v{{iv.id}}" name="v" value="{{iv.id}}" />
+			<label for="v{{iv.id}}">{{ iv }}</label>
+		</li>
+		{% endfor %}
+	</ul>
+	{% endif %}
+</div>
+{% endif %}
+{% endfor %}
+</div>
+
+<div>
+	<input type="submit" name="submit" value="Weiter" />&nbsp;
+	<input type="reset" name="reset" value="Zurücksetzen" />
+</div>
+</form>
+
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends "ergebnisse_base.html" %} {% block title %}Ergebnisse ({{ semester }}){% endblock %} {% block content %}
+<h1>Feedback-Ergebnisse ({{ semester }})</h1>
+
+<form id="sem_form" action="" method="get" accept-charset="utf-8">
+    <fieldset>
+        <label for="semester">Semester:</label><br />
+        <input type="hidden" name="order" value="{{ order }}" />
+        <select size="1" id="semester" name="semester" onchange="document.forms.sem_form.submit()">
+{% for sem in semester_list %}
+  <option value="{{ sem.semester }}"{% if semester == sem %} selected="selected"{% endif %}>{{ sem }}</option>
+{% endfor %}
+</select>
+        <noscript><div><input type="submit" name="sub" value="↵" /></div></noscript>
+    </fieldset>
+</form>
+
+{% if semester.sichtbarkeit != 'ALL' %}
+<p>Hinweis: Diese Ergebnisse sind momentan noch nicht öffentlich verfügbar.</p>
+{% endif %} {% if include_hidden %}
+<p>Hinweis: Die Spalten zum Feedbackpreis sind nur für Administratoren sichtbar.</p>
+{% endif %}
+
+<div class="ranking_header">
+    <div class="label row1{% if not order_num %} selected{% endif %}">
+        <a href="?order=alpha&amp;semester={{ semester.semester }}">alphabetisch</a>
+    </div>
+    {% for p in parts %}
+    <div class="spacer horizontal row1"></div>
+    {% endfor %}
+</div>
+
+{% for p, p_pretty, z in parts reversed %}
+<div class="ranking_header">
+    <div class="label {% cycle 'row2' 'row1' as rowcolors %}{% if order_num == forloop.revcounter %} selected{% endif %}">
+        <a href="?order={{ p }}&amp;semester={{ semester.semester }}">{{ p_pretty }}</a>
+    </div>
+    {% for p, p_pretty, z in parts %} {% if forloop.parentloop.counter < forloop.revcounter %} <div class="spacer horizontal {{ rowcolors }}">
+</div>
+{% else %}
+<div class="spacer vertical"></div>
+{% endif %} {% endfor %}
+</div>
+{% endfor %}
+
+<div class="ranking_header">
+    <div class="label last"></div>
+    {% for p, p_pretty, z in parts %}
+    <div class="spacer vertical"></div>
+    {% endfor %}
+</div>
+
+<div class="clear"></div>
+
+<table class="ranking_table">
+    <tbody>
+        {% for e in ergebnisse %}
+        <tr class="ranking_row {% cycle 'row1' 'row2' %}">
+            <td class="label"><a href="{% url 'public-veranstaltung' e.veranstaltung.id %}">{{ e.veranstaltung.name }}</a></td>
+
+            {% if include_hidden %} {% for val, count in e.all_values %}
+            <td class="data{% if order_num == forloop.counter %} selected{% endif %}{% if count < thresh_valid %} invalid{% endif %}">
+                {% if count >= thresh_show %}{{ val|floatformat:1 }}{% endif %}
+            </td>
+            {% endfor %} {% else %} {% for val, count in e.values %}
+            <td class="data{% if order_num == forloop.counter %} selected{% endif %}{% if count < thresh_valid %} invalid{% endif %}">
+                {% if count >= thresh_show %}{{ val|floatformat:1 }}{% endif %}
+            </td>
+            {% endfor %} {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2>Darstellung der Noten</h2>
+<ul>
+    <li>Durchschnittsnoten werden entsprechend <span class="invalid">gekennzeichnet</span>, falls weniger als {{ thresh_valid }} Antworten einflossen.</li>
+    <li>Bei weniger als {{ thresh_show }} Antworten wird die zugehörige Note gar nicht angezeigt.</li>
+</ul>
+
+<h2>Aufschlüsselung der Kategorien</h2>
+<p>Hier sind die Fragen aufgelistet, die in die einzelnen Noten einfließen.</p>
+{% for p, p_pretty, questions in parts %}
+<h3>{{ p_pretty }}</h3>
+<ul>
+    {% for q in questions %}
+    <li>{{ q }}</li>
+    {% endfor %}
+</ul>
+{% endfor %} {% endblock %}

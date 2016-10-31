@@ -1,0 +1,35 @@
+{% extends "bestellung_base.html" %}
+
+{% block title %}Lange nicht evaluierte Veranstaltungen{% endblock %}
+
+{% block content %}
+<h1>Lange nicht evaluierte Lehrveranstaltungen</h1>
+<p>Veranstaltungen für die seit mehr als zwei Jahren keine Ergebnisse vorliegen und 
+die diese Semester angeboten werden. Es werden nur Veranstaltungen angezeigt, für die keine Bestellung von Bögen vorliegt 
+oder die zurückgemeldeten haben, dass sie nicht an der Evaluation teilnehmen möchten.</p>
+<p>Diese Liste an das Studiendekanat z.B. Wolfgang Heenes weiterleiten damit die 
+Dozenten noch einmal darauf hingewiesen werden, dass die Veranstaltung an der Evaluation teilnehmen sollten.</p>
+<h2>Liste</h2>
+<ul>
+{% for lv in veranstaltungen %}
+<li>{{ lv.veranstaltung.name }} letzte Ergebnisse: {{ lv.letzte_ergebnisse }}</li>
+{% endfor %}
+</ul>
+
+<h2>Ausführliche Liste mit allen Bestellungen</h2>
+{% for lv in veranstaltungen %}
+<h3>{{ lv.veranstaltung.name }}</h3>
+<table>
+<tr>
+<th>Semester</th>
+<th>Bestellte Bögen</th>
+<th>Ausgefüllte Bögen</th>
+</tr>
+{% for cur_sem in lv.bestellungen reversed %}
+<td>{{ cur_sem.veranstaltung.semester }}</td><td>{{ cur_sem.anzahl_bestellung }}</td><td>{{ cur_sem.anzahl_ruecklauf }}</td>
+</tr>
+{% endfor %}
+</table>
+{% endfor %}
+
+{% endblock %}

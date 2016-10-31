@@ -1,0 +1,8 @@
+<label for="semester">Semester:</label>
+<select size="1" id="semester" name="semester">
+{% for sem in semester %}
+  <option value="{{ sem.semester }}"{% if sem == semester_selected %} selected="selected"{% endif %}>
+    {{ sem }}
+  </option>
+{% endfor %}
+</select>

@@ -1,0 +1,28 @@
+{% extends "bestellung_base.html" %}
+
+{% block title %}Zuordnung Veranstaltungen zu Sprache des Fragebogens{% endblock %}
+
+{% block content %}
+<h1>Zuordnung Veranstaltungen zu Sprache des Fragebogens</h1>
+
+<table class="border">
+	<tr>
+		<th>Veranstaltung</th>
+		<th>Sprache</th>
+		<th>Anzahl</th>
+		<th>Typ</th>
+		<th>gedruckt</th>
+		<th>zurück</th>
+	</tr>
+{% for v in veranstaltungen %}
+	<tr class="cycle {% cycle 'row1' 'row2' %}">
+		<td>{{v.name}}</td>
+		<td>{% if v.sprache %}{{v.get_sprache_display}}{% else %}?{% endif %}</td>
+		<td>{{v.anzahl}}</td>
+		<td>{{v.typ}}</td>
+		<td>[<span style="margin-left:12px;">]</span></td>
+		<td>[<span style="margin-left:12px;">]</span></td>
+	</tr>
+{% endfor %}
+</table>
+{% endblock %}

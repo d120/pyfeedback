@@ -1,0 +1,10 @@
+\ProvidesFile{littleaddr.lco}
+            [2007/12/04 v0.1 little address]
+\LoadLetterOption{DINmtext}
+\@setplength{toaddrvpos}{20mm}
+\@setplength{toaddrheight}{25mm}
+\@setplength{refvpos}{42mm}
+\@setplength{sigbeforevskip}{-5mm}
+%\@setplength{firstfootvpos}{290mm}
+\endinput
+

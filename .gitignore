@@ -1,0 +1,15 @@
+latex/anschreiben/veranstalter.adr
+db/
+*.pyc
+htmlcov
+pyenv
+*.aux
+*.log
+.idea
+*.pdf
+*.adr
+.project
+.pydevproject
+.settings/*
+.coverage
+settings_secret.py
