@@ -1,4 +1,7 @@
 # Feedback-Software
+[![Build Status](https://travis-ci.org/d120/pyfeedback.svg?branch=master)](https://travis-ci.org/d120/pyfeedback)
+[![Coverage Status](https://coveralls.io/repos/github/d120/pyfeedback/badge.svg?branch=master)](https://coveralls.io/github/d120/pyfeedback?branch=master)
+
 
 Pyfeedback is a web application created to assist the feedback to modules at TU Darmstadt.
 
