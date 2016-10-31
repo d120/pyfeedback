@@ -8,6 +8,8 @@ env:
     # the latest Django development version is used
   - $DENV="pip install --upgrade --pre Django"
 
+cache: pip
+
 python: 
   - "2.7"
 
