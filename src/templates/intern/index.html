@@ -18,14 +18,17 @@
 <h3>Ablauf</h3>
 <p>Dies sind nicht alle nötigen Schritte; siehe <a href="https://www.fachschaft.informatik.tu-darmstadt.de/trac/fs/wiki/Untergruppen/Feedback" target="_blank">Ablauf im Trac</a>.</p>
 <ol>
-    <li><a href="{% url 'admin:feedback_semester_add' %}" target="_blank">neues Semester anlegen</a> (aktuell: {{cur_semester.short}})</li>
+    <li><a href="{% url 'admin:feedback_semester_add' %}" target="_blank">neues Semester anlegen</a> (aktuell: 
+    {% if cur_semester %}{{cur_semester.short}}{% else %}nicht Vorhanden{% endif %})</li>
     <li><a href="{% url 'import_vv' %}">Veranstaltungen aus VV importieren</a> (vor Bestellphase)</li>
     <li><a href="{% url 'import_vv_edit_users' %}">Fehlende Personendaten nachtragen</a> (vor Bestellphase)</li>
     <li><a href="{% url 'generate_letters' %}">Anschreiben für Veranstalter erzeugen</a> (nach Bestellphase)</li>
     <li><a href="{% url 'export_veranstaltungen' %}">Veranstaltungen für EvaSys exportieren</a> (vor dem Scannen)</li>
     <li><a href="{% url 'import_ergebnisse' %}">Ergebnisse aus EvaSys importieren</a> (nach dem Scannen)</li>
     <li><a href="{% url 'sync_ergebnisse' %}">Rankings berechnen</a> (nach dem Ergebnis-Import)</li>
+    {% if cur_semester %}
     <li><a href="{% url 'admin:feedback_semester_change' cur_semester.id %}" target="_blank">Ergebnisse veröffentlichen</a> (aktuell: sichtbar für {{cur_semester.get_sichtbarkeit_display}})</li>
+    {% endif %}
 </ol>
 {% endblock %}
 
