@@ -102,7 +102,9 @@ class Semester(models.Model):
     def current():
         try:
             return Semester.objects.order_by('-semester')[0]
-        except IndexError, OperationalError:
+        except IndexError:
+            return None
+        except OperationalError:
             return None
 
 class Person(models.Model):
