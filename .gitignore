@@ -1,5 +1,9 @@
 latex/anschreiben/veranstalter.adr
-db/
+# Ignore all files in db folder
+db/*
+# But keep the folder
+!db/.gitkeep
+
 *.pyc
 htmlcov
 pyenv
