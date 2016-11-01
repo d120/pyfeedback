@@ -18,13 +18,13 @@ from django.urls import reverse_lazy
 
 from django.views.generic import ListView
 
-from settings import DEBUG 
+from django.conf import settings
 
 # Admin-Seiten konfigurieren
 admin.autodiscover()
 #admin.site.unregister((User, Group))
 
-if not DEBUG:
+if not settings.DEBUG:
     default_redirect = '/feedback-new/'
 else:
     default_redirect = '/veranstalter/'
@@ -102,7 +102,7 @@ urlpatterns += [
 
 urlpatterns += staticfiles_urlpatterns()
 
-if DEBUG:
+if settings.DEBUG:
     # Ausschließlich in der Entwicklung nötig, damit statische Dateien (JS, CSS, Bilder...)
     # angezeigt werden. Im Server-Betrieb kümmert sich Apache darum.
     urlpatterns += [
