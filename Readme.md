@@ -1,7 +1,7 @@
 # Feedback-Software
-[![Build Status](https://travis-ci.org/d120/pyfeedback.svg?branch=master)](https://travis-ci.org/d120/pyfeedback)
-[![Coverage Status](https://coveralls.io/repos/github/d120/pyfeedback/badge.svg?branch=master)](https://coveralls.io/github/d120/pyfeedback?branch=master)
-
+[![Build Status](https://travis-ci.org/yduman/pyfeedback.svg?branch=develop)](https://travis-ci.org/yduman/pyfeedback)
+[![Coverage Status](https://coveralls.io/repos/github/yduman/pyfeedback/badge.svg?branch=develop)](https://coveralls.io/github/yduman/pyfeedback?branch=develop)
+[![Requirements Status](https://requires.io/github/yduman/pyfeedback/requirements.svg?branch=develop)](https://requires.io/github/yduman/pyfeedback/requirements/?branch=develop)
 
 Pyfeedback is a web application created to assist the feedback to modules at TU Darmstadt.
 
