@@ -11,27 +11,28 @@ from feedback.tests.tools import NonSuTestMixin, get_veranstaltung
 
 from feedback import tests
 
+
 class InternVvTest(NonSuTestMixin):
     def test_import_vv(self):
         path = '/intern/import_vv/'
         self.do_non_su_test(path)
 
         self.assertTrue(self.client.login(username='supers', password='pw'))
-        response = self.client.get(path, **{'REMOTE_USER':'super'})
+        response = self.client.get(path, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.templates[0].name, 'intern/import_vv.html')
         self.assertTrue(isinstance(response.context['form'], UploadFileForm))
 
-        response = self.client.post(path, **{'REMOTE_USER':'super'})
+        response = self.client.post(path, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.templates[0].name, 'intern/import_vv.html')
         self.assertTrue(isinstance(response.context['form'], UploadFileForm))
 
-#        f = StringIO('blablabla')
-#        f.name = 'test.csv'
-#        response = self.client.post(self.path, {'file': f})
-#        f.close()
+        #        f = StringIO('blablabla')
+        #        f.name = 'test.csv'
+        #        response = self.client.post(self.path, {'file': f})
+        #        f.close()
 
         with open(settings.TESTDATA_PATH + 'vv_test.xml', 'r') as f:
-            response = self.client.post(path, {'file': f}, **{'REMOTE_USER':'super'})
+            response = self.client.post(path, {'file': f}, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response['Location'].endswith('/intern/import_vv_edit/'))
 
@@ -40,12 +41,12 @@ class InternVvTest(NonSuTestMixin):
         self.do_non_su_test(path)
 
         self.client.login(username='supers', password='pw')
-        response = self.client.get(path, **{'REMOTE_USER':'super'})
+        response = self.client.get(path, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response['Location'].endswith('/intern/import_vv/'))
 
         ic = ImportCategory.objects.create(parent=None, name='root')
-        response = self.client.get(path, **{'REMOTE_USER':'super'})
+        response = self.client.get(path, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.templates[0].name, 'intern/import_vv_edit.html')
         self.assertSequenceEqual(response.context['semester'], list(Semester.objects.all()))
         self.assertEqual(response.context['vv'], ic)
@@ -64,19 +65,21 @@ class InternVvTest(NonSuTestMixin):
         path = '/intern/import_vv_edit/'
 
         # kein Semester angegeben
-        response = self.client.post(path, {'v': [iv0.id, iv1.id, iv1_sub.id]}, **{'REMOTE_USER':'super'})
+        response = self.client.post(path, {'v': [iv0.id, iv1.id, iv1_sub.id]}, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response['Location'].endswith('/intern/import_vv_edit/'))
 
         # keine Vorlesungen angegeben
-        response = self.client.post(path, {'semester': s.semester}, **{'REMOTE_USER':'super'})
+        response = self.client.post(path, {'semester': s.semester}, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response['Location'].endswith('/intern/import_vv_edit/'))
 
         # beides angegeben
-        response = self.client.post(path, {'v': [iv0.id, iv1.id, iv1_sub.id], 'semester': s.semester}, **{'REMOTE_USER':'super'})
+        response = self.client.post(path, {'v': [iv0.id, iv1.id, iv1_sub.id], 'semester': s.semester},
+                                    **{'REMOTE_USER': 'super'})
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response['Location'].endswith('/intern/import_vv_edit_users/'))
+
 
 class InternVvEditUsersTest(NonSuTestMixin, TestCase):
     def setUp(self):
@@ -95,7 +98,7 @@ class InternVvEditUsersTest(NonSuTestMixin, TestCase):
         self.do_non_su_test(self.path)
 
         self.assertTrue(self.client.login(username='supers', password='pw'))
-        response = self.client.get(self.path, **{'REMOTE_USER':'super'})
+        response = self.client.get(self.path, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.templates[0].name, 'intern/import_vv_edit_users.html')
         self.assertEqual(response.context['personen'], '%d,%d' % (self.p1.id, self.p0.id))
         self.assertEqual(len(response.context['formset'].forms), 2)
@@ -106,6 +109,6 @@ class InternVvEditUsersTest(NonSuTestMixin, TestCase):
                                                 'form-TOTAL_FORMS': 2, 'form-INITIAL_FORMS': 2,
                                                 'form-0-anrede': 'm', 'form-0-email': 'ad@res.se',
                                                 'form-1-anrede': 'w', 'form-1-email': 'ad@res.se',
-                                                }, **{'REMOTE_USER':'super'})
+                                                }, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response['Location'], tests.LOGIN_URL)
