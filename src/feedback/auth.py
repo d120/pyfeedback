@@ -10,6 +10,7 @@ from django.utils.encoding import smart_unicode
 
 from feedback.models import Veranstaltung
 
+
 ### Login mit Veranstalter-Rechten ############################################
 
 class VeranstalterBackend(ModelBackend):
@@ -31,6 +32,7 @@ class TakeoverBackend(ModelBackend):
         if reset or (current_user and current_user.is_superuser):
             return user
         return None
+
 
 ### Nutzung eines Fachschaftsaccounts #########################################
 
@@ -54,6 +56,7 @@ class FSAccountBackend(RemoteUserBackend):
             return (smart_unicode(user))
         else:
             return username
+
 
 class FSDebugRemoteUserMiddleware(RemoteUserMiddleware):
     if settings.DEBUG:

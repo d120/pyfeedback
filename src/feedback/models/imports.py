@@ -20,6 +20,7 @@ class ImportPerson(models.Model):
         verbose_name_plural = verbose_name + 'en'
         app_label = 'feedback'
 
+
 class ImportCategory(models.Model):
     parent = models.ForeignKey('self', null=True, blank=True)
     name = models.CharField(max_length=150)
@@ -32,6 +33,7 @@ class ImportCategory(models.Model):
         verbose_name_plural = verbose_name + 'n'
         unique_together = ('parent', 'name')
         app_label = 'feedback'
+
 
 class ImportVeranstaltung(models.Model):
     typ = models.CharField(max_length=1, choices=Veranstaltung.TYP_CHOICES)

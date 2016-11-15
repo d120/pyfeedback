@@ -4,9 +4,12 @@ from django.views.generic.edit import CreateView
 from feedback.models import Veranstaltung, Semester, BarcodeScannEvent
 from feedback.forms import CreateBarcodeScannEventForm
 
+
 class VeranstaltungsDeadlines(ListView):
-    queryset = Veranstaltung.objects.filter(semester=Semester.current(),evaluieren=True).exclude(auswertungstermin__isnull=True).order_by('name')
+    queryset = Veranstaltung.objects.filter(semester=Semester.current(), evaluieren=True).exclude(
+        auswertungstermin__isnull=True).order_by('name')
     template_name = "feedback/VeranstaltungsDeadlines.html"
+
 
 class CreateBarcodeScannEvent(CreateView):
     """View fuer die Barcode scanner.

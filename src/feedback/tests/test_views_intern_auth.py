@@ -16,7 +16,7 @@ class InternAuthTest(NonSuTestMixin, TestCase):
 
     def test_login_logged_in(self):
         self.client.login(username='supers', password='pw')
-        response = self.client.get(tests.LOGIN_URL, **{'REMOTE_USER':'super'})
+        response = self.client.get(tests.LOGIN_URL, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response['Location'], tests.INDEX_URL)
 
@@ -42,24 +42,24 @@ class InternAuthTest(NonSuTestMixin, TestCase):
         self.assertEqual(response.templates[0].name, 'intern/rechte_uebernehmen.html')
         self.assertSequenceEqual(response.context['veranstaltungen'], [self.v])
 
-        response = self.client.post(path, **{'REMOTE_USER':'super'})
+        response = self.client.post(path, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.templates[0].name, 'intern/rechte_uebernehmen.html')
 
-        response = self.client.post(path, {'vid': self.v.id}, **{'REMOTE_USER':'super'})
+        response = self.client.post(path, {'vid': self.v.id}, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response['Location'].endswith('/veranstalter/'))
 
     def test_rechte_zuruecknehmen(self):
         self.client.login(username='supers', password='pw')
-        self.client.post('/intern/rechte_uebernehmen/', {'vid': self.v.id}, **{'REMOTE_USER':'super'})
+        self.client.post('/intern/rechte_uebernehmen/', {'vid': self.v.id}, **{'REMOTE_USER': 'super'})
 
-        response = self.client.get('/intern/rechte_zuruecknehmen/', **{'REMOTE_USER':'super'})
+        response = self.client.get('/intern/rechte_zuruecknehmen/', **{'REMOTE_USER': 'super'})
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response['Location'], tests.INDEX_URL)
 
     def test_rechte_zuruecknehmen_no_origin_uid(self):
         """Es sollen rechte wiederhergestellt werden die vorher nicht abgegebn wurden"""
         self.assertTrue(self.client.login(username='supers', password='pw'))
-        response = self.client.get('/intern/rechte_zuruecknehmen/', **{'REMOTE_USER':'super'})
+        response = self.client.get('/intern/rechte_zuruecknehmen/', **{'REMOTE_USER': 'super'})
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response['Location'].split('?')[0].endswith(tests.INDEX_END))

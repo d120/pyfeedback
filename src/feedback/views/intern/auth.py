@@ -15,8 +15,6 @@ from django.views.decorators.http import require_safe, require_http_methods
 from feedback.models import Veranstaltung
 
 
-
-
 @user_passes_test(lambda u: u.is_superuser)
 @require_http_methods(('HEAD', 'GET', 'POST'))
 def rechte_uebernehmen(request):
@@ -40,19 +38,21 @@ def rechte_uebernehmen(request):
     data['veranstaltungen'] = Veranstaltung.objects.order_by('semester', 'name').prefetch_related('semester')
     return render(request, 'intern/rechte_uebernehmen.html', data)
 
+
 @login_required
 @require_safe
 def rechte_zuruecknehmen(request):
-    #return is tried but no previous uid exists
-    try :
-        uid = request.session['orig_uid'] # this line throws the exception
+    # return is tried but no previous uid exists
+    try:
+        uid = request.session['orig_uid']  # this line throws the exception
         u = User.objects.get(id=uid)
         user = auth.authenticate(reset=True, user=u)
         auth.login(request, user)
         return HttpResponseRedirect(reverse('intern-index'))
-    #Redirect to intern.index view to get a clear session
+    # Redirect to intern.index view to get a clear session
     except KeyError:
-            return HttpResponseRedirect(reverse('intern-index'))
+        return HttpResponseRedirect(reverse('intern-index'))
+
 
 @require_safe
 def login(request):

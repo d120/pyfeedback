@@ -14,6 +14,7 @@ from feedback.tests.tools import NonSuTestMixin, get_veranstaltung
 
 from feedback import tests
 
+
 class InternMiscTest(NonSuTestMixin, TestCase):
     def test_index(self):
         path = tests.INDEX_END
@@ -22,7 +23,7 @@ class InternMiscTest(NonSuTestMixin, TestCase):
 
         s = Semester.objects.create(semester=20110, fragebogen='2009', sichtbarkeit='ADM')
 
-        response = self.client.get(path, **{'REMOTE_USER':'super'})
+        response = self.client.get(path, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.templates[0].name, 'intern/index.html')
         self.assertEqual(response.context['cur_semester'], s)
 
@@ -33,7 +34,7 @@ class InternMiscTest(NonSuTestMixin, TestCase):
 
         Semester.objects.create(semester=20110, fragebogen='2009', sichtbarkeit='ADM')
 
-        response = self.client.get(path, **{'REMOTE_USER':'super'})
+        response = self.client.get(path, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.templates[0].name, 'intern/fragebogensprache.html')
 
     def test_export_veranstaltungen_get(self):
@@ -41,9 +42,10 @@ class InternMiscTest(NonSuTestMixin, TestCase):
         self.do_non_su_test(path)
         self.client.login(username='supers', password='pw')
 
-        response = self.client.get(path, **{'REMOTE_USER':'super'})
+        response = self.client.get(path, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.templates[0].name, 'intern/export_veranstaltungen.html')
         self.assertSequenceEqual(response.context['semester'], list(Semester.objects.all()))
+
 
 class ExportVeranstaltungenTest(NonSuTestMixin, TestCase):
     def test_export_veranstaltungen_post(self):
@@ -63,12 +65,12 @@ class ExportVeranstaltungenTest(NonSuTestMixin, TestCase):
         v1.save()
 
         # kein Semester angegeben
-        response = self.client.post(path, **{'REMOTE_USER':'super'})
+        response = self.client.post(path, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response['Location'].endswith('/intern/export_veranstaltungen/'))
 
         # keine Bestellung vorhanden
-        response = self.client.post(path, {'semester': s.semester}, **{'REMOTE_USER':'super'})
+        response = self.client.post(path, {'semester': s.semester}, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response['Location'].endswith('/intern/export_veranstaltungen/'))
 
@@ -77,27 +79,27 @@ class ExportVeranstaltungenTest(NonSuTestMixin, TestCase):
         v1.save()
         v2.anzahl = 23
         v2.save()
-        response = self.client.post(path, {'semester': s.semester}, **{'REMOTE_USER':'super'})
+        response = self.client.post(path, {'semester': s.semester}, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response['Location'].endswith('/intern/export_veranstaltungen/'))
 
         # keine Sprache angegeben
         v2.verantwortlich = p
         v2.save()
-        response = self.client.post(path, {'semester': s.semester}, **{'REMOTE_USER':'super'})
+        response = self.client.post(path, {'semester': s.semester}, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response['Location'].endswith('/intern/export_veranstaltungen/'))
 
         # alles OK
         v2.sprache = 'de'
         v2.save()
-        response = self.client.post(path, {'semester': s.semester}, **{'REMOTE_USER':'super'})
+        response = self.client.post(path, {'semester': s.semester}, **{'REMOTE_USER': 'super'})
         self.assertRegexpMatches(response['Content-Disposition'],
                                  r'^attachment; filename="[a-zA-Z0-9_-]+\.xml"$')
 
         # TODO: Use SimpleTestCase.assertXMLEqual when Django is on newer version
         self.assertEqual(response.content,
-                        '''<?xml version="1.0" encoding="UTF-8"?>
+                         '''<?xml version="1.0" encoding="UTF-8"?>
 <EvaSys xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 \txsi:noNamespaceSchemaLocation="http://evaluation.tu-darmstadt.de/evasys/doc/xml-import.xsd">
 \t<Lecture key="lv-1">
@@ -160,6 +162,7 @@ class ExportVeranstaltungenTest(NonSuTestMixin, TestCase):
 </EvaSys>
 ''')
 
+
 #
 class ImportErgebnisseTest(NonSuTestMixin, TestCase):
     def setUp(self):
@@ -171,7 +174,7 @@ class ImportErgebnisseTest(NonSuTestMixin, TestCase):
         self.do_non_su_test(self.path)
         self.client.login(username='supers', password='pw')
 
-        response = self.client.get(self.path, **{'REMOTE_USER':'super'})
+        response = self.client.get(self.path, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.templates[0].name, 'intern/import_ergebnisse.html')
         self.assertSequenceEqual(response.context['semester'], [self.s])
         self.assertTrue(isinstance(response.context['form'], UploadFileForm))
@@ -182,25 +185,25 @@ class ImportErgebnisseTest(NonSuTestMixin, TestCase):
         Veranstaltung.objects.create(name='Test I', lv_nr='1', **default_params)
 
         # kein Semester angegeben
-        response = self.client.post(self.path, **{'REMOTE_USER':'super'})
+        response = self.client.post(self.path, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response['Location'].endswith('/intern/import_ergebnisse/'))
 
         # unvollständiges Formular
-        response = self.client.post(self.path, {'semester': self.s.semester, 'file': ''}, **{'REMOTE_USER':'super'})
+        response = self.client.post(self.path, {'semester': self.s.semester, 'file': ''}, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.templates[0].name, 'intern/import_ergebnisse.html')
 
         # fehlerhafte Datei angegeben
         f = StringIO('b;l;a;b;l;a;b;l;a')
         f.name = 'test.csv'
-        response = self.client.post(self.path, {'semester': self.s.semester, 'file': f}, **{'REMOTE_USER':'super'})
+        response = self.client.post(self.path, {'semester': self.s.semester, 'file': f}, **{'REMOTE_USER': 'super'})
         f.close()
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response['Location'].endswith('/intern/sync_ergebnisse/'))
 
         # alles OK
         with open(settings.TESTDATA_PATH + 'ergebnis_test_20115.csv', 'r') as f:
-            response = self.client.post(self.path, {'semester': self.s.semester, 'file': f}, **{'REMOTE_USER':'super'})
+            response = self.client.post(self.path, {'semester': self.s.semester, 'file': f}, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response['Location'].endswith('/intern/sync_ergebnisse/'))
 
@@ -215,7 +218,7 @@ class SyncErgebnisseTest(NonSuTestMixin, TestCase):
         self.do_non_su_test(self.path)
         self.client.login(username='supers', password='pw')
 
-        response = self.client.get(self.path, **{'REMOTE_USER':'super'})
+        response = self.client.get(self.path, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.templates[0].name, 'intern/sync_ergebnisse.html')
         self.assertSequenceEqual(response.context['semester'], [self.s])
 
@@ -223,21 +226,21 @@ class SyncErgebnisseTest(NonSuTestMixin, TestCase):
         self.client.login(username='supers', password='pw')
 
         # kein Semester angegeben
-        response = self.client.post(self.path, **{'REMOTE_USER':'super'})
+        response = self.client.post(self.path, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response['Location'].endswith('/intern/sync_ergebnisse/'))
 
         # keine Ergebnisse gefunden
-        response = self.client.post(self.path, {'semester': self.s.semester}, **{'REMOTE_USER':'super'})
+        response = self.client.post(self.path, {'semester': self.s.semester}, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response['Location'].endswith('/intern/sync_ergebnisse/'))
 
         # alles OK
         Fragebogen2009.objects.create(veranstaltung=self.v, ue_gesamt=1,
-                                                    ue_e=2, ue_f=3,
-                                                    ue_a=4, ue_b=5, ue_c=1, ue_d=2,
-                                                    ue_g=3, ue_i=4, ue_j=5, ue_k=1)
-        response = self.client.post(self.path, {'semester': self.s.semester}, **{'REMOTE_USER':'super'})
+                                      ue_e=2, ue_f=3,
+                                      ue_a=4, ue_b=5, ue_c=1, ue_d=2,
+                                      ue_g=3, ue_i=4, ue_j=5, ue_k=1)
+        response = self.client.post(self.path, {'semester': self.s.semester}, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response['Location'].endswith('/intern/sync_ergebnisse/'))
 
@@ -249,7 +252,7 @@ class SendmailTest(NonSuTestMixin, TestCase):
         self.do_non_su_test(self.path)
         self.client.login(username='supers', password='pw')
 
-        response = self.client.get(self.path, **{'REMOTE_USER':'super'})
+        response = self.client.get(self.path, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.templates[0].name, 'intern/sendmail.html')
 
     def test_post(self):
@@ -267,19 +270,19 @@ class SendmailTest(NonSuTestMixin, TestCase):
         params = {'uebernehmen': 'x', 'recipient': 'cur_sem_missing_order', 'subject': 'abc', 'body': 'xyz'}
 
         # kein Semester angegeben
-        response = self.client.post(self.path, params, **{'REMOTE_USER':'super'})
+        response = self.client.post(self.path, params, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response['Location'].endswith('/intern/sendmail/'))
 
         # Vorlage übernehmen; Vorlage nicht angegeben
         params['semester'] = s.semester
-        response = self.client.post(self.path, params, **{'REMOTE_USER':'super'})
+        response = self.client.post(self.path, params, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response['Location'].endswith('/intern/sendmail/'))
 
         # Vorlage übernehmen; Vorlage ist angegeben
         params['vorlage'] = mv.id
-        response = self.client.post(self.path, params, **{'REMOTE_USER':'super'})
+        response = self.client.post(self.path, params, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.templates[0].name, 'intern/sendmail.html')
         self.assertEqual(response.context['subject'], mv.subject)
         self.assertEqual(response.context['body'], mv.body)
@@ -287,13 +290,13 @@ class SendmailTest(NonSuTestMixin, TestCase):
         # Vorschau; Empfänger ist auf Veranstalter mit fehlenden Bestellungen eingestellt
         del params['uebernehmen']
         params['vorschau'] = 'x'
-        response = self.client.post(self.path, params, **{'REMOTE_USER':'super'})
+        response = self.client.post(self.path, params, **{'REMOTE_USER': 'super'})
         self.assertIn('intern/sendmail_preview.html', (t.name for t in response.templates))
         self.assertTrue(response.context['vorschau'])
 
         # Vorschau; Empfänger ist auf Veranstaltungen mit Ergebnissen eingestellt
         params['recipient'] = 'cur_sem_results'
-        response = self.client.post(self.path, params, **{'REMOTE_USER':'super'})
+        response = self.client.post(self.path, params, **{'REMOTE_USER': 'super'})
         self.assertIn('intern/sendmail_preview.html', (t.name for t in response.templates))
         self.assertTrue(response.context['vorschau'])
 
@@ -302,7 +305,7 @@ class SendmailTest(NonSuTestMixin, TestCase):
         params['senden'] = 'x'
         params['recipient'] = 'cur_sem_all'
         del params['vorlage']
-        response = self.client.post(self.path, params, **{'REMOTE_USER':'super'})
+        response = self.client.post(self.path, params, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response['Location'], tests.LOGIN_URL)
         # Hier wird in Eclipse ein Fehler angezeigt; mail.outbox gibt es während der Testläufe
