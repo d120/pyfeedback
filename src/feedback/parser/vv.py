@@ -18,7 +18,7 @@ def parse_vv_xml(xmlfile):
     etree = ElementTree.ElementTree()
 
     root = etree.parse(xmlfile, parser=parser).find('CourseCatalogueArea')
-    root_cat = ImportCategory.objects.create(parent=None, name='root')
+    root_cat = ImportCategory.objects.create(name='root', rel_level=None)
 
     parse_vv_recurse(root, root_cat)
 
@@ -45,12 +45,13 @@ _mapping_veranstaltung = {
 
 
 def parse_vv_recurse(ele, cat):
+    last_category_depth = 0
     for e in ele:
         # neue Kategorie hinzufügen
         if e.tag == 'CourseCatalogueArea':
             name = e.find('Name').text
-            sub_cat = ImportCategory.objects.create(parent=cat, name=name)
-            parse_vv_recurse(e, sub_cat)
+            sub_cat = ImportCategory.objects.create(name=name, rel_level=last_category_depth)  # BUG!
+            last_category_depth = parse_vv_recurse(e, sub_cat)
 
         # neue Vorlesung hinzufügen
         elif e.tag == 'Course':
@@ -73,7 +74,7 @@ def parse_vv_recurse(ele, cat):
             except IntegrityError:
                 continue
             iv.veranstalter = veranst
-
+    return last_category_depth
 
 def parse_instructors(instr):
     veranst = []

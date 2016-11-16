@@ -22,8 +22,11 @@ class ImportPerson(models.Model):
 
 
 class ImportCategory(models.Model):
-    parent = models.ForeignKey('self', null=True, blank=True)
-    name = models.CharField(max_length=150)
+    name = models.CharField(max_length=150, unique=True)
+
+    # gibt die rekursionstiefe im baum an.
+    # nullable, um root-Kategorie besonders zu behandeln
+    rel_level = models.IntegerField(null=True, default=0)
 
     def __unicode__(self):
         return self.name
@@ -31,7 +34,6 @@ class ImportCategory(models.Model):
     class Meta:
         verbose_name = 'Importierte Kategorie'
         verbose_name_plural = verbose_name + 'n'
-        unique_together = ('parent', 'name')
         app_label = 'feedback'
 
 
@@ -40,7 +42,7 @@ class ImportVeranstaltung(models.Model):
     name = models.CharField(max_length=150)
     lv_nr = models.CharField(max_length=15, blank=True)
     veranstalter = models.ManyToManyField(ImportPerson, blank=True)
-    category = models.ForeignKey(ImportCategory)
+    category = models.ForeignKey(ImportCategory, related_name="ivs")
 
     def __unicode__(self):
         return u'%s (%s)' % (self.name, self.lv_nr)

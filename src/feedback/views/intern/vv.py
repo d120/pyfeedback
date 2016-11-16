@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.core.urlresolvers import reverse
 from django.db import IntegrityError
-from django.db.models import Q
+from django.db.models import Q, Sum
 from django.forms.formsets import formset_factory
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -41,7 +41,9 @@ def import_vv_edit(request):
         # VV zur Auswahl von Vorlesungen anzeigen
         data['semester'] = Semester.objects.all()
         try:
-            data['vv'] = ImportCategory.objects.get(parent=None)
+            data['vv'] = ImportCategory.objects.all().prefetch_related('ivs')  # sort by id und den ersten eintrag entfernen
+            rest_level = ImportCategory.objects.all().aggregate(sum_lvl=Sum('rel_level'))
+            data['rest_level'] = range(0, rest_level['sum_lvl'])
         except ImportCategory.DoesNotExist:
             messages.error(request, 'Bevor zu importierende Veranstaltungen ausgewählt werden ' +
                            'können, muss zunächst eine VV-XML-Datei hochgeladen werden.')
