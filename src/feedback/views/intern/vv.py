@@ -89,7 +89,7 @@ def import_vv_edit(request):
 @require_http_methods(('HEAD', 'GET', 'POST'))
 def import_vv_edit_users(request):
     data = {}
-    PersonFormSet = formset_factory(PersonForm, extra=0)
+    person_form_set = formset_factory(PersonForm, extra=0)
 
     # Personen suchen, die eine Veranstaltung im aktuellen Semester und unvollständige Daten haben
     has_missing_data = Q(geschlecht='') | Q(email='')
@@ -97,27 +97,28 @@ def import_vv_edit_users(request):
     pers = pers.distinct()
 
     if request.method == 'POST':
-        formset = PersonFormSet(request.POST)
+        formset = person_form_set(request.POST)
         personen = request.POST['personen']
 
         # TODO: im else-Fall werden keine Namen angezeigt, da sie auf initial basieren
         # TODO: vollständige Einträge speichern, auch wenn andere Fehler haben
-        if formset.is_valid():
-            successful_saves = 0
-            for form, pid in zip(formset.forms, personen.split(',')):
+        successful_saves = 0
+        for form, pid in zip(formset.forms, personen.split(',')):
+            if form.is_valid():
                 p = pers.get(id=pid)
                 p.geschlecht = form.cleaned_data['anrede']
                 p.email = form.cleaned_data['email']
                 p.save()
                 successful_saves += 1
 
-            messages.success(request, u'%i Benutzerdatensätze wurden erfolgreich gespeichert.' % successful_saves)
+        messages.success(request, u'%i Benutzerdatensätze wurden erfolgreich gespeichert.' % successful_saves)
+        if successful_saves > 0:
             return HttpResponseRedirect(reverse('intern-index'))
 
     else:
         # Formulare erzeugen
         personen = ','.join([str(p.id) for p in pers])
-        formset = PersonFormSet(initial=[{
+        formset = person_form_set(initial=[{
                                              'anrede': p.geschlecht,
                                              'name': p.full_name(),
                                              'adminlink':
