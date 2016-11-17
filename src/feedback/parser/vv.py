@@ -45,13 +45,20 @@ _mapping_veranstaltung = {
 
 
 def parse_vv_recurse(ele, cat):
+    is_new_category = True
     last_category_depth = 0
     for e in ele:
         # neue Kategorie hinzufügen
         if e.tag == 'CourseCatalogueArea':
             name = e.find('Name').text
-            sub_cat = ImportCategory.objects.create(name=name, rel_level=last_category_depth)  # BUG!
-            last_category_depth = parse_vv_recurse(e, sub_cat)
+
+            rel_step = last_category_depth
+            if is_new_category:
+                is_new_category = False
+                rel_step = 1
+
+            sub_cat = ImportCategory.objects.create(name=name, rel_level=rel_step)
+            last_category_depth = parse_vv_recurse(e, sub_cat) - 1
 
         # neue Vorlesung hinzufügen
         elif e.tag == 'Course':
@@ -74,7 +81,8 @@ def parse_vv_recurse(ele, cat):
             except IntegrityError:
                 continue
             iv.veranstalter = veranst
-    return last_category_depth
+    return 0 if is_new_category else last_category_depth
+
 
 def parse_instructors(instr):
     veranst = []

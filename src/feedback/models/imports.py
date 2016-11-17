@@ -22,7 +22,7 @@ class ImportPerson(models.Model):
 
 
 class ImportCategory(models.Model):
-    name = models.CharField(max_length=150, unique=True)
+    name = models.CharField(max_length=150)
 
     # gibt die rekursionstiefe im baum an.
     # nullable, um root-Kategorie besonders zu behandeln

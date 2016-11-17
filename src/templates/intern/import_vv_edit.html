@@ -53,9 +53,12 @@ $(function() {
             <div class="accordion">
         {% else %}
             {% if category.rel_level == 0 %}
-                </div>
+                </div></div>
             {% elif category.rel_level < 0 %}
-                </div></div> {# TO CHECK#}
+                </div> </div> {# TO CHECK#}
+                {% comment %}{% for i in %}
+                    </div></div>
+                {% endfor %}{% endcomment %}
             {% endif %}
         {% endif %}
 
