@@ -1,4 +1,4 @@
-{% extends "bestellung_base.html" %}{% load static %}
+{% extends "bestellung_base.html" %}{% load static %}{% load filter_range %}
 
 {% block extra_header %}
 <link rel="stylesheet" type="text/css" href="{% static 'jquery/jquery-ui-1.8.6.custom.css' %}" />
@@ -50,21 +50,23 @@ $(function() {
 
     {% for category in vv %}
         {% if forloop.counter0 == 0 or category.rel_level > 0 %}
-            <div class="accordion">
+            <div class="accordion"> {# Create sub-category #}
         {% else %}
             {% if category.rel_level == 0 %}
-                </div></div>
-            {% elif category.rel_level < 0 %}
-                </div> </div> {# TO CHECK#}
-                {% comment %}{% for i in %}
-                    </div></div>
-                {% endfor %}{% endcomment %}
+                </div> {# Close previous accordion-div #}
+            {% else %}
+                {% if category.rel_level < 0 %}
+                    </div> {# Close previous accordion-div #}
+                    {% for i in category.rel_level|range:0 %}
+                        </div></div> {# Jump to parent-category #}
+                    {% endfor %}
+                {% endif %}
             {% endif %}
         {% endif %}
 
         <h3><a href="#">{{ category.name }}</a></h3>
         <div>
-            <div class="mark_unmark"><a href="#" class="markall">alle markieren</a> | <a href="#" class="unmarkall">Markierungen aufheben</a></div>
+            <div class="mark_unmark"><a href="#" class="markall">Alle markieren</a> | <a href="#" class="unmarkall">Markierungen aufheben</a></div>
             <ul>
                 {% for iv in category.ivs.all %}
                     <li style="list-style-type: none">
@@ -75,10 +77,9 @@ $(function() {
             </ul>
 
     {% endfor %}
-    {% for i in rest_level %}
+    {% for i in 0|range:remaining_close_tags %}
         </div></div>
     {% endfor %}
-    </div></div>
 
     <div>
         <input type="submit" name="submit" value="Weiter" />&nbsp;

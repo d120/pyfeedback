@@ -53,12 +53,12 @@ def parse_vv_recurse(ele, cat):
             name = e.find('Name').text
 
             rel_step = last_category_depth
-            if is_new_category:
+            if is_new_category:  # wenn eine Unterkategorie zum ersten Mal erstellt wird hat sie immer ein Step von 1
                 is_new_category = False
                 rel_step = 1
 
             sub_cat = ImportCategory.objects.create(name=name, rel_level=rel_step)
-            last_category_depth = parse_vv_recurse(e, sub_cat) - 1
+            last_category_depth = parse_vv_recurse(e, sub_cat)
 
         # neue Vorlesung hinzufügen
         elif e.tag == 'Course':
@@ -81,7 +81,9 @@ def parse_vv_recurse(ele, cat):
             except IntegrityError:
                 continue
             iv.veranstalter = veranst
-    return 0 if is_new_category else last_category_depth
+
+    # Zurückgegeben wird die Rekursionstiefe der zuletzt erstellten Kategorie, oder wenn keine erstellt wurden 0
+    return 0 if is_new_category else (last_category_depth - 1)
 
 
 def parse_instructors(instr):

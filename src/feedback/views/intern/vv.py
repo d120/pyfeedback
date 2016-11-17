@@ -41,10 +41,13 @@ def import_vv_edit(request):
         # VV zur Auswahl von Vorlesungen anzeigen
         data['semester'] = Semester.objects.all()
         try:
-            data['vv'] = ImportCategory.objects.all().prefetch_related('ivs')[1:]
-            # sort by id
-            rest_level = ImportCategory.objects.all().aggregate(sum_lvl=Sum('rel_level'))
-            data['rest_level'] = range(0, rest_level['sum_lvl'] + 1)
+            data['vv'] = ImportCategory.objects.all().prefetch_related('ivs')[1:]  # erste root-Kategorie ignorieren
+
+            remaining_close_tags = ImportCategory.objects.all().aggregate(sum_lvl=Sum('rel_level'))
+            if remaining_close_tags['sum_lvl'] is None:
+                data['remaining_close_tags'] = 0
+            else:
+                data['remaining_close_tags'] = remaining_close_tags['sum_lvl']
         except ImportCategory.DoesNotExist:
             messages.error(request, 'Bevor zu importierende Veranstaltungen ausgewählt werden ' +
                            'können, muss zunächst eine VV-XML-Datei hochgeladen werden.')
