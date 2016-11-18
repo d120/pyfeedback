@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.core.urlresolvers import reverse
 from django.db import IntegrityError
-from django.db.models import Q
+from django.db.models import Q, Sum
 from django.forms.formsets import formset_factory
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -40,14 +40,21 @@ def import_vv_edit(request):
     if request.method in ('HEAD', 'GET'):
         # VV zur Auswahl von Vorlesungen anzeigen
         data['semester'] = Semester.objects.all()
-        try:
-            data['vv'] = ImportCategory.objects.get(parent=None)
-        except ImportCategory.DoesNotExist:
+
+        category_tree = ImportCategory.objects.all().prefetch_related('ivs')
+        if category_tree:  # prufen, ob die Liste leer ist
+            data['vv'] = category_tree[1:]  # erste root-Kategorie ignorieren
+
+            remaining_close_tags = ImportCategory.objects.all().aggregate(sum_lvl=Sum('rel_level'))
+            if remaining_close_tags['sum_lvl'] is None:
+                data['remaining_close_tags'] = 0
+            else:
+                data['remaining_close_tags'] = remaining_close_tags['sum_lvl']
+            return render(request, 'intern/import_vv_edit.html', data)
+        else:
             messages.error(request, 'Bevor zu importierende Veranstaltungen ausgewählt werden ' +
                            'können, muss zunächst eine VV-XML-Datei hochgeladen werden.')
             return HttpResponseRedirect(reverse('import_vv'))
-        return render(request, 'intern/import_vv_edit.html', data)
-
     else:
         # gewählte Veranstaltungen übernehmen und Personen zuordnen
 
@@ -89,7 +96,7 @@ def import_vv_edit(request):
 @require_http_methods(('HEAD', 'GET', 'POST'))
 def import_vv_edit_users(request):
     data = {}
-    PersonFormSet = formset_factory(PersonForm, extra=0)
+    person_form_set = formset_factory(PersonForm, extra=0)
 
     # Personen suchen, die eine Veranstaltung im aktuellen Semester und unvollständige Daten haben
     has_missing_data = Q(geschlecht='') | Q(email='')
@@ -97,7 +104,7 @@ def import_vv_edit_users(request):
     pers = pers.distinct()
 
     if request.method == 'POST':
-        formset = PersonFormSet(request.POST)
+        formset = person_form_set(request.POST)
         personen = request.POST['personen']
 
         # TODO: im else-Fall werden keine Namen angezeigt, da sie auf initial basieren
@@ -117,14 +124,14 @@ def import_vv_edit_users(request):
     else:
         # Formulare erzeugen
         personen = ','.join([str(p.id) for p in pers])
-        formset = PersonFormSet(initial=[{
-                                             'anrede': p.geschlecht,
-                                             'name': p.full_name(),
-                                             'adminlink':
-                                                 request.build_absolute_uri(
-                                                     reverse('admin:feedback_person_change', args=(p.id,))),
-                                             'email': p.email
-                                         } for p in pers])
+        formset = person_form_set(initial=[{
+                                               'anrede': p.geschlecht,
+                                               'name': p.full_name(),
+                                               'adminlink': request.build_absolute_uri(
+                                                   reverse('admin:feedback_person_change', args=(p.id,))
+                                               ),
+                                               'email': p.email
+                                           } for p in pers])
 
     data['personen'] = personen
     data['formset'] = formset

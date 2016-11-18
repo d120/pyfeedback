@@ -18,7 +18,7 @@ def parse_vv_xml(xmlfile):
     etree = ElementTree.ElementTree()
 
     root = etree.parse(xmlfile, parser=parser).find('CourseCatalogueArea')
-    root_cat = ImportCategory.objects.create(parent=None, name='root')
+    root_cat = ImportCategory.objects.create(parent=None, name='root', rel_level=None)
 
     parse_vv_recurse(root, root_cat)
 
@@ -45,12 +45,20 @@ _mapping_veranstaltung = {
 
 
 def parse_vv_recurse(ele, cat):
+    is_new_category = True
+    last_category_depth = 0
     for e in ele:
         # neue Kategorie hinzufügen
         if e.tag == 'CourseCatalogueArea':
             name = e.find('Name').text
-            sub_cat = ImportCategory.objects.create(parent=cat, name=name)
-            parse_vv_recurse(e, sub_cat)
+
+            rel_step = last_category_depth
+            if is_new_category:  # wenn eine Unterkategorie zum ersten Mal erstellt wird hat sie immer ein Step von 1
+                is_new_category = False
+                rel_step = 1
+
+            sub_cat = ImportCategory.objects.create(name=name, rel_level=rel_step, parent=cat)
+            last_category_depth = parse_vv_recurse(e, sub_cat)
 
         # neue Vorlesung hinzufügen
         elif e.tag == 'Course':
@@ -73,6 +81,9 @@ def parse_vv_recurse(ele, cat):
             except IntegrityError:
                 continue
             iv.veranstalter = veranst
+
+    # Zurückgegeben wird die Rekursionstiefe der zuletzt erstellten Kategorie, oder wenn keine erstellt wurden 0
+    return 0 if is_new_category else (last_category_depth - 1)
 
 
 def parse_instructors(instr):
