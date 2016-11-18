@@ -8,7 +8,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views.decorators.http import require_safe, require_http_methods
 
-from feedback.forms import BestellungModelForm, KommentarModelForm, PersonUpdateForm, VeranstaltungFreiFragenForm, VeranstaltungKleingruppenForm
+from feedback.forms import BestellungModelForm, KommentarModelForm, PersonUpdateForm, VeranstaltungFreiFragenForm, \
+    VeranstaltungKleingruppenForm
 from feedback.models import Veranstaltung, Person, Einstellung, Kommentar, past_semester_orders
 from django.views.generic.edit import UpdateView
 from django.views.generic.detail import DetailView
@@ -40,7 +41,7 @@ def index(request):
     data = {}
     veranst = Veranstaltung.objects.get(id=request.session['vid'])
 
-    #TODO: statt Betrachtung der Sichtbarkeit automatisch aktuelles Semester (-> Kalender) annehmen
+    # TODO: statt Betrachtung der Sichtbarkeit automatisch aktuelles Semester (-> Kalender) annehmen
     if veranst.semester.sichtbarkeit == 'ADM' and Einstellung.get('bestellung_erlaubt') == '1':
         if request.method == 'POST':
             order_form = BestellungModelForm(request.POST, instance=veranst)
@@ -61,7 +62,7 @@ def index(request):
         if request.method == 'POST':
             comment_form = KommentarModelForm(request.POST, instance=kommentar, veranstaltung=veranst)
             if comment_form.is_valid():
-                #TODO: löschen ermöglichen
+                # TODO: löschen ermöglichen
                 kommentar = comment_form.save(commit=False)
                 kommentar.veranstaltung = veranst
                 kommentar.save()
@@ -72,6 +73,7 @@ def index(request):
 
     data['veranstaltung'] = veranst
     return render(request, 'veranstalter/index.html', data)
+
 
 class VerantwortlicherUpdate(UpdateView):
     model = Person
@@ -93,6 +95,7 @@ class VerantwortlicherUpdate(UpdateView):
         except Exception:
             pass
 
+
 class FreieFragenUpdate(UpdateView):
     model = Veranstaltung
     form_class = VeranstaltungFreiFragenForm
@@ -113,6 +116,7 @@ class FreieFragenUpdate(UpdateView):
         except Exception:
             pass
 
+
 class KleingruppenUpdate(UpdateView):
     model = Veranstaltung
     form_class = VeranstaltungKleingruppenForm
@@ -120,7 +124,7 @@ class KleingruppenUpdate(UpdateView):
     success_url = reverse_lazy('VeranstaltungZusammenfassung')
 
     def dispatch(self, request, *args, **kwargs):
-    # Wenn die Veranstaltung keine Übung hat leite weiter auf die Zusammenfassung
+        # Wenn die Veranstaltung keine Übung hat leite weiter auf die Zusammenfassung
         try:
             veranst = Veranstaltung.objects.get(id=request.session['vid'])
             if veranst.has_uebung() == False:
@@ -145,9 +149,11 @@ class KleingruppenUpdate(UpdateView):
         except Exception:
             pass
 
+
 class VeranstaltungZusammenfassung(DetailView):
     model = Veranstaltung
     template_name = 'feedback/veranstaltung_zusamenfassung.html'
+
     def get_object(self):
         try:
             return Veranstaltung.objects.get(id=self.request.session['vid'])

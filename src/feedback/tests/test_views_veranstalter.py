@@ -122,4 +122,3 @@ class VeranstalterIndexTest(TestCase):
         c.post('/veranstalter/', {'veranstaltung': self.v, 'autor': self.p.id, 'text': 'Toll!'})
         self.v = Veranstaltung.objects.get(id=self.v.id)
         self.assertEqual(self.v.kommentar.text, 'Toll!')
-    

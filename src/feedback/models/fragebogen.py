@@ -104,8 +104,9 @@ class Fragebogen(models.Model):
         abstract = True
         app_label = 'feedback'
 
+
 class Ergebnis(models.Model):
-    #TODO: durch OneToOneField ersetzen
+    # TODO: durch OneToOneField ersetzen
     veranstaltung = models.OneToOneField('feedback.Veranstaltung')
     anzahl = models.PositiveIntegerField()
     parts = []
@@ -131,17 +132,19 @@ class Ergebnis(models.Model):
         values = []
         for part in parts:
             val = getattr(self, part[0])
-            count = getattr(self, part[0]+'_count')
+            count = getattr(self, part[0] + '_count')
             values.append([val, count])
 
         return values
 
     def __unicode__(self):
-        return u'Ergebnisse zu "%s" (%s, %s)' % (self.veranstaltung.name, self.veranstaltung.get_typ_display(), self.veranstaltung.semester)
+        return u'Ergebnisse zu "%s" (%s, %s)' % (
+        self.veranstaltung.name, self.veranstaltung.get_typ_display(), self.veranstaltung.semester)
 
     class Meta:
         abstract = True
         app_label = 'feedback'
+
 
 class Kommentar(models.Model):
     veranstaltung = models.OneToOneField('feedback.Veranstaltung')
