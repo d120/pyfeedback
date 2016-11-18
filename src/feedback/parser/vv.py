@@ -18,7 +18,7 @@ def parse_vv_xml(xmlfile):
     etree = ElementTree.ElementTree()
 
     root = etree.parse(xmlfile, parser=parser).find('CourseCatalogueArea')
-    root_cat = ImportCategory.objects.create(name='root', rel_level=None)
+    root_cat = ImportCategory.objects.create(parent=None, name='root', rel_level=None)
 
     parse_vv_recurse(root, root_cat)
 
@@ -57,7 +57,7 @@ def parse_vv_recurse(ele, cat):
                 is_new_category = False
                 rel_step = 1
 
-            sub_cat = ImportCategory.objects.create(name=name, rel_level=rel_step)
+            sub_cat = ImportCategory.objects.create(name=name, rel_level=rel_step, parent=cat)
             last_category_depth = parse_vv_recurse(e, sub_cat)
 
         # neue Vorlesung hinzufügen

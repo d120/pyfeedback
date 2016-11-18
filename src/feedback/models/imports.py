@@ -28,6 +28,9 @@ class ImportCategory(models.Model):
     # nullable, um root-Kategorie besonders zu behandeln
     rel_level = models.IntegerField(null=True, default=0)
 
+    # um eindeutige Suche nach Kategorie zu ermoeglichen
+    parent = models.ForeignKey('self', null=True, blank=True)
+
     def __unicode__(self):
         return self.name
 
@@ -35,6 +38,7 @@ class ImportCategory(models.Model):
         verbose_name = 'Importierte Kategorie'
         verbose_name_plural = verbose_name + 'n'
         app_label = 'feedback'
+        unique_together = ('parent', 'name')
 
 
 class ImportVeranstaltung(models.Model):
