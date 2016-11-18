@@ -45,16 +45,16 @@ class InternVvTest(NonSuTestMixin):
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response['Location'].endswith('/intern/import_vv/'))
 
-        ic = ImportCategory.objects.create(parent=None, name='root')
+        ic = ImportCategory.objects.create(parent=None, name='root', rel_level=1)
         response = self.client.get(path, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.templates[0].name, 'intern/import_vv_edit.html')
         self.assertSequenceEqual(response.context['semester'], list(Semester.objects.all()))
-        self.assertEqual(response.context['vv'], ic)
+        self.assertEqual(response.context['vv'], [])
 
     def test_import_vv_edit_post(self):
         s = Semester.objects.create(semester=20110, fragebogen='2009', sichtbarkeit='ADM')
-        ic = ImportCategory.objects.create(parent=None, name='root')
-        ic_sub = ImportCategory.objects.create(parent=ic, name='sub')
+        ic = ImportCategory.objects.create(parent=None, name='root', rel_level=1)
+        ic_sub = ImportCategory.objects.create(parent=ic, name='sub', rel_level=1)
         ip = ImportPerson.objects.create(vorname='Das', nachname='Wesen')
         iv0 = ImportVeranstaltung.objects.create(typ='vu', name='Bla I', category=ic)
         iv0.veranstalter.add(ip)

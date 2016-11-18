@@ -40,20 +40,21 @@ def import_vv_edit(request):
     if request.method in ('HEAD', 'GET'):
         # VV zur Auswahl von Vorlesungen anzeigen
         data['semester'] = Semester.objects.all()
-        try:
-            data['vv'] = ImportCategory.objects.all().prefetch_related('ivs')[1:]  # erste root-Kategorie ignorieren
+
+        category_tree = ImportCategory.objects.all().prefetch_related('ivs')
+        if category_tree:  # prufen, ob die Liste leer ist
+            data['vv'] = category_tree[1:]  # erste root-Kategorie ignorieren
 
             remaining_close_tags = ImportCategory.objects.all().aggregate(sum_lvl=Sum('rel_level'))
             if remaining_close_tags['sum_lvl'] is None:
                 data['remaining_close_tags'] = 0
             else:
                 data['remaining_close_tags'] = remaining_close_tags['sum_lvl']
-        except ImportCategory.DoesNotExist:
+            return render(request, 'intern/import_vv_edit.html', data)
+        else:
             messages.error(request, 'Bevor zu importierende Veranstaltungen ausgewählt werden ' +
                            'können, muss zunächst eine VV-XML-Datei hochgeladen werden.')
             return HttpResponseRedirect(reverse('import_vv'))
-        return render(request, 'intern/import_vv_edit.html', data)
-
     else:
         # gewählte Veranstaltungen übernehmen und Personen zuordnen
 
