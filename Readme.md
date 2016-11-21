@@ -7,7 +7,7 @@ Pyfeedback is a web application created to assist the feedback to modules at TU 
 
 It is written in Python 2.7 and utilizes the newest version of the django web framework.
 
-## Requierements
+## Requirements
 
 To use pyfeedback the following tools have to be installed:
 * pip and virtualenv for python 2
@@ -17,7 +17,7 @@ To use pyfeedback the following tools have to be installed:
 ## Preparing development environment
 * Create a virtualenv with virtualenv $name
 * Activate the virtualenv with `source $name/bin/activate`
-* Install all requierements with `pip install -r requierements.txt`
+* Install all requirements with `pip install -r requierements.txt`
 * Create the test database with `python src/manage.py migrate`
 * Start the development server with `python src/manage.py runserver`
 

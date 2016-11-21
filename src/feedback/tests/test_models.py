@@ -26,37 +26,40 @@ class InitTest(TestCase):
         self.assertEqual(get_model('Ergebnis', self.s[1]), Ergebnis2009)
         self.assertEqual(get_model('Ergebnis', self.s[2]), Ergebnis2012)
 
+
 class pastOrdersTest(TestCase):
     def setUp(self):
-
         currentSem = Semester.objects.create(semester=20125, fragebogen='2012')
         pastSem = Semester.objects.create(semester=20115, fragebogen='2009')
         futurSem = Semester.objects.create(semester=20130, fragebogen='2012')
 
         self.default_params = {'typ': 'v', 'name': 'Stoning I',
-            'grundstudium': False, 'evaluieren': True}
+                               'grundstudium': False, 'evaluieren': True}
 
-        self.singleLV = Veranstaltung.objects.create(semester = currentSem, lv_nr = '20-00-0021-lv', **self.default_params)
+        self.singleLV = Veranstaltung.objects.create(semester=currentSem, lv_nr='20-00-0021-lv', **self.default_params)
 
         self.lv = []
-        self.lv.append(Veranstaltung.objects.create(semester = pastSem, lv_nr = '20-00-0042-lv', anzahl=10,  **self.default_params))
-        self.lv.append(Veranstaltung.objects.create(semester = currentSem, lv_nr = '20-00-0042-lv', **self.default_params))
+        self.lv.append(
+            Veranstaltung.objects.create(semester=pastSem, lv_nr='20-00-0042-lv', anzahl=10, **self.default_params))
+        self.lv.append(Veranstaltung.objects.create(semester=currentSem, lv_nr='20-00-0042-lv', **self.default_params))
 
-        self.lv.append(Veranstaltung.objects.create(semester = pastSem, lv_nr = '20-00-0043-lv',  **self.default_params))
-        self.lv.append(Veranstaltung.objects.create(semester = currentSem, lv_nr = '20-00-0043-lv', **self.default_params))
-        self.lv.append(Veranstaltung.objects.create(semester = futurSem, lv_nr = '20-00-0043-lv', anzahl=10, **self.default_params))
+        self.lv.append(Veranstaltung.objects.create(semester=pastSem, lv_nr='20-00-0043-lv', **self.default_params))
+        self.lv.append(Veranstaltung.objects.create(semester=currentSem, lv_nr='20-00-0043-lv', **self.default_params))
+        self.lv.append(
+            Veranstaltung.objects.create(semester=futurSem, lv_nr='20-00-0043-lv', anzahl=10, **self.default_params))
 
         self.erg = []
         self.erg.append(Ergebnis2009.objects.create(veranstaltung=self.lv[0], anzahl=5,
-                                             v_gesamt=1, v_gesamt_count=2,
-                                             ue_gesamt=2, ue_gesamt_count=3,
-                                             v_feedbackpreis=3, v_feedbackpreis_count=4))
+                                                    v_gesamt=1, v_gesamt_count=2,
+                                                    ue_gesamt=2, ue_gesamt_count=3,
+                                                    v_feedbackpreis=3, v_feedbackpreis_count=4))
 
     def test_no_past(self):
         """Die Veranstaltung wird das erste mal gehalten"""
         result = past_semester_orders(self.singleLV)
         self.assertEqual(len(result), 0)
-        self.assertEqual(past_semester_orders(self.singleLV), [], 'Die Liste sollte leer sein. Die Veranstaltung wird das erste mal angeboten.')
+        self.assertEqual(past_semester_orders(self.singleLV), [],
+                         'Die Liste sollte leer sein. Die Veranstaltung wird das erste mal angeboten.')
 
     def test_one_befor(self):
         """Die Veranstaltung wurde schonmal gehalten, es wurde bestellt und auch Ergebnisse geliefert"""
@@ -69,7 +72,7 @@ class pastOrdersTest(TestCase):
 
     def test_one_befor_current_ordert(self):
         """Für die aktuelle Veranstaltung wurde eine Bestellung aufgegeben. In der Vergangenheit gab es die Veranstaltung einmal."""
-        self.lv[1].anzahl=42
+        self.lv[1].anzahl = 42
         self.lv[1].save()
 
         result = past_semester_orders(self.lv[1])
@@ -86,7 +89,7 @@ class pastOrdersTest(TestCase):
 
     def test_no_result_exist(self):
         """Die Veranstaltung wurde gehalten, es wurde bestellt jedoch gibt es keine Ergebnisse"""
-        self.lv[2].anzahl=10
+        self.lv[2].anzahl = 10
         self.lv[2].save()
 
         result = past_semester_orders(self.lv[3])
@@ -96,6 +99,7 @@ class pastOrdersTest(TestCase):
         expetedDict = {'veranstaltung': self.lv[2], 'anzahl_bestellung': 10, 'anzahl_ruecklauf': 0}
 
         self.assertDictEqual(expetedDict, result[0])
+
 
 class SemesterTest(TestCase):
     def setUp(self):
@@ -137,7 +141,7 @@ class PersonTest(TestCase):
         p = Person.create_from_import_person(ip)
         self.assertEqual(p, self.p)
 
-        ip.vorname='Eric'
+        ip.vorname = 'Eric'
         p = Person.create_from_import_person(ip)
         self.assertNotEqual(p, self.p)
 
@@ -202,11 +206,12 @@ class VeranstaltungTest(TransactionTestCase):
         """Die URL für den Veranstalter soll die id und den Token enthalten"""
         url = self.v[0].link_veranstalter()
         url_parts = url.split('&')
-        self.assertEqual(len(url_parts),2)
+        self.assertEqual(len(url_parts), 2)
         ver_id = self.v[0].id
-        self.assertEqual(url_parts[0],'https://www.fachschaft.informatik.tu-darmstadt.de/veranstalter/login/?vid=%d' % ver_id)
+        self.assertEqual(url_parts[0],
+                         'https://www.fachschaft.informatik.tu-darmstadt.de/veranstalter/login/?vid=%d' % ver_id)
         access_token = self.v[0].access_token
-        self.assertEquals('token='+access_token,url_parts[1])
+        self.assertEquals('token=' + access_token, url_parts[1])
 
 
 class EinstellungTest(TestCase):
@@ -282,9 +287,9 @@ class ErgebnisTest(TestCase):
         self.s, self.vu = get_veranstaltung('vu')
         self.s, self.v = get_veranstaltung('v')
         self.eu = Ergebnis2009.objects.create(veranstaltung=self.vu, anzahl=5,
-                                             v_gesamt=1, v_gesamt_count=2,
-                                             ue_gesamt=2, ue_gesamt_count=3,
-                                             v_feedbackpreis=3, v_feedbackpreis_count=4)
+                                              v_gesamt=1, v_gesamt_count=2,
+                                              ue_gesamt=2, ue_gesamt_count=3,
+                                              v_feedbackpreis=3, v_feedbackpreis_count=4)
         self.e = Ergebnis2009.objects.create(veranstaltung=self.v, anzahl=5,
                                              v_gesamt=1, v_gesamt_count=2,
                                              ue_gesamt=2, ue_gesamt_count=3,
@@ -293,7 +298,6 @@ class ErgebnisTest(TestCase):
         self.parts_ue = [[2, 3]] + [[None, 0]] * 3
         self.parts_ue_empty = [[None, 0]] * 4
         self.parts_hidden = [[3, 4], [None, 0]]
-
 
     def test_values(self):
         self.assertListEqual(self.eu.values(), self.parts_vl + self.parts_ue)
@@ -309,6 +313,7 @@ class ErgebnisTest(TestCase):
     def test_unique(self):
         with self.assertRaises(IntegrityError):
             Ergebnis2009.objects.create(veranstaltung=self.v)
+
 
 class KommentarTest(TestCase):
     def setUp(self):

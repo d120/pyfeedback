@@ -54,11 +54,11 @@ class VvParserTest(TransactionTestCase):
         cat_fb20_g = self._get_cat_or_fail(name='Grundlagenveranstaltungen', parent=cat_fb20)
         self.assertEqual(ImportCategory.objects.count(), 5)
 
-        self.assertEqual(cat_root.importveranstaltung_set.count(), 0)
-        self.assertEqual(cat_ov.importveranstaltung_set.count(), 0)
-        self.assertEqual(cat_fb20.importveranstaltung_set.count(), 0)
-        self.assertEqual(cat_fb20_ov.importveranstaltung_set.count(), 0)
-        self.assertEqual(cat_fb20_g.importveranstaltung_set.count(), 2)
+        self.assertEqual(cat_root.ivs.count(), 0)
+        self.assertEqual(cat_ov.ivs.count(), 0)
+        self.assertEqual(cat_fb20.ivs.count(), 0)
+        self.assertEqual(cat_fb20_ov.ivs.count(), 0)
+        self.assertEqual(cat_fb20_g.ivs.count(), 2)
 
         self._get_veranst_or_fail(typ='vu', name='Grundlagen der Informatik I', cat=cat_fb20_g)
         self._get_veranst_or_fail(typ='vu', name='Grundlagen der Informatik II', cat=cat_fb20_g)
