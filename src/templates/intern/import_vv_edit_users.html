@@ -1,32 +1,28 @@
 {% extends "bestellung_base.html" %}
-
 {% block title %}Personendaten vervollständigen{% endblock %}
 
 {% block content %}
-<h1>Personendaten vervollständigen</h1>
+    <h1>Personendaten vervollständigen</h1>
 
-{% if formset.forms %}
-<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
-	{{ formset.management_form }}
-	<input type="hidden" name="personen" value="{{personen}}" />
-	<table>
-	{% for form in formset.forms %}
-	<tr><td colspan="3"><h2><a href="{{form.initial.adminlink}}" target"_blank">{{form.initial.name}}</a></h2></td></tr> 
-        
-	    {% for field in form %}
-	        <tr>
-	            <th>{{field.label_tag}}:</th><td>{{field}}</td><td>{{field.errors}}</td>
-	        </tr>
-	    {% endfor %}
-	{% endfor %}
-	</table>
-	<div>
-		<input type="submit" name="submit" value="Weiter" />&nbsp;
-		<input type="reset" name="reset" value="Zurücksetzen" />
-	</div>
-</form>
-{% else %}
-<p>Alle Veranstalter des aktuellen Semesters haben vollständige Personendaten.</p>
-{% endif %}
+    {% if formset.forms %}
+        <form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+            {{ formset.management_form }}
+            <h2>Es sind noch {{ formset | length }} Personendaten zu bearbeiten.</h2>
 
+                {% for form in formset.forms %}
+                            <h2>
+                                <a href="{% url 'import_vv_edit_users_update' pk=form.initial.id %}">
+                                    {{form.initial.name}}
+                                </a>
+                            </h2>
+                {% endfor %}
+            <div>
+                <input type="submit" name="submit" value="Weiter" />&nbsp;
+		        <input type="reset" name="reset" value="Zurücksetzen" />
+	        </div>
+        </form>
+
+    {% else %}
+        <p>Alle Veranstalter des aktuellen Semesters haben vollständige Personendaten.</p>
+    {% endif %}
 {% endblock %}

@@ -1,0 +1,39 @@
+{% extends "bestellung_base.html" %}
+
+{% block title %}Personendaten vervollständigen{% endblock %}
+
+{% block content %}
+    <h1>Personendaten vervollständigen</h1>
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ formset.management_form }}
+                <h2>Es sind noch {{ view.get_to_edit_count }} Personendaten zu bearbeiten.</h2>
+                <h2>{{ person.full_name }}</h2>
+                <h2><a href="http://www.google.com/search?q={{person.full_name}}+tu+darmstadt" target="_blank>">Auf Google suchen.</a></h2>
+
+                {% for field in form %}
+                    {{field.label_tag}}
+                    {{field}}<br><br>
+                    {{field.errors}}
+                {% endfor %}
+            <div>
+                {% if view.get_prev_id == -1 %}
+                    <input type="button" name="back" value="Zurück" disabled="disabled" />&nbsp;
+                {% else %}
+                        <input type="button" name="back" value="Zurück"
+                               onclick="location.href='{% url 'import_vv_edit_users_update' pk=view.get_prev_id %}'"/>&nbsp;
+                {% endif %}
+
+                {% if view.get_next_id == -1 %}
+                    <input type="button" name="jump" value="Überspringen" disabled="disabled" />&nbsp;
+                {% else %}
+                    <input type="button" name="jump" value="Überspringen"
+                           onclick="location.href='{% url 'import_vv_edit_users_update' pk=view.get_next_id %}'"/>&nbsp;
+                {% endif %}
+
+                <input type="submit" name="submit" value="Speichern & Weiter" />
+            </div>
+        </form>
+    <br>
+    <p><a href="{% url 'import_vv_edit_users' %}">zurück zu Personendaten</a></p>
+{% endblock %}

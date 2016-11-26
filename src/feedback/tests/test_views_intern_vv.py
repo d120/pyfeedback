@@ -88,8 +88,10 @@ class InternVvEditUsersTest(NonSuTestMixin, TestCase):
 
         self.p0 = Person.objects.create(vorname='Je', nachname='Mand')
         self.p1 = Person.objects.create(vorname='Auch Je', nachname='Mand')
-        Person.objects.create(vorname='Je', nachname='Mand Anderes')
-        Person.objects.create(vorname='Noch Je', nachname='Mand', geschlecht='m', email='ad@res.se')
+
+        self.path_save_p0 = self.path + str(self.p0.id) + '/'
+        self.path_save_p1 = self.path + str(self.p1.id) + '/'
+
         _, self.v = get_veranstaltung('vu')
         self.v.veranstalter.add(self.p0)
         self.v.veranstalter.add(self.p1)
@@ -100,15 +102,26 @@ class InternVvEditUsersTest(NonSuTestMixin, TestCase):
         self.assertTrue(self.client.login(username='supers', password='pw'))
         response = self.client.get(self.path, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.templates[0].name, 'intern/import_vv_edit_users.html')
-        self.assertEqual(response.context['personen'], '%d,%d' % (self.p1.id, self.p0.id))
         self.assertEqual(len(response.context['formset'].forms), 2)
 
     def test_import_vv_edit_users_post(self):
+        self.do_non_su_test(self.path_save_p0)
+
         self.client.login(username='supers', password='pw')
-        response = self.client.post(self.path, {'personen': '%d,%d' % (self.p1.id, self.p0.id),
-                                                'form-TOTAL_FORMS': 2, 'form-INITIAL_FORMS': 2,
-                                                'form-0-anrede': 'm', 'form-0-email': 'ad@res.se',
-                                                'form-1-anrede': 'w', 'form-1-email': 'ad@res.se',
-                                                }, **{'REMOTE_USER': 'super'})
+
+        response = self.client.get(self.path_save_p0)
+        self.assertEqual(response.templates[0].name, 'intern/import_vv_edit_users_update.html')
+
+        response = self.client.get(self.path_save_p1)
+        self.assertEqual(response.templates[0].name, 'intern/import_vv_edit_users_update.html')
+
+        response = self.client.post(self.path_save_p0, {'geschlecht': 'm', 'email': ''})
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.post(self.path_save_p0, {'geschlecht': 'm', 'email': 'ad@res.se'})
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response['Location'], tests.LOGIN_URL)
+
+        response = self.client.post(self.path_save_p1, {'geschlecht': 'm', 'email': 'ad2@res.se'})
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response['Location'], tests.LOGIN_URL)
