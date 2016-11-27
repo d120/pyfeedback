@@ -5,11 +5,11 @@ from django.contrib.auth.decorators import user_passes_test
 from django.core.urlresolvers import reverse
 from django.db import IntegrityError
 from django.db.models import Q, Sum
-from django.forms.formsets import formset_factory
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
-from django.views.generic.edit import FormView, UpdateView
+from django.views.generic.edit import UpdateView
+from django.views.generic import ListView
 from django.contrib.auth.mixins import UserPassesTestMixin
 
 from feedback.parser import vv as vv_parser
@@ -94,20 +94,13 @@ def import_vv_edit(request):
         return HttpResponseRedirect(reverse('import_vv_edit_users'))
 
 
-class PersonFormView(UserPassesTestMixin, FormView):
+class PersonFormView(UserPassesTestMixin, ListView):
+    model = Person
     template_name = 'intern/import_vv_edit_users.html'
-    form_class = PersonForm
+    context_object_name = 'persons'
 
-    def get(self, request, *args, **kwargs):
-        person_form_set = formset_factory(PersonForm, extra=0)
-        context = self.get_context_data()
-        is_missing = Q(geschlecht='') | Q(email='')
-        pers = Person.objects.filter(is_missing, veranstaltung__semester=Semester.current()).order_by('id').distinct()
-
-        formset = person_form_set(initial=[{'anrede': p.geschlecht, 'name': p.full_name(), 'id': p.id, 'email': p.email}
-                                           for p in pers])
-        context['formset'] = formset
-        return self.render_to_response(context)
+    def get_queryset(self):
+        return Person.persons_to_edit()
 
     def test_func(self):
         return self.request.user.is_superuser
@@ -118,22 +111,17 @@ class PersonFormUpdateView(UserPassesTestMixin, UpdateView):
     form_class = PersonForm
     template_name = 'intern/import_vv_edit_users_update.html'
 
-    def get_next_id(self):
+    def get_id(self):
         try:
-            next_person = Person.objects.filter(id__gt=self.object.id, geschlecht='', email='').order_by("id")[0:1].get().id
-        except Person.DoesNotExist:
-            next_person = -1
-        return next_person
-
-    def get_prev_id(self):
+            next_id = Person.persons_to_edit().filter(id__gt=self.object.id).order_by("id")[0:1].get().id
+        except (Person.DoesNotExist, IndexError):
+            next_id = None
         try:
-            prev_person = Person.objects.filter(id__lt=self.object.id, geschlecht='', email='').order_by("-id")[0:1].get().id
-        except Person.DoesNotExist:
-            prev_person = -1
-        return prev_person
+            prev_id = Person.persons_to_edit().filter(id__lt=self.object.id).order_by("-id")[0:1].get().id
+        except (Person.DoesNotExist, IndexError):
+            prev_id = None
 
-    def get_to_edit_count(self):
-        return Person.objects.filter(geschlecht='', email='').count()
+        return next_id, prev_id
 
     def form_valid(self, form):
         p = form.save(commit=False)
@@ -148,8 +136,8 @@ class PersonFormUpdateView(UserPassesTestMixin, UpdateView):
         return super(PersonFormUpdateView, self).form_invalid(form)
 
     def get_success_url(self):
-        next_id = self.get_next_id()
-        if next_id > 0:
+        next_id, prev_id = self.get_id()
+        if next_id:
             return reverse('import_vv_edit_users_update', args=[next_id])
         else:
             return reverse('import_vv_edit_users')

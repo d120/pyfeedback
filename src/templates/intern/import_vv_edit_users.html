@@ -4,22 +4,18 @@
 {% block content %}
     <h1>Personendaten vervollständigen</h1>
 
-    {% if formset.forms %}
-        <form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
-            {{ formset.management_form }}
-            <h2>Es sind noch {{ formset | length }} Personendaten zu bearbeiten.</h2>
+    {% if persons %}
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h2>Es sind noch {{ persons.count }} Personendaten zu bearbeiten.</h2>
 
-                {% for form in formset.forms %}
+                {% for p in persons %}
                             <h2>
-                                <a href="{% url 'import_vv_edit_users_update' pk=form.initial.id %}">
-                                    {{form.initial.name}}
+                                <a href="{% url 'import_vv_edit_users_update' pk=p.id %}">
+                                    {{p.full_name}}
                                 </a>
                             </h2>
                 {% endfor %}
-            <div>
-                <input type="submit" name="submit" value="Weiter" />&nbsp;
-		        <input type="reset" name="reset" value="Zurücksetzen" />
-	        </div>
         </form>
 
     {% else %}

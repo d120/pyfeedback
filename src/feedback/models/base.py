@@ -9,6 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.db.utils import OperationalError
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
+from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
 
 from feedback.tools import ean_checksum_calc, ean_checksum_valid
@@ -163,6 +164,11 @@ class Person(models.Model):
                 vorname=ip.vorname,
                 nachname=ip.nachname,
             )
+
+    @staticmethod
+    def persons_to_edit(semester=Semester.current()):
+        return Person.objects.filter(Q(geschlecht='') | Q(email=''), veranstaltung__semester=semester)\
+            .order_by('id').distinct()
 
 
 class Veranstaltung(models.Model):
