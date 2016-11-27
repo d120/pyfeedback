@@ -1,6 +1,7 @@
 # coding=utf-8
 
 from django.db import IntegrityError
+from django.db.models import Q
 from django.test import TestCase, TransactionTestCase
 
 from feedback.models import get_model, Semester, Person, Veranstaltung, Einstellung, Mailvorlage
@@ -29,24 +30,24 @@ class InitTest(TestCase):
 
 class pastOrdersTest(TestCase):
     def setUp(self):
-        currentSem = Semester.objects.create(semester=20125, fragebogen='2012')
-        pastSem = Semester.objects.create(semester=20115, fragebogen='2009')
-        futurSem = Semester.objects.create(semester=20130, fragebogen='2012')
+        current_sem = Semester.objects.create(semester=20125, fragebogen='2012')
+        past_sem = Semester.objects.create(semester=20115, fragebogen='2009')
+        future_sem = Semester.objects.create(semester=20130, fragebogen='2012')
 
         self.default_params = {'typ': 'v', 'name': 'Stoning I',
                                'grundstudium': False, 'evaluieren': True}
 
-        self.singleLV = Veranstaltung.objects.create(semester=currentSem, lv_nr='20-00-0021-lv', **self.default_params)
+        self.singleLV = Veranstaltung.objects.create(semester=current_sem, lv_nr='20-00-0021-lv', **self.default_params)
 
         self.lv = []
         self.lv.append(
-            Veranstaltung.objects.create(semester=pastSem, lv_nr='20-00-0042-lv', anzahl=10, **self.default_params))
-        self.lv.append(Veranstaltung.objects.create(semester=currentSem, lv_nr='20-00-0042-lv', **self.default_params))
+            Veranstaltung.objects.create(semester=past_sem, lv_nr='20-00-0042-lv', anzahl=10, **self.default_params))
+        self.lv.append(Veranstaltung.objects.create(semester=current_sem, lv_nr='20-00-0042-lv', **self.default_params))
 
-        self.lv.append(Veranstaltung.objects.create(semester=pastSem, lv_nr='20-00-0043-lv', **self.default_params))
-        self.lv.append(Veranstaltung.objects.create(semester=currentSem, lv_nr='20-00-0043-lv', **self.default_params))
+        self.lv.append(Veranstaltung.objects.create(semester=past_sem, lv_nr='20-00-0043-lv', **self.default_params))
+        self.lv.append(Veranstaltung.objects.create(semester=current_sem, lv_nr='20-00-0043-lv', **self.default_params))
         self.lv.append(
-            Veranstaltung.objects.create(semester=futurSem, lv_nr='20-00-0043-lv', anzahl=10, **self.default_params))
+            Veranstaltung.objects.create(semester=future_sem, lv_nr='20-00-0043-lv', anzahl=10, **self.default_params))
 
         self.erg = []
         self.erg.append(Ergebnis2009.objects.create(veranstaltung=self.lv[0], anzahl=5,
@@ -66,21 +67,22 @@ class pastOrdersTest(TestCase):
         result = past_semester_orders(self.lv[1])
         self.assertEqual(len(result), 1)
 
-        expetedDict = {'veranstaltung': self.lv[0], 'anzahl_bestellung': 10, 'anzahl_ruecklauf': 5}
+        expeted_dict = {'veranstaltung': self.lv[0], 'anzahl_bestellung': 10, 'anzahl_ruecklauf': 5}
 
-        self.assertDictEqual(expetedDict, result[0])
+        self.assertDictEqual(expeted_dict, result[0])
 
     def test_one_befor_current_ordert(self):
-        """Für die aktuelle Veranstaltung wurde eine Bestellung aufgegeben. In der Vergangenheit gab es die Veranstaltung einmal."""
+        """Für die aktuelle Veranstaltung wurde eine Bestellung aufgegeben.
+        In der Vergangenheit gab es die Veranstaltung einmal."""
         self.lv[1].anzahl = 42
         self.lv[1].save()
 
         result = past_semester_orders(self.lv[1])
         self.assertEqual(len(result), 1)
 
-        expetedDict = {'veranstaltung': self.lv[0], 'anzahl_bestellung': 10, 'anzahl_ruecklauf': 5}
+        expeted_dict = {'veranstaltung': self.lv[0], 'anzahl_bestellung': 10, 'anzahl_ruecklauf': 5}
 
-        self.assertDictEqual(expetedDict, result[0])
+        self.assertDictEqual(expeted_dict, result[0])
 
     def test_not_exist(self):
         """Die Veranstaltung wurde schon einmal gehalten, es wurde jedoch nichts bestellt"""
@@ -96,9 +98,9 @@ class pastOrdersTest(TestCase):
 
         self.assertEqual(len(result), 1)
 
-        expetedDict = {'veranstaltung': self.lv[2], 'anzahl_bestellung': 10, 'anzahl_ruecklauf': 0}
+        expeted_dict = {'veranstaltung': self.lv[2], 'anzahl_bestellung': 10, 'anzahl_ruecklauf': 0}
 
-        self.assertDictEqual(expetedDict, result[0])
+        self.assertDictEqual(expeted_dict, result[0])
 
 
 class SemesterTest(TestCase):
@@ -128,22 +130,32 @@ class SemesterTest(TestCase):
 
 class PersonTest(TestCase):
     def setUp(self):
-        self.p = Person.objects.create(vorname='Brian', nachname='Cohen')
+        self.p1 = Person.objects.create(vorname='Brian', nachname='Cohen')
+        self.p2 = Person.objects.create(vorname='Bud', nachname='Spencer', email='x@y.z')
+
+        self.s, self.v = get_veranstaltung('v')
+        self.v.veranstalter = [self.p1, self.p2]
 
     def test_full_name(self):
-        self.assertEqual(self.p.full_name(), 'Brian Cohen')
+        self.assertEqual(self.p1.full_name(), 'Brian Cohen')
 
     def test_unicode(self):
-        self.assertEqual(unicode(self.p), 'Cohen, Brian')
+        self.assertEqual(unicode(self.p1), 'Cohen, Brian')
 
     def test_create_from_import_person(self):
         ip = ImportPerson(vorname='Brian', nachname='Cohen')
         p = Person.create_from_import_person(ip)
-        self.assertEqual(p, self.p)
+        self.assertEqual(p, self.p1)
 
         ip.vorname = 'Eric'
         p = Person.create_from_import_person(ip)
-        self.assertNotEqual(p, self.p)
+        self.assertNotEqual(p, self.p1)
+
+    def test_persons_to_edit(self):
+        to_edit_persons = Person.persons_to_edit(semester=self.s)
+        self.assertEqual(to_edit_persons.count(), 2)
+        self.assertTrue(to_edit_persons.filter(nachname='Cohen').exists())
+        self.assertTrue(to_edit_persons.filter(nachname='Spencer').exists())
 
 
 class VeranstaltungTest(TransactionTestCase):

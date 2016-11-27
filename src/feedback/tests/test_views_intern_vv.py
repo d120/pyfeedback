@@ -102,7 +102,6 @@ class InternVvEditUsersTest(NonSuTestMixin, TestCase):
         self.assertTrue(self.client.login(username='supers', password='pw'))
         response = self.client.get(self.path, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.templates[0].name, 'intern/import_vv_edit_users.html')
-        self.assertEqual(len(response.context['formset'].forms), 2)
 
     def test_import_vv_edit_users_post(self):
         self.do_non_su_test(self.path_save_p0)
