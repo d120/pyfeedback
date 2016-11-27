@@ -7,7 +7,7 @@
         <form action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {{ formset.management_form }}
-                <h2>Es sind noch {{ view.get_to_edit_count }} Personendaten zu bearbeiten.</h2>
+                <h2>Es sind noch {{ person.persons_to_edit.count }} Personendaten zu bearbeiten.</h2>
                 <h2>{{ person.full_name }}</h2>
                 <h2><a href="http://www.google.com/search?q={{person.full_name}}+tu+darmstadt" target="_blank>">Auf Google suchen.</a></h2>
 
@@ -17,18 +17,18 @@
                     {{field.errors}}
                 {% endfor %}
             <div>
-                {% if view.get_prev_id == -1 %}
-                    <input type="button" name="back" value="Zurück" disabled="disabled" />&nbsp;
+                {% if view.get_id.1 %}
+                    <input type="button" name="back" value="Zurück"
+                               onclick="location.href='{% url 'import_vv_edit_users_update' pk=view.get_id.1 %}'"/>&nbsp;
                 {% else %}
-                        <input type="button" name="back" value="Zurück"
-                               onclick="location.href='{% url 'import_vv_edit_users_update' pk=view.get_prev_id %}'"/>&nbsp;
+                        <input type="button" name="back" value="Zurück" disabled="disabled" />&nbsp;
                 {% endif %}
 
-                {% if view.get_next_id == -1 %}
-                    <input type="button" name="jump" value="Überspringen" disabled="disabled" />&nbsp;
-                {% else %}
+                {% if view.get_id.0 %}
                     <input type="button" name="jump" value="Überspringen"
-                           onclick="location.href='{% url 'import_vv_edit_users_update' pk=view.get_next_id %}'"/>&nbsp;
+                           onclick="location.href='{% url 'import_vv_edit_users_update' pk=view.get_id.0 %}'"/>&nbsp;
+                {% else %}
+                    <input type="button" name="jump" value="Überspringen" disabled="disabled" />&nbsp;
                 {% endif %}
 
                 <input type="submit" name="submit" value="Speichern & Weiter" />
