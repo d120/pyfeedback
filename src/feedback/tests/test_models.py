@@ -5,6 +5,7 @@ from django.db.models import Q
 from django.test import TestCase, TransactionTestCase
 
 from feedback.models import get_model, Semester, Person, Veranstaltung, Einstellung, Mailvorlage
+from feedback.models.base import AlternativVorname
 from feedback.models import past_semester_orders
 from feedback.models import ImportPerson, ImportCategory, ImportVeranstaltung, Kommentar
 from feedback.models import Fragebogen2008, Fragebogen2009, Ergebnis2008, Ergebnis2009
@@ -132,9 +133,16 @@ class PersonTest(TestCase):
     def setUp(self):
         self.p1 = Person.objects.create(vorname='Brian', nachname='Cohen')
         self.p2 = Person.objects.create(vorname='Bud', nachname='Spencer', email='x@y.z')
+        self.p3 = Person.objects.create(vorname='Test', nachname='Tester', email='a@b.c', geschlecht='m')
+        self.p4 = Person.objects.create(vorname='Test Zweitname', nachname='Tester')
 
-        self.s, self.v = get_veranstaltung('v')
-        self.v.veranstalter = [self.p1, self.p2]
+        self.s1, self.v1 = get_veranstaltung('v')
+        self.v1.veranstalter = [self.p1]
+
+        self.s2 = Semester.objects.get_or_create(semester=20115, fragebogen='2009', sichtbarkeit='ADM')[0]
+        default_params = {'semester': self.s2, 'grundstudium': False, 'evaluieren': True, 'lv_nr': '321' + 'v'}
+        self.v2 = Veranstaltung.objects.create(typ='v', name='CMS', **default_params)
+        self.v2.veranstalter = [self.p4]
 
     def test_full_name(self):
         self.assertEqual(self.p1.full_name(), 'Brian Cohen')
@@ -152,10 +160,42 @@ class PersonTest(TestCase):
         self.assertNotEqual(p, self.p1)
 
     def test_persons_to_edit(self):
-        to_edit_persons = Person.persons_to_edit(semester=self.s)
-        self.assertEqual(to_edit_persons.count(), 2)
-        self.assertTrue(to_edit_persons.filter(nachname='Cohen').exists())
-        self.assertTrue(to_edit_persons.filter(nachname='Spencer').exists())
+        to_edit_persons = Person.persons_to_edit(semester=self.s1)
+        self.assertEqual(to_edit_persons.count(), 1)
+        self.assertTrue(to_edit_persons.filter(vorname='Brian').exists())
+
+    def test_all_edited_persons(self):
+        edited_persons = Person.all_edited_persons()
+        self.assertEqual(edited_persons.count(), 1)
+        self.assertTrue(edited_persons.filter(email='a@b.c', geschlecht='m').exists())
+
+    def test_persons_with_similar_names(self):
+        similar_persons = Person.persons_with_similar_names('Test', 'Tester')
+        self.assertEqual(similar_persons.count(), 1)
+        self.assertTrue(similar_persons.filter(vorname='Test').exists())
+
+    def test_veranstaltungen(self):
+        veranstaltungen = Person.veranstaltungen(self.p1)
+        veranstalter_name = veranstaltungen.filter(veranstalter=self.p1)[0].veranstalter.get().full_name()
+        self.assertEqual(veranstaltungen.count(), 1)
+        self.assertEqual(self.p1.full_name(), veranstalter_name)
+
+    def test_replace_veranstalter(self):
+        # when
+        Person.replace_veranstalter(self.p4, self.p3)
+
+        # then
+        self.assertFalse(Person.veranstaltungen(self.p4).exists())
+        self.assertEqual(Person.veranstaltungen(self.p3).count(), 1)
+        self.assertEqual(AlternativVorname.objects.get().vorname, self.p4.vorname)
+        self.assertEqual(AlternativVorname.objects.get().person, self.p3)
+
+    def test_is_veranstalter(self):
+        is_veranstalter1 = Person.is_veranstalter(self.p1)
+        is_veranstalter2 = Person.is_veranstalter(self.p2)
+
+        self.assertTrue(is_veranstalter1)
+        self.assertFalse(is_veranstalter2)
 
 
 class VeranstaltungTest(TransactionTestCase):

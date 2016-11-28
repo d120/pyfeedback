@@ -157,16 +157,58 @@ class Person(models.Model):
     def create_from_import_person(ip):
         # Prüfen, ob Benutzer existiert
         try:
-            return Person.objects.raw(u"SELECT * FROM feedback_person WHERE vorname || ' ' || nachname == %s",
-                                      [ip.full_name()])[-1]
-        except IndexError:
-            return Person.objects.create(
-                vorname=ip.vorname,
-                nachname=ip.nachname,
-            )
+            return Person.objects.filter(vorname=ip.vorname, nachname=ip.nachname)[0]
+        except (Person.DoesNotExist, IndexError):
+            try:
+                return AlternativVorname.objects.filter(vorname=ip.vorname).get().person
+            except (AlternativVorname.DoesNotExist, IndexError):
+                return Person.objects.create(vorname=ip.vorname, nachname=ip.nachname)
 
     @staticmethod
-    def persons_to_edit(semester=Semester.current()):
+    def persons_to_edit(semester=None):
+        if semester is None:
+            semester = Semester.current()
+        return Person.objects.filter(Q(geschlecht='') | Q(email=''), veranstaltung__semester=semester)\
+            .order_by('id').distinct()
+
+    @staticmethod
+    def all_edited_persons():
+        return Person.objects.filter(~Q(geschlecht='') & ~Q(email='')).order_by('id').distinct()
+
+    @staticmethod
+    def persons_with_similar_names(vorname, nachname):
+        return Person.all_edited_persons().filter(vorname__startswith=vorname, nachname=nachname)
+
+    @staticmethod
+    def veranstaltungen(person):
+        return Veranstaltung.objects.filter(veranstalter=person)
+
+    @staticmethod
+    def replace_veranstalter(new, old):
+        veranstaltungen = Person.veranstaltungen(new)
+
+        # replace every lecture held by 'new' with 'old'
+        for v in veranstaltungen:
+            v.veranstalter = [old]
+            v.save()
+
+        # save the second name from 'new' as the alternative first name of 'old'
+        av = AlternativVorname.objects.create(vorname=new.vorname, person=old)
+        av.save()
+
+    @staticmethod
+    def is_veranstalter(person):
+        return Person.veranstaltungen(person).count() > 0
+
+
+class AlternativVorname(models.Model):
+    vorname = models.CharField(_('first name'), max_length=30, blank=True)
+    person = models.ForeignKey(Person, on_delete=models.CASCADE)
+
+    @staticmethod
+    def persons_to_edit(semester=None):
+        if semester is None:
+            semester = Semester.current()
         return Person.objects.filter(Q(geschlecht='') | Q(email=''), veranstaltung__semester=semester)\
             .order_by('id').distinct()
 
