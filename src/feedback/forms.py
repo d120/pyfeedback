@@ -11,9 +11,17 @@ class UploadFileForm(forms.Form):
     file = forms.FileField(label='Datei')
 
 
-class PersonForm(forms.Form):
-    anrede = forms.ChoiceField(Person.GESCHLECHT_CHOICES)
-    email = forms.EmailField(label='E-Mail')
+class PersonForm(forms.ModelForm):
+    class Meta:
+        model = Person
+        fields = ('geschlecht', 'email')
+
+    def clean(self):
+        geschlecht = self.cleaned_data.get('geschlecht')
+        email = self.cleaned_data.get('email')
+
+        if not geschlecht or not email:
+            raise forms.ValidationError('Das Feld für die Anrede oder Email ist leer.')
 
 
 class BestellungModelForm(forms.ModelForm):

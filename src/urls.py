@@ -5,7 +5,6 @@ from django.contrib import admin
 from django.contrib.auth.models import User, Group
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
-import feedback.views
 import feedback.views.public
 import feedback.views.veranstalter
 from feedback.views.public_class_view import VeranstaltungsDeadlines, CreateBarcodeScannEvent
@@ -15,8 +14,6 @@ import feedback.views.intern.auth
 from django.views.decorators.csrf import csrf_exempt
 import django.contrib.auth.views
 from django.urls import reverse_lazy
-
-from django.views.generic import ListView
 
 from django.conf import settings
 
@@ -85,7 +82,12 @@ urlpatterns += [
 urlpatterns += [
     url(r'^intern/import_vv/$', feedback.views.intern.vv.import_vv, name='import_vv'),
     url(r'^intern/import_vv_edit/$', feedback.views.intern.vv.import_vv_edit, name='import_vv_edit'),
-    url(r'^intern/import_vv_edit_users/$', feedback.views.intern.vv.import_vv_edit_users, name='import_vv_edit_users'),
+
+    # so sollte der Aufruf der Class-based View sein
+    url(r'^intern/import_vv_edit_users/$', feedback.views.intern.vv.PersonFormView.as_view(),
+        name='import_vv_edit_users'),
+    url(r'^intern/import_vv_edit_users/(?P<pk>\d+)/$', feedback.views.intern.vv.PersonFormUpdateView.as_view(),
+        name='import_vv_edit_users_update')
 ]
 
 # interne Views: Authentifizierung

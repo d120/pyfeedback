@@ -5,10 +5,12 @@ from django.contrib.auth.decorators import user_passes_test
 from django.core.urlresolvers import reverse
 from django.db import IntegrityError
 from django.db.models import Q, Sum
-from django.forms.formsets import formset_factory
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
+from django.views.generic.edit import UpdateView
+from django.views.generic import ListView
+from django.contrib.auth.mixins import UserPassesTestMixin
 
 from feedback.parser import vv as vv_parser
 from feedback.models import Veranstaltung, Person, Semester, ImportCategory, ImportVeranstaltung
@@ -92,47 +94,53 @@ def import_vv_edit(request):
         return HttpResponseRedirect(reverse('import_vv_edit_users'))
 
 
-@user_passes_test(lambda u: u.is_superuser)
-@require_http_methods(('HEAD', 'GET', 'POST'))
-def import_vv_edit_users(request):
-    data = {}
-    person_form_set = formset_factory(PersonForm, extra=0)
+class PersonFormView(UserPassesTestMixin, ListView):
+    model = Person
+    template_name = 'intern/import_vv_edit_users.html'
+    context_object_name = 'persons'
 
-    # Personen suchen, die eine Veranstaltung im aktuellen Semester und unvollständige Daten haben
-    has_missing_data = Q(geschlecht='') | Q(email='')
-    pers = Person.objects.filter(has_missing_data, veranstaltung__semester=Semester.current())
-    pers = pers.distinct()
+    def get_queryset(self):
+        return Person.persons_to_edit()
 
-    if request.method == 'POST':
-        formset = person_form_set(request.POST)
-        personen = request.POST['personen']
+    def test_func(self):
+        return self.request.user.is_superuser
 
-        # TODO: im else-Fall werden keine Namen angezeigt, da sie auf initial basieren
-        # TODO: vollständige Einträge speichern, auch wenn andere Fehler haben
-        if formset.is_valid():
-            successful_saves = 0
-            for form, pid in zip(formset.forms, personen.split(',')):
-                p = pers.get(id=pid)
-                p.geschlecht = form.cleaned_data['anrede']
-                p.email = form.cleaned_data['email']
-                p.save()
-                successful_saves += 1
 
-            messages.success(request, u'%i Benutzerdatensätze wurden erfolgreich gespeichert.' % successful_saves)
-            return HttpResponseRedirect(reverse('intern-index'))
+class PersonFormUpdateView(UserPassesTestMixin, UpdateView):
+    model = Person
+    form_class = PersonForm
+    template_name = 'intern/import_vv_edit_users_update.html'
 
-    else:
-        # Formulare erzeugen
-        personen = ','.join([str(p.id) for p in pers])
-        formset = person_form_set(initial=[{
-                                               'anrede': p.geschlecht,
-                                               'name': p.full_name(),
-                                               'adminlink': request.build_absolute_uri(
-                                                   reverse('admin:feedback_person_change', args=(p.id,))
-                                               ),
-                                               'email': p.email
-                                           } for p in pers])
+    def get_id(self):
+        try:
+            next_id = Person.persons_to_edit().filter(id__gt=self.object.id).order_by("id")[0].id
+        except (Person.DoesNotExist, IndexError):
+            next_id = None
+        try:
+            prev_id = Person.persons_to_edit().filter(id__lt=self.object.id).order_by("-id")[0].id
+        except (Person.DoesNotExist, IndexError):
+            prev_id = None
 
-    data['personen'] = personen
-    data['formset'] = formset
-    return render(request, 'intern/import_vv_edit_users.html', data)
+        return next_id, prev_id
+
+    def form_valid(self, form):
+        p = form.save(commit=False)
+        p.geschlecht = form.cleaned_data['geschlecht']
+        p.email = form.cleaned_data['email']
+        p.save()
+        messages.success(self.request, u'Benutzerdatensätze wurden erfolgreich gespeichert.')
+        return super(PersonFormUpdateView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, u'Das Feld für die Anrede oder Email ist leer.')
+        return super(PersonFormUpdateView, self).form_invalid(form)
+
+    def get_success_url(self):
+        next_id, prev_id = self.get_id()
+        if next_id:
+            return reverse('import_vv_edit_users_update', args=[next_id])
+        else:
+            return reverse('import_vv_edit_users')
+
+    def test_func(self):
+        return self.request.user.is_superuser
