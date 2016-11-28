@@ -88,10 +88,11 @@ class InternVvEditUsersTest(NonSuTestMixin, TestCase):
 
         self.p0 = Person.objects.create(vorname='Je', nachname='Mand')
         self.p1 = Person.objects.create(vorname='Auch Je', nachname='Mand')
+        self.p2 = Person.objects.create(vorname="Noch Je", nachname='Mand')
 
         self.path_save_p0 = self.path + str(self.p0.id) + '/'
         self.path_save_p1 = self.path + str(self.p1.id) + '/'
-        self.path_save_p2 = self.path + str(self.p0.id) + '/namecheck/'
+        self.path_save_p2 = self.path + str(self.p2.id) + '/namecheck/'
 
         _, self.v = get_veranstaltung('vu')
         self.v.veranstalter.add(self.p0)
@@ -132,3 +133,14 @@ class InternVvEditUsersTest(NonSuTestMixin, TestCase):
 
         response = self.client.get(self.path_save_p2, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.templates[0].name, 'intern/import_vv_edit_users_namecheck.html')
+
+    def test_import_vv_edit_users_namecheck_post(self):
+        self.do_non_su_test(self.path_save_p2)
+        self.client.login(username='supers', password='pw')
+
+        response = self.client.get(self.path_save_p2)
+        self.assertEqual(response.templates[0].name, 'intern/import_vv_edit_users_namecheck.html')
+
+        response = self.client.post(self.path_save_p2, {'id_new': str(self.p1.id), 'id_old': str(self.p2.id),
+                                                        'similar': 'Zusammenführen'})
+        self.assertEqual(response.status_code, 302)
