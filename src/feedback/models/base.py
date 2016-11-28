@@ -166,7 +166,9 @@ class Person(models.Model):
             )
 
     @staticmethod
-    def persons_to_edit(semester=Semester.current()):
+    def persons_to_edit(semester=None):
+        if semester is None:
+            semester = Semester.current()
         return Person.objects.filter(Q(geschlecht='') | Q(email=''), veranstaltung__semester=semester)\
             .order_by('id').distinct()
 
