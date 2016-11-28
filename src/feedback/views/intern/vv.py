@@ -113,11 +113,11 @@ class PersonFormUpdateView(UserPassesTestMixin, UpdateView):
 
     def get_id(self):
         try:
-            next_id = Person.persons_to_edit().filter(id__gt=self.object.id).order_by("id")[0:1].get().id
+            next_id = Person.persons_to_edit().filter(id__gt=self.object.id).order_by("id")[0].id
         except (Person.DoesNotExist, IndexError):
             next_id = None
         try:
-            prev_id = Person.persons_to_edit().filter(id__lt=self.object.id).order_by("-id")[0:1].get().id
+            prev_id = Person.persons_to_edit().filter(id__lt=self.object.id).order_by("-id")[0].id
         except (Person.DoesNotExist, IndexError):
             prev_id = None
 
