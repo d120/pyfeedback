@@ -1,0 +1,437 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<CourseCatalogue>
+<CourseCatalogueArea>
+<Name>Sommersemester 2012</Name>
+<RemarkPublic>&lt;strong&gt;Vorlesungsverzeichnis des Sommersemesters 2012 der Technischen Universität Darmstadt&lt;/strong&gt;
+
+Hinweise:
+In Einzelfällen kann es noch zu weiteren Bearbeitungen des Vorlesungsverzeichnisses durch die Fachbereiche kommen. Sollten Sie Fragen zu den angebotenen Lehrveranstaltungen haben, schauen Sie bitte auf den Webseiten des zuständigen Fachbereichs nach, ob Zusatzhinweise gegeben werden. Links hierzu finden Sie über die &lt;a href=&quot;http://www.tu-darmstadt.de/universitaet/fachbereiche/index.de.jsp&quot;&gt;Homepage der TU Darmstadt&lt;/a&gt; oder nach Aufklappen der jeweiligen Fachbereichsebenen im Vorlesungsverzeichnis.
+
+Nach erfolgreichem Login finden Sie die Bereiche und damit auch die Modul- und Lehrveranstaltungsangebote Ihrer Prüfungsordnung unter dem Punkt &lt;strong&gt;&quot;Veranstaltungen&quot; -&gt; &quot;Anmeldung&quot;&lt;/strong&gt;
+&lt;strong&gt;WICHTIG!&lt;/strong&gt; Bachelor- und Masterstudierende melden sich bitte &lt;strong&gt; nur über diesen Weg&lt;/strong&gt; zu Modulen und Lehrveranstaltungen an!
+
+&lt;strong&gt;Die Anmeldung über die Lehrveranstaltungssuche ist ausschliesslich für Diplom- und Magisterstudierende zulässig! Die Modulkontexte für Bachelor- und Masterstudierende werden hier nicht erfasst. Dies kann dazu führen, dass eine Prüfungsanmeldung nicht möglich ist!&lt;/strong&gt;
+
+Bei allgemeinen Fragen wenden Sie sich bitte per &lt;a href=&quot;mailto:tucan@tu-darmstadt.de&quot;&gt;Email an unseren Support&lt;/a&gt;
+
+Bitte beachten Sie auch unsere Anleitungen zur Modul-, Lehrveranstaltungs- und Prüfungsanmeldung sowie weiteren Hilfen, Tipps und Tricks auf &lt;a href=&quot;http://www.info.tucan.tu-darmstadt.de/studium/stud/bachelorundmaster/index.de.jsp&quot;&gt;unseren Supportseiten.&lt;/a&gt;
+
+</RemarkPublic>
+<CourseCatalogueArea>
+<Name>Alle Orientierungs- und Einführungsveranstaltungen</Name>
+<RemarkPublic>Weitere Informationen zum Studium an der TU Darmstadt erhalten Sie &lt;a href=&quot;http://www.tu-darmstadt.de/studieren/index.de.jsp&quot;&gt;hier&lt;/a&gt;.</RemarkPublic>
+<Course>
+<Number>20-00-0001-ov</Number>
+<Name>Orientierungsveranstaltung</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation></AdditionalInformation>
+<InstructorString>Johannes Fürnkranz</InstructorString>
+</Course>
+<Course>
+<Number></Number>
+<Name>Kurs ohne Veranstaltungs nummer</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation></AdditionalInformation>
+<InstructorString>Freundliche Tester</InstructorString>
+</Course>
+<Course>
+<Number>20-00-4202-iv</Number>
+<Name></Name>
+<Appointment>	</Appointment>
+<AdditionalInformation></AdditionalInformation>
+<InstructorString>Dozent fuer Veranstaltung ohne Namen</InstructorString>
+</Course>
+</CourseCatalogueArea>
+<CourseCatalogueArea>
+<Name>FB20 - Informatik</Name>
+<RemarkPublic>&lt;a href=&quot;http://www.informatik.tu-darmstadt.de/&quot;&gt;Zur Homepage des Fachbereichs.&lt;/a&gt;&lt;/br&gt;
+</RemarkPublic>
+<CourseCatalogueArea>
+<Name>Orientierungsveranstaltungen</Name>
+<RemarkPublic></RemarkPublic>
+<Course>
+<Number>20-00-0001-ov</Number>
+<Name>Orientierungsveranstaltung</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation></AdditionalInformation>
+<InstructorString>Johannes Fürnkranz</InstructorString>
+</Course>
+</CourseCatalogueArea>
+<CourseCatalogueArea>
+<Name>Grundlagenveranstaltungen</Name>
+<RemarkPublic></RemarkPublic>
+<Course>
+<Number>20-00-0004-iv</Number>
+<Name>Grundlagen der Informatik I</Name>
+<Appointment>6 UE / Wöchentlich 2 UE Di 8–9:40 S202/C205;S202/C110 ab 10.04.12; 2 UE Mo 13:30–15:10 S202/C205;S202/C110 ab 16.04.12</Appointment>
+<AdditionalInformation>. 
+
+</AdditionalInformation>
+<InstructorString>Guido Peter Rößling</InstructorString>
+<Smallgroups>
+<Smallgroup>
+<Name>Grundlagen der Informatik I - Gr. 1</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation>
+
+</AdditionalInformation>
+<InstructorString>Guido Peter Rößling</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik I - Gr. 10</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation>
+
+</AdditionalInformation>
+<InstructorString>Guido Peter Rößling</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik I - Gr. 11</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation>
+
+</AdditionalInformation>
+<InstructorString>Guido Peter Rößling</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik I - Gr. 12</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation>
+
+</AdditionalInformation>
+<InstructorString>Guido Peter Rößling</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik I - Gr. 13</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation>
+
+</AdditionalInformation>
+<InstructorString>Guido Peter Rößling</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik I - Gr. 14</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation>
+
+</AdditionalInformation>
+<InstructorString>Guido Peter Rößling</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik I - Gr. 15</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation>
+
+</AdditionalInformation>
+<InstructorString>Guido Peter Rößling</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik I - Gr. 16</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation>
+
+</AdditionalInformation>
+<InstructorString>Guido Peter Rößling</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik I - Gr. 2</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation>
+
+</AdditionalInformation>
+<InstructorString>Guido Peter Rößling</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik I - Gr. 3</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation>
+
+</AdditionalInformation>
+<InstructorString>Guido Peter Rößling</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik I - Gr. 4</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation>
+
+</AdditionalInformation>
+<InstructorString>Guido Peter Rößling</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik I - Gr. 5</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation>
+
+</AdditionalInformation>
+<InstructorString>Guido Peter Rößling</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik I - Gr. 6</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation>
+
+</AdditionalInformation>
+<InstructorString>Guido Peter Rößling</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik I - Gr. 7</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation>
+
+</AdditionalInformation>
+<InstructorString>Guido Peter Rößling</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik I - Gr. 8</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation>
+
+</AdditionalInformation>
+<InstructorString>Guido Peter Rößling</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik I - Gr. 9</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation>
+
+</AdditionalInformation>
+<InstructorString>Guido Peter Rößling</InstructorString>
+</Smallgroup>
+</Smallgroups>
+</Course>
+<Course>
+<Number>20-00-0004-tt</Number>
+<Name>Mentorensystem</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation></AdditionalInformation>
+<InstructorString>Sabine General</InstructorString>
+</Course>
+<Course>
+<Number>20-00-0005-iv</Number>
+<Name>Grundlagen der Informatik II</Name>
+<Appointment>8 UE / Wöchentlich 2 UE Di 15:10–16:50 ab 10.04.12; 2 UE Do 8–9:40 S101/A1 ab 12.04.12</Appointment>
+<AdditionalInformation></AdditionalInformation>
+<InstructorString>Karsten Richard Weihe</InstructorString>
+<Smallgroups>
+<Smallgroup>
+<Name>Grundlagen der Informatik II - Gr. 01</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation></AdditionalInformation>
+<InstructorString>Karsten Richard Weihe</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik II - Gr. 02</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation></AdditionalInformation>
+<InstructorString>Karsten Richard Weihe</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik II - Gr. 03</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation></AdditionalInformation>
+<InstructorString>Karsten Richard Weihe</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik II - Gr. 04</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation></AdditionalInformation>
+<InstructorString>Karsten Richard Weihe</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik II - Gr. 05</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation></AdditionalInformation>
+<InstructorString>Karsten Richard Weihe</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik II - Gr. 06</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation></AdditionalInformation>
+<InstructorString>Karsten Richard Weihe</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik II - Gr. 07</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation></AdditionalInformation>
+<InstructorString>Karsten Richard Weihe</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik II - Gr. 08</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation></AdditionalInformation>
+<InstructorString>Karsten Richard Weihe</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik II - Gr. 09</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation></AdditionalInformation>
+<InstructorString>Karsten Richard Weihe</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik II - Gr. 10</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation></AdditionalInformation>
+<InstructorString>Karsten Richard Weihe</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik II - Gr. 11</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation></AdditionalInformation>
+<InstructorString>Karsten Richard Weihe</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik II - Gr. 12</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation></AdditionalInformation>
+<InstructorString>Karsten Richard Weihe</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik II - Gr. 13</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation></AdditionalInformation>
+<InstructorString>Karsten Richard Weihe</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik II - Gr. 14</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation></AdditionalInformation>
+<InstructorString>Karsten Richard Weihe</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik II - Gr. 15</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation></AdditionalInformation>
+<InstructorString>Karsten Richard Weihe</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik II - Gr. 16</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation></AdditionalInformation>
+<InstructorString>Karsten Richard Weihe</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik II - Gr. 17</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation></AdditionalInformation>
+<InstructorString>Karsten Richard Weihe</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik II - Gr. 18</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation></AdditionalInformation>
+<InstructorString>Karsten Richard Weihe</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik II - Gr. 19</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation></AdditionalInformation>
+<InstructorString>Karsten Richard Weihe</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik II - Gr. 20</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation></AdditionalInformation>
+<InstructorString>Karsten Richard Weihe</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik II - Gr. 21</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation></AdditionalInformation>
+<InstructorString>Karsten Richard Weihe</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik II - Gr. 22</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation></AdditionalInformation>
+<InstructorString>Karsten Richard Weihe</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik II - Gr. 23</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation></AdditionalInformation>
+<InstructorString>Karsten Richard Weihe</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik II - Gr. 24</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation></AdditionalInformation>
+<InstructorString>Karsten Richard Weihe</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik II - Gr. 25</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation></AdditionalInformation>
+<InstructorString>Karsten Richard Weihe</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik II - Gr. 26</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation></AdditionalInformation>
+<InstructorString>Karsten Richard Weihe</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik II - Gr. 27</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation></AdditionalInformation>
+<InstructorString>Karsten Richard Weihe</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik II - Gr. 28</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation></AdditionalInformation>
+<InstructorString>Karsten Richard Weihe</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik II - Gr. 29</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation></AdditionalInformation>
+<InstructorString>Karsten Richard Weihe</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik II - Gr. 30</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation></AdditionalInformation>
+<InstructorString>Karsten Richard Weihe</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik II - Gr. 31</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation></AdditionalInformation>
+<InstructorString>Karsten Richard Weihe</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik II - Gr. 32</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation></AdditionalInformation>
+<InstructorString>Karsten Richard Weihe</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik II - Gr. 33</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation></AdditionalInformation>
+<InstructorString>Karsten Richard Weihe</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik II - Gr. 34</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation></AdditionalInformation>
+<InstructorString>Karsten Richard Weihe</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik II - Gr. 35</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation></AdditionalInformation>
+<InstructorString>Karsten Richard Weihe</InstructorString>
+</Smallgroup>
+<Smallgroup>
+<Name>Grundlagen der Informatik II - Gr. 38</Name>
+<Appointment>	</Appointment>
+<AdditionalInformation></AdditionalInformation>
+<InstructorString>Karsten Richard Weihe</InstructorString>
+</Smallgroup>
+</Smallgroups>
+</Course>
+</CourseCatalogueArea>
+</CourseCatalogueArea>
+</CourseCatalogueArea>
+</CourseCatalogue>
