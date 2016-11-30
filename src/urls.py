@@ -87,7 +87,9 @@ urlpatterns += [
     url(r'^intern/import_vv_edit_users/$', feedback.views.intern.vv.PersonFormView.as_view(),
         name='import_vv_edit_users'),
     url(r'^intern/import_vv_edit_users/(?P<pk>\d+)/$', feedback.views.intern.vv.PersonFormUpdateView.as_view(),
-        name='import_vv_edit_users_update')
+        name='import_vv_edit_users_update'),
+    url(r'^intern/import_vv_edit_users/(?P<pk>\d+)/namecheck/$', feedback.views.intern.vv.SimilarNamesView.as_view(),
+        name='import_vv_edit_users_update_namecheck')
 ]
 
 # interne Views: Authentifizierung

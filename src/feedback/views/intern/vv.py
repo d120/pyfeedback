@@ -8,8 +8,8 @@ from django.db.models import Q, Sum
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
-from django.views.generic.edit import UpdateView
-from django.views.generic import ListView
+from django.views.generic.edit import UpdateView, FormView
+from django.views.generic import ListView, DetailView
 from django.contrib.auth.mixins import UserPassesTestMixin
 
 from feedback.parser import vv as vv_parser
@@ -141,6 +141,48 @@ class PersonFormUpdateView(UserPassesTestMixin, UpdateView):
             return reverse('import_vv_edit_users_update', args=[next_id])
         else:
             return reverse('import_vv_edit_users')
+
+    def test_func(self):
+        return self.request.user.is_superuser
+
+    def has_similar_name(self):
+        vorname = self.object.vorname.split(' ')[0]
+        nachname = self.object.nachname
+        similar_persons = Person.persons_with_similar_names(vorname, nachname)
+
+        return similar_persons.count() > 0
+
+
+class SimilarNamesView(UserPassesTestMixin, DetailView):
+    model = Person
+    template_name = 'intern/import_vv_edit_users_namecheck.html'
+    context_object_name = 'person_new'
+
+    def post(self, request, *args, **kwargs):
+        id_old = request.POST['id_old']
+        id_new = request.POST['id_new']
+
+        old_person = Person.objects.get(pk=id_old)
+        new_person = Person.objects.get(pk=id_new)
+
+        Person.replace_veranstalter(new_person, old_person)
+        if not Person.is_veranstalter(new_person):
+            new_person.delete()
+
+        return HttpResponseRedirect(reverse('import_vv_edit_users'))
+
+    def get_context_data(self, **kwargs):
+        context = super(SimilarNamesView, self).get_context_data(**kwargs)
+        context['new_vorname'] = self.object.vorname
+        context['new_nachname'] = self.object.nachname
+
+        vorname = context['new_vorname'].split(' ')[0]
+        nachname = context['new_nachname']
+
+        context['similar_person'] = Person.persons_with_similar_names(vorname, nachname)
+        context['old_veranstaltungen'] = Person.veranstaltungen(context['similar_person'])
+        context['new_veranstaltungen'] = Person.veranstaltungen(context['person_new'])
+        return context
 
     def test_func(self):
         return self.request.user.is_superuser
