@@ -1,5 +1,7 @@
 # coding=utf-8
 
+from types import UnicodeType
+
 from django.db import IntegrityError
 from django.db.models import Q
 from django.test import TestCase, TransactionTestCase
@@ -264,6 +266,8 @@ class VeranstaltungTest(TransactionTestCase):
                          'https://www.fachschaft.informatik.tu-darmstadt.de/veranstalter/login/?vid=%d' % ver_id)
         access_token = self.v[0].access_token
         self.assertEquals('token=' + access_token, url_parts[1])
+        not_saved_v = Veranstaltung()
+        self.assertEqual(type(not_saved_v.link_veranstalter()), UnicodeType)
 
 
 class EinstellungTest(TestCase):

@@ -431,7 +431,10 @@ class Veranstaltung(models.Model):
         """Gibt die URL für die Bestellunng durch den Veranstalter zurück"""
         link_veranstalter = 'https://www.fachschaft.informatik.tu-darmstadt.de%s' % reverse('veranstalter-login')
         link_suffix_format = '?vid=%d&token=%s'
-        return link_veranstalter + (link_suffix_format % (self.pk, self.access_token))
+        if self.pk is not None and self.access_token is not None:
+            return link_veranstalter + (link_suffix_format % (self.pk, self.access_token))
+        else:
+            return "Der Veranstalter Link wird erst nach dem Anlegen angezeigt"
 
     def csv_to_tutor(self):
         """Erzeuge Tutoren Objekte aus der CSV Eingabe der Veranstalter"""
