@@ -8,35 +8,35 @@ from feedback.models.base import Log
 
 
 def status_angelegt(modeladmin, request, queryset):
-    queryset.update(status=100)
+    queryset.update(status=Veranstaltung.STATUS_ANGELEGT)
     for veranstaltung in queryset:
         veranstaltung.log(True, False)
 status_angelegt.short_description = 'Status: angelegt'
 
 
 def status_gedruckt(modeladmin, request, queryset):
-    queryset.update(status=600)
+    queryset.update(status=Veranstaltung.STATUS_GEDRUCKT)
     for veranstaltung in queryset:
         veranstaltung.log(True, False)
 status_gedruckt.short_description = 'Status: gedruckt'
 
 
 def status_versandt(modeladmin, request, queryset):
-    queryset.update(status=700)
+    queryset.update(status=Veranstaltung.STATUS_VERSANDT)
     for veranstaltung in queryset:
         veranstaltung.log(True, False)
 status_versandt.short_description = 'Status: versandt'
 
 
 def status_boegen_eingegangen(modeladmin, request, queryset):
-    queryset.update(status=800)
+    queryset.update(status=Veranstaltung.STATUS_BOEGEN_EINGEGANGEN)
     for veranstaltung in queryset:
         veranstaltung.log(True, False)
 status_boegen_eingegangen.short_description = 'Status: eingegangen'
 
 
 def status_boegen_gescannt(modeladmin, request, queryset):
-    queryset.update(status=900)
+    queryset.update(status=Veranstaltung.STATUS_BOEGEN_GESCANNT)
     for veranstaltung in queryset:
         veranstaltung.log(True, False)
 status_boegen_gescannt.short_description = 'Status: gescannt'
