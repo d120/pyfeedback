@@ -10,7 +10,6 @@ from django.db.utils import OperationalError
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
 from django.db.models import Q
-from django.views.decorators.csrf import csrf_exempt
 
 from feedback.tools import ean_checksum_calc, ean_checksum_valid
 
@@ -205,13 +204,6 @@ class AlternativVorname(models.Model):
     vorname = models.CharField(_('first name'), max_length=30, blank=True)
     person = models.ForeignKey(Person, on_delete=models.CASCADE)
 
-    @staticmethod
-    def persons_to_edit(semester=None):
-        if semester is None:
-            semester = Semester.current()
-        return Person.objects.filter(Q(geschlecht='') | Q(email=''), veranstaltung__semester=semester)\
-            .order_by('id').distinct()
-
 
 class Veranstaltung(models.Model):
     TYP_CHOICES = (
@@ -282,6 +274,21 @@ class Veranstaltung(models.Model):
 
     BARCODE_BASE = 2 * 10 ** 11
 
+    # Vorlesungsstatus
+    STATUS_ANGELEGT = 100
+    STATUS_GEDRUCKT = 600
+    STATUS_VERSANDT = 700
+    STATUS_BOEGEN_EINGEGANGEN = 800
+    STATUS_BOEGEN_GESCANNT = 900
+
+    STATUS_CHOICES = (
+        (STATUS_ANGELEGT, 'Angelegt'),
+        (STATUS_GEDRUCKT, 'Gedruckt'),
+        (STATUS_VERSANDT, 'Versandt'),
+        (STATUS_BOEGEN_EINGEGANGEN, 'Bögen eingegangen'),
+        (STATUS_BOEGEN_GESCANNT, 'Bögen gescannt')
+    )
+
     # Helfertext für Dozenten für den Veranstaltungstyp.
     vlNoEx = 'Wenn Ihre Vorlesung keine Übung hat wählen Sie bitte <i>%s</i> aus'
     for cur in TYP_CHOICES:
@@ -293,6 +300,7 @@ class Veranstaltung(models.Model):
     name = models.CharField(max_length=150)
     semester = models.ForeignKey(Semester)
     lv_nr = models.CharField(max_length=15, blank=True, verbose_name=u'LV-Nummer')
+    status = models.IntegerField(choices=STATUS_CHOICES, default=STATUS_ANGELEGT)
     grundstudium = models.BooleanField()
     evaluieren = models.BooleanField()
     veranstalter = models.ManyToManyField(Person, blank=True,
@@ -315,6 +323,18 @@ class Veranstaltung(models.Model):
     freiefrage1 = models.TextField(verbose_name='1. Freie Frage', blank=True)
     freiefrage2 = models.TextField(verbose_name='2. Freie Frage', blank=True)
     kleingruppen = models.TextField(verbose_name='Kleingruppen', blank=True)
+
+    def get_next_state(self):
+        if self.status == Veranstaltung.STATUS_ANGELEGT:
+            return Veranstaltung.STATUS_GEDRUCKT
+        elif self.status == Veranstaltung.STATUS_GEDRUCKT:
+            return Veranstaltung.STATUS_VERSANDT
+        elif self.status == Veranstaltung.STATUS_VERSANDT:
+            return Veranstaltung.STATUS_BOEGEN_EINGEGANGEN
+        elif self.status == Veranstaltung.STATUS_BOEGEN_EINGEGANGEN:
+            return Veranstaltung.STATUS_BOEGEN_GESCANNT
+        else:
+            return None
 
     def get_evasys_typ(self):
         return Veranstaltung.VORLESUNGSTYP[self.typ]
@@ -398,6 +418,20 @@ class Veranstaltung(models.Model):
 
     def __unicode__(self):
         return u"%s [%s] (%s)" % (self.name, self.typ, self.semester.short())
+
+    def create_log(self, verursacher, interface):
+        Log.objects.create(veranstaltung=self, status=self.status, verursacher=verursacher, interface=interface)
+
+    def log(self, is_admin, is_scan):
+        if is_admin and is_scan:
+            # Es ist nicht möglich den Status gleichzeitig durch Django Admin und Barcodescanner zu ändern
+            pass
+        elif is_admin:
+            self.create_log('Person', 'Django Admin')
+        elif is_scan:
+            self.create_log('Barcodescanner', 'Barcodescanner')
+        else:
+            self.create_log('Person', 'Frontend')
 
     def auwertungstermin_to_late_msg(self):
         toLateDate = self.semester.last_Auswertungstermin_to_late_human()
@@ -526,7 +560,7 @@ class Mailvorlage(models.Model):
 
 class BarcodeScanner(models.Model):
     """Ein Barcode Scanner der fuer das Scannen von Barcodes benutzt wird"""
-    token = models.CharField(max_length=64)
+    token = models.CharField(max_length=64, unique=True)
     description = models.TextField()
 
     def __unicode__(self):
@@ -536,6 +570,11 @@ class BarcodeScanner(models.Model):
         verbose_name = 'Barcode Scanner'
         verbose_name_plural = 'Barcode Scanner'
         app_label = 'feedback'
+
+
+class BarcodeAllowedState(models.Model):
+    barcode_scanner = models.ForeignKey(BarcodeScanner)
+    allow_state = models.IntegerField(choices=Veranstaltung.STATUS_CHOICES, null=True, unique=True)
 
 
 class BarcodeScannEvent(models.Model):
@@ -557,9 +596,24 @@ class BarcodeScannEvent(models.Model):
         barcode_decode = Veranstaltung.decode_barcode(self.barcode)
         verst_obj = Veranstaltung.objects.get(pk=barcode_decode['veranstaltung'])
         self.veranstaltung = verst_obj
+        self.veranstaltung.log(False, True)
 
         if (barcode_decode['tutorgroup'] >= 1):
             tutorgroup = Tutor.objects.get(veranstaltung=verst_obj, nummer=barcode_decode['tutorgroup'])
             self.tutorgroup = tutorgroup
 
         super(BarcodeScannEvent, self).save(*args, **kwargs)
+
+
+class Log(models.Model):
+    veranstaltung = models.ForeignKey(Veranstaltung, null=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    status = models.IntegerField(choices=Veranstaltung.STATUS_CHOICES, default=Veranstaltung.STATUS_ANGELEGT)
+    verursacher = models.CharField(max_length=30, blank=True)
+    interface = models.CharField(max_length=30, blank=True)
+
+    class Meta:
+        verbose_name = 'Log'
+        verbose_name_plural = 'Logs'
+        app_label = 'feedback'
+

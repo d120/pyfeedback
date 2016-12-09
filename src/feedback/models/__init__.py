@@ -1,6 +1,7 @@
 # coding=utf-8
 
-from feedback.models.base import Einstellung, Mailvorlage, Person, Semester, Veranstaltung, Tutor, BarcodeScanner, BarcodeScannEvent
+from feedback.models.base import Einstellung, Mailvorlage, Person, Semester, Veranstaltung, \
+    Tutor, BarcodeScanner, BarcodeScannEvent, BarcodeAllowedState, Log
 from feedback.models.imports import ImportPerson, ImportCategory, ImportVeranstaltung
 from feedback.models.fragebogen import Fragebogen, Ergebnis, Kommentar
 from feedback.models.fragebogen2008 import Fragebogen2008, Ergebnis2008
@@ -11,11 +12,13 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from django.db.models import Q
 
+
 def get_model(model, semester):
     mod = '%s.fragebogen%s' % (__name__, semester.fragebogen)
     cls = '%s%s' % (model, semester.fragebogen)
     module = __import__(mod, fromlist=(cls,))
     return getattr(module, cls)
+
 
 def long_not_ordert():
     """Alle Veranstaltungen die schon länger nicht mehr evaluiert wurden"""
@@ -50,6 +53,7 @@ def long_not_ordert():
         else:
             result.append({'veranstaltung': can, 'letzte_ergebnisse': last_result, 'bestellungen': res })
     return result
+
 
 def past_semester_orders(cur_ver):
     """Gibt die Anzahl an Bestellungen und Rückläufern aus den früheren Semestern"""

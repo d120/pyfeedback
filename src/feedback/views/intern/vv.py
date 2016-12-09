@@ -77,7 +77,7 @@ def import_vv_edit(request):
         data['v'] = []
         for iv in ImportVeranstaltung.objects.filter(id__in=v_ids):
             try:
-                v = Veranstaltung.objects.create(typ=iv.typ, name=iv.name, semester=semester,
+                v = Veranstaltung.objects.create(typ=iv.typ, name=iv.name, status=Veranstaltung.STATUS_ANGELEGT, semester=semester,
                                                  lv_nr=iv.lv_nr, grundstudium=False, evaluieren=True)
             except IntegrityError:
                 # Veranstaltung wurde bereits importiert (kann vorkommen, wenn sie im VV in

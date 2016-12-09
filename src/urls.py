@@ -19,7 +19,7 @@ from django.conf import settings
 
 # Admin-Seiten konfigurieren
 admin.autodiscover()
-#admin.site.unregister((User, Group))
+# admin.site.unregister((User, Group))
 
 if not settings.DEBUG:
     default_redirect = '/feedback-new/'
@@ -47,7 +47,7 @@ urlpatterns += [
 urlpatterns += [url(r'^deadlines/$',
                          VeranstaltungsDeadlines.as_view(), name='Deadlines'),
                 url(r'^barcodedrop/$',
-                         csrf_exempt(CreateBarcodeScannEvent.as_view()), name='barcodedrop'),
+                         csrf_exempt(feedback.views.public.barcodedrop), name='barcodedrop'),
                 ]
 
 
@@ -58,10 +58,14 @@ urlpatterns += [
 ]
 
 urlpatterns += [
-    url(r'^veranstalter/verantwortlicherUpdate/$', feedback.views.veranstalter.VerantwortlicherUpdate.as_view(), name='VerantwortlicherUpdate'),
-    url(r'^veranstalter/freieFragenUpdate/$', feedback.views.veranstalter.FreieFragenUpdate.as_view(), name='FreieFragenUpdate'),
-    url(r'^veranstalter/kleingruppenUpdate/$', feedback.views.veranstalter.KleingruppenUpdate.as_view(), name='KleingruppenUpdate'),
-    url(r'^veranstalter/zusammenfassung/$', feedback.views.veranstalter.VeranstaltungZusammenfassung.as_view(), name='VeranstaltungZusammenfassung'),
+    url(r'^veranstalter/verantwortlicherUpdate/$', feedback.views.veranstalter.VerantwortlicherUpdate.as_view(),
+        name='VerantwortlicherUpdate'),
+    url(r'^veranstalter/freieFragenUpdate/$', feedback.views.veranstalter.FreieFragenUpdate.as_view(),
+        name='FreieFragenUpdate'),
+    url(r'^veranstalter/kleingruppenUpdate/$', feedback.views.veranstalter.KleingruppenUpdate.as_view(),
+        name='KleingruppenUpdate'),
+    url(r'^veranstalter/zusammenfassung/$', feedback.views.veranstalter.VeranstaltungZusammenfassung.as_view(),
+        name='VeranstaltungZusammenfassung'),
 ]
 
 # interne Views
@@ -82,8 +86,6 @@ urlpatterns += [
 urlpatterns += [
     url(r'^intern/import_vv/$', feedback.views.intern.vv.import_vv, name='import_vv'),
     url(r'^intern/import_vv_edit/$', feedback.views.intern.vv.import_vv_edit, name='import_vv_edit'),
-
-    # so sollte der Aufruf der Class-based View sein
     url(r'^intern/import_vv_edit_users/$', feedback.views.intern.vv.PersonFormView.as_view(),
         name='import_vv_edit_users'),
     url(r'^intern/import_vv_edit_users/(?P<pk>\d+)/$', feedback.views.intern.vv.PersonFormUpdateView.as_view(),
