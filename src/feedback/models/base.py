@@ -12,6 +12,7 @@ from django.core.exceptions import ValidationError
 from django.db.models import Q
 
 from feedback.tools import ean_checksum_calc, ean_checksum_valid
+from django.contrib.auth.models import User
 
 from django.utils import formats
 
@@ -212,6 +213,7 @@ class Veranstaltung(models.Model):
         ('pr', 'Praktikum'),
         ('se', 'Seminar'),
     )
+
     SPRACHE_CHOICES = (
         ('de', 'Deutsch'),
         ('en', 'Englisch'),
@@ -289,6 +291,13 @@ class Veranstaltung(models.Model):
         (STATUS_BOEGEN_GESCANNT, 'Bögen gescannt')
     )
 
+    STATUS_UEBERGANG = {
+        STATUS_ANGELEGT: (STATUS_GEDRUCKT,),
+        STATUS_GEDRUCKT: (STATUS_VERSANDT,),
+        STATUS_VERSANDT: (STATUS_BOEGEN_EINGEGANGEN,),
+        STATUS_BOEGEN_EINGEGANGEN: (STATUS_BOEGEN_GESCANNT,)
+    }
+
     # Helfertext für Dozenten für den Veranstaltungstyp.
     vlNoEx = 'Wenn Ihre Vorlesung keine Übung hat wählen Sie bitte <i>%s</i> aus'
     for cur in TYP_CHOICES:
@@ -325,15 +334,9 @@ class Veranstaltung(models.Model):
     kleingruppen = models.TextField(verbose_name='Kleingruppen', blank=True)
 
     def get_next_state(self):
-        if self.status == Veranstaltung.STATUS_ANGELEGT:
-            return Veranstaltung.STATUS_GEDRUCKT
-        elif self.status == Veranstaltung.STATUS_GEDRUCKT:
-            return Veranstaltung.STATUS_VERSANDT
-        elif self.status == Veranstaltung.STATUS_VERSANDT:
-            return Veranstaltung.STATUS_BOEGEN_EINGEGANGEN
-        elif self.status == Veranstaltung.STATUS_BOEGEN_EINGEGANGEN:
-            return Veranstaltung.STATUS_BOEGEN_GESCANNT
-        else:
+        try:
+            return self.STATUS_UEBERGANG[self.status][0]  # TODO: Sobald es mehrere Zustande gibt
+        except KeyError:
             return None
 
     def get_evasys_typ(self):
@@ -419,19 +422,15 @@ class Veranstaltung(models.Model):
     def __unicode__(self):
         return u"%s [%s] (%s)" % (self.name, self.typ, self.semester.short())
 
-    def create_log(self, verursacher, interface):
-        Log.objects.create(veranstaltung=self, status=self.status, verursacher=verursacher, interface=interface)
+    def create_log(self, user, scanner, interface):
+        Log.objects.create(veranstaltung=self, user=user, scanner=scanner, status=self.status, interface=interface)
 
-    def log(self, is_admin, is_scan):
-        if is_admin and is_scan:
-            # Es ist nicht möglich den Status gleichzeitig durch Django Admin und Barcodescanner zu ändern
-            pass
-        elif is_admin:
-            self.create_log('Person', 'Django Admin')
-        elif is_scan:
-            self.create_log('Barcodescanner', 'Barcodescanner')
-        else:
-            self.create_log('Person', 'Frontend')
+    # TODO: Logging for transitions via Frontend
+    def log(self, interface):
+        if isinstance(interface, BarcodeScanner):
+            self.create_log(None, interface, Log.SCANNER)
+        elif isinstance(interface, User):
+            self.create_log(interface, None, Log.ADMIN)
 
     def auwertungstermin_to_late_msg(self):
         toLateDate = self.semester.last_Auswertungstermin_to_late_human()
@@ -596,7 +595,7 @@ class BarcodeScannEvent(models.Model):
         barcode_decode = Veranstaltung.decode_barcode(self.barcode)
         verst_obj = Veranstaltung.objects.get(pk=barcode_decode['veranstaltung'])
         self.veranstaltung = verst_obj
-        self.veranstaltung.log(False, True)
+        self.veranstaltung.log(self.scanner)
 
         if (barcode_decode['tutorgroup'] >= 1):
             tutorgroup = Tutor.objects.get(veranstaltung=verst_obj, nummer=barcode_decode['tutorgroup'])
@@ -606,11 +605,22 @@ class BarcodeScannEvent(models.Model):
 
 
 class Log(models.Model):
-    veranstaltung = models.ForeignKey(Veranstaltung, null=True)
+    FRONTEND = 'fe'
+    SCANNER = 'bs'
+    ADMIN = 'ad'
+
+    INTERFACE_CHOICES = (
+        (FRONTEND, 'Frontend'),
+        (SCANNER, 'Barcodescanner'),
+        (ADMIN, 'Admin')
+    )
+
+    veranstaltung = models.ForeignKey(Veranstaltung, null=True, related_name='veranstaltung')
+    user = models.ForeignKey(User, null=True, related_name='user')
+    scanner = models.ForeignKey(BarcodeScanner, null=True, related_name='scanner')
     timestamp = models.DateTimeField(auto_now_add=True)
     status = models.IntegerField(choices=Veranstaltung.STATUS_CHOICES, default=Veranstaltung.STATUS_ANGELEGT)
-    verursacher = models.CharField(max_length=30, blank=True)
-    interface = models.CharField(max_length=30, blank=True)
+    interface = models.CharField(max_length=2, choices=INTERFACE_CHOICES)
 
     class Meta:
         verbose_name = 'Log'

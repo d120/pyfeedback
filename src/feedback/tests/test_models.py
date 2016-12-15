@@ -8,13 +8,14 @@ from django.utils.timezone import now
 from freezegun import freeze_time
 
 from feedback.models import get_model, Semester, Person, Veranstaltung, Einstellung, Mailvorlage
-from feedback.models.base import AlternativVorname, Log
+from feedback.models.base import AlternativVorname, Log, BarcodeScanner
 from feedback.models import past_semester_orders
 from feedback.models import ImportPerson, ImportCategory, ImportVeranstaltung, Kommentar
 from feedback.models import Fragebogen2008, Fragebogen2009, Ergebnis2008, Ergebnis2009
 from feedback.models import Fragebogen2012, Ergebnis2012
 from feedback.tests.tools import get_veranstaltung
-
+from django.urls import reverse
+from django.contrib.auth.models import User
 
 
 class InitTest(TestCase):
@@ -218,6 +219,9 @@ class VeranstaltungTest(TransactionTestCase):
                                                    name='Stoning V',
                                                    status=Veranstaltung.STATUS_GEDRUCKT,
                                                    **self.default_params))
+        self.scanner = BarcodeScanner.objects.create(token="aa", description="description")
+
+        User.objects.create_superuser('supers', None, 'pw')
 
     def test_get_evasys_typ(self):
         self.assertEqual(self.v[0].get_evasys_typ(), 1)
@@ -230,26 +234,32 @@ class VeranstaltungTest(TransactionTestCase):
         self.assertEqual(self.v[4].status, Veranstaltung.STATUS_GEDRUCKT)
 
     def test_log(self):
-        is_admin = True
-        is_scan = True
 
-        self.v[0].log(is_admin, is_scan)
+        self.v[0].log(None)
         self.assertEqual(Log.objects.count(), 0)
 
-        self.v[0].log(is_admin, not is_scan)
+        self.v[0].log(self.scanner)
         self.assertEqual(Log.objects.count(), 1)
-        self.assertEqual(Log.objects.get(veranstaltung=self.v[0]).verursacher, 'Person')
-        self.assertEqual(Log.objects.get(veranstaltung=self.v[0]).interface, 'Django Admin')
+        self.assertEqual(Log.objects.get(veranstaltung=self.v[0]).scanner, self.scanner)
+        self.assertEqual(Log.objects.get(veranstaltung=self.v[0]).interface, Log.SCANNER)
 
-        self.v[1].log(not is_admin, is_scan)
-        self.assertEqual(Log.objects.count(), 2)
-        self.assertEqual(Log.objects.get(veranstaltung=self.v[1]).verursacher, 'Barcodescanner')
-        self.assertEqual(Log.objects.get(veranstaltung=self.v[1]).interface, 'Barcodescanner')
+    def test_admin_veranstaltung(self):
+        self.assertTrue(self.client.login(username='supers', password='pw'))
+        update_url = reverse("admin:feedback_veranstaltung_changelist")
 
-        self.v[2].log(not is_admin, not is_scan)
-        self.assertEqual(Log.objects.count(), 3)
-        self.assertEqual(Log.objects.get(veranstaltung=self.v[2]).verursacher, 'Person')
-        self.assertEqual(Log.objects.get(veranstaltung=self.v[2]).interface, 'Frontend')
+        data = {'action': 'action_status_aendern',
+                '_selected_action': [unicode(f.pk) for f in [self.v[0]]]}
+
+        response = self.client.post(update_url, data, **{'REMOTE_USER': 'super'})
+        self.assertEqual(response.status_code, 200)
+
+        data["apply"] = True
+        data["status"] = Veranstaltung.STATUS_BOEGEN_GESCANNT
+        response = self.client.post(update_url, data, **{'REMOTE_USER': 'super'})
+        self.assertEqual(response.status_code, 302)
+
+        self.assertEqual(Log.objects.count(), 1)
+        self.assertEqual(Log.objects.get(veranstaltung=self.v[0]).interface, Log.ADMIN)
 
     @staticmethod
     def change_status(v, new_status):
@@ -459,8 +469,9 @@ class LogTest(TestCase):
     def setUp(self):
         self.time = now()
         self.s, self.v = get_veranstaltung('v')
+        self.scanner = BarcodeScanner.objects.create(token="aa", description="description")
         self.log = Log.objects.create(veranstaltung=self.v, timestamp=self.time, status=Veranstaltung.STATUS_GEDRUCKT,
-                                      verursacher='Person', interface='Django Admin')
+                                      user=None, scanner=self.scanner, interface=Log.ADMIN)
 
     def test_name(self):
         self.assertEqual(self.log.veranstaltung.pk, self.v.pk)
@@ -471,8 +482,8 @@ class LogTest(TestCase):
     def test_status(self):
         self.assertEqual(self.log.status, Veranstaltung.STATUS_GEDRUCKT)
 
-    def test_verursacher(self):
-        self.assertEqual(self.log.verursacher, 'Person')
+    def test_scanner_attr(self):
+        self.assertEqual(self.log.scanner, self.scanner)
 
     def test_interface(self):
-        self.assertEqual(self.log.interface, 'Django Admin')
+        self.assertEqual(self.log.interface, Log.ADMIN)

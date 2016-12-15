@@ -25,7 +25,7 @@ def barcodedrop(request):
             if next_state is None:
                 response_message = "Nachster Status ungultig."
             else:
-                time_offset = datetime.date.today() - datetime.timedelta(hours=1)
+                time_offset = datetime.date.today() - datetime.timedelta(minutes=1)
                 is_double_scan = Log.objects.filter(
                     veranstaltung=verst_obj,
                     timestamp__gt=time_offset,
@@ -42,7 +42,7 @@ def barcodedrop(request):
                     if is_allowed > 0:
                         verst_obj.status = next_state
                         verst_obj.save()
-                        verst_obj.log(False, True)
+                        verst_obj.log(barcode_scanner)
                         response_message = "Die Veranstaltung wurde erfolgreich in den nachsten Zustand uerfuehrt"
                         success = True
                     else:

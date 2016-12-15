@@ -1,50 +1,27 @@
 # coding=utf-8
 
 from django.contrib import admin
+from django import forms
+from django.http.response import HttpResponseRedirect
+from django.shortcuts import render
 
 from feedback.models import Person, Veranstaltung, Semester, Einstellung, \
     Mailvorlage, Kommentar, Tutor, BarcodeScanner, BarcodeScannEvent, BarcodeAllowedState
 from feedback.models.base import Log
 
 
-def status_angelegt(modeladmin, request, queryset):
-    queryset.update(status=Veranstaltung.STATUS_ANGELEGT)
-    for veranstaltung in queryset:
-        veranstaltung.log(True, False)
-status_angelegt.short_description = 'Status: angelegt'
-
-
-def status_gedruckt(modeladmin, request, queryset):
-    queryset.update(status=Veranstaltung.STATUS_GEDRUCKT)
-    for veranstaltung in queryset:
-        veranstaltung.log(True, False)
-status_gedruckt.short_description = 'Status: gedruckt'
-
-
-def status_versandt(modeladmin, request, queryset):
-    queryset.update(status=Veranstaltung.STATUS_VERSANDT)
-    for veranstaltung in queryset:
-        veranstaltung.log(True, False)
-status_versandt.short_description = 'Status: versandt'
-
-
-def status_boegen_eingegangen(modeladmin, request, queryset):
-    queryset.update(status=Veranstaltung.STATUS_BOEGEN_EINGEGANGEN)
-    for veranstaltung in queryset:
-        veranstaltung.log(True, False)
-status_boegen_eingegangen.short_description = 'Status: eingegangen'
-
-
-def status_boegen_gescannt(modeladmin, request, queryset):
-    queryset.update(status=Veranstaltung.STATUS_BOEGEN_GESCANNT)
-    for veranstaltung in queryset:
-        veranstaltung.log(True, False)
-status_boegen_gescannt.short_description = 'Status: gescannt'
-
-
 class PersonAdmin(admin.ModelAdmin):
     list_display = ('__unicode__', 'email')
     search_fields = ['vorname', 'nachname', 'email', ]
+
+
+class LogInline(admin.TabularInline):
+    model = Log
+    readonly_fields = ('veranstaltung', 'user', 'scanner', 'timestamp', 'status', 'interface')
+    can_delete = False
+
+    def has_add_permission(self, request, obj=None):
+        return False
 
 
 class VeranstaltungAdmin(admin.ModelAdmin):
@@ -63,29 +40,42 @@ class VeranstaltungAdmin(admin.ModelAdmin):
     search_fields = ['name']
     filter_horizontal = ('veranstalter', 'ergebnis_empfaenger')  # @see http://stackoverflow.com/a/5386871
     readonly_fields = ('link_veranstalter',)
+    inlines = [LogInline, ]
 
+    def save_model(self, request, obj, form, change):
+        super(VeranstaltungAdmin, self).save_model(request, obj, form, change)
+        # Post-Save Operation
+        for changed_att in form.changed_data:
+            if changed_att == "status": # Wenn Status sich aendert, wird es notiert
+                obj.log(request.user)
 
-class VeranstaltungStatus(Veranstaltung):
-    class Meta:
-        verbose_name = 'Status der Veranstaltung'
-        verbose_name_plural = 'Status der Veranstaltungen'
-        proxy = True
+    class StatusAendernForm(forms.Form):
+        _selected_action = forms.CharField(widget=forms.MultipleHiddenInput)
+        status = forms.ChoiceField(choices=Veranstaltung.STATUS_CHOICES)
 
+    def action_status_aendern(self, request, queryset):
+        form = None
 
-class VeranstaltungStatusAdmin(admin.ModelAdmin):
-    list_display = ('lv_nr', 'name', 'status')
-    list_display_links = ['name']
-    list_filter = ('lv_nr', 'name', 'status')
-    search_fields = ['name']
-    actions = [
-        status_angelegt, status_gedruckt, status_versandt, status_boegen_eingegangen, status_boegen_gescannt
-    ]
+        if 'apply' in request.POST:
+            form = self.StatusAendernForm(request.POST)
 
+            if form.is_valid():
+                status = form.cleaned_data['status']
 
-class LogAdmin(admin.ModelAdmin):
-    list_display = ('veranstaltung', 'timestamp', 'status', 'verursacher', 'interface')
-    list_filter = ('veranstaltung',)
-    ordering = ('timestamp',)
+                queryset.update(status=status)
+                for veranstaltung in queryset:
+                    veranstaltung.log(request.user)
+
+                self.message_user(request, "Status erfolgreich geändert.")
+                return HttpResponseRedirect(request.get_full_path())
+
+        if not form:
+            form = self.StatusAendernForm(initial={'_selected_action': request.POST.getlist(admin.ACTION_CHECKBOX_NAME)})
+
+        return render(request, 'admin/status_aendern.html', {'veranstaltungen': queryset, 'status': form, })
+
+    action_status_aendern.short_description = "Ändere den Status einer Veranstaltung"
+    actions = [action_status_aendern]
 
 
 class SemesterAdmin(admin.ModelAdmin):
@@ -153,5 +143,3 @@ admin.site.register(Kommentar, KommentarAdmin)
 admin.site.register(Tutor, TutorAdmin)
 admin.site.register(BarcodeScannEvent, BarcodeScannEventAdmin)
 admin.site.register(BarcodeScanner, BarcodeScannerAdmin)
-admin.site.register(VeranstaltungStatus, VeranstaltungStatusAdmin)
-admin.site.register(Log, LogAdmin)
