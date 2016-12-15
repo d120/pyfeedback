@@ -29,7 +29,7 @@ def barcodedrop(request):
                 is_double_scan = Log.objects.filter(
                     veranstaltung=verst_obj,
                     timestamp__gt=time_offset,
-                    interface="Barcodescanner").count()
+                    interface=Log.SCANNER).count()
 
                 if is_double_scan > 0:
                     response_message = "Die Veranstaltung wurde in der vergangenen Stunde " \

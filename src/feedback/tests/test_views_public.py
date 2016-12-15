@@ -240,6 +240,8 @@ class PublicDropBarcode(TestCase):
         self.barcode_scanner = BarcodeScanner.objects.create(token="LRh73Ds23", description="")
         BarcodeAllowedState.objects.create(barcode_scanner=self.barcode_scanner,
                                            allow_state=Veranstaltung.STATUS_GEDRUCKT)
+        BarcodeAllowedState.objects.create(barcode_scanner=self.barcode_scanner,
+                                           allow_state=Veranstaltung.STATUS_VERSANDT)
 
         self.semester = Semester.objects.create(semester=20165,
                                                 fragebogen='test',
