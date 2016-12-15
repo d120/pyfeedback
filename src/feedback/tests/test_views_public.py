@@ -10,6 +10,9 @@ from feedback.models import Semester, Ergebnis2009, Veranstaltung, \
 from feedback.tests.test_views_veranstalter import login_veranstalter
 from feedback.tests import redirect_urls
 import json
+from freezegun import freeze_time
+import datetime
+
 
 @override_settings(ROOT_URLCONF=redirect_urls)
 class RedirectTest(TestCase):
@@ -333,3 +336,19 @@ class PublicDropBarcode(TestCase):
             "scanner_token": self.barcode_scanner.token
         })
         self.assertJsonSuccess(response, False)
+
+    def test_valid_double_scan(self):
+        barcode = self.veranstaltung.get_barcode_number()
+        response = self.client.post(self.path, {
+            "barcode": barcode,
+            "scanner_token": self.barcode_scanner.token
+        })
+        self.assertJsonSuccess(response, True)
+
+        future_time = datetime.datetime.now() + datetime.timedelta(minutes=2)
+        with freeze_time(future_time):
+            response = self.client.post(self.path, {
+                "barcode": barcode,
+                "scanner_token": self.barcode_scanner.token
+            })
+            self.assertJsonSuccess(response, True)

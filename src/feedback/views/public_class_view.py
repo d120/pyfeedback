@@ -25,7 +25,7 @@ def barcodedrop(request):
             if next_state is None:
                 response_message = "Nachster Status ungultig."
             else:
-                time_offset = datetime.date.today() - datetime.timedelta(minutes=1)
+                time_offset = datetime.datetime.now() - datetime.timedelta(minutes=1)
                 is_double_scan = Log.objects.filter(
                     veranstaltung=verst_obj,
                     timestamp__gt=time_offset,
