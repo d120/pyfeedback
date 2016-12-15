@@ -184,7 +184,7 @@ def generate_letters(request):
         eva_id=v.get_barcode_number()
         empfaenger = unicode(v.verantwortlich.full_name())
         line = u'\\adrentry{%s}{%s}{%s}{%s}{%s}{%s}{%s}{%s}{%s}\n' % (
-                        v.verantwortlich.full_name(), v.verantwortlich.anschrift, translate_to_latex(v.name), v.anzahl, v.sprache, v.get_typ_display(), eva_id, v.freiefrage1.strip(), v.freiefrage2.strip())
+                        translate_to_latex(v.verantwortlich.full_name()), translate_to_latex(v.verantwortlich.anschrift), translate_to_latex(v.name), v.anzahl, v.sprache, v.get_typ_display(), eva_id, v.freiefrage1.strip(), v.freiefrage2.strip())
         lines.append(smart_str(line))
 
     #TODO: prüfen, ob nötige Dateien schreibbar sind (abgabedatum.inc, anschreiben.{log,aux,pdf}, veranstalter.adr)
