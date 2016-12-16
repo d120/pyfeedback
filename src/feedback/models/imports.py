@@ -47,6 +47,7 @@ class ImportVeranstaltung(models.Model):
     lv_nr = models.CharField(max_length=15, blank=True)
     veranstalter = models.ManyToManyField(ImportPerson, blank=True)
     category = models.ForeignKey(ImportCategory, related_name="ivs")
+    is_attended_course = models.BooleanField(default=True)
 
     def __unicode__(self):
         return u'%s (%s)' % (self.name, self.lv_nr)

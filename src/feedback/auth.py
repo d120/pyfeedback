@@ -8,7 +8,7 @@ from django.contrib.auth.backends import RemoteUserBackend, ModelBackend
 from django.contrib.auth.middleware import RemoteUserMiddleware
 from django.utils.encoding import smart_unicode
 
-from feedback.models import Veranstaltung
+from feedback.models.base import Veranstaltung
 
 
 ### Login mit Veranstalter-Rechten ############################################

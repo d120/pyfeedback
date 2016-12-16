@@ -75,12 +75,26 @@ def parse_vv_recurse(ele, cat):
                 continue
 
             name = e.find('Name').text
-            veranst = parse_instructors(e.find('InstructorString').text)
+
+            instructor_string = e.find('InstructorString').text
+            is_attended_course = (instructor_string != "N.N.")
+
+            if is_attended_course:
+                veranst = parse_instructors(instructor_string)
+
             try:
-                iv = ImportVeranstaltung.objects.create(typ=typ, name=name, lv_nr=lv_nr, category=cat)
+                iv = ImportVeranstaltung.objects.create(
+                    typ=typ,
+                    name=name,
+                    lv_nr=lv_nr,
+                    category=cat,
+                    is_attended_course=is_attended_course
+                )
             except IntegrityError:
                 continue
-            iv.veranstalter = veranst
+
+            if is_attended_course:
+                iv.veranstalter = veranst
 
     # Zurückgegeben wird die Rekursionstiefe der zuletzt erstellten Kategorie, oder wenn keine erstellt wurden 0
     return 0 if is_new_category else (last_category_depth - 1)

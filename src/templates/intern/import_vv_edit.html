@@ -10,6 +10,9 @@ h5.ui-accordion-header h6.ui-accordion-header
 .mark_unmark { margin-bottom: 0.9em; margin-top: -0.9em; font-size: 80% }
 
 .foo { border: 1px solid green; }
+.unattended_course {
+    background-color: #FFFF00;
+}
 </style>
 
 <script type="text/javascript" src="{% static 'jquery/jquery-1.4.2.min.js' %}"></script>
@@ -17,7 +20,31 @@ h5.ui-accordion-header h6.ui-accordion-header
 <script type="text/javascript">
 <!--
 function check_checkboxes(event, checked) {
-	$(event.target).parent().parent().find("input:checkbox").attr('checked', checked);
+	var parentElem = $(event.target).parent().parent();
+
+    var checkboxes;
+    if(checked) {
+        checkboxes = parentElem.find(".attended_course > input:checkbox");
+        var unattended_courses = parentElem.find(".unattended_course");
+        if(unattended_courses.length > 0) {
+            alert("Es gibt Veranstaltungen ohne validen Dozenten. Diese Veranstaltungen wurden nicht ausgewählt.");
+
+            var expandParent = function(childElem) {
+                var accordeon_div = childElem.parent().parent();
+                var accordeon_title = accordeon_div.prev();
+                if(accordeon_title.is("h3")) {
+                    if(!accordeon_div.is(":visible")) { // only expand if collapsed
+                        accordeon_title.click();
+                    }
+                    expandParent(accordeon_title);
+                }
+            }
+            expandParent(unattended_courses.eq(0))
+        }
+    } else {
+        checkboxes = parentElem.find("input:checkbox");
+    }
+    checkboxes.attr('checked', checked);
 	event.preventDefault();	
 }
 
@@ -69,7 +96,7 @@ $(function() {
             <div class="mark_unmark"><a href="#" class="markall">Alle markieren</a> | <a href="#" class="unmarkall">Markierungen aufheben</a></div>
             <ul>
                 {% for iv in category.ivs.all %}
-                    <li style="list-style-type: none">
+                    <li style="list-style-type: none" class="{{ iv.is_attended_course | yesno:"attended_course,unattended_course" }} ">
                         <input type="checkbox" id="v{{iv.id}}" name="v" value="{{iv.id}}" />
                         <label for="v{{iv.id}}">{{ iv }}</label>
                     </li>

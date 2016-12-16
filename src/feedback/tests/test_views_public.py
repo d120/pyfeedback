@@ -4,9 +4,14 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.test import TestCase, override_settings
 
-from feedback.models import Semester, Ergebnis2009, Veranstaltung, Kommentar, Person
+from feedback.models import Semester, Ergebnis2009, Veranstaltung, \
+    Kommentar, Person, BarcodeScanner, BarcodeAllowedState
+
 from feedback.tests.test_views_veranstalter import login_veranstalter
 from feedback.tests import redirect_urls
+import json
+from freezegun import freeze_time
+import datetime
 
 
 @override_settings(ROOT_URLCONF=redirect_urls)
@@ -228,3 +233,122 @@ class PublicVeranstaltungTest(TestCase):
         response = self.client.get('/ergebnisse/%d/' % self.v.id, **{'REMOTE_USER':'testuser'})
         ctx = response.context
         self.assertEqual(ctx['restricted'], True)
+
+
+class PublicDropBarcode(TestCase):
+    def setUp(self):
+        self.path = "/barcodedrop/"
+        self.barcode_scanner_no_access_right = BarcodeScanner.objects.create(token="LRh73Ds22", description="")
+
+        self.barcode_scanner = BarcodeScanner.objects.create(token="LRh73Ds23", description="")
+        BarcodeAllowedState.objects.create(barcode_scanner=self.barcode_scanner,
+                                           allow_state=Veranstaltung.STATUS_GEDRUCKT)
+        BarcodeAllowedState.objects.create(barcode_scanner=self.barcode_scanner,
+                                           allow_state=Veranstaltung.STATUS_VERSANDT)
+
+        self.semester = Semester.objects.create(semester=20165,
+                                                fragebogen='test',
+                                                sichtbarkeit='ADM')
+
+        self.veranstaltung = Veranstaltung.objects.create(
+            typ='v', name='GDI',
+            semester=self.semester,
+            grundstudium=False,
+            evaluieren=True
+        )
+
+        self.deleted_veranstaltung = Veranstaltung.objects.create(
+            typ='v', name='GDI2',
+            semester=self.semester,
+            grundstudium=False,
+            evaluieren=True
+        )
+
+        self.last_state_veranstaltung = Veranstaltung.objects.create(
+            typ='v', name='GDI3',
+            semester=self.semester,
+            grundstudium=False,
+            evaluieren=True,
+            status=Veranstaltung.STATUS_BOEGEN_GESCANNT
+        )
+        self.deleted_barcode = self.deleted_veranstaltung.get_barcode_number()
+        self.deleted_veranstaltung.delete()
+
+    def assertJsonSuccess(self, response, success):
+        response_json = json.loads(response.content)
+        self.assertEqual(response_json['success'], success)
+
+    def test_invalid_token(self):
+        response = self.client.post(self.path, {"barcode": 22})
+        self.assertJsonSuccess(response, False)
+
+        response = self.client.post(self.path, {"scanner_token": ""})
+        self.assertJsonSuccess(response, False)
+
+    def test_invalid_barcode(self):
+        response = self.client.post(self.path, {"scanner_token": self.barcode_scanner.token})
+        self.assertJsonSuccess(response, False)
+
+        response = self.client.post(self.path, {"barcode": 22, "scanner_token": self.barcode_scanner.token})
+        self.assertJsonSuccess(response, False)
+
+        response = self.client.post(self.path, {
+            "barcode": self.deleted_barcode,
+            "scanner_token": self.barcode_scanner.token
+        })
+        self.assertJsonSuccess(response, False)
+
+    def test_barcode_scanner_right(self):
+        barcode = self.veranstaltung.get_barcode_number()
+        response = self.client.post(self.path, {
+            "barcode": barcode,
+            "scanner_token": self.barcode_scanner_no_access_right.token
+        })
+        self.assertJsonSuccess(response, False)
+        
+        barcode = self.last_state_veranstaltung.get_barcode_number()
+        response = self.client.post(self.path, {
+            "barcode": barcode,
+            "scanner_token": self.barcode_scanner.token
+        })
+        self.assertJsonSuccess(response, False)
+
+    def test_valid_barcode_scan(self):
+        barcode = self.veranstaltung.get_barcode_number()
+        response = self.client.post(self.path, {
+            "barcode": barcode,
+            "scanner_token": self.barcode_scanner.token
+        })
+        self.assertJsonSuccess(response, True)
+        self.veranstaltung.refresh_from_db()
+        self.assertEqual(self.veranstaltung.status, Veranstaltung.STATUS_GEDRUCKT)
+
+    def test_double_scan(self):
+        barcode = self.veranstaltung.get_barcode_number()
+        response = self.client.post(self.path, {
+            "barcode": barcode,
+            "scanner_token": self.barcode_scanner.token
+        })
+        self.assertJsonSuccess(response, True)
+
+        response = self.client.post(self.path, {
+            "barcode": barcode,
+            "scanner_token": self.barcode_scanner.token
+        })
+        self.assertJsonSuccess(response, False)
+
+    def test_valid_double_scan(self):
+        barcode = self.veranstaltung.get_barcode_number()
+        response = self.client.post(self.path, {
+            "barcode": barcode,
+            "scanner_token": self.barcode_scanner.token
+        })
+        self.assertJsonSuccess(response, True)
+
+        future_time = datetime.datetime.now() + datetime.timedelta(minutes=2)
+        with freeze_time(future_time):
+            response = self.client.post(self.path, {
+                "barcode": barcode,
+                "scanner_token": self.barcode_scanner.token
+            })
+            self.assertJsonSuccess(response, True)

@@ -3,7 +3,7 @@
 from django.conf import settings
 from django.shortcuts import get_object_or_404, render
 from django.views.decorators.http import require_safe
-
+from feedback.views.public_class_view import barcodedrop
 from feedback.models import Semester, get_model, Veranstaltung, Kommentar
 
 from django.conf import settings

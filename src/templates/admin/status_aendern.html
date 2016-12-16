@@ -1,0 +1,20 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+
+
+
+<form action="" method="post">
+    {% csrf_token %}
+    {{ tag_form }}
+
+    {{ status }}
+    <p>Es wird der Status für folgende Veranstaltungen geändert:</p>
+
+    <ul>{{ veranstaltungen|unordered_list }}</ul>
+
+    <input type="hidden" name="action" value="action_status_aendern" />
+    <input type="submit" name="apply" value="Übernehmen" />
+</form>
+
+{% endblock %}

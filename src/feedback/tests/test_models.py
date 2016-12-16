@@ -3,16 +3,19 @@
 from types import UnicodeType
 
 from django.db import IntegrityError
-from django.db.models import Q
 from django.test import TestCase, TransactionTestCase
+from django.utils.timezone import now
+from freezegun import freeze_time
 
 from feedback.models import get_model, Semester, Person, Veranstaltung, Einstellung, Mailvorlage
-from feedback.models.base import AlternativVorname
+from feedback.models.base import AlternativVorname, Log, BarcodeScanner
 from feedback.models import past_semester_orders
 from feedback.models import ImportPerson, ImportCategory, ImportVeranstaltung, Kommentar
 from feedback.models import Fragebogen2008, Fragebogen2009, Ergebnis2008, Ergebnis2009
 from feedback.models import Fragebogen2012, Ergebnis2012
 from feedback.tests.tools import get_veranstaltung
+from django.urls import reverse
+from django.contrib.auth.models import User
 
 
 class InitTest(TestCase):
@@ -212,12 +215,76 @@ class VeranstaltungTest(TransactionTestCase):
         self.v.append(Veranstaltung.objects.create(typ='vu', name='Stoning II', **self.default_params))
         self.v.append(Veranstaltung.objects.create(typ='pr', name='Stoning III', **self.default_params))
         self.v.append(Veranstaltung.objects.create(typ='se', name='Stoning IV', **self.default_params))
+        self.v.append(Veranstaltung.objects.create(typ='v',
+                                                   name='Stoning V',
+                                                   status=Veranstaltung.STATUS_GEDRUCKT,
+                                                   **self.default_params))
+        self.scanner = BarcodeScanner.objects.create(token="aa", description="description")
+
+        User.objects.create_superuser('supers', None, 'pw')
 
     def test_get_evasys_typ(self):
         self.assertEqual(self.v[0].get_evasys_typ(), 1)
         self.assertEqual(self.v[1].get_evasys_typ(), 9)
         self.assertEqual(self.v[2].get_evasys_typ(), 5)
         self.assertEqual(self.v[3].get_evasys_typ(), 2)
+
+    def test_status(self):
+        self.assertEqual(self.v[0].status, Veranstaltung.STATUS_ANGELEGT)
+        self.assertEqual(self.v[4].status, Veranstaltung.STATUS_GEDRUCKT)
+
+    def test_log(self):
+
+        self.v[0].log(None)
+        self.assertEqual(Log.objects.count(), 0)
+
+        self.v[0].log(self.scanner)
+        self.assertEqual(Log.objects.count(), 1)
+        self.assertEqual(Log.objects.get(veranstaltung=self.v[0]).scanner, self.scanner)
+        self.assertEqual(Log.objects.get(veranstaltung=self.v[0]).interface, Log.SCANNER)
+
+    def test_admin_veranstaltung(self):
+        self.assertTrue(self.client.login(username='supers', password='pw'))
+        update_url = reverse("admin:feedback_veranstaltung_changelist")
+
+        data = {'action': 'action_status_aendern',
+                '_selected_action': [unicode(f.pk) for f in [self.v[0]]]}
+
+        response = self.client.post(update_url, data, **{'REMOTE_USER': 'super'})
+        self.assertEqual(response.status_code, 200)
+
+        data["apply"] = True
+        data["status"] = Veranstaltung.STATUS_BOEGEN_GESCANNT
+        response = self.client.post(update_url, data, **{'REMOTE_USER': 'super'})
+        self.assertEqual(response.status_code, 302)
+
+        self.assertEqual(Log.objects.count(), 1)
+        self.assertEqual(Log.objects.get(veranstaltung=self.v[0]).interface, Log.ADMIN)
+
+    @staticmethod
+    def change_status(v, new_status):
+        v.status = new_status
+        v.save()
+
+    def test_get_next_state(self):
+        v = self.v[0]
+        self.assertEqual(v.get_next_state(), Veranstaltung.STATUS_GEDRUCKT)
+
+        self.change_status(v, Veranstaltung.STATUS_GEDRUCKT)
+        self.assertEqual(v.get_next_state(), Veranstaltung.STATUS_VERSANDT)
+
+        self.change_status(v, Veranstaltung.STATUS_VERSANDT)
+        self.assertEqual(v.get_next_state(), Veranstaltung.STATUS_BOEGEN_EINGEGANGEN)
+
+        self.change_status(v, Veranstaltung.STATUS_BOEGEN_EINGEGANGEN)
+        self.assertEqual(v.get_next_state(), Veranstaltung.STATUS_BOEGEN_GESCANNT)
+
+        self.change_status(v, Veranstaltung.STATUS_BOEGEN_GESCANNT)
+        self.assertIsNone(v.get_next_state())
+
+    def test_has_uebung(self):
+        self.assertTrue(self.v[1].has_uebung())
+        self.assertFalse(self.v[0].has_uebung())
 
     def test_unicode(self):
         self.assertEqual(unicode(self.v[0]), 'Stoning I [v] (SS 2011)')
@@ -323,7 +390,7 @@ class ImportVeranstaltungTest(TestCase):
     def setUp(self):
         self.c = ImportCategory.objects.create(name='Sketches')
         self.iv = ImportVeranstaltung.objects.create(typ='v', name='Dead Parrot', lv_nr='42',
-                                                     category=self.c)
+                                                     category=self.c, is_attended_course=True)
 
     def test_unicode(self):
         self.assertEqual(unicode(self.iv), 'Dead Parrot (42)')
@@ -394,3 +461,29 @@ class KommentarTest(TestCase):
     def test_unique(self):
         with self.assertRaises(IntegrityError):
             Kommentar.objects.create(veranstaltung=self.v, autor=self.p[1], text="I'm not.")
+
+
+class LogTest(TestCase):
+
+    @freeze_time("2016-12-06")
+    def setUp(self):
+        self.time = now()
+        self.s, self.v = get_veranstaltung('v')
+        self.scanner = BarcodeScanner.objects.create(token="aa", description="description")
+        self.log = Log.objects.create(veranstaltung=self.v, timestamp=self.time, status=Veranstaltung.STATUS_GEDRUCKT,
+                                      user=None, scanner=self.scanner, interface=Log.ADMIN)
+
+    def test_name(self):
+        self.assertEqual(self.log.veranstaltung.pk, self.v.pk)
+
+    def test_timestamp(self):
+        self.assertEqual(self.log.timestamp, self.time)
+
+    def test_status(self):
+        self.assertEqual(self.log.status, Veranstaltung.STATUS_GEDRUCKT)
+
+    def test_scanner_attr(self):
+        self.assertEqual(self.log.scanner, self.scanner)
+
+    def test_interface(self):
+        self.assertEqual(self.log.interface, Log.ADMIN)
