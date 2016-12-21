@@ -36,7 +36,7 @@ class VeranstaltungAdmin(admin.ModelAdmin):
     list_display = ('typ', 'name', 'semester', 'grundstudium', 'evaluieren', 'anzahl',
                     'sprache', 'status', 'veranstalter_list')
     list_display_links = ['name']
-    list_filter = ('typ', 'semester', 'grundstudium', 'evaluieren', 'sprache')
+    list_filter = ('typ', 'semester', 'status', 'grundstudium', 'evaluieren', 'sprache')
     search_fields = ['name']
     filter_horizontal = ('veranstalter', 'ergebnis_empfaenger')  # @see http://stackoverflow.com/a/5386871
     readonly_fields = ('link_veranstalter',)
