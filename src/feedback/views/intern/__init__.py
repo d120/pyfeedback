@@ -156,7 +156,7 @@ def generate_letters(request):
     if vorlage == 'Anschreiben':
         latexpath = settings.LATEX_PATH
         templatename = 'anschreiben'
-    elif vorlage == 'Aufkleber' or vorlage == 'Grossaufkleber':
+    elif vorlage == 'Aufkleber':
         latexpath = settings.LATEX_PATH+'../aufkleber/'
         templatename = 'aufkleber'
 
@@ -171,12 +171,16 @@ def generate_letters(request):
 
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=%s.pdf' % (templatename)
-    if vorlage != 'Grossaufkleber':
+    if vorlage != 'Aufkleber':
         veranst = Veranstaltung.objects.filter(semester=semester, evaluieren=True, anzahl__gt=0).order_by('sprache','anzahl')
+    elif 'anzahlaufkleber' in request.POST and request.POST['anzahlaufkleber'].isdigit():
+        anzahl = request.POST['anzahlaufkleber']
+        anzahl = int(anzahl)
+        veranst = Veranstaltung.objects.filter(semester=semester, evaluieren=True, anzahl__gt=anzahl).order_by('sprache','anzahl')
     else:
-        veranst = Veranstaltung.objects.filter(semester=semester, evaluieren=True, anzahl__gt=85).order_by('sprache','anzahl')
+        veranst = Veranstaltung.objects.filter(semester=semester, evaluieren=True, anzahl__gt=0).order_by('sprache','anzahl')
     if not veranst.count():
-        messages.error(request, 'Für das ausgewählte Semester (%s) liegen keine Bestellungen vor!' % semester)
+        messages.error(request, 'Für das ausgewählte Semester (%s) liegen keine Bestellungen vor oder die Mindesteilnehmeranzahl ist zu hoch!' % semester)
         return HttpResponseRedirect(reverse('generate_letters'))
 
     lines = []

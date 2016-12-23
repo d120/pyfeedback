@@ -120,16 +120,16 @@ class GenerateLettersTest(NonSuTestMixin, TestCase):
                                          'vorlage': 'Anschreiben'}, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.templates[0].name, 'intern/generate_letters.html')
 
-        # test Aufkleber fuer grosse Veranstaltungen
+        # test Aufkleber with variable number
         response = self.client.post(self.path,
                                     {'semester': s.semester, 'erhebungswoche': '10. - 11. November 2011',
-                                     'vorlage': 'Grossaufkleber'}, **{'REMOTE_USER': 'super'})
+                                        'vorlage': 'Aufkleber', 'anzahlaufkleber':'85'}, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.status_code, 302)
         v.anzahl = 86
         v.save()
         response = self.client.post(self.path,
                                     {'semester': s.semester, 'erhebungswoche': '10. - 11. November 2011',
-                                     'vorlage': 'Grossaufkleber'}, **{'REMOTE_USER': 'super'})
+                                        'vorlage': 'Aufkleber', 'anzahlaufkleber': '85'}, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.status_code, 200)
         self.assertRegexpMatches(response['Content-Disposition'],
                                  r'^attachment; filename=[a-zA-Z0-9_-]+\.pdf$')
