@@ -282,20 +282,23 @@ class Veranstaltung(models.Model):
     STATUS_VERSANDT = 700
     STATUS_BOEGEN_EINGEGANGEN = 800
     STATUS_BOEGEN_GESCANNT = 900
+    STATUS_ERGEBNISSE_VERSANDT = 1000
 
     STATUS_CHOICES = (
         (STATUS_ANGELEGT, 'Angelegt'),
         (STATUS_GEDRUCKT, 'Gedruckt'),
         (STATUS_VERSANDT, 'Versandt'),
         (STATUS_BOEGEN_EINGEGANGEN, 'Bögen eingegangen'),
-        (STATUS_BOEGEN_GESCANNT, 'Bögen gescannt')
+        (STATUS_BOEGEN_GESCANNT, 'Bögen gescannt'),
+        (STATUS_ERGEBNISSE_VERSANDT, 'Ergebnisse versandt')
     )
 
     STATUS_UEBERGANG = {
         STATUS_ANGELEGT: (STATUS_GEDRUCKT,),
         STATUS_GEDRUCKT: (STATUS_VERSANDT,),
         STATUS_VERSANDT: (STATUS_BOEGEN_EINGEGANGEN,),
-        STATUS_BOEGEN_EINGEGANGEN: (STATUS_BOEGEN_GESCANNT,)
+        STATUS_BOEGEN_EINGEGANGEN: (STATUS_BOEGEN_GESCANNT,),
+        STATUS_BOEGEN_GESCANNT: (STATUS_ERGEBNISSE_VERSANDT,)
     }
 
     # Helfertext für Dozenten für den Veranstaltungstyp.

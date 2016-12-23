@@ -280,6 +280,9 @@ class VeranstaltungTest(TransactionTestCase):
         self.assertEqual(v.get_next_state(), Veranstaltung.STATUS_BOEGEN_GESCANNT)
 
         self.change_status(v, Veranstaltung.STATUS_BOEGEN_GESCANNT)
+        self.assertEqual(v.get_next_state(), Veranstaltung.STATUS_ERGEBNISSE_VERSANDT)
+
+        self.change_status(v, Veranstaltung.STATUS_ERGEBNISSE_VERSANDT)
         self.assertIsNone(v.get_next_state())
 
     def test_has_uebung(self):
