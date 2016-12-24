@@ -14,8 +14,8 @@
 <p>Zu erzeugende Datei:
 <fieldset>
 <input type="radio" id="anschreiben" name="vorlage" value="Anschreiben"><label for="anschreiben"> Anschreiben</label><br>
-<input type="radio" id="aufkleber" name="vorlage" value="Aufkleber"><label for="aufkleber"> Aufkleber</label><br>
-<input type="radio" id="grosseaufkleber" name="vorlage" value="Grossaufkleber"><label for="grosseaufkleber"> Aufkleber (nur für große Veranstaltungen >= 85)</label><br>
+<input type="radio" id="aufkleber" name="vorlage" value="Aufkleber"><label for="aufkleber"> Aufkleber</label>
+&nbsp;<label for="aufkleberanzahl">(Mindestteilnehmerzahl: </label> <input type="text" id="aufkleberanzahl" disabled name="anzahlaufkleber" value=0>)
 </fieldset>
 <p>
 <input type="submit" name="submit" value="PDF erzeugen" />
@@ -26,5 +26,17 @@
 <h2>Fehler bei der Ausführung von pdflatex</h2>
 <pre>{{texlog}}</pre>
 {% endif %}
-
+<script>
+	let aufkleber = document.getElementById('aufkleber');
+	let anschreiben = document.getElementById('anschreiben');
+	let anzahl = document.getElementById('aufkleberanzahl');
+	aufkleber.onclick = function(){
+		let anzahl = document.getElementById('aufkleberanzahl');
+		if(aufkleber.checked)
+			anzahl.disabled = false;
+		}
+	anschreiben.onclick = function(){
+			anzahl.disabled = true;
+	}
+</script>
 {% endblock %}
