@@ -7,6 +7,7 @@ from StringIO import StringIO
 from django.conf import settings
 from django.core import mail
 from django.test import TestCase
+from django.core.urlresolvers import reverse
 
 from feedback.forms import UploadFileForm
 from feedback.models import Semester, Person, Veranstaltung, Fragebogen2009, Mailvorlage, Einstellung
@@ -299,6 +300,13 @@ class SendmailTest(NonSuTestMixin, TestCase):
         response = self.client.post(self.path, params, **{'REMOTE_USER': 'super'})
         self.assertIn('intern/sendmail_preview.html', (t.name for t in response.templates))
         self.assertTrue(response.context['vorschau'])
+
+        # Vorschau: Check if the replacements are highlighted
+        color_span = '<span style="color:blue">{}</span>'
+        self.assertEqual(color_span.format('Grundlagen der Agrarphilosophie I') , response.context['veranstaltung'])
+        link_veranstalter = 'https://www.fachschaft.informatik.tu-darmstadt.de%s' % reverse('veranstalter-login')
+        link_suffix_format = '?vid=%d&token=%s'
+        self.assertEqual(color_span.format(link_veranstalter + (link_suffix_format % (1337, '0123456789abcdef'))) , response.context['link_veranstalter'])
 
         # Senden
         del params['vorschau']

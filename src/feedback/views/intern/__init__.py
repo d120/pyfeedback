@@ -240,11 +240,12 @@ def sendmail(request):
             flt = {str('ergebnis'+data['semester_selected'].fragebogen): None}
             veranstaltungen = veranstaltungen.exclude(**flt)
 
+        color_span = '<span style="color:blue">{}</span>'
         link_veranstalter = 'https://www.fachschaft.informatik.tu-darmstadt.de%s' % reverse('veranstalter-login')
         link_suffix_format = '?vid=%d&token=%s'
         demo_context = RequestContext(request, {
-            'veranstaltung': 'Grundlagen der Agrarphilosophie I',
-            'link_veranstalter': link_veranstalter + (link_suffix_format % (1337, '0123456789abcdef')),
+            'veranstaltung': color_span.format('Grundlagen der Agrarphilosophie I'),
+            'link_veranstalter': color_span.format(link_veranstalter + (link_suffix_format % (1337, '0123456789abcdef'))),
         })
 
         if 'uebernehmen' in request.POST:
