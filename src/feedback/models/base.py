@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 
 import random
+import re
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -114,6 +115,37 @@ class Semester(models.Model):
             return None
 
 
+class Fachgebiet(models.Model):
+    """Repräsentiert ein Fachgebiet des Fachbereichs Informatik."""
+    name = models.CharField(max_length=80)
+    kuerzel = models.CharField(max_length=10)
+
+    class Meta:
+        verbose_name = 'Fachgebiet'
+        verbose_name_plural = 'Fachgebiete'
+        app_label = 'feedback'
+
+
+class FachgebietEmail(models.Model):
+    """Repräsentiert den Suffix der Email-Adresse einer Person. Als Suffix ist alles ab dem @-Symbol definiert."""
+    fachgebiet = models.ForeignKey(Fachgebiet, related_name='fachgebiet_emailsuffix')
+    suffix = models.EmailField(default="fachgebiet@", help_text="Vor dem @-Symbol kann beliebiges stehen. "
+                                                                "Wichtig ist nur der Domainname dahinter.")
+    email_sekretaerin = models.EmailField(blank=True)
+
+    def get_suffix(self):
+        return re.search("@[\w.-]+", self.suffix).group()
+
+    def save(self, *args, **kwargs):
+        self.suffix = self.get_suffix()
+        super(FachgebietEmail, self).save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = 'Fachgebiet Email'
+        verbose_name_plural = 'Fachgebiet Emails'
+        app_label = 'feedback'
+
+
 class Person(models.Model):
     GESCHLECHT_CHOICES = (
         ('', ''),
@@ -133,7 +165,7 @@ class Person(models.Model):
     email = models.EmailField(_('e-mail address'), blank=True)
     anschrift = models.CharField(_('anschrift'), max_length=80, blank=True,
                                  help_text='Bitte geben sie die Anschrift so an, dass der Versand per Hauspost problemlos erfolgen kann.')
-    fachgebiet = models.CharField(_('Fachgebiet'), max_length=80, blank=True)
+    fachgebiet = models.ForeignKey(Fachgebiet)
 
     def full_name(self):
         return u'%s %s' % (self.vorname, self.nachname)
@@ -608,6 +640,7 @@ class BarcodeScannEvent(models.Model):
 
 
 class Log(models.Model):
+    """Ein Logger für die Zustandsübergänge der Veranstaltungen."""
     FRONTEND = 'fe'
     SCANNER = 'bs'
     ADMIN = 'ad'
@@ -629,4 +662,5 @@ class Log(models.Model):
         verbose_name = 'Log'
         verbose_name_plural = 'Logs'
         app_label = 'feedback'
+
 

@@ -7,7 +7,7 @@ from django.shortcuts import render
 
 from feedback.models import Person, Veranstaltung, Semester, Einstellung, \
     Mailvorlage, Kommentar, Tutor, BarcodeScanner, BarcodeScannEvent, BarcodeAllowedState
-from feedback.models.base import Log
+from feedback.models.base import Log, Fachgebiet, FachgebietEmail
 
 
 class PersonAdmin(admin.ModelAdmin):
@@ -134,6 +134,18 @@ class BarcodeScannerAdmin(admin.ModelAdmin):
     list_display = ('token', 'description')
 
 
+class FachgebietEmailAdminInline(admin.TabularInline):
+    model = FachgebietEmail
+    extra = 1
+
+
+# TODO: Person <--> Fachgebiet Relation sichtbar machen
+class FachgebietAdmin(admin.ModelAdmin):
+    list_display = ('name', 'kuerzel')
+    list_display_links = ('name',)
+    inlines = (FachgebietEmailAdminInline,)
+
+
 admin.site.register(Person, PersonAdmin)
 admin.site.register(Veranstaltung, VeranstaltungAdmin)
 admin.site.register(Semester, SemesterAdmin)
@@ -143,3 +155,4 @@ admin.site.register(Kommentar, KommentarAdmin)
 admin.site.register(Tutor, TutorAdmin)
 admin.site.register(BarcodeScannEvent, BarcodeScannEventAdmin)
 admin.site.register(BarcodeScanner, BarcodeScannerAdmin)
+admin.site.register(Fachgebiet, FachgebietAdmin)
