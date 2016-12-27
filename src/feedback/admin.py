@@ -13,6 +13,7 @@ from feedback.models.base import Log, Fachgebiet, FachgebietEmail
 class PersonAdmin(admin.ModelAdmin):
     list_display = ('__unicode__', 'email')
     search_fields = ['vorname', 'nachname', 'email', ]
+    list_filter = ('fachgebiet',)
 
 
 class LogInline(admin.TabularInline):
@@ -139,7 +140,6 @@ class FachgebietEmailAdminInline(admin.TabularInline):
     extra = 1
 
 
-# TODO: Person <--> Fachgebiet Relation sichtbar machen
 class FachgebietAdmin(admin.ModelAdmin):
     list_display = ('name', 'kuerzel')
     list_display_links = ('name',)

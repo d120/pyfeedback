@@ -120,6 +120,9 @@ class Fachgebiet(models.Model):
     name = models.CharField(max_length=80)
     kuerzel = models.CharField(max_length=10)
 
+    def __unicode__(self):
+        return self.name
+
     class Meta:
         verbose_name = 'Fachgebiet'
         verbose_name_plural = 'Fachgebiete'
@@ -128,17 +131,16 @@ class Fachgebiet(models.Model):
 
 class FachgebietEmail(models.Model):
     """Repräsentiert den Suffix der Email-Adresse einer Person. Als Suffix ist alles ab dem @-Symbol definiert."""
-    fachgebiet = models.ForeignKey(Fachgebiet, related_name='fachgebiet_emailsuffix')
-    suffix = models.EmailField(default="fachgebiet@", help_text="Vor dem @-Symbol kann beliebiges stehen. "
-                                                                "Wichtig ist nur der Domainname dahinter.")
+    fachgebiet = models.ForeignKey(Fachgebiet, related_name='fachgebiet')
+    email_suffix = models.CharField(max_length=150,
+                                    help_text="Hier soll der Domainname einer Email-Adresse eines Fachgebiets stehen.",
+                                    null=True)
     email_sekretaerin = models.EmailField(blank=True)
 
-    def get_suffix(self):
-        return re.search("@[\w.-]+", self.suffix).group()
-
-    def save(self, *args, **kwargs):
-        self.suffix = self.get_suffix()
-        super(FachgebietEmail, self).save(*args, **kwargs)
+    @staticmethod
+    def assign_to_fachgebiet(email):
+        fachgebiet_id = FachgebietEmail.objects.get(email_suffix__contains=email).fachgebiet_id
+        return Fachgebiet.objects.get(pk=fachgebiet_id)
 
     class Meta:
         verbose_name = 'Fachgebiet Email'
@@ -162,10 +164,10 @@ class Person(models.Model):
     geschlecht = models.CharField(max_length=1, choices=GESCHLECHT_CHOICES, blank=True, verbose_name=u'Anrede')
     vorname = models.CharField(_('first name'), max_length=30, blank=True)
     nachname = models.CharField(_('last name'), max_length=30, blank=True)
-    email = models.EmailField(_('e-mail address'), blank=True)
+    email = models.EmailField(_('e-mail'), blank=True)
     anschrift = models.CharField(_('anschrift'), max_length=80, blank=True,
                                  help_text='Bitte geben sie die Anschrift so an, dass der Versand per Hauspost problemlos erfolgen kann.')
-    fachgebiet = models.ForeignKey(Fachgebiet)
+    fachgebiet = models.ForeignKey(Fachgebiet, null=True, blank=True)
 
     def full_name(self):
         return u'%s %s' % (self.vorname, self.nachname)
