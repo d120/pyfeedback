@@ -139,8 +139,10 @@ class FachgebietEmail(models.Model):
 
     @staticmethod
     def assign_to_fachgebiet(email):
-        fachgebiet_id = FachgebietEmail.objects.get(email_suffix__contains=email).fachgebiet_id
-        return Fachgebiet.objects.get(pk=fachgebiet_id)
+        try:
+            return Fachgebiet.objects.get(pk=FachgebietEmail.objects.get(email_suffix__contains=email).fachgebiet_id)
+        except Exception:
+            pass
 
     class Meta:
         verbose_name = 'Fachgebiet Email'
