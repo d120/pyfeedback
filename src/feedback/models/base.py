@@ -138,9 +138,11 @@ class FachgebietEmail(models.Model):
     email_sekretaerin = models.EmailField(blank=True)
 
     @staticmethod
-    def assign_to_fachgebiet(email):
+    def get_fachgebiet_from_email(email):
         try:
-            return Fachgebiet.objects.get(pk=FachgebietEmail.objects.get(email_suffix__contains=email).fachgebiet_id)
+            suffix = email.split('@')[1]
+            fg_id = FachgebietEmail.objects.get(email_suffix__contains=suffix).fachgebiet_id
+            return Fachgebiet.objects.get(pk=fg_id)
         except Exception:
             pass
 

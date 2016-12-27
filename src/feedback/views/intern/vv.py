@@ -128,8 +128,7 @@ class PersonFormUpdateView(UserPassesTestMixin, UpdateView):
         p = form.save(commit=False)
         p.geschlecht = form.cleaned_data['geschlecht']
         p.email = form.cleaned_data['email']
-        suffix = p.email.split('@')[1]
-        p.fachgebiet = FachgebietEmail.assign_to_fachgebiet(suffix)
+        p.fachgebiet = FachgebietEmail.get_fachgebiet_from_email(p.email)
         p.save()
         messages.success(self.request, u'Benutzerdatensätze wurden erfolgreich gespeichert.')
         messages.success(self.request, str(p.full_name()) + ' wurde dem Fachbereich ' + str(p.fachgebiet) + ' zugewiesen.')

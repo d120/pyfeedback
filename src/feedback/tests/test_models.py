@@ -8,7 +8,7 @@ from django.utils.timezone import now
 from freezegun import freeze_time
 
 from feedback.models import get_model, Semester, Person, Veranstaltung, Einstellung, Mailvorlage
-from feedback.models.base import AlternativVorname, Log, BarcodeScanner
+from feedback.models.base import AlternativVorname, Log, BarcodeScanner, Fachgebiet, FachgebietEmail
 from feedback.models import past_semester_orders
 from feedback.models import ImportPerson, ImportCategory, ImportVeranstaltung, Kommentar
 from feedback.models import Fragebogen2008, Fragebogen2009, Ergebnis2008, Ergebnis2009
@@ -132,6 +132,39 @@ class SemesterTest(TestCase):
     def test_is_unique(self):
         with self.assertRaises(IntegrityError):
             Semester.objects.create(semester=20115, fragebogen='foo', sichtbarkeit='ALL')
+
+
+class FachgebietTest(TestCase):
+    def setUp(self):
+        self.fg = Fachgebiet.objects.create(name="Software Technology Group", kuerzel="STG")
+
+    def test_name(self):
+        self.assertEqual(self.fg.name, "Software Technology Group")
+
+    def test_kuerzel(self):
+        self.assertEqual(self.fg.kuerzel, "STG")
+
+
+class FachgebietEmailTest(TestCase):
+    def setUp(self):
+        self.fg = Fachgebiet.objects.create(name="Software Technology Group", kuerzel="STG")
+        self.fge = FachgebietEmail.objects.create(fachgebiet=self.fg, email_suffix="stg.tu-darmstadt.de",
+                                                  email_sekretaerin="sek@stg.tu-darmstadt.de")
+        self.p = Person.objects.create(vorname="Je", nachname="Mand", email="je.mand@stg.tu-darmstadt.de")
+
+    def test_fachgebiet(self):
+        self.assertEqual(self.fge.fachgebiet_id, self.fg.id)
+
+    def test_email_suffix(self):
+        self.assertEqual(self.fge.email_suffix, "stg.tu-darmstadt.de")
+
+    def test_email_sekretaerin(self):
+        self.assertEqual(self.fge.email_sekretaerin, "sek@stg.tu-darmstadt.de")
+
+    def test_get_fachgebiet_from_email(self):
+        fg = FachgebietEmail.get_fachgebiet_from_email(self.p.email)
+        self.assertEqual(self.fg, fg)
+
 
 
 class PersonTest(TestCase):
