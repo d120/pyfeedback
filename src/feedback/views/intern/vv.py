@@ -150,7 +150,10 @@ class PersonFormUpdateView(UserPassesTestMixin, UpdateView):
         nachname = self.object.nachname
         similar_persons = Person.persons_with_similar_names(vorname, nachname)
 
-        return similar_persons.count() > 0
+        if self.object.full_name() == similar_persons.get().full_name():
+            return False
+        else:
+            return similar_persons.count() > 0
 
 
 class SimilarNamesView(UserPassesTestMixin, DetailView):
