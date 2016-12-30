@@ -164,6 +164,7 @@ class FachgebietEmailTest(TestCase):
     def test_get_fachgebiet_from_email(self):
         fg = FachgebietEmail.get_fachgebiet_from_email(self.p.email)
         self.assertEqual(self.fg, fg)
+        self.assertRaises(Exception, FachgebietEmail.get_fachgebiet_from_email(''))
 
 
 

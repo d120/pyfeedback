@@ -140,11 +140,11 @@ class FachgebietEmail(models.Model):
     @staticmethod
     def get_fachgebiet_from_email(email):
         try:
-            suffix = email.split('@')[1]
-            fg_id = FachgebietEmail.objects.get(email_suffix__contains=suffix).fachgebiet_id
+            suffix = email.split('@')[-1]
+            fg_id = FachgebietEmail.objects.get(email_suffix=suffix).fachgebiet_id
             return Fachgebiet.objects.get(pk=fg_id)
         except Exception:
-            pass
+            return None
 
     class Meta:
         verbose_name = 'Fachgebiet Email'
