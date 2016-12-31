@@ -15,6 +15,14 @@ class PersonAdmin(admin.ModelAdmin):
     search_fields = ['vorname', 'nachname', 'email', ]
     list_filter = ('fachgebiet',)
 
+    # TODO: implement form for Fachgebiet assignment
+    class FachgebietZuweisenForm(forms.Form):
+        pass
+
+    # TODO: implement action for Fachgebiet assignment
+    def assign_fachgebiet_action(self, request, queryset):
+        pass
+
 
 class LogInline(admin.TabularInline):
     model = Log
@@ -54,7 +62,7 @@ class VeranstaltungAdmin(admin.ModelAdmin):
         _selected_action = forms.CharField(widget=forms.MultipleHiddenInput)
         status = forms.ChoiceField(choices=Veranstaltung.STATUS_CHOICES)
 
-    def action_status_aendern(self, request, queryset):
+    def status_aendern_action(self, request, queryset):
         form = None
 
         if 'apply' in request.POST:
@@ -75,8 +83,8 @@ class VeranstaltungAdmin(admin.ModelAdmin):
 
         return render(request, 'admin/status_aendern.html', {'veranstaltungen': queryset, 'status': form, })
 
-    action_status_aendern.short_description = "Ändere den Status einer Veranstaltung"
-    actions = [action_status_aendern]
+    status_aendern_action.short_description = "Ändere den Status einer Veranstaltung"
+    actions = [status_aendern_action]
 
 
 class SemesterAdmin(admin.ModelAdmin):
