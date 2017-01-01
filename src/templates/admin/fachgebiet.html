@@ -6,9 +6,21 @@
     {{ fg }}
     <p>Folgende Personen werden einem Fachgebiet zugewiesen:</p>
 
-    {% for p in personen %}
-        <input type="checkbox" name="{{ p.id }}" id="{{ p.id }}" /> {{ p }} <br>
-    {% endfor %}
+    <table>
+        <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Vorschlag für Fachgebiet</th>
+        </tr>
+        {% for person, suggestion in data %}
+            <tr>
+                <td><input type="checkbox" name="{{ person.id }}" id="{{ person.id }}" /></td>
+                <td>{{ person }}</td>
+                <td>{{ suggestion }}</td>
+            <br>
+            </tr>
+        {% endfor %}
+    </table>
 
     <br>
     <input type="hidden" name="action" value="assign_fachgebiet_action" />

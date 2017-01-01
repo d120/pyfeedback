@@ -29,8 +29,6 @@ class PersonAdmin(admin.ModelAdmin):
                 fachgebiet = form.cleaned_data['fachgebiet']
                 for person in queryset:
                     if str(person.id) in request.POST:
-                        print "=======> CHECKED PERSONS"
-                        print person.full_name()
                         person.fachgebiet = fachgebiet
                         person.save()
 
@@ -42,7 +40,13 @@ class PersonAdmin(admin.ModelAdmin):
                 initial={'_selected_action': request.POST.getlist(admin.ACTION_CHECKBOX_NAME)}
             )
 
-        return render(request, 'admin/fachgebiet.html', {'personen': queryset, 'fg': form, })
+            suggestion_list = []
+            for p in queryset:
+                suggestion_list.append(FachgebietEmail.get_fachgebiet_from_email(p.email))
+
+            data = zip(queryset, suggestion_list)
+
+        return render(request, 'admin/fachgebiet.html', {'data': data, 'fg': form, })
 
     assign_fachgebiet_action.short_description = "Personen einem Fachgebiet zuweisen."
     actions = [assign_fachgebiet_action]
