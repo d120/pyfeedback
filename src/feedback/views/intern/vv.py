@@ -131,7 +131,10 @@ class PersonFormUpdateView(UserPassesTestMixin, UpdateView):
         p.fachgebiet = FachgebietEmail.get_fachgebiet_from_email(p.email)
         p.save()
         messages.success(self.request, u'Benutzerdatensätze wurden erfolgreich gespeichert.')
-        messages.success(self.request, u' '.join((p.full_name(), ' wurde dem Fachbereich ', str(p.fachgebiet), ' zugewiesen.')).encode('utf-8'))
+        if p.fachgebiet is None:
+            pass
+        else:
+            messages.success(self.request, u' '.join((p.full_name(), ' wurde dem Fachbereich ', str(p.fachgebiet), ' zugewiesen.')).encode('utf-8'))
         return super(PersonFormUpdateView, self).form_valid(form)
 
     def form_invalid(self, form):
