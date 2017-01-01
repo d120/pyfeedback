@@ -3,7 +3,7 @@
 from django.contrib import admin
 from django import forms
 from django.http.response import HttpResponseRedirect
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render
 
 from feedback.models import Person, Veranstaltung, Semester, Einstellung, \
     Mailvorlage, Kommentar, Tutor, BarcodeScanner, BarcodeScannEvent, BarcodeAllowedState
@@ -17,45 +17,43 @@ class PersonAdmin(admin.ModelAdmin):
 
     class FachgebietZuweisenForm(forms.Form):
         _selected_action = forms.CharField(widget=forms.MultipleHiddenInput)
-        fachgebiet = forms.ModelChoiceField(queryset=Fachgebiet.objects.all(), label=u'Fachgebiet')
 
     def assign_fachgebiet_action(self, request, queryset):
         form = None
         suggestion_list = []
+
         for p in queryset:
-            if FachgebietEmail.get_fachgebiet_from_email(p.email) is None:
-                suggestion_list.append('Unbekannt')
-            else:
-                suggestion_list.append(FachgebietEmail.get_fachgebiet_from_email(p.email))
+            proposed_fachgebiet = FachgebietEmail.get_fachgebiet_from_email(p.email)
+            suggestion_list.append((p, proposed_fachgebiet))
 
-        data = zip(queryset, suggestion_list)
-
-        if 'apply' or 'save' in request.POST:
+        if any(s in request.POST for s in ('apply', 'save')):
             form = self.FachgebietZuweisenForm(request.POST)
 
             if form.is_valid():
-                fachgebiet = form.cleaned_data['fachgebiet']
+                selected_persons = request.POST.getlist("selectedPerson")
                 for person in queryset:
-                    if str(person.id) in request.POST:
-                        person.fachgebiet = fachgebiet
-                        person.save()
-                        data = [(x, y) for x, y in data if x is not person]
+                    person_id_str = str(person.id)
+                    if person_id_str in selected_persons:
+                        proposed_fachgebiet_id = request.POST.get("fachgebiet_" + person_id_str, 0);
+                        if proposed_fachgebiet_id > 0:
+                            proposed_fachgebiet = Fachgebiet.objects.get(id=proposed_fachgebiet_id)
+                            person.fachgebiet = proposed_fachgebiet
+                            person.save()
+                            suggestion_list = [(x, y) for x, y in suggestion_list if x is not person]
 
-                self.message_user(request, "Fachgebiet erfolgreich zugewiesen.")
+                self.message_user(request, "Fachgebiete erfolgreich zugewiesen.")
 
-                if 'save' in request.POST or not data:
+                if ('save' in request.POST) or not suggestion_list:
                     return HttpResponseRedirect(request.get_full_path())
-                else:
-                    return render_to_response('admin/fachgebiet.html', {'data': data, 'fachgebiet': form, })
 
         if not form:
             form = self.FachgebietZuweisenForm(initial={
                 '_selected_action': request.POST.getlist(admin.ACTION_CHECKBOX_NAME)
             })
 
-        return render(request, 'admin/fachgebiet.html', {'data': data, 'fachgebiet': form, })
+        return render(request, 'admin/fachgebiet.html', {'data': suggestion_list, 'fachgebiet': form, })
 
-    assign_fachgebiet_action.short_description = "Einem Fachgebiet zuweisen."
+    assign_fachgebiet_action.short_description = "Einem Fachgebiet zuweisen"
     actions = [assign_fachgebiet_action]
 
 

@@ -12,12 +12,20 @@
             <th>Name</th>
             <th>Vorschlag für Fachgebiet</th>
         </tr>
-        {% for person, suggestion in data %}
+        {% for person, fachgebiet in data %}
             <tr>
-                <td><input type="checkbox" name="{{ person.id }}" id="{{ person.id }}" /></td>
+                <td>
+                    <input type="checkbox" name="selectedPerson" value="{{ person.id }}" {{ fachgebiet|yesno:",disabled" }}/>
+                    {% if fachgebiet %}
+                        <input type="hidden" name="fachgebiet_{{ person.id }}" value="{{ fachgebiet.id }}"/>
+                    {% endif %}
+                </td>
                 <td>{{ person }}</td>
-                <td>{{ suggestion }}</td>
-            <br>
+                {% if fachgebiet %}
+                    <td>{{ fachgebiet }}</td>
+                {% else %}
+                    <td>Unbekannt</td>
+                {% endif %}
             </tr>
         {% endfor %}
     </table>
