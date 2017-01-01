@@ -167,7 +167,6 @@ class FachgebietEmailTest(TestCase):
         self.assertRaises(Exception, FachgebietEmail.get_fachgebiet_from_email(''))
 
 
-
 class PersonTest(TestCase):
     def setUp(self):
         self.p1 = Person.objects.create(vorname='Brian', nachname='Cohen')
@@ -236,6 +235,10 @@ class PersonTest(TestCase):
         self.assertTrue(is_veranstalter1)
         self.assertFalse(is_veranstalter2)
 
+    # TODO: tests for admin?
+    def test_person_admin_assign_fachgebiet(self):
+        pass
+
 
 class VeranstaltungTest(TransactionTestCase):
     def setUp(self):
@@ -281,7 +284,7 @@ class VeranstaltungTest(TransactionTestCase):
         self.assertTrue(self.client.login(username='supers', password='pw'))
         update_url = reverse("admin:feedback_veranstaltung_changelist")
 
-        data = {'action': 'action_status_aendern',
+        data = {'action': 'status_aendern_action',
                 '_selected_action': [unicode(f.pk) for f in [self.v[0]]]}
 
         response = self.client.post(update_url, data, **{'REMOTE_USER': 'super'})
