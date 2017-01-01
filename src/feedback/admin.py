@@ -11,17 +11,41 @@ from feedback.models.base import Log, Fachgebiet, FachgebietEmail
 
 
 class PersonAdmin(admin.ModelAdmin):
-    list_display = ('__unicode__', 'email')
+    list_display = ('__unicode__', 'email', 'fachgebiet')
     search_fields = ['vorname', 'nachname', 'email', ]
     list_filter = ('fachgebiet',)
 
-    # TODO: implement form for Fachgebiet assignment
     class FachgebietZuweisenForm(forms.Form):
-        pass
+        _selected_action = forms.CharField(widget=forms.MultipleHiddenInput)
+        fachgebiet = forms.ModelChoiceField(queryset=Fachgebiet.objects.all(), label=u'Fachgebiet')
 
-    # TODO: implement action for Fachgebiet assignment
     def assign_fachgebiet_action(self, request, queryset):
-        pass
+        form = None
+
+        if 'apply' in request.POST:
+            form = self.FachgebietZuweisenForm(request.POST)
+
+            if form.is_valid():
+                fachgebiet = form.cleaned_data['fachgebiet']
+                for person in queryset:
+                    if str(person.id) in request.POST:
+                        print "=======> CHECKED PERSONS"
+                        print person.full_name()
+                        person.fachgebiet = fachgebiet
+                        person.save()
+
+                self.message_user(request, "Fachgebiet erfolgreich zugewiesen.")
+                return HttpResponseRedirect(request.get_full_path())
+
+        if not form:
+            form = self.FachgebietZuweisenForm(
+                initial={'_selected_action': request.POST.getlist(admin.ACTION_CHECKBOX_NAME)}
+            )
+
+        return render(request, 'admin/fachgebiet.html', {'personen': queryset, 'fg': form, })
+
+    assign_fachgebiet_action.short_description = "Personen einem Fachgebiet zuweisen."
+    actions = [assign_fachgebiet_action]
 
 
 class LogInline(admin.TabularInline):

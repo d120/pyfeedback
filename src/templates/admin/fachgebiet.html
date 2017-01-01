@@ -1,6 +1,18 @@
 {% extends "admin/base_site.html" %}
 {% block content %}
 
-    <!-- TODO: implement view for Fachgebiet assignment -->
+<form action="" method="post">
+    {% csrf_token %}
+    {{ fg }}
+    <p>Folgende Personen werden einem Fachgebiet zugewiesen:</p>
+
+    {% for p in personen %}
+        <input type="checkbox" name="{{ p.id }}" id="{{ p.id }}" /> {{ p }} <br>
+    {% endfor %}
+
+    <br>
+    <input type="hidden" name="action" value="assign_fachgebiet_action" />
+    <input type="submit" name="apply" value="Übernehmen" />
+</form>
 
 {% endblock %}
