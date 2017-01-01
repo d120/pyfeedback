@@ -3,16 +3,33 @@
 
 <form action="" method="post">
     {% csrf_token %}
-    {{ fg }}
+    {{ fachgebiet }}
     <p>Folgende Personen werden einem Fachgebiet zugewiesen:</p>
 
-    {% for p in personen %}
-        <input type="checkbox" name="{{ p.id }}" id="{{ p.id }}" /> {{ p }} <br>
-    {% endfor %}
+    <table>
+        <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Vorschlag für Fachgebiet</th>
+        </tr>
+        {% for person, suggestion in data %}
+            <tr>
+                <td><input type="checkbox" name="{{ person.id }}" id="{{ person.id }}" /></td>
+                <td>{{ person }}</td>
+                <td>{{ suggestion }}</td>
+            <br>
+            </tr>
+        {% endfor %}
+    </table>
 
     <br>
     <input type="hidden" name="action" value="assign_fachgebiet_action" />
-    <input type="submit" name="apply" value="Übernehmen" />
+    {% if data|length == 1 %}
+        <input type="submit" name="apply" value="Sichern und weiter bearbeiten" disabled="disabled" />
+    {% else %}
+        <input type="submit" name="apply" value="Sichern und weiter bearbeiten" />
+    {% endif %}
+    <input type="submit" name="save" value="Sichern" />
 </form>
 
 {% endblock %}

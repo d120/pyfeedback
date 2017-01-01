@@ -3,7 +3,7 @@
 from django.contrib import admin
 from django import forms
 from django.http.response import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, render_to_response
 
 from feedback.models import Person, Veranstaltung, Semester, Einstellung, \
     Mailvorlage, Kommentar, Tutor, BarcodeScanner, BarcodeScannEvent, BarcodeAllowedState
@@ -21,30 +21,41 @@ class PersonAdmin(admin.ModelAdmin):
 
     def assign_fachgebiet_action(self, request, queryset):
         form = None
+        suggestion_list = []
+        for p in queryset:
+            if FachgebietEmail.get_fachgebiet_from_email(p.email) is None:
+                suggestion_list.append('Unbekannt')
+            else:
+                suggestion_list.append(FachgebietEmail.get_fachgebiet_from_email(p.email))
 
-        if 'apply' in request.POST:
+        data = zip(queryset, suggestion_list)
+
+        if 'apply' or 'save' in request.POST:
             form = self.FachgebietZuweisenForm(request.POST)
 
             if form.is_valid():
                 fachgebiet = form.cleaned_data['fachgebiet']
                 for person in queryset:
                     if str(person.id) in request.POST:
-                        print "=======> CHECKED PERSONS"
-                        print person.full_name()
                         person.fachgebiet = fachgebiet
                         person.save()
+                        data = [(x, y) for x, y in data if x is not person]
 
                 self.message_user(request, "Fachgebiet erfolgreich zugewiesen.")
-                return HttpResponseRedirect(request.get_full_path())
+
+                if 'save' in request.POST or not data:
+                    return HttpResponseRedirect(request.get_full_path())
+                else:
+                    return render_to_response('admin/fachgebiet.html', {'data': data, 'fachgebiet': form, })
 
         if not form:
-            form = self.FachgebietZuweisenForm(
-                initial={'_selected_action': request.POST.getlist(admin.ACTION_CHECKBOX_NAME)}
-            )
+            form = self.FachgebietZuweisenForm(initial={
+                '_selected_action': request.POST.getlist(admin.ACTION_CHECKBOX_NAME)
+            })
 
-        return render(request, 'admin/fachgebiet.html', {'personen': queryset, 'fg': form, })
+        return render(request, 'admin/fachgebiet.html', {'data': data, 'fachgebiet': form, })
 
-    assign_fachgebiet_action.short_description = "Personen einem Fachgebiet zuweisen."
+    assign_fachgebiet_action.short_description = "Einem Fachgebiet zuweisen."
     actions = [assign_fachgebiet_action]
 
 
