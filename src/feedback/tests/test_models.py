@@ -147,10 +147,16 @@ class FachgebietTest(TestCase):
 
 class FachgebietEmailTest(TestCase):
     def setUp(self):
+        User.objects.create_superuser('supers', None, 'pw')
+
         self.fg = Fachgebiet.objects.create(name="Software Technology Group", kuerzel="STG")
         self.fge = FachgebietEmail.objects.create(fachgebiet=self.fg, email_suffix="stg.tu-darmstadt.de",
                                                   email_sekretaerin="sek@stg.tu-darmstadt.de")
+
+        self.fg1 = Fachgebiet.objects.create(name="FG1", kuerzel="FG1")
+
         self.p = Person.objects.create(vorname="Je", nachname="Mand", email="je.mand@stg.tu-darmstadt.de")
+        self.p1 = Person.objects.create(vorname="An", nachname="Derer", email="an.derer@fg1.de")
 
     def test_fachgebiet(self):
         self.assertEqual(self.fge.fachgebiet_id, self.fg.id)
@@ -165,6 +171,27 @@ class FachgebietEmailTest(TestCase):
         fg = FachgebietEmail.get_fachgebiet_from_email(self.p.email)
         self.assertEqual(self.fg, fg)
         self.assertRaises(Exception, FachgebietEmail.get_fachgebiet_from_email(''))
+
+    def test_admin_assign_person(self):
+        self.assertTrue(self.client.login(username='supers', password='pw'))
+
+        update_url = reverse("admin:feedback_fachgebiet_change", args=(self.fg1.id,))
+        data = {
+            'name': self.fg1.name,
+            'kuerzel': self.fg1.kuerzel,
+            'fachgebiet-TOTAL_FORMS': 1,
+            'fachgebiet-INITIAL_FORMS': 0,
+            'fachgebiet-MIN_NUM_FORMS': 0,
+            'fachgebiet-MAX_NUM_FORMS': 1000,
+            'fachgebiet-0-fachgebiet': self.fg1.id,
+            'fachgebiet-0-email_suffix': 'fg1.de',
+            '_save': 'Sichern'
+        }
+
+        response = self.client.post(update_url, data, **{'REMOTE_USER': 'super'})
+        self.assertEqual(response.status_code, 302)
+        self.p1.refresh_from_db()
+        self.assertEqual(self.p1.fachgebiet, self.fg1)
 
 
 class PersonTest(TestCase):

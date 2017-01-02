@@ -186,6 +186,30 @@ class FachgebietAdmin(admin.ModelAdmin):
     list_display_links = ('name',)
     inlines = (FachgebietEmailAdminInline,)
 
+    def save_related(self, request, form, formsets, change):
+        super(FachgebietAdmin, self).save_related(request, form, formsets, change)
+
+        if change:
+            count_added = 0
+            for formset in formsets:
+                if formset.extra_forms:
+                    for new_forms in formset.extra_forms:
+                        if new_forms.instance:
+                            fachgebiet_email_instance = new_forms.instance
+                            fachgebiet_suffix = fachgebiet_email_instance.email_suffix
+                            if fachgebiet_suffix:
+                                persons = Person.objects.filter(fachgebiet=None)
+
+                                for person in persons:
+                                    proposed_fachgebiet = FachgebietEmail.get_fachgebiet_from_email(person.email)
+                                    if proposed_fachgebiet \
+                                            and proposed_fachgebiet.id == fachgebiet_email_instance.fachgebiet_id:
+                                        person.fachgebiet = proposed_fachgebiet
+                                        person.save()
+                                        count_added += 1
+
+            if count_added > 0:
+                self.message_user(request, "Dieser Fachgebiet wurde {0} Personen zugeordnet".format(count_added))
 
 admin.site.register(Person, PersonAdmin)
 admin.site.register(Veranstaltung, VeranstaltungAdmin)
