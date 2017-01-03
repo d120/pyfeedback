@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 
 import random
+import re
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -114,6 +115,43 @@ class Semester(models.Model):
             return None
 
 
+class Fachgebiet(models.Model):
+    """Repräsentiert ein Fachgebiet des Fachbereichs Informatik."""
+    name = models.CharField(max_length=80)
+    kuerzel = models.CharField(max_length=10)
+
+    def __unicode__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Fachgebiet'
+        verbose_name_plural = 'Fachgebiete'
+        app_label = 'feedback'
+
+
+class FachgebietEmail(models.Model):
+    """Repräsentiert den Suffix der Email-Adresse einer Person. Als Suffix ist alles ab dem @-Symbol definiert."""
+    fachgebiet = models.ForeignKey(Fachgebiet, related_name='fachgebiet')
+    email_suffix = models.CharField(max_length=150,
+                                    help_text="Hier soll der Domainname einer Email-Adresse eines Fachgebiets stehen.",
+                                    null=True)
+    email_sekretaerin = models.EmailField(blank=True)
+
+    @staticmethod
+    def get_fachgebiet_from_email(email):
+        try:
+            suffix = email.split('@')[-1]
+            fg_id = FachgebietEmail.objects.get(email_suffix=suffix).fachgebiet_id
+            return Fachgebiet.objects.get(pk=fg_id)
+        except Exception:
+            return None
+
+    class Meta:
+        verbose_name = 'Fachgebiet Email'
+        verbose_name_plural = 'Fachgebiet Emails'
+        app_label = 'feedback'
+
+
 class Person(models.Model):
     GESCHLECHT_CHOICES = (
         ('', ''),
@@ -130,10 +168,10 @@ class Person(models.Model):
     geschlecht = models.CharField(max_length=1, choices=GESCHLECHT_CHOICES, blank=True, verbose_name=u'Anrede')
     vorname = models.CharField(_('first name'), max_length=30, blank=True)
     nachname = models.CharField(_('last name'), max_length=30, blank=True)
-    email = models.EmailField(_('e-mail address'), blank=True)
+    email = models.EmailField(_('e-mail'), blank=True)
     anschrift = models.CharField(_('anschrift'), max_length=80, blank=True,
                                  help_text='Bitte geben sie die Anschrift so an, dass der Versand per Hauspost problemlos erfolgen kann.')
-    fachgebiet = models.CharField(_('Fachgebiet'), max_length=80, blank=True)
+    fachgebiet = models.ForeignKey(Fachgebiet, null=True, blank=True)
 
     def full_name(self):
         return u'%s %s' % (self.vorname, self.nachname)
@@ -608,6 +646,7 @@ class BarcodeScannEvent(models.Model):
 
 
 class Log(models.Model):
+    """Ein Logger für die Zustandsübergänge der Veranstaltungen."""
     FRONTEND = 'fe'
     SCANNER = 'bs'
     ADMIN = 'ad'
@@ -629,4 +668,5 @@ class Log(models.Model):
         verbose_name = 'Log'
         verbose_name_plural = 'Logs'
         app_label = 'feedback'
+
 

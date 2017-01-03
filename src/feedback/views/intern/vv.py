@@ -8,12 +8,13 @@ from django.db.models import Q, Sum
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
-from django.views.generic.edit import UpdateView, FormView
+from django.views.generic.edit import UpdateView
 from django.views.generic import ListView, DetailView
 from django.contrib.auth.mixins import UserPassesTestMixin
 
 from feedback.parser import vv as vv_parser
 from feedback.models import Veranstaltung, Person, Semester, ImportCategory, ImportVeranstaltung
+from feedback.models.base import FachgebietEmail
 from feedback.forms import PersonForm, UploadFileForm
 
 
@@ -127,8 +128,13 @@ class PersonFormUpdateView(UserPassesTestMixin, UpdateView):
         p = form.save(commit=False)
         p.geschlecht = form.cleaned_data['geschlecht']
         p.email = form.cleaned_data['email']
+        p.fachgebiet = FachgebietEmail.get_fachgebiet_from_email(p.email)
         p.save()
         messages.success(self.request, u'Benutzerdatensätze wurden erfolgreich gespeichert.')
+
+        if p.fachgebiet is not None:
+            messages.success(self.request, u' '.join((p.full_name(), ' wurde dem Fachbereich ', str(p.fachgebiet), ' zugewiesen.')).encode('utf-8'))
+
         return super(PersonFormUpdateView, self).form_valid(form)
 
     def form_invalid(self, form):
