@@ -147,10 +147,16 @@ class FachgebietTest(TestCase):
 
 class FachgebietEmailTest(TestCase):
     def setUp(self):
+        User.objects.create_superuser('supers', None, 'pw')
+
         self.fg = Fachgebiet.objects.create(name="Software Technology Group", kuerzel="STG")
         self.fge = FachgebietEmail.objects.create(fachgebiet=self.fg, email_suffix="stg.tu-darmstadt.de",
                                                   email_sekretaerin="sek@stg.tu-darmstadt.de")
+
+        self.fg1 = Fachgebiet.objects.create(name="FG1", kuerzel="FG1")
+
         self.p = Person.objects.create(vorname="Je", nachname="Mand", email="je.mand@stg.tu-darmstadt.de")
+        self.p1 = Person.objects.create(vorname="An", nachname="Derer", email="an.derer@fg1.de")
 
     def test_fachgebiet(self):
         self.assertEqual(self.fge.fachgebiet_id, self.fg.id)
@@ -166,10 +172,32 @@ class FachgebietEmailTest(TestCase):
         self.assertEqual(self.fg, fg)
         self.assertRaises(Exception, FachgebietEmail.get_fachgebiet_from_email(''))
 
+    def test_admin_assign_person(self):
+        self.assertTrue(self.client.login(username='supers', password='pw'))
+
+        update_url = reverse("admin:feedback_fachgebiet_change", args=(self.fg1.id,))
+        data = {
+            'name': self.fg1.name,
+            'kuerzel': self.fg1.kuerzel,
+            'fachgebiet-TOTAL_FORMS': 1,
+            'fachgebiet-INITIAL_FORMS': 0,
+            'fachgebiet-MIN_NUM_FORMS': 0,
+            'fachgebiet-MAX_NUM_FORMS': 1000,
+            'fachgebiet-0-fachgebiet': self.fg1.id,
+            'fachgebiet-0-email_suffix': 'fg1.de',
+            '_save': 'Sichern'
+        }
+
+        response = self.client.post(update_url, data, **{'REMOTE_USER': 'super'})
+        self.assertEqual(response.status_code, 302)
+        self.p1.refresh_from_db()
+        self.assertEqual(self.p1.fachgebiet, self.fg1)
 
 
 class PersonTest(TestCase):
     def setUp(self):
+        User.objects.create_superuser('supers', None, 'pw')
+
         self.p1 = Person.objects.create(vorname='Brian', nachname='Cohen')
         self.p2 = Person.objects.create(vorname='Bud', nachname='Spencer', email='x@y.z')
         self.p3 = Person.objects.create(vorname='Test', nachname='Tester', email='a@b.c', geschlecht='m')
@@ -182,6 +210,12 @@ class PersonTest(TestCase):
         default_params = {'semester': self.s2, 'grundstudium': False, 'evaluieren': True, 'lv_nr': '321' + 'v'}
         self.v2 = Veranstaltung.objects.create(typ='v', name='CMS', **default_params)
         self.v2.veranstalter = [self.p4]
+
+        self.fachgebiet1 = Fachgebiet.objects.create(name="Fachgebiet1", kuerzel="FB1")
+        FachgebietEmail.objects.create(fachgebiet=self.fachgebiet1, email_suffix="fb1.tud.de")
+
+        self.fb_p1 = Person.objects.create(vorname="Max1", nachname="Mustername",
+                                           email="max1mustermann@fb1.tud.de")
 
     def test_full_name(self):
         self.assertEqual(self.p1.full_name(), 'Brian Cohen')
@@ -236,6 +270,27 @@ class PersonTest(TestCase):
         self.assertTrue(is_veranstalter1)
         self.assertFalse(is_veranstalter2)
 
+    def test_person_admin_assign_fachgebiet(self):
+        self.assertTrue(self.client.login(username='supers', password='pw'))
+        update_url = reverse("admin:feedback_person_changelist")
+
+        data = {'action': 'assign_fachgebiet_action',
+                '_selected_action': [unicode(f.pk) for f in [self.fb_p1]]}
+
+        response = self.client.post(update_url, data, **{'REMOTE_USER': 'super'})
+        self.assertEqual(response.status_code, 200)
+
+        data["apply"] = True
+        data["selectedPerson"] = [self.fb_p1.id]
+        data["fachgebiet_" + str(self.fb_p1.id)] = self.fachgebiet1.id
+
+        self.assertEqual(self.fb_p1.fachgebiet, None)
+        response = self.client.post(update_url, data, **{'REMOTE_USER': 'super'})
+        self.assertEqual(response.status_code, 302)
+
+        self.fb_p1.refresh_from_db()
+        self.assertEqual(self.fb_p1.fachgebiet, self.fachgebiet1)
+
 
 class VeranstaltungTest(TransactionTestCase):
     def setUp(self):
@@ -281,7 +336,7 @@ class VeranstaltungTest(TransactionTestCase):
         self.assertTrue(self.client.login(username='supers', password='pw'))
         update_url = reverse("admin:feedback_veranstaltung_changelist")
 
-        data = {'action': 'action_status_aendern',
+        data = {'action': 'status_aendern_action',
                 '_selected_action': [unicode(f.pk) for f in [self.v[0]]]}
 
         response = self.client.post(update_url, data, **{'REMOTE_USER': 'super'})

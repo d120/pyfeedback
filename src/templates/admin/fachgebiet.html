@@ -1,0 +1,43 @@
+{% extends "admin/base_site.html" %}
+{% block content %}
+
+<form action="" method="post">
+    {% csrf_token %}
+    {{ fachgebiet }}
+    <p>Folgende Personen werden einem Fachgebiet zugewiesen:</p>
+
+    <table>
+        <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Vorschlag für Fachgebiet</th>
+        </tr>
+        {% for person, fachgebiet in data %}
+            <tr>
+                <td>
+                    <input type="checkbox" name="selectedPerson" value="{{ person.id }}" {{ fachgebiet|yesno:",disabled" }}/>
+                    {% if fachgebiet %}
+                        <input type="hidden" name="fachgebiet_{{ person.id }}" value="{{ fachgebiet.id }}"/>
+                    {% endif %}
+                </td>
+                <td>{{ person }}</td>
+                {% if fachgebiet %}
+                    <td>{{ fachgebiet }}</td>
+                {% else %}
+                    <td>Unbekannt</td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    </table>
+
+    <br>
+    <input type="hidden" name="action" value="assign_fachgebiet_action" />
+    {% if data|length == 1 %}
+        <input type="submit" name="apply" value="Sichern und weiter bearbeiten" disabled="disabled" />
+    {% else %}
+        <input type="submit" name="apply" value="Sichern und weiter bearbeiten" />
+    {% endif %}
+    <input type="submit" name="save" value="Sichern" />
+</form>
+
+{% endblock %}

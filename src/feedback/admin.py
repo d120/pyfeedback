@@ -11,9 +11,50 @@ from feedback.models.base import Log, Fachgebiet, FachgebietEmail
 
 
 class PersonAdmin(admin.ModelAdmin):
-    list_display = ('__unicode__', 'email')
+    list_display = ('__unicode__', 'email', 'fachgebiet')
     search_fields = ['vorname', 'nachname', 'email', ]
     list_filter = ('fachgebiet',)
+
+    class FachgebietZuweisenForm(forms.Form):
+        _selected_action = forms.CharField(widget=forms.MultipleHiddenInput)
+
+    def assign_fachgebiet_action(self, request, queryset):
+        form = None
+        suggestion_list = []
+
+        for p in queryset:
+            proposed_fachgebiet = FachgebietEmail.get_fachgebiet_from_email(p.email)
+            suggestion_list.append((p, proposed_fachgebiet))
+
+        if any(s in request.POST for s in ('apply', 'save')):
+            form = self.FachgebietZuweisenForm(request.POST)
+
+            if form.is_valid():
+                selected_persons = request.POST.getlist("selectedPerson")
+                for person in queryset:
+                    person_id_str = str(person.id)
+                    if person_id_str in selected_persons:
+                        proposed_fachgebiet_id = request.POST.get("fachgebiet_" + person_id_str, 0);
+                        if proposed_fachgebiet_id > 0:
+                            proposed_fachgebiet = Fachgebiet.objects.get(id=proposed_fachgebiet_id)
+                            person.fachgebiet = proposed_fachgebiet
+                            person.save()
+                            suggestion_list = [(x, y) for x, y in suggestion_list if x is not person]
+
+                self.message_user(request, "Fachgebiete erfolgreich zugewiesen.")
+
+                if ('save' in request.POST) or not suggestion_list:
+                    return HttpResponseRedirect(request.get_full_path())
+
+        if not form:
+            form = self.FachgebietZuweisenForm(initial={
+                '_selected_action': request.POST.getlist(admin.ACTION_CHECKBOX_NAME)
+            })
+
+        return render(request, 'admin/fachgebiet.html', {'data': suggestion_list, 'fachgebiet': form, })
+
+    assign_fachgebiet_action.short_description = "Einem Fachgebiet zuweisen"
+    actions = [assign_fachgebiet_action]
 
 
 class LogInline(admin.TabularInline):
@@ -54,7 +95,7 @@ class VeranstaltungAdmin(admin.ModelAdmin):
         _selected_action = forms.CharField(widget=forms.MultipleHiddenInput)
         status = forms.ChoiceField(choices=Veranstaltung.STATUS_CHOICES)
 
-    def action_status_aendern(self, request, queryset):
+    def status_aendern_action(self, request, queryset):
         form = None
 
         if 'apply' in request.POST:
@@ -75,8 +116,8 @@ class VeranstaltungAdmin(admin.ModelAdmin):
 
         return render(request, 'admin/status_aendern.html', {'veranstaltungen': queryset, 'status': form, })
 
-    action_status_aendern.short_description = "Ändere den Status einer Veranstaltung"
-    actions = [action_status_aendern]
+    status_aendern_action.short_description = "Ändere den Status einer Veranstaltung"
+    actions = [status_aendern_action]
 
 
 class SemesterAdmin(admin.ModelAdmin):
@@ -145,6 +186,30 @@ class FachgebietAdmin(admin.ModelAdmin):
     list_display_links = ('name',)
     inlines = (FachgebietEmailAdminInline,)
 
+    def save_related(self, request, form, formsets, change):
+        super(FachgebietAdmin, self).save_related(request, form, formsets, change)
+
+        if change:
+            count_added = 0
+            for formset in formsets:
+                if formset.extra_forms:
+                    for new_forms in formset.extra_forms:
+                        if new_forms.instance:
+                            fachgebiet_email_instance = new_forms.instance
+                            fachgebiet_suffix = fachgebiet_email_instance.email_suffix
+                            if fachgebiet_suffix:
+                                persons = Person.objects.filter(fachgebiet=None)
+
+                                for person in persons:
+                                    proposed_fachgebiet = FachgebietEmail.get_fachgebiet_from_email(person.email)
+                                    if proposed_fachgebiet \
+                                            and proposed_fachgebiet.id == fachgebiet_email_instance.fachgebiet_id:
+                                        person.fachgebiet = proposed_fachgebiet
+                                        person.save()
+                                        count_added += 1
+
+            if count_added > 0:
+                self.message_user(request, "Dieser Fachgebiet wurde {0} Personen zugeordnet".format(count_added))
 
 admin.site.register(Person, PersonAdmin)
 admin.site.register(Veranstaltung, VeranstaltungAdmin)
