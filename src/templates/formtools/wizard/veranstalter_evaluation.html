@@ -1,0 +1,12 @@
+{% extends "formtools/wizard/wizard_form.htm" %}
+
+
+
+{% block feedback_veranstalter_form %}
+    {% if veranstaltung.Semester.vollerhebung %}
+        Eine Vollerhebung
+    {% else %}
+        {{ wizard.form }}
+    {% endif %}
+
+{% endblock %}

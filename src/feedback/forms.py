@@ -104,16 +104,16 @@ class PersonUpdateForm(forms.ModelForm):
         fields = ('anschrift', 'fachgebiet')
 
 
-class VeranstaltungFreiFragenForm(forms.ModelForm):
-    class Meta:
-        model = Veranstaltung
-        fields = ('freiefrage1', 'freiefrage2')
+#class VeranstaltungFreiFragenForm(forms.ModelForm):
+#    class Meta:
+#        model = Veranstaltung
+#        fields = ('freiefrage1', 'freiefrage2')
 
 
-class VeranstaltungKleingruppenForm(forms.ModelForm):
-    class Meta:
-        model = Veranstaltung
-        fields = ('kleingruppen',)
+#class VeranstaltungKleingruppenForm(forms.ModelForm):
+#    class Meta:
+#        model = Veranstaltung
+#        fields = ('kleingruppen',)
 
 
 class CreateBarcodeScannEventForm(forms.ModelForm):

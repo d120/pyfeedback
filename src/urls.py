@@ -15,7 +15,7 @@ from django.views.decorators.csrf import csrf_exempt
 import django.contrib.auth.views
 from django.urls import reverse_lazy
 from django.conf import settings
-from feedback.views.veranstalter import ContactWizard
+from feedback.views.veranstalter import VeranstalterWizard
 
 # Admin-Seiten konfigurieren
 admin.autodiscover()
@@ -55,7 +55,7 @@ urlpatterns += [url(r'^deadlines/$',
 urlpatterns += [
     url(r'^veranstalter/login/$', feedback.views.veranstalter.login, name='veranstalter-login'),
     # url(r'^veranstalter/$', feedback.views.veranstalter.index, name='veranstalter-index'),
-    url(r'^veranstalter/', ContactWizard.as_view(), name='veranstalter-index')
+    url(r'^veranstalter/', VeranstalterWizard.as_view(), name='veranstalter-index')
 ]
 
 # urlpatterns += [
