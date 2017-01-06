@@ -27,13 +27,16 @@ class PersonForm(forms.ModelForm):
 class BestellungModelForm(forms.ModelForm):
     def __init__(self, data=None, *args, **kwargs):
         super(BestellungModelForm, self).__init__(data, *args, **kwargs)
+
         if 'instance' not in kwargs:
             raise KeyError(u'This form needs an instance=... parameter to function properly.')
+
         veranstalter_queryset = kwargs['instance'].veranstalter.all()
         self.fields['verantwortlich'].queryset = veranstalter_queryset
         self.fields['ergebnis_empfaenger'].queryset = veranstalter_queryset
+
         # Es findet eine Vollerhebung statt unterbinde austragen
-        if kwargs['instance'].semester.vollerhebung == True:
+        if kwargs['instance'].semester.vollerhebung:
             del self.fields['evaluieren']
 
         # FIXME: Django haengt sonst einen Hilfetext an der nicht zum Widget past
@@ -43,8 +46,8 @@ class BestellungModelForm(forms.ModelForm):
         self.fields['auswertungstermin'].help_text += ' ' + kwargs['instance'].auwertungstermin_to_late_msg()
 
         # Nutze ein Widget bei dem nur das jahr des letzten Auswertungstermins angegeben werden kann 
-        yearsTuple = kwargs['instance'].semester.auswertungstermin_years()
-        self.fields['auswertungstermin'].widget = extras.SelectDateWidget(years=(yearsTuple))
+        years_tuple = kwargs['instance'].semester.auswertungstermin_years()
+        self.fields['auswertungstermin'].widget = extras.SelectDateWidget(years=years_tuple)
 
         # Auswertungstermin kann nur gewählt werden wenn es ein Seminar oder Praktikum ist
         if kwargs['instance'].typ not in ['se', 'pr']:
@@ -64,8 +67,7 @@ class BestellungModelForm(forms.ModelForm):
 
             # wenn wir Formular geschickt bekommen
             # Wenn die Checkbox nicht gesetzt ist sie False
-        if data and (data.get('evaluieren', False) != False or
-                             kwargs['instance'].semester.vollerhebung == True):
+        if data and (data.get('evaluieren', False) is not False or kwargs['instance'].semester.vollerhebung):
             # nur wenn Evaluieren angeklickt ist oder Vollerhebung sind die anderen Felder erforderlich
             for k, field in self.fields.items():
                 field.required = True
@@ -75,15 +77,19 @@ class BestellungModelForm(forms.ModelForm):
     class Meta:
         model = Veranstaltung
         fields = (
-        'evaluieren', 'typ', 'anzahl', 'sprache', 'verantwortlich', 'ergebnis_empfaenger', 'auswertungstermin')
+            'evaluieren', 'typ', 'anzahl', 'sprache',
+            'verantwortlich', 'ergebnis_empfaenger', 'auswertungstermin'
+        )
         widgets = {'ergebnis_empfaenger': forms.CheckboxSelectMultiple}
 
 
 class KommentarModelForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         veranst = kwargs.pop('veranstaltung', None)
-        if veranst == None:
+
+        if veranst is None:
             raise KeyError(u'This form needs an veranstaltung=... parameter to function properly.')
+
         super(KommentarModelForm, self).__init__(*args, **kwargs)
         self.fields['autor'].queryset = veranst.veranstalter.all()
 
@@ -122,7 +128,7 @@ class CreateBarcodeScannEventForm(forms.ModelForm):
         super(CreateBarcodeScannEventForm, self).clean()
         cd = self.cleaned_data
 
-        if (cd['scanner'].token != cd['scanner_token']):
+        if cd['scanner'].token != cd['scanner_token']:
             raise ValidationError(ValidationError('Token dose not match', code='tokendmatch'))
         else:
             barcode_decoded = Veranstaltung.decode_barcode(cd['barcode'])
