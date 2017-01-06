@@ -14,8 +14,8 @@ import feedback.views.intern.auth
 from django.views.decorators.csrf import csrf_exempt
 import django.contrib.auth.views
 from django.urls import reverse_lazy
-
 from django.conf import settings
+from feedback.views.veranstalter import ContactWizard
 
 # Admin-Seiten konfigurieren
 admin.autodiscover()
@@ -54,19 +54,20 @@ urlpatterns += [url(r'^deadlines/$',
 # Veranstalter-Views
 urlpatterns += [
     url(r'^veranstalter/login/$', feedback.views.veranstalter.login, name='veranstalter-login'),
-    url(r'^veranstalter/$', feedback.views.veranstalter.index, name='veranstalter-index'),
+    # url(r'^veranstalter/$', feedback.views.veranstalter.index, name='veranstalter-index'),
+    url(r'^veranstalter/', ContactWizard.as_view(), name='veranstalter-index')
 ]
 
-urlpatterns += [
-    url(r'^veranstalter/verantwortlicherUpdate/$', feedback.views.veranstalter.VerantwortlicherUpdate.as_view(),
-        name='VerantwortlicherUpdate'),
-    url(r'^veranstalter/freieFragenUpdate/$', feedback.views.veranstalter.FreieFragenUpdate.as_view(),
-        name='FreieFragenUpdate'),
-    url(r'^veranstalter/kleingruppenUpdate/$', feedback.views.veranstalter.KleingruppenUpdate.as_view(),
-        name='KleingruppenUpdate'),
-    url(r'^veranstalter/zusammenfassung/$', feedback.views.veranstalter.VeranstaltungZusammenfassung.as_view(),
-        name='VeranstaltungZusammenfassung'),
-]
+# urlpatterns += [
+#    url(r'^veranstalter/verantwortlicherUpdate/$', feedback.views.veranstalter.VerantwortlicherUpdate.as_view(),
+#        name='VerantwortlicherUpdate'),
+#    url(r'^veranstalter/freieFragenUpdate/$', feedback.views.veranstalter.FreieFragenUpdate.as_view(),
+#        name='FreieFragenUpdate'),
+#    url(r'^veranstalter/kleingruppenUpdate/$', feedback.views.veranstalter.KleingruppenUpdate.as_view(),
+#        name='KleingruppenUpdate'),
+#    url(r'^veranstalter/zusammenfassung/$', feedback.views.veranstalter.VeranstaltungZusammenfassung.as_view(),
+#        name='VeranstaltungZusammenfassung'),
+# ]
 
 # interne Views
 urlpatterns += [
