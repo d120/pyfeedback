@@ -1,3 +1,5 @@
+# coding=utf-8
+
 from django.conf import settings
 from django.views.decorators.http import require_safe
 from django.contrib import auth
