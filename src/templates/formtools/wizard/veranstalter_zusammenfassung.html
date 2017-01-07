@@ -1,5 +1,13 @@
 {% extends "formtools/wizard/wizard_form.html" %}
 
 {% block feedback_veranstalter_form %}
-    Zusammenfassung
+    <h2>Zusammenfassung der Daten</h2>
+
+    {% if not form_data %}
+        <p>Die Veranstaltung wird nicht evaluiert.</p>
+    {% endif %}
+
+    {% for form in form_data %}
+        {{ form }}
+    {% endfor %}
 {% endblock %}

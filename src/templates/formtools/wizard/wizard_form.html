@@ -17,8 +17,8 @@
         </table>
 
         {% if wizard.steps.prev %}
-            <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.first }}">Erster Schritt</button>
-            <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">"Zurück"</button>
+            <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.first }}">Erster Schritt</button>&nbsp;
+            <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">Zurück</button>&nbsp;
         {% endif %}
 
         <input type="submit" value="Weiter"/>

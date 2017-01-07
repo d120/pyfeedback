@@ -40,6 +40,11 @@ VERANSTALTER_VIEW_TEMPLATES = {
 }
 
 
+def show_summary_page_form_condition(wizard):
+    cleaned_data = wizard.get_cleaned_data_for_step('veranstalter_evaluation') or {}
+    return cleaned_data.get('evaluation', False)
+
+
 class VeranstalterWizard(SessionWizardView):
     # TODO: Login und bestellung_erlaubt beachten
 
@@ -61,23 +66,19 @@ class VeranstalterWizard(SessionWizardView):
         return [VERANSTALTER_VIEW_TEMPLATES[self.steps.current]]
 
     def done(self, form_list, **kwargs):
-        return render_to_response('formtools/wizard/veranstalter_evaluation.html', {
-            'form_data': [form.cleaned_data for form in form_list],
-        })
+        return render_to_response('formtools/wizard/veranstalter_zusammenfassung.html',
+                                  {'form_data': [form.cleaned_data for form in form_list], })
 
-    def get_form(self, step=None, data=None, files=None):
-        form = super(VeranstalterWizard, self).get_form(step, data, files)
-
-        if step is None:
-            step = self.steps.current
-
-        if step == 'veranstalter_evaluation':
-            if data is not None:
-                if 'veranstalter_evaluation-veranstaltung_evaluieren' not in data:
-                    # TODO: Zusammenfassung und Status ändern
-                    pass
-
-        return form
+    # def get_form(self, step=None, data=None, files=None):
+    #     form = super(VeranstalterWizard, self).get_form(step, data, files)
+    #
+    #     if step is None:
+    #         step = self.steps.current
+    #
+    #     if step == 'veranstalter_zusammenfassung':
+    #         pass
+    #
+    #     return form
 
 
 

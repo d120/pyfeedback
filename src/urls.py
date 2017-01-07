@@ -2,12 +2,12 @@
 
 from django.conf.urls import include, url
 from django.contrib import admin
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 import feedback.views.public
 import feedback.views.veranstalter
-from feedback.views.public_class_view import VeranstaltungsDeadlines, CreateBarcodeScannEvent
+from feedback.views.public_class_view import VeranstaltungsDeadlines
 import feedback.views.intern
 import feedback.views.intern.vv
 import feedback.views.intern.auth
@@ -17,6 +17,7 @@ from django.urls import reverse_lazy
 from django.conf import settings
 from feedback.views.veranstalter import VeranstalterWizard
 from django.contrib.auth.decorators import login_required
+from feedback.views.veranstalter import show_summary_page_form_condition
 
 
 # Admin-Seiten konfigurieren
@@ -54,7 +55,8 @@ urlpatterns += [url(r'^deadlines/$', VeranstaltungsDeadlines.as_view(), name='De
 urlpatterns += [
     url(r'^veranstalter/login/$', feedback.views.veranstalter.login, name='veranstalter-login'),
     # url(r'^veranstalter/$', feedback.views.veranstalter.index, name='veranstalter-index'),
-    url(r'^veranstalter/', login_required(VeranstalterWizard.as_view()), name='veranstalter-index')
+    url(r'^veranstalter/', login_required(VeranstalterWizard.as_view(condition_dict={
+        'veranstalter_basisinformationen': show_summary_page_form_condition})), name='veranstalter-index')
 ]
 
 # urlpatterns += [

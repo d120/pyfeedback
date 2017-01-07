@@ -25,7 +25,7 @@ class PersonForm(forms.ModelForm):
 
 
 class VeranstalterEvaluationForm(forms.Form):
-    veranstaltung_evaluieren = forms.BooleanField(label="Möchten Sie die Veranstaltung evaluieren?", required=False)
+    evaluation = forms.BooleanField(label="Möchten Sie die Veranstaltung evaluieren?", required=False)
 
 
 class VeranstalterBasisForm(forms.Form):
