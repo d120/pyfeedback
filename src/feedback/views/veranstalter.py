@@ -11,7 +11,7 @@ from feedback.models import Veranstaltung
 from feedback.forms import VeranstalterEvaluationForm, VeranstalterBasisForm, VeranstalterZusammenfassungForm
 
 
-# TODO: Ist diese Funktion noch nötig ??
+# TODO: Ist diese Funktion noch noetig ??
 @require_safe
 def login(request):
     if 'vid' in request.GET and 'token' in request.GET:
