@@ -16,6 +16,8 @@ import django.contrib.auth.views
 from django.urls import reverse_lazy
 from django.conf import settings
 from feedback.views.veranstalter import VeranstalterWizard
+from django.contrib.auth.decorators import login_required
+
 
 # Admin-Seiten konfigurieren
 admin.autodiscover()
@@ -44,18 +46,15 @@ urlpatterns += [
     url(r'^ergebnisse/$', feedback.views.public.index, name='public-results'),
 ]
 
-urlpatterns += [url(r'^deadlines/$',
-                         VeranstaltungsDeadlines.as_view(), name='Deadlines'),
-                url(r'^barcodedrop/$',
-                         csrf_exempt(feedback.views.public.barcodedrop), name='barcodedrop'),
-                ]
+urlpatterns += [url(r'^deadlines/$', VeranstaltungsDeadlines.as_view(), name='Deadlines'),
+                url(r'^barcodedrop/$', csrf_exempt(feedback.views.public.barcodedrop), name='barcodedrop'),]
 
 
 # Veranstalter-Views
 urlpatterns += [
     url(r'^veranstalter/login/$', feedback.views.veranstalter.login, name='veranstalter-login'),
     # url(r'^veranstalter/$', feedback.views.veranstalter.index, name='veranstalter-index'),
-    url(r'^veranstalter/', VeranstalterWizard.as_view(), name='veranstalter-index')
+    url(r'^veranstalter/', login_required(VeranstalterWizard.as_view()), name='veranstalter-index')
 ]
 
 # urlpatterns += [

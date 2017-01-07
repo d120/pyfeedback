@@ -1,12 +1,19 @@
-{% extends "formtools/wizard/wizard_form.htm" %}
-
-
+{% extends "formtools/wizard/wizard_form.html" %}
 
 {% block feedback_veranstalter_form %}
-    {% if veranstaltung.Semester.vollerhebung %}
-        Eine Vollerhebung
+    {% if veranstaltung.semester.vollerhebung %}
+        <h2>Information zur Vollerhebung</h2>
+        <p style="text-align: justify">
+            In diesem Semester findet eine Vollerhebung aller Lehrveranstaltungen am Fachbereich Informatik statt.
+            Die Teilnahme an der Evaluation der Lehre ist somit laut §4 Abs. 9 Richtlinien für den Bereich der
+            Lehrveranstaltungsevaluation der Technischen Universität Darmstadt veröffentlicht in der
+            <a href="https://www.intern.tu-darmstadt.de/media/dezernat_ii/satzungsbeilagen/sb_14_III.pdf">Satzungsbeilage 2014-III</a>
+            <strong>verpflichtend</strong> für alle Lehrveranstaltungen. Falls Ihre Veranstaltung eine Service-Veranstaltung
+            ist und die Evaluation durch einen anderen Fachbereich durchgeführt wird setzen Sie sich bitte mit uns in Verbindung:
+            <br>
+            <a href="mailto:feedback@fachschaft.informatik.tu-darmstadt.de">feedback@fachschaft.informatik.tu-darmstadt.de</a>
+        </p>
     {% else %}
         {{ wizard.form }}
     {% endif %}
-
 {% endblock %}

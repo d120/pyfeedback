@@ -24,6 +24,18 @@ class PersonForm(forms.ModelForm):
             raise forms.ValidationError('Das Feld für die Anrede oder Email ist leer.')
 
 
+class VeranstalterEvaluationForm(forms.Form):
+    veranstaltung_evaluieren = forms.BooleanField(label="Möchten Sie die Veranstaltung evaluieren?", required=False)
+
+
+class VeranstalterBasisForm(forms.Form):
+    message = forms.CharField(widget=forms.Textarea)
+
+
+class VeranstalterZusammenfassungForm(forms.Form):
+    message = forms.CharField(widget=forms.Textarea)
+
+
 class BestellungModelForm(forms.ModelForm):
     def __init__(self, data=None, *args, **kwargs):
         super(BestellungModelForm, self).__init__(data, *args, **kwargs)
@@ -104,16 +116,16 @@ class PersonUpdateForm(forms.ModelForm):
         fields = ('anschrift', 'fachgebiet')
 
 
-#class VeranstaltungFreiFragenForm(forms.ModelForm):
-#    class Meta:
-#        model = Veranstaltung
-#        fields = ('freiefrage1', 'freiefrage2')
+# class VeranstaltungFreiFragenForm(forms.ModelForm):
+#     class Meta:
+#         model = Veranstaltung
+#         fields = ('freiefrage1', 'freiefrage2')
 
 
-#class VeranstaltungKleingruppenForm(forms.ModelForm):
-#    class Meta:
-#        model = Veranstaltung
-#        fields = ('kleingruppen',)
+# class VeranstaltungKleingruppenForm(forms.ModelForm):
+#     class Meta:
+#         model = Veranstaltung
+#         fields = ('kleingruppen',)
 
 
 class CreateBarcodeScannEventForm(forms.ModelForm):

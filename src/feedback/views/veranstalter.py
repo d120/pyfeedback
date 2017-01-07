@@ -1,14 +1,17 @@
+from django.conf import settings
 from django.views.decorators.http import require_safe
 from django.contrib import auth
-from feedback.models import Veranstaltung
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.shortcuts import render
-from django import forms
 from django.shortcuts import render_to_response
 from formtools.wizard.views import SessionWizardView
 
+from feedback.models import Veranstaltung
+from feedback.forms import VeranstalterEvaluationForm, VeranstalterBasisForm, VeranstalterZusammenfassungForm
 
+
+# TODO: Ist diese Funktion noch nötig ??
 @require_safe
 def login(request):
     if 'vid' in request.GET and 'token' in request.GET:
@@ -21,30 +24,23 @@ def login(request):
             v = Veranstaltung.objects.get(id=vid)
             request.session['vid'] = v.id
             request.session['veranstaltung'] = unicode(v)
-            return HttpResponseRedirect(reverse('veranstalter-index'))
+
+            if v.status is Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR or Veranstaltung.STATUS_BESTELLUNG_GEOEFFNET:
+                return HttpResponseRedirect(reverse('veranstalter-index'))
 
     return render(request, 'veranstalter/login_failed.html')
+
 
 VERANSTALTER_VIEW_TEMPLATES = {
     "veranstalter_evaluation": "formtools/wizard/veranstalter_evaluation.html",
     "veranstalter_basisinformationen": "formtools/wizard/veranstalter_basiserfassung.html",
-    "veranstalter_zusammenfassung": "formtools/wizard/veranstalter_zusammenfassung.html"}
-
-
-class VeranstalterEvaluationForm(forms.Form):
-    veranstaltung_evaluieren = forms.BooleanField(label="Soll die Veranstaltung evaluiert werden?")
-
-
-class VeranstalterBasisForm(forms.Form):
-    message = forms.CharField(widget=forms.Textarea)
-
-
-class VeranstalterZusammenfassungForm(forms.Form):
-    message = forms.CharField(widget=forms.Textarea)
+    "veranstalter_zusammenfassung": "formtools/wizard/veranstalter_zusammenfassung.html"
+}
 
 
 class VeranstalterWizard(SessionWizardView):
     # TODO: Login und bestellung_erlaubt beachten
+
     form_list = [
         ('veranstalter_evaluation', VeranstalterEvaluationForm),
         ('veranstalter_basisinformationen', VeranstalterBasisForm),
@@ -52,18 +48,35 @@ class VeranstalterWizard(SessionWizardView):
     ]
 
     def get_context_data(self, form, **kwargs):
+        if self.request.user.username != settings.USERNAME_VERANSTALTER:
+            return render(self.request, 'veranstalter/not_authenticated.html')
+
         context = super(VeranstalterWizard, self).get_context_data(form=form, **kwargs)
         context.update({'veranstaltung': Veranstaltung.objects.get(id=self.request.session['vid'])})
         return context
 
     def get_template_names(self):
-        print self.steps.current
         return [VERANSTALTER_VIEW_TEMPLATES[self.steps.current]]
 
     def done(self, form_list, **kwargs):
         return render_to_response('formtools/wizard/veranstalter_evaluation.html', {
             'form_data': [form.cleaned_data for form in form_list],
         })
+
+    def get_form(self, step=None, data=None, files=None):
+        form = super(VeranstalterWizard, self).get_form(step, data, files)
+
+        if step is None:
+            step = self.steps.current
+
+        if step == 'veranstalter_evaluation':
+            if data is not None:
+                if 'veranstalter_evaluation-veranstaltung_evaluieren' not in data:
+                    # TODO: Zusammenfassung und Status ändern
+                    pass
+
+        return form
+
 
 
 

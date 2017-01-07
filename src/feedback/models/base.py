@@ -316,6 +316,9 @@ class Veranstaltung(models.Model):
 
     # Vorlesungsstatus
     STATUS_ANGELEGT = 100
+    STATUS_BESTELLUNG_GEOEFFNET = 200
+    STATUS_KEINE_EVALUATION = 300
+    STATUS_BESTELLUNG_LIEGT_VOR = 500
     STATUS_GEDRUCKT = 600
     STATUS_VERSANDT = 700
     STATUS_BOEGEN_EINGEGANGEN = 800
@@ -324,15 +327,21 @@ class Veranstaltung(models.Model):
 
     STATUS_CHOICES = (
         (STATUS_ANGELEGT, 'Angelegt'),
+        (STATUS_BESTELLUNG_GEOEFFNET, 'Bestellung geöffnet'),
+        (STATUS_KEINE_EVALUATION, 'Keine Evaluation'),
+        (STATUS_BESTELLUNG_LIEGT_VOR, 'Bestellung liegt vor'),
         (STATUS_GEDRUCKT, 'Gedruckt'),
         (STATUS_VERSANDT, 'Versandt'),
         (STATUS_BOEGEN_EINGEGANGEN, 'Bögen eingegangen'),
         (STATUS_BOEGEN_GESCANNT, 'Bögen gescannt'),
-        (STATUS_ERGEBNISSE_VERSANDT, 'Ergebnisse versandt')
+        (STATUS_ERGEBNISSE_VERSANDT, 'Ergebnisse versandt'),
     )
 
+    # TODO: not the final version of status transition
     STATUS_UEBERGANG = {
-        STATUS_ANGELEGT: (STATUS_GEDRUCKT,),
+        STATUS_ANGELEGT: (STATUS_GEDRUCKT, STATUS_BESTELLUNG_GEOEFFNET),
+        STATUS_BESTELLUNG_GEOEFFNET: (STATUS_KEINE_EVALUATION, STATUS_BESTELLUNG_LIEGT_VOR),
+        STATUS_BESTELLUNG_LIEGT_VOR: (STATUS_GEDRUCKT,),
         STATUS_GEDRUCKT: (STATUS_VERSANDT,),
         STATUS_VERSANDT: (STATUS_BOEGEN_EINGEGANGEN,),
         STATUS_BOEGEN_EINGEGANGEN: (STATUS_BOEGEN_GESCANNT,),
