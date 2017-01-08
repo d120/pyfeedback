@@ -56,7 +56,7 @@ urlpatterns += [
     url(r'^veranstalter/login/$', feedback.views.veranstalter.login, name='veranstalter-login'),
     # url(r'^veranstalter/$', feedback.views.veranstalter.index, name='veranstalter-index'),
     url(r'^veranstalter/', login_required(VeranstalterWizard.as_view(condition_dict={
-        'veranstalter_basisinformationen': show_summary_form_condition
+        'basisdaten': show_summary_form_condition
     })), name='veranstalter-index')
 ]
 

@@ -1,4 +1,4 @@
-{% extends "formtools/wizard/wizard_form.html" %}
+{% extends "formtools/wizard/base.html" %}
 
 {% block feedback_veranstalter_form %}
     <h2>Zusammenfassung der Daten</h2>
@@ -8,7 +8,7 @@
     {% endif %}
 
     {% for form in form_data %}
-        {{ form }}
+        {{ form }} <br>
     {% endfor %}
 
     <input type="submit" name="save" value="Speichern"/>

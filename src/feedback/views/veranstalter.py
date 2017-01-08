@@ -34,19 +34,20 @@ def login(request):
 
 
 VERANSTALTER_VIEW_TEMPLATES = {
-    "veranstalter_evaluation": "formtools/wizard/veranstalter_evaluation.html",
-    "veranstalter_basisinformationen": "formtools/wizard/veranstalter_basiserfassung.html",
+    "evaluation": "formtools/wizard/evaluation.html",
+    "basisdaten": "formtools/wizard/basisdaten.html",
 }
 
 
 def process_vollerhebung(context, data):
     if context['veranstaltung'].semester.vollerhebung:
         data._mutable = True
-        data['veranstalter_evaluation-evaluieren'] = True
+        data['evaluation-evaluieren'] = True
         data._mutable = False
 
+
 def show_summary_form_condition(wizard):
-    cleaned_data = wizard.get_cleaned_data_for_step('veranstalter_evaluation') or {}
+    cleaned_data = wizard.get_cleaned_data_for_step('evaluation') or {}
     return cleaned_data.get('evaluieren', True)
 
 
@@ -54,8 +55,8 @@ class VeranstalterWizard(SessionWizardView):
     # TODO: Login und bestellung_erlaubt beachten
 
     form_list = [
-        ('veranstalter_evaluation', VeranstaltungEvaluationForm),
-        ('veranstalter_basisinformationen', VeranstaltungBasisdatenForm),
+        ('evaluation', VeranstaltungEvaluationForm),
+        ('basisdaten', VeranstaltungBasisdatenForm),
     ]
 
     def get_context_data(self, form, **kwargs):
@@ -71,7 +72,7 @@ class VeranstalterWizard(SessionWizardView):
         if step is None:
             step = self.steps.current
 
-        if step == 'veranstalter_evaluation':
+        if step == 'evaluation':
             if data is not None:
                 process_vollerhebung(self.get_context_data(form), data)
 
@@ -82,7 +83,7 @@ class VeranstalterWizard(SessionWizardView):
 
     def done(self, form_list, **kwargs):
         form_data = process_form_data(form_list)
-        return render_to_response('formtools/wizard/veranstalter_zusammenfassung.html', {'form_data': form_data})
+        return render_to_response('formtools/wizard/zusammenfassung.html', {'form_data': form_data})
 
 
 def process_form_data(form_list):

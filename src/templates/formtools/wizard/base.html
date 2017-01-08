@@ -6,6 +6,7 @@
 
 {% block content %}
     <p>Schritt {{ wizard.steps.step1 }} von {{ wizard.steps.count }}</p>
+
     <form action="" method="post">
         {% csrf_token %}
         <table>
