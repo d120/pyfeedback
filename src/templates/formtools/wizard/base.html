@@ -5,16 +5,16 @@
 {% endblock %}
 
 {% block content %}
-    <p>Schritt {{ wizard.steps.step1 }} von {{ wizard.steps.count }}</p>
+    {% if wizard.steps.count %}
+        <p>Schritt {{ wizard.steps.step1 }} von {{ wizard.steps.count }}</p>
+    {% endif %}
 
     <form action="" method="post">
         {% csrf_token %}
         <table>
             {{ wizard.management_form }}
-
             {% block feedback_veranstalter_form %}
             {% endblock %}
-
         </table>
 
         {% if wizard.steps.prev %}
@@ -22,7 +22,9 @@
             <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">Zurück</button>&nbsp;
         {% endif %}
 
-        <input type="submit" value="Weiter"/>
+        {% if wizard.steps.count %}
+            <input type="submit" value="Weiter"/>
+        {% endif %}
     </form>
 {% endblock %}
 
