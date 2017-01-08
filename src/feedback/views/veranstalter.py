@@ -10,7 +10,7 @@ from django.shortcuts import render_to_response
 from formtools.wizard.views import SessionWizardView
 
 from feedback.models import Veranstaltung
-from feedback.forms import VeranstaltungEvaluationForm, VeranstaltungBasisdatenForm
+from feedback.forms import VeranstaltungEvaluationForm  # , VeranstaltungBasisdatenForm
 
 
 # TODO: Ist diese Funktion noch noetig ??
@@ -35,7 +35,7 @@ def login(request):
 
 VERANSTALTER_VIEW_TEMPLATES = {
     "evaluation": "formtools/wizard/evaluation.html",
-    "basisdaten": "formtools/wizard/basisdaten.html",
+    # "basisdaten": "formtools/wizard/basisdaten.html",
 }
 
 
@@ -56,7 +56,7 @@ class VeranstalterWizard(SessionWizardView):
 
     form_list = [
         ('evaluation', VeranstaltungEvaluationForm),
-        ('basisdaten', VeranstaltungBasisdatenForm),
+        # ('basisdaten', VeranstaltungBasisdatenForm),
     ]
 
     def get_context_data(self, form, **kwargs):
@@ -83,12 +83,28 @@ class VeranstalterWizard(SessionWizardView):
 
     def done(self, form_list, **kwargs):
         form_data = process_form_data(form_list)
-        return render_to_response('formtools/wizard/zusammenfassung.html', {'form_data': form_data})
+        instance = Veranstaltung.objects.get(id=self.request.session['vid'])
+        save_to_db(instance, form_list)
+        return render_to_response('formtools/wizard/zusammenfassung.html', {'form_data': form_data,
+                                                                            'form_list': form_list})
 
 
 def process_form_data(form_list):
     form_data = [form.cleaned_data for form in form_list]
     return form_data
+
+
+def save_to_db(instance, form_list):
+    for form in form_list:
+        for key, val in form.cleaned_data.iteritems():
+            setattr(instance, key, val)
+    instance.save()
+    set_veranstaltung_status(instance)
+
+
+def set_veranstaltung_status(instance):
+    instance.set_next_state()
+    instance.save()
 
 
 

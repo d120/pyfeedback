@@ -389,6 +389,15 @@ class Veranstaltung(models.Model):
         except KeyError:
             return None
 
+    def set_next_state(self):
+        status = self.STATUS_UEBERGANG[self.status]
+        evaluation = self.evaluieren
+
+        if self.status is self.STATUS_BESTELLUNG_GEOEFFNET and evaluation:
+            self.status = status[-1]
+        else:
+            self.status = self.STATUS_KEINE_EVALUATION
+
     def get_evasys_typ(self):
         return Veranstaltung.VORLESUNGSTYP[self.typ]
 

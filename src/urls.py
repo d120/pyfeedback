@@ -54,22 +54,13 @@ urlpatterns += [url(r'^deadlines/$', VeranstaltungsDeadlines.as_view(), name='De
 # Veranstalter-Views
 urlpatterns += [
     url(r'^veranstalter/login/$', feedback.views.veranstalter.login, name='veranstalter-login'),
-    # url(r'^veranstalter/$', feedback.views.veranstalter.index, name='veranstalter-index'),
-    url(r'^veranstalter/', login_required(VeranstalterWizard.as_view(condition_dict={
-        'basisdaten': show_summary_form_condition
-    })), name='veranstalter-index')
-]
 
-# urlpatterns += [
-#    url(r'^veranstalter/verantwortlicherUpdate/$', feedback.views.veranstalter.VerantwortlicherUpdate.as_view(),
-#        name='VerantwortlicherUpdate'),
-#    url(r'^veranstalter/freieFragenUpdate/$', feedback.views.veranstalter.FreieFragenUpdate.as_view(),
-#        name='FreieFragenUpdate'),
-#    url(r'^veranstalter/kleingruppenUpdate/$', feedback.views.veranstalter.KleingruppenUpdate.as_view(),
-#        name='KleingruppenUpdate'),
-#    url(r'^veranstalter/zusammenfassung/$', feedback.views.veranstalter.VeranstaltungZusammenfassung.as_view(),
-#        name='VeranstaltungZusammenfassung'),
-# ]
+    url(r'^veranstalter/', login_required(VeranstalterWizard.as_view()), name='veranstalter-index'),
+
+    # url(r'^veranstalter/', login_required(VeranstalterWizard.as_view(condition_dict={
+    #     'basisdaten': show_summary_form_condition
+    # })), name='veranstalter-index')
+]
 
 # interne Views
 urlpatterns += [

@@ -2,14 +2,14 @@
 
 {% block feedback_veranstalter_form %}
     <h2>Zusammenfassung der Daten</h2>
+    <p>Die Daten wurden erfolgreich gespeichert.</p>
 
     {% if not form_data %}
         <p>Die Veranstaltung wird nicht evaluiert.</p>
     {% endif %}
 
-    {% for form in form_data %}
-        {{ form }} <br>
+    {% for form in form_list %}
+        {{ form }}
     {% endfor %}
 
-    <input type="submit" name="save" value="Speichern"/>
 {% endblock %}

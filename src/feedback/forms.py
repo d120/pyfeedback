@@ -13,8 +13,8 @@ class VeranstaltungEvaluationForm(forms.ModelForm):
         fields = ('evaluieren',)
 
 
-class VeranstaltungBasisdatenForm(forms.Form):
-    message = forms.CharField(widget=forms.Textarea)
+# class VeranstaltungBasisdatenForm(forms.Form):
+#     message = forms.CharField(widget=forms.Textarea)
 
 
 class UploadFileForm(forms.Form):

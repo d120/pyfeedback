@@ -22,8 +22,12 @@
             <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">Zurück</button>&nbsp;
         {% endif %}
 
-        {% if wizard.steps.count %}
-            <input type="submit" value="Weiter"/>
+        {% if wizard.steps.next %}
+            <input type="submit" name="next_step" value="Weiter"/>
+        {% endif %}
+
+        {% if wizard.steps.last %}
+            <input type="submit" name="save" value="Speichern"/>
         {% endif %}
     </form>
 {% endblock %}
