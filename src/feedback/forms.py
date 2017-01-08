@@ -7,6 +7,16 @@ from feedback.models import Person, Veranstaltung, Kommentar, BarcodeScanner, Ba
 from django.core.exceptions import ValidationError
 
 
+class VeranstaltungEvaluationForm(forms.ModelForm):
+    class Meta:
+        model = Veranstaltung
+        fields = ('evaluieren',)
+
+
+class VeranstaltungBasisdatenForm(forms.Form):
+    message = forms.CharField(widget=forms.Textarea)
+
+
 class UploadFileForm(forms.Form):
     file = forms.FileField(label='Datei')
 
@@ -22,18 +32,6 @@ class PersonForm(forms.ModelForm):
 
         if not geschlecht or not email:
             raise forms.ValidationError('Das Feld für die Anrede oder Email ist leer.')
-
-
-class VeranstalterEvaluationForm(forms.Form):
-    evaluation = forms.BooleanField(label="Möchten Sie die Veranstaltung evaluieren?", required=False)
-
-
-class VeranstalterBasisForm(forms.Form):
-    message = forms.CharField(widget=forms.Textarea)
-
-
-class VeranstalterZusammenfassungForm(forms.Form):
-    message = forms.CharField(widget=forms.Textarea)
 
 
 class BestellungModelForm(forms.ModelForm):

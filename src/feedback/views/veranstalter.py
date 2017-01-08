@@ -10,7 +10,7 @@ from django.shortcuts import render_to_response
 from formtools.wizard.views import SessionWizardView
 
 from feedback.models import Veranstaltung
-from feedback.forms import VeranstalterEvaluationForm, VeranstalterBasisForm, VeranstalterZusammenfassungForm
+from feedback.forms import VeranstaltungEvaluationForm, VeranstaltungBasisdatenForm
 
 
 # TODO: Ist diese Funktion noch noetig ??
@@ -36,22 +36,26 @@ def login(request):
 VERANSTALTER_VIEW_TEMPLATES = {
     "veranstalter_evaluation": "formtools/wizard/veranstalter_evaluation.html",
     "veranstalter_basisinformationen": "formtools/wizard/veranstalter_basiserfassung.html",
-    "veranstalter_zusammenfassung": "formtools/wizard/veranstalter_zusammenfassung.html"
 }
 
 
-def show_summary_page_form_condition(wizard):
+def process_vollerhebung(context, data):
+    if context['veranstaltung'].semester.vollerhebung:
+        data._mutable = True
+        data['veranstalter_evaluation-evaluieren'] = True
+        data._mutable = False
+
+def show_summary_form_condition(wizard):
     cleaned_data = wizard.get_cleaned_data_for_step('veranstalter_evaluation') or {}
-    return cleaned_data.get('evaluation', False)
+    return cleaned_data.get('evaluieren', True)
 
 
 class VeranstalterWizard(SessionWizardView):
     # TODO: Login und bestellung_erlaubt beachten
 
     form_list = [
-        ('veranstalter_evaluation', VeranstalterEvaluationForm),
-        ('veranstalter_basisinformationen', VeranstalterBasisForm),
-        ('veranstalter_zusammenfassung', VeranstalterZusammenfassungForm)
+        ('veranstalter_evaluation', VeranstaltungEvaluationForm),
+        ('veranstalter_basisinformationen', VeranstaltungBasisdatenForm),
     ]
 
     def get_context_data(self, form, **kwargs):
@@ -62,24 +66,28 @@ class VeranstalterWizard(SessionWizardView):
         context.update({'veranstaltung': Veranstaltung.objects.get(id=self.request.session['vid'])})
         return context
 
+    def get_form(self, step=None, data=None, files=None):
+        form = super(VeranstalterWizard, self).get_form(step, data, files)
+        if step is None:
+            step = self.steps.current
+
+        if step == 'veranstalter_evaluation':
+            if data is not None:
+                process_vollerhebung(self.get_context_data(form), data)
+
+        return form
+
     def get_template_names(self):
         return [VERANSTALTER_VIEW_TEMPLATES[self.steps.current]]
 
     def done(self, form_list, **kwargs):
-        return render_to_response('formtools/wizard/veranstalter_zusammenfassung.html',
-                                  {'form_data': [form.cleaned_data for form in form_list], })
+        form_data = process_form_data(form_list)
+        return render_to_response('formtools/wizard/veranstalter_zusammenfassung.html', {'form_data': form_data})
 
-    # def get_form(self, step=None, data=None, files=None):
-    #     form = super(VeranstalterWizard, self).get_form(step, data, files)
-    #
-    #     if step is None:
-    #         step = self.steps.current
-    #
-    #     if step == 'veranstalter_zusammenfassung':
-    #         pass
-    #
-    #     return form
 
+def process_form_data(form_list):
+    form_data = [form.cleaned_data for form in form_list]
+    return form_data
 
 
 

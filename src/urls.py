@@ -17,7 +17,7 @@ from django.urls import reverse_lazy
 from django.conf import settings
 from feedback.views.veranstalter import VeranstalterWizard
 from django.contrib.auth.decorators import login_required
-from feedback.views.veranstalter import show_summary_page_form_condition
+from feedback.views.veranstalter import show_summary_form_condition
 
 
 # Admin-Seiten konfigurieren
@@ -56,7 +56,8 @@ urlpatterns += [
     url(r'^veranstalter/login/$', feedback.views.veranstalter.login, name='veranstalter-login'),
     # url(r'^veranstalter/$', feedback.views.veranstalter.index, name='veranstalter-index'),
     url(r'^veranstalter/', login_required(VeranstalterWizard.as_view(condition_dict={
-        'veranstalter_basisinformationen': show_summary_page_form_condition})), name='veranstalter-index')
+        'veranstalter_basisinformationen': show_summary_form_condition
+    })), name='veranstalter-index')
 ]
 
 # urlpatterns += [
