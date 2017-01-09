@@ -1,10 +1,18 @@
-{% extends "bestellung_base.html" %} {% block title %}Login benötigt{% endblock %} {% block content %}
-<h1>Login benötigt</h1>
+{% extends "bestellung_base.html" %}
+{% block title %}
+    Login benötigt
+{% endblock %}
 
-<p>
-    Diese Seite können Sie nur aufrufen, wenn Sie sie über den Login-Link aus einer E-Mail, die wir Ihnen in Ihrer Eigenschaft als Veranstalter gesendet haben, aufrufen. Wenn Sie diese E-Mail nicht (mehr) besitzen, melden Sie sich bitte beim
-    <a href="mailto:feedback@fachschaft.informatik.tu-darmstadt.de">Feedback-Team</a>. Wir bitten für die Unannehmlichkeiten um Entschuldigung.
-</p>
+{% block content %}
+    <h1>Login benötigt</h1>
 
-<p><a href="{% url 'auth-login' %}">zum Admin-Login</a></p>
+    <p>
+        Diese Seite können Sie nur aufrufen, wenn Sie sie über den Login-Link aus einer E-Mail,
+        die wir Ihnen in Ihrer Eigenschaft als Veranstalter gesendet haben, aufrufen.
+        Wenn Sie diese E-Mail nicht (mehr) besitzen, melden Sie sich bitte beim
+        <a href="mailto:feedback@fachschaft.informatik.tu-darmstadt.de">Feedback-Team</a>.
+        Wir bitten für die Unannehmlichkeiten um Entschuldigung.
+    </p>
+
+    <p><a href="{% url 'auth-login' %}">zum Admin-Login</a></p>
 {% endblock %}

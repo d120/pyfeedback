@@ -2,20 +2,23 @@
 
 from django.conf.urls import include, url
 from django.contrib import admin
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 import feedback.views.public
 import feedback.views.veranstalter
-from feedback.views.public_class_view import VeranstaltungsDeadlines, CreateBarcodeScannEvent
+from feedback.views.public_class_view import VeranstaltungsDeadlines
 import feedback.views.intern
 import feedback.views.intern.vv
 import feedback.views.intern.auth
 from django.views.decorators.csrf import csrf_exempt
 import django.contrib.auth.views
 from django.urls import reverse_lazy
-
 from django.conf import settings
+from feedback.views.veranstalter import VeranstalterWizard
+from django.contrib.auth.decorators import login_required
+from feedback.views.veranstalter import show_summary_form_condition
+
 
 # Admin-Seiten konfigurieren
 admin.autodiscover()
@@ -44,28 +47,19 @@ urlpatterns += [
     url(r'^ergebnisse/$', feedback.views.public.index, name='public-results'),
 ]
 
-urlpatterns += [url(r'^deadlines/$',
-                         VeranstaltungsDeadlines.as_view(), name='Deadlines'),
-                url(r'^barcodedrop/$',
-                         csrf_exempt(feedback.views.public.barcodedrop), name='barcodedrop'),
-                ]
+urlpatterns += [url(r'^deadlines/$', VeranstaltungsDeadlines.as_view(), name='Deadlines'),
+                url(r'^barcodedrop/$', csrf_exempt(feedback.views.public.barcodedrop), name='barcodedrop'),]
 
 
 # Veranstalter-Views
 urlpatterns += [
     url(r'^veranstalter/login/$', feedback.views.veranstalter.login, name='veranstalter-login'),
-    url(r'^veranstalter/$', feedback.views.veranstalter.index, name='veranstalter-index'),
-]
 
-urlpatterns += [
-    url(r'^veranstalter/verantwortlicherUpdate/$', feedback.views.veranstalter.VerantwortlicherUpdate.as_view(),
-        name='VerantwortlicherUpdate'),
-    url(r'^veranstalter/freieFragenUpdate/$', feedback.views.veranstalter.FreieFragenUpdate.as_view(),
-        name='FreieFragenUpdate'),
-    url(r'^veranstalter/kleingruppenUpdate/$', feedback.views.veranstalter.KleingruppenUpdate.as_view(),
-        name='KleingruppenUpdate'),
-    url(r'^veranstalter/zusammenfassung/$', feedback.views.veranstalter.VeranstaltungZusammenfassung.as_view(),
-        name='VeranstaltungZusammenfassung'),
+    url(r'^veranstalter/', VeranstalterWizard.as_view(), name='veranstalter-index'),
+
+    # url(r'^veranstalter/', login_required(VeranstalterWizard.as_view(condition_dict={
+    #     'basisdaten': show_summary_form_condition
+    # })), name='veranstalter-index')
 ]
 
 # interne Views

@@ -125,6 +125,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.admindocs',
     'django.contrib.messages',
+    'formtools',
     'feedback',
     'debug_toolbar',
 )

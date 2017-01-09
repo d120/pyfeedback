@@ -34,9 +34,10 @@ class NonSuTestMixin(TransactionTestCase):
 
 def get_veranstaltung(typ):
     s = Semester.objects.get_or_create(semester=20110, fragebogen='2009', sichtbarkeit='ADM')[0]
-    default_params = {'semester': s, 'grundstudium': False, 'evaluieren': True, 'lv_nr': '123' + typ}
+    default_params = {'semester': s, 'status': Veranstaltung.STATUS_BESTELLUNG_GEOEFFNET, 'grundstudium': False,
+                      'evaluieren': True, 'lv_nr': '123' + typ}
     v = Veranstaltung.objects.create(typ=typ, name='Stoning I', **default_params)
-    return (s, v)
+    return s, v
 
 
 def login_veranstalter(v):

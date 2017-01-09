@@ -59,66 +59,75 @@ class VeranstalterIndexTest(TestCase):
         with self.assertRaises(KeyError):
             ctx['comment_form']
     
-    def test_get_bestellung(self):
-        Einstellung.objects.create(name='bestellung_erlaubt', wert='1')
-        c = login_veranstalter(self.v)
-        response = c.get('/veranstalter/')
-        ctx = response.context
-        self.assertTrue(isinstance(ctx['order_form'], BestellungModelForm))
-        self.assertNotContains(response,'Information zur Vollerhebung')
-        self.assertContains(response,'Evaluieren:')
+    # def test_get_bestellung(self):
+    #     Einstellung.objects.create(name='bestellung_erlaubt', wert='1')
+    #     c = login_veranstalter(self.v)
+    #     response = c.get('/veranstalter/')
+    #     ctx = response.context
+    #     self.assertTrue(isinstance(ctx['order_form'], BestellungModelForm))
+    #     self.assertNotContains(response,'Information zur Vollerhebung')
+    #     self.assertContains(response,'Evaluieren:')
         
-    def test_get_bestellung_vollerhebung(self):
-        """Teste ob der Hinweis zur Vollerhebung angezeigt wird und ein Austragen
-        nicht möglich ist"""
-        self.s.vollerhebung = True
-        self.s.save()
-        Einstellung.objects.create(name='bestellung_erlaubt', wert='1')
-        c = login_veranstalter(self.v)
-        response = c.get('/veranstalter/')
-        ctx = response.context
-        self.assertTrue(isinstance(ctx['order_form'], BestellungModelForm))
-        self.assertContains(response,'Information zur Vollerhebung')
-        self.assertNotContains(response,'Evaluieren:')
+    # def test_get_bestellung_vollerhebung(self):
+    #     """Teste ob der Hinweis zur Vollerhebung angezeigt wird und ein Austragen
+    #     nicht möglich ist"""
+    #     self.s.vollerhebung = True
+    #     self.s.save()
+    #     Einstellung.objects.create(name='bestellung_erlaubt', wert='1')
+    #     c = login_veranstalter(self.v)
+    #     response = c.get('/veranstalter/')
+    #     ctx = response.context
+    #     self.assertTrue(isinstance(ctx['order_form'], BestellungModelForm))
+    #     self.assertContains(response,'Information zur Vollerhebung')
+    #     self.assertNotContains(response,'Evaluieren:')
     
     def test_post_bestellung(self):
         Einstellung.objects.create(name='bestellung_erlaubt', wert='1')
         c = login_veranstalter(self.v)
-        c.post('/veranstalter/', {'anzahl': 42, 'sprache': 'de', 'typ': 'vu', 'verantwortlich': self.p.id})
-        self.v = Veranstaltung.objects.get(id=self.v.id)
-        self.assertEqual(self.v.anzahl, 42)
+        response_firststep = c.post('/veranstalter/', {'evaluation-evaluieren': True,
+                                  "veranstalter_wizard-current_step": "evaluation"})
+        self.v.refresh_from_db()
+        self.assertTrue(self.v.evaluieren)
+        self.assertTemplateUsed(response_firststep, "formtools/wizard/zusammenfassung.html")
+
+    def test_post_keine_evaluation(self):
+        Einstellung.objects.create(name='bestellung_erlaubt', wert='1')
+        c = login_veranstalter(self.v)
+        response_firststep = c.post('/veranstalter/', {"veranstalter_wizard-current_step": "evaluation"})
+
+        self.v.refresh_from_db()
+        self.assertFalse(self.v.evaluieren)
+        self.assertEqual(self.v.status, Veranstaltung.STATUS_KEINE_EVALUATION)
+        self.assertTemplateUsed(response_firststep, "formtools/wizard/zusammenfassung.html")
     
     def test_post_bestellung_vollerhebung(self):
         self.s.vollerhebung = True
         self.s.save()
         Einstellung.objects.create(name='bestellung_erlaubt', wert='1')
         c = login_veranstalter(self.v)
-        # Post mit fehlenden Daten ist nicht valide
-        c.post('/veranstalter/', {'anzahl': 42})
-        self.v = Veranstaltung.objects.get(id=self.v.id)
-        self.assertEqual(self.v.anzahl, None)
-        # Post mit allen Daten ist valide
-        c.post('/veranstalter/', {'anzahl': 42, 'sprache': 'de',
-                                  'typ': 'vu', 
-                                  'verantwortlich': self.p.id, 
-                                  'ergebnis_empfaenger': {self.p.id},
-                                  }
-               )
-        self.v = Veranstaltung.objects.get(id=self.v.id)
-        self.assertEqual(self.v.anzahl, 42)
-    
-    def test_get_kommentar(self):
-        self.s.sichtbarkeit = 'VER'
-        self.s.save()
+
+        response_vollerhebung = c.get('/veranstalter/')
+
+        self.assertContains(response_vollerhebung, "<h2>Information zur Vollerhebung</h2>")
+
+        response_firststep = c.post('/veranstalter/', {"evaluation-evaluieren": True,
+                                                       "veranstalter_wizard-current_step": "evaluation"})
+
+        self.v.refresh_from_db()
+        self.assertEqual(self.v.status, Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR)
+        self.assertTrue(self.v.evaluieren)
+        self.assertTemplateUsed(response_firststep, "formtools/wizard/zusammenfassung.html")
+
+    def test_post_access_bestellung(self):
+        Einstellung.objects.create(name='bestellung_erlaubt', wert='1')
+        self.v.status = Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR
+        self.v.save()
+
         c = login_veranstalter(self.v)
-        response = c.get('/veranstalter/')
-        ctx = response.context
-        self.assertTrue(isinstance(ctx['comment_form'], KommentarModelForm))
-    
-    def test_post_kommentar(self):
-        c = login_veranstalter(self.v)
-        self.s.sichtbarkeit = 'VER'
-        self.s.save()
-        c.post('/veranstalter/', {'veranstaltung': self.v, 'autor': self.p.id, 'text': 'Toll!'})
-        self.v = Veranstaltung.objects.get(id=self.v.id)
-        self.assertEqual(self.v.kommentar.text, 'Toll!')
+
+        response_firststep = c.post('/veranstalter/', {'evaluation-evaluieren': True,
+                                  "veranstalter_wizard-current_step": "evaluation"})
+        self.v.refresh_from_db()
+        self.assertTrue(self.v.evaluieren)
+        self.assertTemplateUsed(response_firststep, "formtools/wizard/zusammenfassung.html")
+

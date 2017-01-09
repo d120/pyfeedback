@@ -1,15 +1,12 @@
 # coding=utf-8
 
-from base64 import b64decode
-
 from django.conf import settings
-from django.contrib import auth
+from django.contrib import auth, messages
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
-from django.utils.encoding import smart_unicode
 from django.views.decorators.http import require_safe, require_http_methods
 
 from feedback.models import Veranstaltung
@@ -25,13 +22,20 @@ def rechte_uebernehmen(request):
             orig_uid = request.user.id
             v = request.POST['vid']
             u = User.objects.get(username=settings.USERNAME_VERANSTALTER)
+            veranst = Veranstaltung.objects.get(id=v)
 
             user = auth.authenticate(user=u, current_user=request.user)
             auth.login(request, user)
             request.session['orig_uid'] = orig_uid
             request.session['vid'] = v
-            request.session['veranstaltung'] = unicode(Veranstaltung.objects.get(id=v))
-            return HttpResponseRedirect(reverse('veranstalter-index'))
+            request.session['veranstaltung'] = unicode(veranst)
+
+            if veranst.status is Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR or \
+                    veranst.status is Veranstaltung.STATUS_BESTELLUNG_GEOEFFNET:
+                return HttpResponseRedirect(reverse('veranstalter-index'))
+            else:
+                messages.warning(request, u'Fehler beim übernehmen der Rechte. '
+                                          u'Der Status der Veranstaltung ist nicht berechtigt.')
         except KeyError:
             pass
 

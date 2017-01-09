@@ -18,3 +18,4 @@ pyenv
 .coverage
 settings_secret.py
 static/*
+venv/
