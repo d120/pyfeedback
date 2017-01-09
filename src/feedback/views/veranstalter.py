@@ -39,15 +39,13 @@ VERANSTALTER_VIEW_TEMPLATES = {
 }
 
 
-def process_vollerhebung(context, data):
-    if context['veranstaltung'].semester.vollerhebung:
-        data._mutable = True
-        data['evaluation-evaluieren'] = True
-        data._mutable = False
-
-
 def show_summary_form_condition(wizard):
     cleaned_data = wizard.get_cleaned_data_for_step('evaluation') or {}
+    v = Veranstaltung.objects.get(id=wizard.request.session['vid'])
+
+    if v.semester.vollerhebung:
+        return True
+
     return cleaned_data.get('evaluieren', True)
 
 
@@ -59,24 +57,16 @@ class VeranstalterWizard(SessionWizardView):
         # ('basisdaten', VeranstaltungBasisdatenForm),
     ]
 
-    def get_context_data(self, form, **kwargs):
+    def get(self, request, *args, **kwargs):
         if self.request.user.username != settings.USERNAME_VERANSTALTER:
             return render(self.request, 'veranstalter/not_authenticated.html')
+        return super(VeranstalterWizard, self).get(request, *args, **kwargs)
+
+    def get_context_data(self, form, **kwargs):
 
         context = super(VeranstalterWizard, self).get_context_data(form=form, **kwargs)
         context.update({'veranstaltung': Veranstaltung.objects.get(id=self.request.session['vid'])})
         return context
-
-    def get_form(self, step=None, data=None, files=None):
-        form = super(VeranstalterWizard, self).get_form(step, data, files)
-        if step is None:
-            step = self.steps.current
-
-        if step == 'evaluation':
-            if data is not None:
-                process_vollerhebung(self.get_context_data(form), data)
-
-        return form
 
     def get_template_names(self):
         return [VERANSTALTER_VIEW_TEMPLATES[self.steps.current]]
