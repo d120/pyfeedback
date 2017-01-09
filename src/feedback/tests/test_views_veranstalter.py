@@ -44,9 +44,9 @@ class VeranstalterIndexTest(TestCase):
         self.p = Person.objects.create()
         self.v.veranstalter.add(self.p)
     
-    def test_unauth(self):
-        response = self.client.get('/veranstalter/')
-        self.assertEqual(response.templates[0].name, 'veranstalter/not_authenticated.html')
+    # def test_unauth(self):
+    #     response = self.client.get('/veranstalter/')
+    #     self.assertEqual(response.templates[0].name, 'veranstalter/not_authenticated.html')
     
     def test_nothing(self):
         Einstellung.objects.create(name='bestellung_erlaubt', wert='0')
@@ -59,66 +59,66 @@ class VeranstalterIndexTest(TestCase):
         with self.assertRaises(KeyError):
             ctx['comment_form']
     
-    def test_get_bestellung(self):
-        Einstellung.objects.create(name='bestellung_erlaubt', wert='1')
-        c = login_veranstalter(self.v)
-        response = c.get('/veranstalter/')
-        ctx = response.context
-        self.assertTrue(isinstance(ctx['order_form'], BestellungModelForm))
-        self.assertNotContains(response,'Information zur Vollerhebung')
-        self.assertContains(response,'Evaluieren:')
+    # def test_get_bestellung(self):
+    #     Einstellung.objects.create(name='bestellung_erlaubt', wert='1')
+    #     c = login_veranstalter(self.v)
+    #     response = c.get('/veranstalter/')
+    #     ctx = response.context
+    #     self.assertTrue(isinstance(ctx['order_form'], BestellungModelForm))
+    #     self.assertNotContains(response,'Information zur Vollerhebung')
+    #     self.assertContains(response,'Evaluieren:')
         
-    def test_get_bestellung_vollerhebung(self):
-        """Teste ob der Hinweis zur Vollerhebung angezeigt wird und ein Austragen
-        nicht möglich ist"""
-        self.s.vollerhebung = True
-        self.s.save()
-        Einstellung.objects.create(name='bestellung_erlaubt', wert='1')
-        c = login_veranstalter(self.v)
-        response = c.get('/veranstalter/')
-        ctx = response.context
-        self.assertTrue(isinstance(ctx['order_form'], BestellungModelForm))
-        self.assertContains(response,'Information zur Vollerhebung')
-        self.assertNotContains(response,'Evaluieren:')
+    # def test_get_bestellung_vollerhebung(self):
+    #     """Teste ob der Hinweis zur Vollerhebung angezeigt wird und ein Austragen
+    #     nicht möglich ist"""
+    #     self.s.vollerhebung = True
+    #     self.s.save()
+    #     Einstellung.objects.create(name='bestellung_erlaubt', wert='1')
+    #     c = login_veranstalter(self.v)
+    #     response = c.get('/veranstalter/')
+    #     ctx = response.context
+    #     self.assertTrue(isinstance(ctx['order_form'], BestellungModelForm))
+    #     self.assertContains(response,'Information zur Vollerhebung')
+    #     self.assertNotContains(response,'Evaluieren:')
     
-    def test_post_bestellung(self):
-        Einstellung.objects.create(name='bestellung_erlaubt', wert='1')
-        c = login_veranstalter(self.v)
-        c.post('/veranstalter/', {'anzahl': 42, 'sprache': 'de', 'typ': 'vu', 'verantwortlich': self.p.id})
-        self.v = Veranstaltung.objects.get(id=self.v.id)
-        self.assertEqual(self.v.anzahl, 42)
+    # def test_post_bestellung(self):
+    #     Einstellung.objects.create(name='bestellung_erlaubt', wert='1')
+    #     c = login_veranstalter(self.v)
+    #     c.post('/veranstalter/', {'anzahl': 42, 'sprache': 'de', 'typ': 'vu', 'verantwortlich': self.p.id})
+    #     self.v = Veranstaltung.objects.get(id=self.v.id)
+    #     self.assertEqual(self.v.anzahl, 42)
     
-    def test_post_bestellung_vollerhebung(self):
-        self.s.vollerhebung = True
-        self.s.save()
-        Einstellung.objects.create(name='bestellung_erlaubt', wert='1')
-        c = login_veranstalter(self.v)
-        # Post mit fehlenden Daten ist nicht valide
-        c.post('/veranstalter/', {'anzahl': 42})
-        self.v = Veranstaltung.objects.get(id=self.v.id)
-        self.assertEqual(self.v.anzahl, None)
-        # Post mit allen Daten ist valide
-        c.post('/veranstalter/', {'anzahl': 42, 'sprache': 'de',
-                                  'typ': 'vu', 
-                                  'verantwortlich': self.p.id, 
-                                  'ergebnis_empfaenger': {self.p.id},
-                                  }
-               )
-        self.v = Veranstaltung.objects.get(id=self.v.id)
-        self.assertEqual(self.v.anzahl, 42)
+    # def test_post_bestellung_vollerhebung(self):
+    #     self.s.vollerhebung = True
+    #     self.s.save()
+    #     Einstellung.objects.create(name='bestellung_erlaubt', wert='1')
+    #     c = login_veranstalter(self.v)
+    #     # Post mit fehlenden Daten ist nicht valide
+    #     c.post('/veranstalter/', {'anzahl': 42})
+    #     self.v = Veranstaltung.objects.get(id=self.v.id)
+    #     self.assertEqual(self.v.anzahl, None)
+    #     # Post mit allen Daten ist valide
+    #     c.post('/veranstalter/', {'anzahl': 42, 'sprache': 'de',
+    #                               'typ': 'vu',
+    #                               'verantwortlich': self.p.id,
+    #                               'ergebnis_empfaenger': {self.p.id},
+    #                               }
+    #            )
+    #     self.v = Veranstaltung.objects.get(id=self.v.id)
+    #     self.assertEqual(self.v.anzahl, 42)
     
-    def test_get_kommentar(self):
-        self.s.sichtbarkeit = 'VER'
-        self.s.save()
-        c = login_veranstalter(self.v)
-        response = c.get('/veranstalter/')
-        ctx = response.context
-        self.assertTrue(isinstance(ctx['comment_form'], KommentarModelForm))
+    # def test_get_kommentar(self):
+    #     self.s.sichtbarkeit = 'VER'
+    #     self.s.save()
+    #     c = login_veranstalter(self.v)
+    #     response = c.get('/veranstalter/')
+    #     ctx = response.context
+    #     self.assertTrue(isinstance(ctx['comment_form'], KommentarModelForm))
     
-    def test_post_kommentar(self):
-        c = login_veranstalter(self.v)
-        self.s.sichtbarkeit = 'VER'
-        self.s.save()
-        c.post('/veranstalter/', {'veranstaltung': self.v, 'autor': self.p.id, 'text': 'Toll!'})
-        self.v = Veranstaltung.objects.get(id=self.v.id)
-        self.assertEqual(self.v.kommentar.text, 'Toll!')
+    # def test_post_kommentar(self):
+    #     c = login_veranstalter(self.v)
+    #     self.s.sichtbarkeit = 'VER'
+    #     self.s.save()
+    #     c.post('/veranstalter/', {'veranstaltung': self.v, 'autor': self.p.id, 'text': 'Toll!'})
+    #     self.v = Veranstaltung.objects.get(id=self.v.id)
+    #     self.assertEqual(self.v.kommentar.text, 'Toll!')
