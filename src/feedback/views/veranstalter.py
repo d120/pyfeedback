@@ -10,10 +10,9 @@ from django.shortcuts import render_to_response
 from formtools.wizard.views import SessionWizardView
 
 from feedback.models import Veranstaltung
-from feedback.forms import VeranstaltungEvaluationForm  # , VeranstaltungBasisdatenForm
+from feedback.forms import VeranstaltungEvaluationForm, VeranstaltungBasisdatenForm
 
 
-# TODO: Ist diese Funktion noch noetig ??
 @require_safe
 def login(request):
     if 'vid' in request.GET and 'token' in request.GET:
@@ -35,27 +34,31 @@ def login(request):
 
 VERANSTALTER_VIEW_TEMPLATES = {
     "evaluation": "formtools/wizard/evaluation.html",
-    # "basisdaten": "formtools/wizard/basisdaten.html",
+    "basisdaten": "formtools/wizard/basisdaten.html",
 }
 
 
 def show_summary_form_condition(wizard):
+    """
+    Wenn wir keine Vollerhebung haben, und der Veranstalter nicht evauliert, dann
+    springt der Wizard direkt zur Zusammenfassung.
+    """
     cleaned_data = wizard.get_cleaned_data_for_step('evaluation') or {}
     v = Veranstaltung.objects.get(id=wizard.request.session['vid'])
 
     if v.semester.vollerhebung:
         return True
-
     return cleaned_data.get('evaluieren', True)
 
 
 class VeranstalterWizard(SessionWizardView):
-    # TODO: Login und bestellung_erlaubt beachten
-
     form_list = [
         ('evaluation', VeranstaltungEvaluationForm),
-        # ('basisdaten', VeranstaltungBasisdatenForm),
+        ('basisdaten', VeranstaltungBasisdatenForm),
     ]
+
+    def get_instance(self):
+        return Veranstaltung.objects.get(id=self.request.session['vid'])
 
     def get(self, request, *args, **kwargs):
         if self.request.user.username != settings.USERNAME_VERANSTALTER:
@@ -63,7 +66,6 @@ class VeranstalterWizard(SessionWizardView):
         return super(VeranstalterWizard, self).get(request, *args, **kwargs)
 
     def get_context_data(self, form, **kwargs):
-
         context = super(VeranstalterWizard, self).get_context_data(form=form, **kwargs)
         context.update({'veranstaltung': Veranstaltung.objects.get(id=self.request.session['vid'])})
         return context
@@ -85,6 +87,9 @@ def process_form_data(form_list):
 
 
 def save_to_db(instance, form_list):
+    """
+    Speichert alle eingegebenen Daten des Wizards auf das Modell
+    """
     for form in form_list:
         for key, val in form.cleaned_data.iteritems():
             setattr(instance, key, val)
@@ -93,6 +98,9 @@ def save_to_db(instance, form_list):
 
 
 def set_veranstaltung_status(instance):
+    """
+    Setzt den Status einer Veranstaltung auf den nächsten validen Zustand
+    """
     instance.set_next_state()
     instance.save()
 

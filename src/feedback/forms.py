@@ -13,8 +13,12 @@ class VeranstaltungEvaluationForm(forms.ModelForm):
         fields = ('evaluieren',)
 
 
-# class VeranstaltungBasisdatenForm(forms.Form):
-#     message = forms.CharField(widget=forms.Textarea)
+class VeranstaltungBasisdatenForm(forms.ModelForm):
+    class Meta:
+        model = Veranstaltung
+        fields = ('typ', 'anzahl', 'sprache', 'verantwortlich', 'ergebnis_empfaenger', 'auswertungstermin')
+        widgets = {'ergebnis_empfaenger': forms.CheckboxSelectMultiple,
+                   'auswertungstermin': forms.SelectDateWidget}
 
 
 class UploadFileForm(forms.Form):
