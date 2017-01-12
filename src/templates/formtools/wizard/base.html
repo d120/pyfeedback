@@ -1,5 +1,29 @@
 {% extends "bestellung_base.html" %}
 
+{% block extra_header %}
+    <style>
+        select {
+            border: 1px solid #000000;
+        }
+        table {
+            border-spacing: 10px;
+        }
+        table th {
+            vertical-align: top;
+        }
+        table .helptext {
+            color: rgba(184, 87, 0, 0.8);
+        }
+        .typography ul {
+            margin: 0px;
+            display: inline-block;
+        }
+        .typography ul li {
+            list-style-type: none;
+            margin: 0px;
+        }
+    </style>
+{% endblock %}
 {% block head %}
     {{ wizard.form.media }}
 {% endblock %}
