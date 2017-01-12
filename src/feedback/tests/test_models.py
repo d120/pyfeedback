@@ -8,7 +8,7 @@ from django.utils.timezone import now
 from freezegun import freeze_time
 
 from feedback.models import get_model, Semester, Person, Veranstaltung, Einstellung, Mailvorlage
-from feedback.models.base import AlternativVorname, Log, BarcodeScanner, Fachgebiet, FachgebietEmail
+from feedback.models.base import AlternativVorname, Log, BarcodeScanner, BarcodeAllowedState, Fachgebiet, FachgebietEmail
 from feedback.models import past_semester_orders
 from feedback.models import ImportPerson, ImportCategory, ImportVeranstaltung, Kommentar
 from feedback.models import Fragebogen2008, Fragebogen2009, Ergebnis2008, Ergebnis2009
@@ -290,6 +290,30 @@ class PersonTest(TestCase):
 
         self.fb_p1.refresh_from_db()
         self.assertEqual(self.fb_p1.fachgebiet, self.fachgebiet1)
+
+
+class BarcodeScannTest(TestCase):
+    def setUp(self):
+        self.barcode_scanner = BarcodeScanner.objects.create(token="LRh73Ds22", description="description1")
+        self.barcode_scanner2 = BarcodeScanner.objects.create(token="KHzz211d", description="description2")
+
+    def test_equal_state_onscanners(self):
+        try:
+            # Gleicher Status auf zwei Barcodescanner möglich
+            BarcodeAllowedState.objects.create(barcode_scanner=self.barcode_scanner,
+                                               allow_state=Veranstaltung.STATUS_GEDRUCKT)
+            BarcodeAllowedState.objects.create(barcode_scanner=self.barcode_scanner2,
+                                               allow_state=Veranstaltung.STATUS_GEDRUCKT)
+        except IntegrityError:
+            self.fail()
+
+    def test_same_state_onscanner(self):
+        BarcodeAllowedState.objects.create(barcode_scanner=self.barcode_scanner,
+                                           allow_state=Veranstaltung.STATUS_GEDRUCKT)
+
+        with self.assertRaises(IntegrityError):
+            BarcodeAllowedState.objects.create(barcode_scanner=self.barcode_scanner,
+                                               allow_state=Veranstaltung.STATUS_GEDRUCKT)
 
 
 class VeranstaltungTest(TransactionTestCase):
