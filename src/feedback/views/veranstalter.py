@@ -48,6 +48,7 @@ def show_summary_form_condition(wizard):
 
     if v.semester.vollerhebung:
         return True
+
     return cleaned_data.get('evaluieren', True)
 
 
@@ -76,7 +77,8 @@ class VeranstalterWizard(SessionWizardView):
     def done(self, form_list, **kwargs):
         form_data = process_form_data(form_list)
         instance = Veranstaltung.objects.get(id=self.request.session['vid'])
-        save_to_db(instance, form_list)
+        save_to_db(self.request, instance, form_list)
+
         return render_to_response('formtools/wizard/zusammenfassung.html', {'form_data': form_data,
                                                                             'form_list': form_list})
 
@@ -86,23 +88,15 @@ def process_form_data(form_list):
     return form_data
 
 
-def save_to_db(instance, form_list):
+def save_to_db(request, instance, form_list):
     """
     Speichert alle eingegebenen Daten des Wizards auf das Modell
+    und setzt den Status einer Veranstaltung auf den nächsten validen Zustand
     """
     for form in form_list:
         for key, val in form.cleaned_data.iteritems():
             setattr(instance, key, val)
-    instance.save()
-    set_veranstaltung_status(instance)
 
-
-def set_veranstaltung_status(instance):
-    """
-    Setzt den Status einer Veranstaltung auf den nächsten validen Zustand
-    """
     instance.set_next_state()
     instance.save()
-
-
-
+    instance.log(request.user, is_frontend=True)
