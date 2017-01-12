@@ -86,9 +86,23 @@ class VeranstalterIndexTest(TestCase):
         c = login_veranstalter(self.v)
         response_firststep = c.post('/veranstalter/', {'evaluation-evaluieren': True,
                                   "veranstalter_wizard-current_step": "evaluation"})
+
+        self.assertTemplateUsed(response_firststep, "formtools/wizard/basisdaten.html")
+
+        response_secondstep = c.post('/veranstalter/', {
+            "veranstalter_wizard-current_step": "basisdaten",
+            "basisdaten-typ": "v",
+            "basisdaten-anzahl": 22,
+            "basisdaten-sprache": "de",
+            "basisdaten-verantwortlich": 1,
+            "basisdaten-auswerungstermin_day": 18,
+            "basisdaten-auswertungstermin_month": 10,
+            "basisdaten-auswertungstermin_year": 2017
+        })
+
         self.v.refresh_from_db()
         self.assertTrue(self.v.evaluieren)
-        self.assertTemplateUsed(response_firststep, "formtools/wizard/zusammenfassung.html")
+        self.assertTemplateUsed(response_secondstep, "formtools/wizard/zusammenfassung.html")
 
     def test_post_keine_evaluation(self):
         Einstellung.objects.create(name='bestellung_erlaubt', wert='1')
@@ -114,9 +128,8 @@ class VeranstalterIndexTest(TestCase):
                                                        "veranstalter_wizard-current_step": "evaluation"})
 
         self.v.refresh_from_db()
-        self.assertEqual(self.v.status, Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR)
         self.assertTrue(self.v.evaluieren)
-        self.assertTemplateUsed(response_firststep, "formtools/wizard/zusammenfassung.html")
+        self.assertTemplateUsed(response_firststep, "formtools/wizard/basisdaten.html")
 
     def test_post_access_bestellung(self):
         Einstellung.objects.create(name='bestellung_erlaubt', wert='1')
@@ -129,5 +142,5 @@ class VeranstalterIndexTest(TestCase):
                                   "veranstalter_wizard-current_step": "evaluation"})
         self.v.refresh_from_db()
         self.assertTrue(self.v.evaluieren)
-        self.assertTemplateUsed(response_firststep, "formtools/wizard/zusammenfassung.html")
+        self.assertTemplateUsed(response_firststep, "formtools/wizard/basisdaten.html")
 

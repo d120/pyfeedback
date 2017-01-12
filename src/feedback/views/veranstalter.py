@@ -68,7 +68,7 @@ class VeranstalterWizard(SessionWizardView):
 
     def get_context_data(self, form, **kwargs):
         context = super(VeranstalterWizard, self).get_context_data(form=form, **kwargs)
-        context.update({'veranstaltung': Veranstaltung.objects.get(id=self.request.session['vid'])})
+        context.update({'veranstaltung': self.get_instance()})
         return context
 
     def get_template_names(self):
@@ -76,7 +76,7 @@ class VeranstalterWizard(SessionWizardView):
 
     def done(self, form_list, **kwargs):
         form_data = process_form_data(form_list)
-        instance = Veranstaltung.objects.get(id=self.request.session['vid'])
+        instance = self.get_instance()
         save_to_db(self.request, instance, form_list)
 
         return render_to_response('formtools/wizard/zusammenfassung.html', {'form_data': form_data,

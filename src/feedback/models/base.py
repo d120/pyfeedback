@@ -514,7 +514,7 @@ class Veranstaltung(models.Model):
     def clean(self, *args, **kwargs):
         super(Veranstaltung, self).clean(*args, **kwargs)
 
-        if self.auswertungstermin != None and self.auswertungstermin > self.semester.last_Auswertungstermin().date():
+        if self.auswertungstermin is not None and self.id is not None and self.auswertungstermin > self.semester.last_Auswertungstermin().date():
             raise ValidationError(self.auwertungstermin_to_late_msg())
 
     def save(self, *args, **kwargs):

@@ -55,9 +55,9 @@ urlpatterns += [url(r'^deadlines/$', VeranstaltungsDeadlines.as_view(), name='De
 urlpatterns += [
     url(r'^veranstalter/login/$', feedback.views.veranstalter.login, name='veranstalter-login'),
 
-    url(r'^veranstalter/', login_required(VeranstalterWizard.as_view(condition_dict={
+    url(r'^veranstalter/', VeranstalterWizard.as_view(condition_dict={
         'basisdaten': show_summary_form_condition
-    })), name='veranstalter-index')
+    }), name='veranstalter-index')
 ]
 
 # interne Views
