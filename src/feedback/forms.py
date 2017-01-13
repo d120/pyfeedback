@@ -14,6 +14,13 @@ class VeranstaltungEvaluationForm(forms.ModelForm):
 
 
 class VeranstaltungBasisdatenForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(VeranstaltungBasisdatenForm, self).__init__(*args, **kwargs)
+
+        veranstalter_queryset = kwargs['instance'].veranstalter.all()
+        self.fields['verantwortlich'].queryset = veranstalter_queryset
+        self.fields['ergebnis_empfaenger'].queryset = veranstalter_queryset
+
     class Meta:
         model = Veranstaltung
         fields = ('typ', 'anzahl', 'sprache', 'verantwortlich', 'ergebnis_empfaenger', 'auswertungstermin')

@@ -71,6 +71,9 @@ class VeranstalterWizard(SessionWizardView):
         context.update({'veranstaltung': self.get_instance()})
         return context
 
+    def get_form_instance(self, step):
+        return self.get_instance()
+
     def get_template_names(self):
         return [VERANSTALTER_VIEW_TEMPLATES[self.steps.current]]
 
