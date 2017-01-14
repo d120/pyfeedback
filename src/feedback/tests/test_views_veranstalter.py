@@ -4,7 +4,6 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.test import TestCase
 
-from feedback.forms import BestellungModelForm, KommentarModelForm
 from feedback.models import Einstellung, Person, Veranstaltung
 from feedback.tests.tools import get_veranstaltung, login_veranstalter
 
