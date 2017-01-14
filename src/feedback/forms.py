@@ -17,9 +17,30 @@ class VeranstaltungBasisdatenForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(VeranstaltungBasisdatenForm, self).__init__(*args, **kwargs)
 
+        # Schränke QuerySet nur auf den Veranstalter ein
         veranstalter_queryset = kwargs['instance'].veranstalter.all()
         self.fields['verantwortlich'].queryset = veranstalter_queryset
         self.fields['ergebnis_empfaenger'].queryset = veranstalter_queryset
+
+        # Keine negative Anzahl möglich
+        self.fields['anzahl'] = forms.IntegerField(min_value=1)
+
+        # Nutze ein Widget bei dem nur das jahr des letzten Auswertungstermins angegeben werden kann
+        years_tuple = kwargs['instance'].semester.auswertungstermin_years()
+        self.fields['auswertungstermin'].widget = extras.SelectDateWidget(years=years_tuple)
+
+        # Auswertungstermin kann nur gewählt werden wenn es ein Seminar oder Praktikum ist
+        if kwargs['instance'].typ not in ['se', 'pr']:
+            del self.fields['auswertungstermin']
+
+        # Lösche die Auswahl ob es eine Übung gibt wenn es keine Vorlesung ist
+        vltypes = ['vu', 'v']
+        if kwargs['instance'].typ not in vltypes:
+            del self.fields['typ']
+
+        # Wenn Evaluation oder Vollerhebung, dann sind alle anderen Felder notwendig
+        for k, field in self.fields.items():
+            field.required = True
 
     class Meta:
         model = Veranstaltung

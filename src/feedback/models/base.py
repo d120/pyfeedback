@@ -397,8 +397,6 @@ class Veranstaltung(models.Model):
                 self.status = status[1]
             else:
                 self.status = status[0]
-        else:
-            self.status = status[0]
 
     def get_evasys_typ(self):
         return Veranstaltung.VORLESUNGSTYP[self.typ]
