@@ -85,19 +85,18 @@ class VeranstalterIndexTest(TestCase):
         Einstellung.objects.create(name='bestellung_erlaubt', wert='1')
         c = login_veranstalter(self.v)
         response_firststep = c.post('/veranstalter/', {'evaluation-evaluieren': True,
-                                  "veranstalter_wizard-current_step": "evaluation"})
+                                                       "veranstalter_wizard-current_step": "evaluation"})
 
         self.assertTemplateUsed(response_firststep, "formtools/wizard/basisdaten.html")
 
         response_secondstep = c.post('/veranstalter/', {
             "veranstalter_wizard-current_step": "basisdaten",
-            "basisdaten-typ": "v",
+            "basisdaten-typ": "vu",
             "basisdaten-anzahl": 22,
             "basisdaten-sprache": "de",
             "basisdaten-verantwortlich": 1,
-            "basisdaten-auswerungstermin_day": 18,
-            "basisdaten-auswertungstermin_month": 10,
-            "basisdaten-auswertungstermin_year": 2017
+            "basisdaten - ergebnis_empfaenger": 1,
+            "save": "Speichern"
         })
 
         self.v.refresh_from_db()
