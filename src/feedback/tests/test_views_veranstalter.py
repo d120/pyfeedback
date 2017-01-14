@@ -95,7 +95,7 @@ class VeranstalterIndexTest(TestCase):
             "basisdaten-anzahl": 22,
             "basisdaten-sprache": "de",
             "basisdaten-verantwortlich": 1,
-            "basisdaten - ergebnis_empfaenger": 1,
+            "basisdaten-ergebnis_empfaenger": 1,
             "save": "Speichern"
         })
 
