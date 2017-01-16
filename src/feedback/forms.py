@@ -49,6 +49,17 @@ class VeranstaltungBasisdatenForm(forms.ModelForm):
                    'auswertungstermin': forms.SelectDateWidget}
 
 
+class VeranstaltungPrimaerDozentForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        previous_step_data = kwargs.pop('your_data')
+        super(VeranstaltungPrimaerDozentForm, self).__init__(*args, **kwargs)
+        self.fields['primaerdozent'].queryset = previous_step_data['ergebnis_empfaenger']
+
+    class Meta:
+        model = Veranstaltung
+        fields = ('primaerdozent',)
+
+
 class UploadFileForm(forms.Form):
     file = forms.FileField(label='Datei')
 

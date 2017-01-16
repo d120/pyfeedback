@@ -1,0 +1,15 @@
+{% extends "formtools/wizard/base.html" %}
+
+{% block feedback_veranstalter_form %}
+{#    <h3>Erfassung des Primärdozenten</h3>#}
+{#    {% if form.primaerdozent|length == 1 %}#}
+{#    <p style="text-align: justify">#}
+{#        <br>#}
+{#        Primärdozent: {{ form.primaerdozent }}#}
+{#        <br>#}
+{#        Der Primärdozent wurde automatisch hinzugefügt.#}
+{#        </p>#}
+{#    {% else %}#}
+        {{ wizard.form }}
+{#    {% endif %}#}
+{% endblock %}

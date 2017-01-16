@@ -10,7 +10,7 @@ from django.shortcuts import render_to_response
 from formtools.wizard.views import SessionWizardView
 
 from feedback.models import Veranstaltung
-from feedback.forms import VeranstaltungEvaluationForm, VeranstaltungBasisdatenForm
+from feedback.forms import VeranstaltungEvaluationForm, VeranstaltungBasisdatenForm, VeranstaltungPrimaerDozentForm
 
 
 @require_safe
@@ -35,6 +35,7 @@ def login(request):
 VERANSTALTER_VIEW_TEMPLATES = {
     "evaluation": "formtools/wizard/evaluation.html",
     "basisdaten": "formtools/wizard/basisdaten.html",
+    "primaerdozent": "formtools/wizard/primaerdozent.html",
 }
 
 
@@ -56,6 +57,7 @@ class VeranstalterWizard(SessionWizardView):
     form_list = [
         ('evaluation', VeranstaltungEvaluationForm),
         ('basisdaten', VeranstaltungBasisdatenForm),
+        ('primaerdozent', VeranstaltungPrimaerDozentForm),
     ]
 
     def get_instance(self):
@@ -73,6 +75,13 @@ class VeranstalterWizard(SessionWizardView):
 
     def get_form_instance(self, step):
         return self.get_instance()
+
+    def get_form_kwargs(self, step=None):
+        kwargs = {}
+        if step == 'primaerdozent':
+            your_data = self.get_cleaned_data_for_step('basisdaten')
+            kwargs.update({'your_data': your_data})
+        return kwargs
 
     def get_template_names(self):
         return [VERANSTALTER_VIEW_TEMPLATES[self.steps.current]]
