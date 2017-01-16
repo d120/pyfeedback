@@ -16,8 +16,6 @@ import django.contrib.auth.views
 from django.urls import reverse_lazy
 from django.conf import settings
 from feedback.views.veranstalter import VeranstalterWizard
-from django.contrib.auth.decorators import login_required
-from feedback.views.veranstalter import show_summary_form_condition
 
 
 # Admin-Seiten konfigurieren

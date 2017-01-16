@@ -39,7 +39,7 @@ VERANSTALTER_VIEW_TEMPLATES = {
 }
 
 
-def show_summary_form_condition(wizard):
+def perform_evalution(wizard):
     """
     Wenn wir keine Vollerhebung haben, und der Veranstalter nicht evauliert, dann
     springt der Wizard direkt zur Zusammenfassung.
@@ -53,6 +53,19 @@ def show_summary_form_condition(wizard):
     return cleaned_data.get('evaluieren', True)
 
 
+def show_primaerdozent_form(wizard):
+    show_summary_form = perform_evalution(wizard)
+    if show_summary_form:
+        cleaned_data = wizard.get_cleaned_data_for_step('basisdaten') or {}
+        ergebnis_empfaenger = cleaned_data.get('ergebnis_empfaenger', None)
+        if ergebnis_empfaenger is not None:
+            if ergebnis_empfaenger.count() == 1:
+                # TODO setze den einzigen Empfenger als Primaerdozent.
+                return False
+
+    return show_summary_form
+
+
 class VeranstalterWizard(SessionWizardView):
     form_list = [
         ('evaluation', VeranstaltungEvaluationForm),
@@ -60,8 +73,8 @@ class VeranstalterWizard(SessionWizardView):
         ('primaerdozent', VeranstaltungPrimaerDozentForm),
     ]
     condition_dict = {
-        'basisdaten': show_summary_form_condition,
-        'primaerdozent': show_summary_form_condition
+        'basisdaten': perform_evalution,
+        'primaerdozent': show_primaerdozent_form
     }
 
     def get_instance(self):
