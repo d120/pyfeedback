@@ -394,13 +394,13 @@ class Veranstaltung(models.Model):
     def set_next_state(self):
         status = self.STATUS_UEBERGANG[self.status]
 
-        if self.status is self.STATUS_BESTELLUNG_GEOEFFNET:
+        if self.status == self.STATUS_BESTELLUNG_GEOEFFNET:
             if self.evaluieren:
                 self.status = status[1]
             else:
                 self.status = status[0]
 
-        elif self.status is self.STATUS_BESTELLUNG_LIEGT_VOR:
+        elif self.status == self.STATUS_BESTELLUNG_LIEGT_VOR:
             self.status = status[1]
 
         else:

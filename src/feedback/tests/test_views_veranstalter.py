@@ -93,14 +93,21 @@ class VeranstalterIndexTest(TestCase):
             "basisdaten-typ": "vu",
             "basisdaten-anzahl": 22,
             "basisdaten-sprache": "de",
-            "basisdaten-verantwortlich": 1,
-            "basisdaten-ergebnis_empfaenger": 1,
+            "basisdaten-verantwortlich": self.p.id,
+            "basisdaten-ergebnis_empfaenger": self.p.id,
             "save": "Speichern"
+        })
+
+        self.assertTemplateUsed(response_secondstep, "formtools/wizard/primaerdozent.html")
+
+        response_thirdstep = c.post('/veranstalter/', {
+            "veranstalter_wizard-current_step": "primaerdozent",
+            "primaerdozent-primaerdozent": self.p.id
         })
 
         self.v.refresh_from_db()
         self.assertTrue(self.v.evaluieren)
-        self.assertTemplateUsed(response_secondstep, "formtools/wizard/zusammenfassung.html")
+        self.assertTemplateUsed(response_thirdstep, "formtools/wizard/zusammenfassung.html")
 
     def test_post_keine_evaluation(self):
         Einstellung.objects.create(name='bestellung_erlaubt', wert='1')

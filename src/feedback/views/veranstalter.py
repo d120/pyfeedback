@@ -59,6 +59,10 @@ class VeranstalterWizard(SessionWizardView):
         ('basisdaten', VeranstaltungBasisdatenForm),
         ('primaerdozent', VeranstaltungPrimaerDozentForm),
     ]
+    condition_dict = {
+        'basisdaten': show_summary_form_condition,
+        'primaerdozent': show_summary_form_condition
+    }
 
     def get_instance(self):
         return Veranstaltung.objects.get(id=self.request.session['vid'])
@@ -77,10 +81,10 @@ class VeranstalterWizard(SessionWizardView):
         return self.get_instance()
 
     def get_form_kwargs(self, step=None):
-        kwargs = {}
+        kwargs = super(VeranstalterWizard, self).get_form_kwargs(step)
         if step == 'primaerdozent':
-            your_data = self.get_cleaned_data_for_step('basisdaten')
-            kwargs.update({'your_data': your_data})
+            basisdaten = self.get_cleaned_data_for_step('basisdaten')
+            kwargs.update({'basisdaten': basisdaten})
         return kwargs
 
     def get_template_names(self):

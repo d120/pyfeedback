@@ -51,9 +51,10 @@ class VeranstaltungBasisdatenForm(forms.ModelForm):
 
 class VeranstaltungPrimaerDozentForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
-        previous_step_data = kwargs.pop('your_data')
+        previous_step_data = kwargs.pop('basisdaten')
         super(VeranstaltungPrimaerDozentForm, self).__init__(*args, **kwargs)
         self.fields['primaerdozent'].queryset = previous_step_data['ergebnis_empfaenger']
+        self.fields['primaerdozent'].required = True
 
     class Meta:
         model = Veranstaltung
