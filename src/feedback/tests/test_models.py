@@ -322,8 +322,20 @@ class VeranstaltungTest(TransactionTestCase):
         self.assertEqual(self.v[0].status, Veranstaltung.STATUS_ANGELEGT)
         self.assertEqual(self.v[4].status, Veranstaltung.STATUS_GEDRUCKT)
 
-    def test_log(self):
+    def test_set_next_state(self):
+        veranstaltung = self.v[4]
+        veranstaltung.status = Veranstaltung.STATUS_BESTELLUNG_GEOEFFNET
+        veranstaltung.set_next_state()
+        self.assertEqual(veranstaltung.status, Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR)
 
+        veranstaltung.set_next_state()
+        self.assertEqual(veranstaltung.status, Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR)
+
+        veranstaltung.status = Veranstaltung.STATUS_GEDRUCKT
+        veranstaltung.set_next_state()
+        self.assertEqual(veranstaltung.status, Veranstaltung.STATUS_VERSANDT)
+
+    def test_log(self):
         self.v[0].log(None)
         self.assertEqual(Log.objects.count(), 0)
 

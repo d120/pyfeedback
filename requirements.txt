@@ -3,5 +3,5 @@ Django==1.10.5
 django-debug-toolbar==1.6
 docutils==0.13.1
 sqlparse==0.2.2
-freezegun
-django-formtools
+freezegun==0.3.8
+django-formtools==2.0

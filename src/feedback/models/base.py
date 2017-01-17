@@ -341,7 +341,7 @@ class Veranstaltung(models.Model):
     STATUS_UEBERGANG = {
         STATUS_ANGELEGT: (STATUS_GEDRUCKT, STATUS_BESTELLUNG_GEOEFFNET),
         STATUS_BESTELLUNG_GEOEFFNET: (STATUS_KEINE_EVALUATION, STATUS_BESTELLUNG_LIEGT_VOR),
-        STATUS_BESTELLUNG_LIEGT_VOR: (STATUS_GEDRUCKT,),
+        STATUS_BESTELLUNG_LIEGT_VOR: (STATUS_GEDRUCKT, STATUS_BESTELLUNG_LIEGT_VOR),
         STATUS_GEDRUCKT: (STATUS_VERSANDT,),
         STATUS_VERSANDT: (STATUS_BOEGEN_EINGEGANGEN,),
         STATUS_BOEGEN_EINGEGANGEN: (STATUS_BOEGEN_GESCANNT,),
@@ -391,12 +391,18 @@ class Veranstaltung(models.Model):
 
     def set_next_state(self):
         status = self.STATUS_UEBERGANG[self.status]
-        evaluation = self.evaluieren
 
-        if self.status is self.STATUS_BESTELLUNG_GEOEFFNET and evaluation:
-            self.status = status[-1]
+        if self.status is self.STATUS_BESTELLUNG_GEOEFFNET:
+            if self.evaluieren:
+                self.status = status[1]
+            else:
+                self.status = status[0]
+
+        elif self.status is self.STATUS_BESTELLUNG_LIEGT_VOR:
+            self.status = status[1]
+
         else:
-            self.status = self.STATUS_KEINE_EVALUATION
+            self.status = status[0]
 
     def get_evasys_typ(self):
         return Veranstaltung.VORLESUNGSTYP[self.typ]
@@ -484,12 +490,14 @@ class Veranstaltung(models.Model):
     def create_log(self, user, scanner, interface):
         Log.objects.create(veranstaltung=self, user=user, scanner=scanner, status=self.status, interface=interface)
 
-    # TODO: Logging for transitions via Frontend
-    def log(self, interface):
+    def log(self, interface, is_frontend=False):
         if isinstance(interface, BarcodeScanner):
             self.create_log(None, interface, Log.SCANNER)
         elif isinstance(interface, User):
-            self.create_log(interface, None, Log.ADMIN)
+            if is_frontend:
+                self.create_log(interface, None, Log.FRONTEND)
+            else:
+                self.create_log(interface, None, Log.ADMIN)
 
     def auwertungstermin_to_late_msg(self):
         toLateDate = self.semester.last_Auswertungstermin_to_late_human()
@@ -510,7 +518,7 @@ class Veranstaltung(models.Model):
     def clean(self, *args, **kwargs):
         super(Veranstaltung, self).clean(*args, **kwargs)
 
-        if self.auswertungstermin != None and self.auswertungstermin > self.semester.last_Auswertungstermin().date():
+        if self.auswertungstermin is not None and self.id is not None and self.auswertungstermin > self.semester.last_Auswertungstermin().date():
             raise ValidationError(self.auwertungstermin_to_late_msg())
 
     def save(self, *args, **kwargs):
