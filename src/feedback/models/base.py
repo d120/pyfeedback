@@ -538,9 +538,9 @@ class Veranstaltung(models.Model):
         else:
             return "Der Veranstalter Link wird erst nach dem Anlegen angezeigt"
 
-    def csv_to_tutor(self):
+    def csv_to_tutor(self, csv_content):
         """Erzeuge Tutoren Objekte aus der CSV Eingabe der Veranstalter"""
-        input_clean = self.kleingruppen.strip()
+        input_clean = csv_content.strip()
         input_lines = input_clean.splitlines()
         nummer = 1
         for l in input_lines:

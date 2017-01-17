@@ -35,12 +35,12 @@
 
     <form action="" method="post">
         {% csrf_token %}
-        <table>
+        <table class="wizard_form_table">
             {{ wizard.management_form }}
             {% block feedback_veranstalter_form %}
             {% endblock %}
         </table>
-
+        {% block feedback_veranstalter_extra %}{% endblock %}
         {% if wizard.steps.prev %}
             <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.first }}">Erster Schritt</button>&nbsp;
             <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">Zurück</button>&nbsp;

@@ -4,7 +4,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.test import TestCase
 
-from feedback.models import Einstellung, Person, Veranstaltung
+from feedback.models import Einstellung, Person, Veranstaltung, Tutor
 from feedback.tests.tools import get_veranstaltung, login_veranstalter
 
 
@@ -42,9 +42,13 @@ class VeranstalterIndexTest(TestCase):
         self.s, self.v = get_veranstaltung('vu')
         self.p = Person.objects.create(vorname="v1", nachname="n1")
         self.p2 = Person.objects.create(vorname="v2", nachname="n2")
+        self.p3 = Person.objects.create(vorname="v3", nachname="n3")
 
         self.v.veranstalter.add(self.p)
         self.v.veranstalter.add(self.p2)
+
+        self.s2, self.v_wo_excercises = get_veranstaltung('v')
+        self.v_wo_excercises.veranstalter.add(self.p3)
     
     def test_unauth(self):
         response = self.client.get('/veranstalter/')
@@ -102,13 +106,25 @@ class VeranstalterIndexTest(TestCase):
             "freie_fragen-freifrage2": "Ist das die zweite Frage?"
         })
 
+        self.assertTemplateUsed(response_fifth_step, "formtools/wizard/tutoren.html")
+
+        self.assertEqual(Tutor.objects.count(), 0)
+        response_sixth_step = c.post('/veranstalter/', {
+            "veranstalter_wizard-current_step": "tutoren",
+            "tutoren-csv_tutoren": "Müller,Max,muller.max@web.de,Bemerkung1\nMustermann,Erika,erika.mustermann@aa.de"
+        })
+
         self.v.refresh_from_db()
         self.p.refresh_from_db()
 
+        self.assertTemplateUsed(response_sixth_step, "formtools/wizard/zusammenfassung.html")
         self.assertTrue(self.v.evaluieren)
         self.assertEqual(self.v.primaerdozent, self.p)
+        self.assertEqual(Tutor.objects.count(), 2)
         self.assertEqual(self.p.email, "test@test.de")
-        self.assertTemplateUsed(response_fifth_step, "formtools/wizard/zusammenfassung.html")
+        self.assertEqual(self.v.anzahl, 22)
+        self.assertEqual(self.v.ergebnis_empfaenger.count(), 2)
+        self.assertEqual(self.v.sprache, "de")
 
     def test_post_keine_evaluation(self):
         Einstellung.objects.create(name='bestellung_erlaubt', wert='1')
@@ -187,11 +203,54 @@ class VeranstalterIndexTest(TestCase):
             "freie_fragen-freifrage2": "Ist das die zweite Frage?"
         })
 
+        self.assertTemplateUsed(response_fifth_step, "formtools/wizard/tutoren.html")
+
+        self.assertEqual(Tutor.objects.count(), 0)
+        response_sixth_step = c.post('/veranstalter/', {
+            "veranstalter_wizard-current_step": "tutoren",
+            "tutoren-csv_tutoren": "Müller,Max,muller.max@web.de,Bemerkung1\nMustermann,Erika,erika.mustermann@aa.de"
+        })
+
         self.v.refresh_from_db()
         self.p.refresh_from_db()
 
+        self.assertTemplateUsed(response_sixth_step, "formtools/wizard/zusammenfassung.html")
         self.assertTrue(self.v.evaluieren)
         self.assertEqual(self.v.primaerdozent, self.p2)
+        self.assertEqual(Tutor.objects.count(), 2)
         self.assertEqual(self.p.email, "test@test.de")
-        self.assertTemplateUsed(response_fifth_step, "formtools/wizard/zusammenfassung.html")
+
+    def test_post_bestellung_without_excercises(self):
+        Einstellung.objects.create(name='bestellung_erlaubt', wert='1')
+        c = login_veranstalter(self.v_wo_excercises)
+        c.post('/veranstalter/', {'evaluation-evaluieren': True,
+                                                       "veranstalter_wizard-current_step": "evaluation"})
+
+        c.post('/veranstalter/', {
+            "veranstalter_wizard-current_step": "basisdaten",
+            "basisdaten-typ": "v",
+            "basisdaten-anzahl": 11,
+            "basisdaten-sprache": "de",
+            "basisdaten-verantwortlich": self.p3.id,
+            "basisdaten-ergebnis_empfaenger": self.p3.id,
+            "save": "Speichern"
+        })
+        c.post('/veranstalter/', {
+            "veranstalter_wizard-current_step": "verantwortlicher_address",
+            "verantwortlicher_address-email": "test@test.de",
+            "verantwortlicher_address-anschrift": "Alexanderstrasse 8, 64287 Darmstadt"
+        })
+        response_fourth_step = c.post('/veranstalter/', {
+            "veranstalter_wizard-current_step": "freie_fragen",
+            "freie_fragen-freifrage1": "Ist das die erste Frage?",
+            "freie_fragen-freifrage2": "Ist das die zweite Frage?"
+        })
+        self.assertEqual(Tutor.objects.count(), 0)
+
+        self.v.refresh_from_db()
+        self.p.refresh_from_db()
+
+        self.assertTemplateUsed(response_fourth_step, "formtools/wizard/zusammenfassung.html")
+        self.assertEqual(Tutor.objects.count(), 0)
+
 
