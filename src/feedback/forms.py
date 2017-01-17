@@ -37,6 +37,13 @@ class VeranstaltungBasisdatenForm(forms.ModelForm):
         vltypes = ['vu', 'v']
         if kwargs['instance'].typ not in vltypes:
             del self.fields['typ']
+        else:
+            choices = []
+            for cur in self.fields['typ'].choices:
+                if cur[0] in vltypes:
+                    choices.append(cur)
+
+            self.fields['typ'].choices = choices
 
         # Wenn Evaluation oder Vollerhebung, dann sind alle anderen Felder notwendig
         for k, field in self.fields.items():
