@@ -373,6 +373,8 @@ class Veranstaltung(models.Model):
                                                  related_name='ergebnis_empfaenger',
                                                  verbose_name=u'Empfänger der Ergebnisse',
                                                  help_text=u'An diese Personen werden die Ergebnisse per E-Mail geschickt.')
+    primaerdozent = models.ForeignKey(Person, related_name='primaerdozent', null=True, blank=True,
+                                       help_text=u'Die Person, die im Anschreiben erwähnt wird')
     auswertungstermin = models.DateField(null=True, blank=True,
                                          verbose_name=u'Auswertungstermin',
                                          help_text=u'An welchem Tag sollen Fragebögen für diese Veranstaltung ausgewerter werden? ' +
@@ -392,13 +394,13 @@ class Veranstaltung(models.Model):
     def set_next_state(self):
         status = self.STATUS_UEBERGANG[self.status]
 
-        if self.status is self.STATUS_BESTELLUNG_GEOEFFNET:
+        if self.status == self.STATUS_BESTELLUNG_GEOEFFNET:
             if self.evaluieren:
                 self.status = status[1]
             else:
                 self.status = status[0]
 
-        elif self.status is self.STATUS_BESTELLUNG_LIEGT_VOR:
+        elif self.status == self.STATUS_BESTELLUNG_LIEGT_VOR:
             self.status = status[1]
 
         else:
