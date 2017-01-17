@@ -60,7 +60,6 @@ def show_primaerdozent_form(wizard):
         ergebnis_empfaenger = cleaned_data.get('ergebnis_empfaenger', None)
         if ergebnis_empfaenger is not None:
             if ergebnis_empfaenger.count() == 1:
-                # TODO setze den einzigen Empfenger als Primaerdozent.
                 return False
 
     return show_summary_form
@@ -104,8 +103,20 @@ class VeranstalterWizard(SessionWizardView):
         return [VERANSTALTER_VIEW_TEMPLATES[self.steps.current]]
 
     def done(self, form_list, **kwargs):
+        if not any(isinstance(x, VeranstaltungPrimaerDozentForm) for x in form_list):
+            # preselect primaer dozent
+            cleaned_data = self.get_cleaned_data_for_step('basisdaten') or {}
+            ergebnis_empfaenger = cleaned_data.get('ergebnis_empfaenger', None)
+            if ergebnis_empfaenger is not None:
+                form_primar = VeranstaltungPrimaerDozentForm(is_dynamic_form=True,
+                                                             data={'primaerdozent': ergebnis_empfaenger[0].id},
+                                                             instance=self.get_instance())
+                form_primar.is_valid()
+                form_list.append(form_primar)
+
         form_data = process_form_data(form_list)
         instance = self.get_instance()
+
         save_to_db(self.request, instance, form_list)
 
         return render_to_response('formtools/wizard/zusammenfassung.html', {'form_data': form_data,
