@@ -179,11 +179,19 @@ class VeranstalterIndexTest(TestCase):
             "verantwortlicher_address-anschrift": "Alexanderstrasse 8, 64287 Darmstadt"
         })
 
+        self.assertTemplateUsed(response_fourth_step, "formtools/wizard/freiefragen.html")
+
+        response_fifth_step = c.post('/veranstalter/', {
+            "veranstalter_wizard-current_step": "freie_fragen",
+            "freie_fragen-freifrage1": "Ist das die erste Frage?",
+            "freie_fragen-freifrage2": "Ist das die zweite Frage?"
+        })
+
         self.v.refresh_from_db()
         self.p.refresh_from_db()
 
         self.assertTrue(self.v.evaluieren)
         self.assertEqual(self.v.primaerdozent, self.p2)
         self.assertEqual(self.p.email, "test@test.de")
-        self.assertTemplateUsed(response_fourth_step, "formtools/wizard/zusammenfassung.html")
+        self.assertTemplateUsed(response_fifth_step, "formtools/wizard/zusammenfassung.html")
 
