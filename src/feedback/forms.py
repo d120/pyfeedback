@@ -70,6 +70,11 @@ class VeranstaltungDozentDatenForm(forms.ModelForm):
         fields = ('email', 'anschrift')
 
 
+class VeranstaltungFreieFragen(forms.ModelForm):
+    class Meta:
+        model = Veranstaltung
+        fields = ('freiefrage1', 'freiefrage2')
+
 
 class UploadFileForm(forms.Form):
     file = forms.FileField(label='Datei')

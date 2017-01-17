@@ -11,7 +11,7 @@ from formtools.wizard.views import SessionWizardView
 
 from feedback.models import Veranstaltung
 from feedback.forms import VeranstaltungEvaluationForm, VeranstaltungBasisdatenForm, VeranstaltungPrimaerDozentForm, \
-    VeranstaltungDozentDatenForm
+    VeranstaltungDozentDatenForm, VeranstaltungFreieFragen
 
 
 @require_safe
@@ -38,6 +38,7 @@ VERANSTALTER_VIEW_TEMPLATES = {
     "basisdaten": "formtools/wizard/basisdaten.html",
     "primaerdozent": "formtools/wizard/primaerdozent.html",
     "verantwortlicher_address": "formtools/wizard/address.html",
+    "freie_fragen": "formtools/wizard/freiefragen.html"
 }
 
 
@@ -73,11 +74,14 @@ class VeranstalterWizard(SessionWizardView):
         ('basisdaten', VeranstaltungBasisdatenForm),
         ('primaerdozent', VeranstaltungPrimaerDozentForm),
         ('verantwortlicher_address', VeranstaltungDozentDatenForm),
+        ('freie_fragen', VeranstaltungFreieFragen),
     ]
+
     condition_dict = {
         'basisdaten': perform_evalution,
         'primaerdozent': show_primaerdozent_form,
         'verantwortlicher_address': perform_evalution,
+        'freie_fragen': perform_evalution,
     }
 
     def get_instance(self):
