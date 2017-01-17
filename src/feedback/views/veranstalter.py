@@ -95,7 +95,8 @@ class VeranstalterWizard(SessionWizardView):
 
     def get_form_instance(self, step):
         if step == "verantwortlicher_address":
-            return self.get_instance().verantwortlich
+            basisdaten = self.get_cleaned_data_for_step('basisdaten')
+            return basisdaten["verantwortlich"]
         return self.get_instance()
 
     def get_form_kwargs(self, step=None):
@@ -141,8 +142,12 @@ def save_to_db(request, instance, form_list):
     """
     for form in form_list:
         for key, val in form.cleaned_data.iteritems():
-            setattr(form.instance, key, val)
-        if form.instance is not Veranstaltung:
+            if isinstance(form.instance, Veranstaltung):
+                setattr(instance, key, val)
+            else:
+                setattr(form.instance, key, val)
+
+        if not isinstance(form.instance, Veranstaltung):
             form.instance.save()
 
     instance.set_next_state()

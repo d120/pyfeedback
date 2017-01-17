@@ -86,10 +86,21 @@ class VeranstalterIndexTest(TestCase):
             "primaerdozent-primaerdozent": self.p.id
         })
 
+        self.assertTemplateUsed(response_thirdstep, "formtools/wizard/address.html")
+
+        response_fourth_step = c.post('/veranstalter/', {
+            "veranstalter_wizard-current_step": "verantwortlicher_address",
+            "verantwortlicher_address-email": "test@test.de",
+            "verantwortlicher_address-anschrift": "Alexanderstrasse 8, 64287 Darmstadt"
+        })
+
         self.v.refresh_from_db()
+        self.p.refresh_from_db()
+
         self.assertTrue(self.v.evaluieren)
         self.assertEqual(self.v.primaerdozent, self.p)
-        self.assertTemplateUsed(response_thirdstep, "formtools/wizard/zusammenfassung.html")
+        self.assertEqual(self.p.email, "test@test.de")
+        self.assertTemplateUsed(response_fourth_step, "formtools/wizard/zusammenfassung.html")
 
     def test_post_keine_evaluation(self):
         Einstellung.objects.create(name='bestellung_erlaubt', wert='1')
@@ -149,8 +160,19 @@ class VeranstalterIndexTest(TestCase):
             "save": "Speichern"
         })
 
+        self.assertTemplateUsed(response_secondstep, "formtools/wizard/address.html")
+
+        response_fourth_step = c.post('/veranstalter/', {
+            "veranstalter_wizard-current_step": "verantwortlicher_address",
+            "verantwortlicher_address-email": "test@test.de",
+            "verantwortlicher_address-anschrift": "Alexanderstrasse 8, 64287 Darmstadt"
+        })
+
         self.v.refresh_from_db()
+        self.p.refresh_from_db()
+
         self.assertTrue(self.v.evaluieren)
         self.assertEqual(self.v.primaerdozent, self.p2)
-        self.assertTemplateUsed(response_secondstep, "formtools/wizard/zusammenfassung.html")
+        self.assertEqual(self.p.email, "test@test.de")
+        self.assertTemplateUsed(response_fourth_step, "formtools/wizard/zusammenfassung.html")
 
