@@ -10,7 +10,8 @@ from django.shortcuts import render_to_response
 from formtools.wizard.views import SessionWizardView
 
 from feedback.models import Veranstaltung
-from feedback.forms import VeranstaltungEvaluationForm, VeranstaltungBasisdatenForm, VeranstaltungPrimaerDozentForm
+from feedback.forms import VeranstaltungEvaluationForm, VeranstaltungBasisdatenForm, VeranstaltungPrimaerDozentForm, \
+    VeranstaltungDozentDatenForm
 
 
 @require_safe
@@ -36,6 +37,7 @@ VERANSTALTER_VIEW_TEMPLATES = {
     "evaluation": "formtools/wizard/evaluation.html",
     "basisdaten": "formtools/wizard/basisdaten.html",
     "primaerdozent": "formtools/wizard/primaerdozent.html",
+    "verantwortlicher_address": "formtools/wizard/address.html",
 }
 
 
@@ -70,10 +72,12 @@ class VeranstalterWizard(SessionWizardView):
         ('evaluation', VeranstaltungEvaluationForm),
         ('basisdaten', VeranstaltungBasisdatenForm),
         ('primaerdozent', VeranstaltungPrimaerDozentForm),
+        ('verantwortlicher_address', VeranstaltungDozentDatenForm),
     ]
     condition_dict = {
         'basisdaten': perform_evalution,
-        'primaerdozent': show_primaerdozent_form
+        'primaerdozent': show_primaerdozent_form,
+        'verantwortlicher_address': perform_evalution,
     }
 
     def get_instance(self):
@@ -90,6 +94,8 @@ class VeranstalterWizard(SessionWizardView):
         return context
 
     def get_form_instance(self, step):
+        if step == "verantwortlicher_address":
+            return self.get_instance().verantwortlich
         return self.get_instance()
 
     def get_form_kwargs(self, step=None):
@@ -135,7 +141,9 @@ def save_to_db(request, instance, form_list):
     """
     for form in form_list:
         for key, val in form.cleaned_data.iteritems():
-            setattr(instance, key, val)
+            setattr(form.instance, key, val)
+        if form.instance is not Veranstaltung:
+            form.instance.save()
 
     instance.set_next_state()
     instance.save()
