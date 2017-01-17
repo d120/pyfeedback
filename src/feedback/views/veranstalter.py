@@ -27,7 +27,8 @@ def login(request):
             request.session['vid'] = v.id
             request.session['veranstaltung'] = unicode(v)
 
-            if v.status is Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR or Veranstaltung.STATUS_BESTELLUNG_GEOEFFNET:
+            if v.status == Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR or \
+                    v.status == Veranstaltung.STATUS_BESTELLUNG_GEOEFFNET:
                 return HttpResponseRedirect(reverse('veranstalter-index'))
 
     return render(request, 'veranstalter/login_failed.html')
