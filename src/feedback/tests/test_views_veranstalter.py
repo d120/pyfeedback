@@ -40,8 +40,11 @@ class VeranstalterIndexTest(TestCase):
     def setUp(self):
         User.objects.create_user(settings.USERNAME_VERANSTALTER)
         self.s, self.v = get_veranstaltung('vu')
-        self.p = Person.objects.create()
+        self.p = Person.objects.create(vorname="v1", nachname="n1")
+        self.p2 = Person.objects.create(vorname="v2", nachname="n2")
+
         self.v.veranstalter.add(self.p)
+        self.v.veranstalter.add(self.p2)
     
     def test_unauth(self):
         response = self.client.get('/veranstalter/')
@@ -57,29 +60,7 @@ class VeranstalterIndexTest(TestCase):
             ctx['order_form']
         with self.assertRaises(KeyError):
             ctx['comment_form']
-    
-    # def test_get_bestellung(self):
-    #     Einstellung.objects.create(name='bestellung_erlaubt', wert='1')
-    #     c = login_veranstalter(self.v)
-    #     response = c.get('/veranstalter/')
-    #     ctx = response.context
-    #     self.assertTrue(isinstance(ctx['order_form'], BestellungModelForm))
-    #     self.assertNotContains(response,'Information zur Vollerhebung')
-    #     self.assertContains(response,'Evaluieren:')
-        
-    # def test_get_bestellung_vollerhebung(self):
-    #     """Teste ob der Hinweis zur Vollerhebung angezeigt wird und ein Austragen
-    #     nicht möglich ist"""
-    #     self.s.vollerhebung = True
-    #     self.s.save()
-    #     Einstellung.objects.create(name='bestellung_erlaubt', wert='1')
-    #     c = login_veranstalter(self.v)
-    #     response = c.get('/veranstalter/')
-    #     ctx = response.context
-    #     self.assertTrue(isinstance(ctx['order_form'], BestellungModelForm))
-    #     self.assertContains(response,'Information zur Vollerhebung')
-    #     self.assertNotContains(response,'Evaluieren:')
-    
+
     def test_post_bestellung(self):
         Einstellung.objects.create(name='bestellung_erlaubt', wert='1')
         c = login_veranstalter(self.v)
@@ -94,7 +75,7 @@ class VeranstalterIndexTest(TestCase):
             "basisdaten-anzahl": 22,
             "basisdaten-sprache": "de",
             "basisdaten-verantwortlich": self.p.id,
-            "basisdaten-ergebnis_empfaenger": self.p.id,
+            "basisdaten-ergebnis_empfaenger": [self.p.id, self.p2.id],
             "save": "Speichern"
         })
 
@@ -107,6 +88,7 @@ class VeranstalterIndexTest(TestCase):
 
         self.v.refresh_from_db()
         self.assertTrue(self.v.evaluieren)
+        self.assertEqual(self.v.primaerdozent, self.p)
         self.assertTemplateUsed(response_thirdstep, "formtools/wizard/zusammenfassung.html")
 
     def test_post_keine_evaluation(self):
@@ -148,4 +130,27 @@ class VeranstalterIndexTest(TestCase):
         self.v.refresh_from_db()
         self.assertTrue(self.v.evaluieren)
         self.assertTemplateUsed(response_firststep, "formtools/wizard/basisdaten.html")
+
+    def test_post_bestellung_ein_ergebnis_empfaenger(self):
+        Einstellung.objects.create(name='bestellung_erlaubt', wert='1')
+        c = login_veranstalter(self.v)
+        response_firststep = c.post('/veranstalter/', {'evaluation-evaluieren': True,
+                                                       "veranstalter_wizard-current_step": "evaluation"})
+
+        self.assertTemplateUsed(response_firststep, "formtools/wizard/basisdaten.html")
+
+        response_secondstep = c.post('/veranstalter/', {
+            "veranstalter_wizard-current_step": "basisdaten",
+            "basisdaten-typ": "vu",
+            "basisdaten-anzahl": 22,
+            "basisdaten-sprache": "de",
+            "basisdaten-verantwortlich": self.p.id,
+            "basisdaten-ergebnis_empfaenger": self.p2.id,
+            "save": "Speichern"
+        })
+
+        self.v.refresh_from_db()
+        self.assertTrue(self.v.evaluieren)
+        self.assertEqual(self.v.primaerdozent, self.p2)
+        self.assertTemplateUsed(response_secondstep, "formtools/wizard/zusammenfassung.html")
 
