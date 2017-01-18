@@ -1,5 +1,6 @@
 # coding=utf-8
 
+from django import forms
 from django.conf import settings
 from django.views.decorators.http import require_safe
 from django.contrib import auth
@@ -40,7 +41,8 @@ VERANSTALTER_VIEW_TEMPLATES = {
     "primaerdozent": "formtools/wizard/primaerdozent.html",
     "verantwortlicher_address": "formtools/wizard/address.html",
     "freie_fragen": "formtools/wizard/freiefragen.html",
-    "tutoren": "formtools/wizard/tutoren.html"
+    "tutoren": "formtools/wizard/tutoren.html",
+    "zusammenfassung": "formtools/wizard/zusammenfassung.html"
 }
 
 
@@ -85,7 +87,8 @@ class VeranstalterWizard(SessionWizardView):
         ('primaerdozent', VeranstaltungPrimaerDozentForm),
         ('verantwortlicher_address', VeranstaltungDozentDatenForm),
         ('freie_fragen', VeranstaltungFreieFragen),
-        ('tutoren', VeranstaltungTutorenForm)
+        ('tutoren', VeranstaltungTutorenForm),
+        ('zusammenfassung', forms.Form)
     ]
 
     condition_dict = {
@@ -124,6 +127,23 @@ class VeranstalterWizard(SessionWizardView):
 
     def get_template_names(self):
         return [VERANSTALTER_VIEW_TEMPLATES[self.steps.current]]
+
+    def render(self, form=None, **kwargs):
+        if self.steps.current == "zusammenfassung":
+            all_form_data = []
+            for step_form in self.form_list:
+                form_obj = self.get_form(
+                    step=step_form,
+                    data=self.storage.get_step_data(step_form),
+                    files=self.storage.get_step_files(step_form),
+                )
+                if form_obj.is_valid():
+                    cleaned_d = form_obj.cleaned_data
+                    # TODO: queryset zu text konvertieren und in template keylabel anzeigen
+                    all_form_data.append(cleaned_d)
+            return self.render_to_response({"all_form_data": all_form_data})
+        else:
+            return super(VeranstalterWizard, self).render(form, **kwargs)
 
     def done(self, form_list, **kwargs):
         if not any(isinstance(x, VeranstaltungPrimaerDozentForm) for x in form_list):
