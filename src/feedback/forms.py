@@ -76,6 +76,10 @@ class VeranstaltungFreieFragen(forms.ModelForm):
         fields = ('freiefrage1', 'freiefrage2')
 
 
+class VeranstaltungTutorenForm(forms.Form):
+    csv_tutoren = forms.CharField(label='CSV', widget=forms.Textarea)
+
+
 class UploadFileForm(forms.Form):
     file = forms.FileField(label='Datei')
 

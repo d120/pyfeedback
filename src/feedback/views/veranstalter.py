@@ -11,7 +11,7 @@ from formtools.wizard.views import SessionWizardView
 
 from feedback.models import Veranstaltung
 from feedback.forms import VeranstaltungEvaluationForm, VeranstaltungBasisdatenForm, VeranstaltungPrimaerDozentForm, \
-    VeranstaltungDozentDatenForm, VeranstaltungFreieFragen
+    VeranstaltungDozentDatenForm, VeranstaltungFreieFragen, VeranstaltungTutorenForm
 
 
 @require_safe
@@ -38,7 +38,8 @@ VERANSTALTER_VIEW_TEMPLATES = {
     "basisdaten": "formtools/wizard/basisdaten.html",
     "primaerdozent": "formtools/wizard/primaerdozent.html",
     "verantwortlicher_address": "formtools/wizard/address.html",
-    "freie_fragen": "formtools/wizard/freiefragen.html"
+    "freie_fragen": "formtools/wizard/freiefragen.html",
+    "tutoren": "formtools/wizard/tutoren.html"
 }
 
 
@@ -68,6 +69,14 @@ def show_primaerdozent_form(wizard):
     return show_summary_form
 
 
+def show_tutor_form(wizard):
+    show_summary_form = perform_evalution(wizard)
+    if show_summary_form:
+        v = wizard.get_instance()
+        return v.has_uebung()
+    return show_summary_form
+
+
 class VeranstalterWizard(SessionWizardView):
     form_list = [
         ('evaluation', VeranstaltungEvaluationForm),
@@ -75,6 +84,7 @@ class VeranstalterWizard(SessionWizardView):
         ('primaerdozent', VeranstaltungPrimaerDozentForm),
         ('verantwortlicher_address', VeranstaltungDozentDatenForm),
         ('freie_fragen', VeranstaltungFreieFragen),
+        ('tutoren', VeranstaltungTutorenForm)
     ]
 
     condition_dict = {
@@ -82,6 +92,7 @@ class VeranstalterWizard(SessionWizardView):
         'primaerdozent': show_primaerdozent_form,
         'verantwortlicher_address': perform_evalution,
         'freie_fragen': perform_evalution,
+        'tutoren': show_tutor_form
     }
 
     def get_instance(self):
@@ -146,12 +157,15 @@ def save_to_db(request, instance, form_list):
     """
     for form in form_list:
         for key, val in form.cleaned_data.iteritems():
-            if isinstance(form.instance, Veranstaltung):
+            if isinstance(form, VeranstaltungTutorenForm):
+                if key == "csv_tutoren":
+                    instance.csv_to_tutor(val)
+            elif isinstance(form.instance, Veranstaltung):
                 setattr(instance, key, val)
             else:
                 setattr(form.instance, key, val)
 
-        if not isinstance(form.instance, Veranstaltung):
+        if not isinstance(form, VeranstaltungTutorenForm) and not isinstance(form.instance, Veranstaltung):
             form.instance.save()
 
     instance.set_next_state()
