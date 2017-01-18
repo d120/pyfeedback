@@ -64,6 +64,13 @@ class VeranstaltungPrimaerDozentForm(forms.ModelForm):
         fields = ('primaerdozent',)
 
 
+class VeranstaltungDozentDatenForm(forms.ModelForm):
+    class Meta:
+        model = Person
+        fields = ('email', 'anschrift')
+
+
+
 class UploadFileForm(forms.Form):
     file = forms.FileField(label='Datei')
 
