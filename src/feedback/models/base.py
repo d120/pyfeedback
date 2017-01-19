@@ -543,6 +543,8 @@ class Veranstaltung(models.Model):
         input_clean = csv_content.strip()
         input_lines = input_clean.splitlines()
         nummer = 1
+
+        Tutor.objects.filter(veranstaltung=self).delete()
         for l in input_lines:
             # skip empty lines
             if len(l.strip()) > 1:
@@ -554,13 +556,13 @@ class Veranstaltung(models.Model):
                     if len(row) > 3:
                         anmerkungInput = row[3]
 
-                    Tutor.objects.get_or_create(
+                    Tutor.objects.create(
                         veranstaltung=self,
                         nummer=nummer,
                         nachname=row[0],
                         vorname=row[1],
                         email=row[2],
-                        anmerkung=anmerkungInput,
+                        anmerkung=anmerkungInput
                     )
 
                     nummer += 1

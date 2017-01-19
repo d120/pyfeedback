@@ -143,14 +143,16 @@ class VeranstalterWizard(SessionWizardView):
     def get_form_instance(self, step):
         if step == "verantwortlicher_address":
             basisdaten = self.get_cleaned_data_for_step('basisdaten')
-            return basisdaten["verantwortlich"]
+            if basisdaten:
+                return basisdaten["verantwortlich"]
         return self.get_instance()
 
     def get_form_kwargs(self, step=None):
         kwargs = super(VeranstalterWizard, self).get_form_kwargs(step)
         if step == 'primaerdozent':
             basisdaten = self.get_cleaned_data_for_step('basisdaten')
-            kwargs.update({'basisdaten': basisdaten})
+            if basisdaten is not None:
+                kwargs.update({'basisdaten': basisdaten})
         return kwargs
 
     def get_template_names(self):
@@ -168,13 +170,12 @@ class VeranstalterWizard(SessionWizardView):
                 form_primar.is_valid()
                 form_list.append(form_primar)
 
-        form_data = process_form_data(form_list)
+        # form_data = process_form_data(form_list)
         instance = self.get_instance()
 
         save_to_db(self.request, instance, form_list)
 
-        return render_to_response('formtools/wizard/zusammenfassung.html', {'form_data': form_data,
-                                                                            'form_list': form_list})
+        return render_to_response('formtools/wizard/bestellung_done.html', )
 
 
 def process_form_data(form_list):
@@ -192,12 +193,14 @@ def save_to_db(request, instance, form_list):
             if isinstance(form, VeranstaltungTutorenForm):
                 if key == "csv_tutoren":
                     instance.csv_to_tutor(val)
+                    setattr(instance, "", val)
             elif isinstance(form.instance, Veranstaltung):
                 setattr(instance, key, val)
             else:
                 setattr(form.instance, key, val)
 
-        if not isinstance(form, VeranstaltungTutorenForm) and not isinstance(form.instance, Veranstaltung):
+        if not isinstance(form, VeranstaltungTutorenForm) \
+                and hasattr(form, 'instance') and not isinstance(form.instance, Veranstaltung):
             form.instance.save()
 
     instance.set_next_state()

@@ -61,10 +61,11 @@ class VeranstaltungPrimaerDozentForm(forms.ModelForm):
         if kwargs.pop("is_dynamic_form", False):
             super(VeranstaltungPrimaerDozentForm, self).__init__(*args, **kwargs)
         else:
-            previous_step_data = kwargs.pop('basisdaten')
+            previous_step_data = kwargs.pop('basisdaten', None)
             super(VeranstaltungPrimaerDozentForm, self).__init__(*args, **kwargs)
-            self.fields['primaerdozent'].queryset = previous_step_data['ergebnis_empfaenger']
-            self.fields['primaerdozent'].required = True
+            if previous_step_data is not None:
+                self.fields['primaerdozent'].queryset = previous_step_data['ergebnis_empfaenger']
+                self.fields['primaerdozent'].required = True
 
     class Meta:
         model = Veranstaltung
