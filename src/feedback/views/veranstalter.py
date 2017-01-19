@@ -137,10 +137,12 @@ class VeranstalterWizard(SessionWizardView):
                     data=self.storage.get_step_data(step_form),
                     files=self.storage.get_step_files(step_form),
                 )
+
                 if form_obj.is_valid():
                     cleaned_d = form_obj.cleaned_data
                     # TODO: queryset zu text konvertieren und in template keylabel anzeigen
                     all_form_data.append(cleaned_d)
+
             return self.render_to_response({"all_form_data": all_form_data})
         else:
             return super(VeranstalterWizard, self).render(form, **kwargs)

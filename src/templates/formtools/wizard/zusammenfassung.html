@@ -9,11 +9,14 @@
 
     {% for form_data in all_form_data %}
         {% for k, v in form_data.iteritems %}
-
-            <p>{{ k }} - {{ v }} </p>
+            {% if v.all %}
+                {% for model in v.all %}
+                    <p>{{ k }} - {{ model }} </p>
+                {% endfor %}
+            {% else %}
+                <p>{{ k }} - {{ v }} </p>
+            {% endif %}
         {% endfor %}
-
-
     {% endfor %}
 
 {% endblock %}
