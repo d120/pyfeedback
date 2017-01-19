@@ -9,7 +9,7 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import render
 from django.shortcuts import render_to_response
 from formtools.wizard.views import SessionWizardView
-
+from django.db.models.query import QuerySet
 from feedback.models import Veranstaltung
 from feedback.forms import VeranstaltungEvaluationForm, VeranstaltungBasisdatenForm, VeranstaltungPrimaerDozentForm, \
     VeranstaltungDozentDatenForm, VeranstaltungFreieFragen, VeranstaltungTutorenForm
@@ -75,8 +75,9 @@ def show_primaerdozent_form(wizard):
 def show_tutor_form(wizard):
     show_summary_form = perform_evalution(wizard)
     if show_summary_form:
-        v = wizard.get_instance()
-        return v.has_uebung()
+        cleaned_data = wizard.get_cleaned_data_for_step('basisdaten') or {}
+        v_typ = cleaned_data.get('typ', '')
+        return v_typ == "vu"
     return show_summary_form
 
 
@@ -110,6 +111,33 @@ class VeranstalterWizard(SessionWizardView):
     def get_context_data(self, form, **kwargs):
         context = super(VeranstalterWizard, self).get_context_data(form=form, **kwargs)
         context.update({'veranstaltung': self.get_instance()})
+        if self.steps.current == "zusammenfassung":
+            all_form_data = []
+            for step_form in self.form_list:
+                form_obj = self.get_form(
+                    step=step_form,
+                    data=self.storage.get_step_data(step_form),
+                    files=self.storage.get_step_files(step_form),
+                )
+                if form_obj.is_valid():
+                    for field_key, field_obj in form_obj.fields.items():
+                        cleaned_d = form_obj.cleaned_data[field_key]
+                        field_value = ""
+                        if isinstance(field_obj, forms.fields.BooleanField):
+                            field_value = "Ja" if cleaned_d else "Nein"
+                        elif isinstance(field_obj, forms.fields.TypedChoiceField):
+                            for key, choice in field_obj.choices:
+                                if key == cleaned_d:
+                                    field_value = choice
+                                    break
+                        else:
+                            field_value = form_obj.cleaned_data[field_key]
+
+                        all_form_data.append({
+                            'label': field_obj.label,
+                            'value': field_value
+                        })
+            context.update({'all_form_data':  all_form_data})
         return context
 
     def get_form_instance(self, step):
@@ -127,25 +155,6 @@ class VeranstalterWizard(SessionWizardView):
 
     def get_template_names(self):
         return [VERANSTALTER_VIEW_TEMPLATES[self.steps.current]]
-
-    def render(self, form=None, **kwargs):
-        if self.steps.current == "zusammenfassung":
-            all_form_data = []
-            for step_form in self.form_list:
-                form_obj = self.get_form(
-                    step=step_form,
-                    data=self.storage.get_step_data(step_form),
-                    files=self.storage.get_step_files(step_form),
-                )
-
-                if form_obj.is_valid():
-                    cleaned_d = form_obj.cleaned_data
-                    # TODO: queryset zu text konvertieren und in template keylabel anzeigen
-                    all_form_data.append(cleaned_d)
-
-            return self.render_to_response({"all_form_data": all_form_data})
-        else:
-            return super(VeranstalterWizard, self).render(form, **kwargs)
 
     def done(self, form_list, **kwargs):
         if not any(isinstance(x, VeranstaltungPrimaerDozentForm) for x in form_list):
