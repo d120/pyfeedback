@@ -114,10 +114,17 @@ class VeranstalterIndexTest(TestCase):
             "tutoren-csv_tutoren": "Müller,Max,muller.max@web.de,Bemerkung1\nMustermann,Erika,erika.mustermann@aa.de"
         })
 
+        self.assertTemplateUsed(response_sixth_step, "formtools/wizard/zusammenfassung.html")
+
+        response_seventh_step = c.post('/veranstalter/', {
+            "veranstalter_wizard-current_step": "zusammenfassung"
+        })
+
         self.v.refresh_from_db()
         self.p.refresh_from_db()
 
-        self.assertTemplateUsed(response_sixth_step, "formtools/wizard/zusammenfassung.html")
+        self.assertTemplateUsed(response_seventh_step, "formtools/wizard/bestellung_done.html")
+
         self.assertTrue(self.v.evaluieren)
         self.assertEqual(self.v.primaerdozent, self.p)
         self.assertEqual(Tutor.objects.count(), 2)
@@ -130,8 +137,11 @@ class VeranstalterIndexTest(TestCase):
         Einstellung.objects.create(name='bestellung_erlaubt', wert='1')
         c = login_veranstalter(self.v)
         response_firststep = c.post('/veranstalter/', {"veranstalter_wizard-current_step": "evaluation"})
+        self.assertTemplateUsed(response_firststep, "formtools/wizard/zusammenfassung.html")
+        response_second = c.post('/veranstalter/', {"veranstalter_wizard-current_step": "zusammenfassung"})
 
         self.v.refresh_from_db()
+        self.assertTemplateUsed(response_second, "formtools/wizard/bestellung_done.html")
         self.assertFalse(self.v.evaluieren)
         self.assertEqual(self.v.status, Veranstaltung.STATUS_KEINE_EVALUATION)
         self.assertTemplateUsed(response_firststep, "formtools/wizard/zusammenfassung.html")
@@ -211,10 +221,16 @@ class VeranstalterIndexTest(TestCase):
             "tutoren-csv_tutoren": "Müller,Max,muller.max@web.de,Bemerkung1\nMustermann,Erika,erika.mustermann@aa.de"
         })
 
+        self.assertTemplateUsed(response_sixth_step, "formtools/wizard/zusammenfassung.html")
+
+        response_seventh_step = c.post('/veranstalter/', {
+            "veranstalter_wizard-current_step": "zusammenfassung"
+        })
+
         self.v.refresh_from_db()
         self.p.refresh_from_db()
 
-        self.assertTemplateUsed(response_sixth_step, "formtools/wizard/zusammenfassung.html")
+        self.assertTemplateUsed(response_seventh_step, "formtools/wizard/bestellung_done.html")
         self.assertTrue(self.v.evaluieren)
         self.assertEqual(self.v.primaerdozent, self.p2)
         self.assertEqual(Tutor.objects.count(), 2)

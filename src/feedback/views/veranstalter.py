@@ -9,7 +9,6 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import render
 from django.shortcuts import render_to_response
 from formtools.wizard.views import SessionWizardView
-from django.db.models.query import QuerySet
 from feedback.models import Veranstaltung
 from feedback.forms import VeranstaltungEvaluationForm, VeranstaltungBasisdatenForm, VeranstaltungPrimaerDozentForm, \
     VeranstaltungDozentDatenForm, VeranstaltungFreieFragen, VeranstaltungTutorenForm
@@ -133,8 +132,11 @@ class VeranstalterWizard(SessionWizardView):
                         else:
                             field_value = form_obj.cleaned_data[field_key]
 
+                        field_label = field_obj.label
+                        if field_label is None:
+                            field_label = field_key
                         all_form_data.append({
-                            'label': field_obj.label,
+                            'label': field_label,
                             'value': field_value
                         })
             context.update({'all_form_data':  all_form_data})
@@ -153,6 +155,10 @@ class VeranstalterWizard(SessionWizardView):
             basisdaten = self.get_cleaned_data_for_step('basisdaten')
             if basisdaten is not None:
                 kwargs.update({'basisdaten': basisdaten})
+        elif step == 'tutoren':
+            veranstaltung = self.get_form_instance(step)
+            if veranstaltung is not None:
+                kwargs.update({'preset_csv': veranstaltung.kleingruppen})
         return kwargs
 
     def get_template_names(self):
@@ -170,17 +176,11 @@ class VeranstalterWizard(SessionWizardView):
                 form_primar.is_valid()
                 form_list.append(form_primar)
 
-        # form_data = process_form_data(form_list)
         instance = self.get_instance()
 
         save_to_db(self.request, instance, form_list)
 
         return render_to_response('formtools/wizard/bestellung_done.html', )
-
-
-def process_form_data(form_list):
-    form_data = [form.cleaned_data for form in form_list]
-    return form_data
 
 
 def save_to_db(request, instance, form_list):
@@ -193,7 +193,7 @@ def save_to_db(request, instance, form_list):
             if isinstance(form, VeranstaltungTutorenForm):
                 if key == "csv_tutoren":
                     instance.csv_to_tutor(val)
-                    setattr(instance, "", val)
+                    setattr(instance, "kleingruppen", val)
             elif isinstance(form.instance, Veranstaltung):
                 setattr(instance, key, val)
             else:

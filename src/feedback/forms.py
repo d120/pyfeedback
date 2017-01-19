@@ -87,6 +87,11 @@ class VeranstaltungFreieFragen(forms.ModelForm):
 class VeranstaltungTutorenForm(forms.Form):
     csv_tutoren = forms.CharField(label='CSV', widget=forms.Textarea)
 
+    def __init__(self, *args, **kwargs):
+        preset_csv = kwargs.pop("preset_csv", None)
+        super(VeranstaltungTutorenForm, self).__init__(*args, **kwargs)
+        self.fields["csv_tutoren"].initial = preset_csv
+
 
 class UploadFileForm(forms.Form):
     file = forms.FileField(label='Datei')
