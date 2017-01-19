@@ -12,6 +12,7 @@ from formtools.wizard.views import SessionWizardView
 from feedback.models import Veranstaltung
 from feedback.forms import VeranstaltungEvaluationForm, VeranstaltungBasisdatenForm, VeranstaltungPrimaerDozentForm, \
     VeranstaltungDozentDatenForm, VeranstaltungFreieFragen, VeranstaltungTutorenForm
+from django.core.mail import send_mail
 
 
 @require_safe
@@ -179,6 +180,15 @@ class VeranstalterWizard(SessionWizardView):
         instance = self.get_instance()
 
         save_to_db(self.request, instance, form_list)
+
+        for e in ergebnis_empfaenger:
+            send_mail(
+                'Evaluation der Lehrveranstaltungen - Zusammenfassung der Daten',
+                'Here is the message.',
+                settings.DEFAULT_FROM_EMAIL,
+                [e.email],
+                fail_silently=False,
+            )
 
         return render_to_response('formtools/wizard/bestellung_done.html', )
 
