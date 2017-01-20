@@ -166,10 +166,10 @@ class VeranstalterWizard(SessionWizardView):
         return [VERANSTALTER_VIEW_TEMPLATES[self.steps.current]]
 
     def done(self, form_list, **kwargs):
+        cleaned_data = self.get_cleaned_data_for_step('basisdaten') or {}
+        ergebnis_empfaenger = cleaned_data.get('ergebnis_empfaenger', None)
         if not any(isinstance(x, VeranstaltungPrimaerDozentForm) for x in form_list):
             # preselect primaer dozent
-            cleaned_data = self.get_cleaned_data_for_step('basisdaten') or {}
-            ergebnis_empfaenger = cleaned_data.get('ergebnis_empfaenger', None)
             if ergebnis_empfaenger is not None:
                 form_primar = VeranstaltungPrimaerDozentForm(is_dynamic_form=True,
                                                              data={'primaerdozent': ergebnis_empfaenger[0].id},
@@ -181,14 +181,15 @@ class VeranstalterWizard(SessionWizardView):
 
         save_to_db(self.request, instance, form_list)
 
-        for e in ergebnis_empfaenger:
-            send_mail(
-                'Evaluation der Lehrveranstaltungen - Zusammenfassung der Daten',
-                'Here is the message.',
-                settings.DEFAULT_FROM_EMAIL,
-                [e.email],
-                fail_silently=False,
-            )
+        if ergebnis_empfaenger is not None:
+            for e in ergebnis_empfaenger:
+                send_mail(
+                    'Evaluation der Lehrveranstaltungen - Zusammenfassung der Daten',
+                    'Here is the message.',
+                    settings.DEFAULT_FROM_EMAIL,
+                    [e.email],
+                    fail_silently=False,
+                )
 
         return render_to_response('formtools/wizard/bestellung_done.html', )
 
