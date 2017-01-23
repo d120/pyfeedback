@@ -182,10 +182,11 @@ class VeranstalterWizard(SessionWizardView):
         save_to_db(self.request, instance, form_list)
 
         if ergebnis_empfaenger is not None:
+            all_data_str = self.get_all_cleaned_data().__str__()
             for e in ergebnis_empfaenger:
                 send_mail(
                     'Evaluation der Lehrveranstaltungen - Zusammenfassung der Daten',
-                    'Here is the message.',
+                    all_data_str,
                     settings.DEFAULT_FROM_EMAIL,
                     [e.email],
                     fail_silently=False,
