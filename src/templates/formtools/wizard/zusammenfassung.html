@@ -1,15 +1,39 @@
 {% extends "formtools/wizard/base.html" %}
 
+{% block extra_header %}
+    <style>
+        .summary_table {
+            border-spacing: 5px;
+        }
+        .summary_table th {
+            text-align: left;
+            vertical-align: top;
+        }
+        .summary_table td p {
+            margin-bottom: 0px;
+        }
+    </style>
+{% endblock %}
+
 {% block feedback_veranstalter_form %}
     <h2>Zusammenfassung der Daten</h2>
-    <p>Die Daten wurden erfolgreich gespeichert.</p>
 
-    {% if not form_data %}
-        <p>Die Veranstaltung wird nicht evaluiert.</p>
-    {% endif %}
+    <table class="summary_table">
 
-    {% for form in form_list %}
-        {{ form }}
-    {% endfor %}
+        {% for form_data in all_form_data %}
+            <tr>
+                <th>{{ form_data.label }}</th>
+                <td>
+                    {% if form_data.value.all %}
+                        {% for query in form_data.value %}
+                            <p>{{ query }}</p>
+                        {% endfor %}
+                    {% else %}
+                        {{ form_data.value }}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
 
+    </table>
 {% endblock %}

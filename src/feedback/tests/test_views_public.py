@@ -148,7 +148,7 @@ class PublicVeranstaltungTest(TestCase):
         self.s = Semester.objects.create(semester=20110, fragebogen='2009', sichtbarkeit='ADM')
         params = {'semester': self.s, 'grundstudium': False, 'evaluieren': True, 'lv_nr': '123'}
         self.v = Veranstaltung.objects.create(typ='vu', name='Stoning I',
-                                              access_token='42', **params)
+                                              access_token='42', status=Veranstaltung.STATUS_BESTELLUNG_GEOEFFNET, **params)
         self.e = Ergebnis2009.objects.create(veranstaltung=self.v, anzahl=20,
                                              v_gesamt=2.3, v_gesamt_count=20,
                                              v_didaktik=1.5, v_didaktik_count=3)

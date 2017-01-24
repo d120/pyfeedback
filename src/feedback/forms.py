@@ -37,6 +37,13 @@ class VeranstaltungBasisdatenForm(forms.ModelForm):
         vltypes = ['vu', 'v']
         if kwargs['instance'].typ not in vltypes:
             del self.fields['typ']
+        else:
+            choices = []
+            for cur in self.fields['typ'].choices:
+                if cur[0] in vltypes:
+                    choices.append(cur)
+
+            self.fields['typ'].choices = choices
 
         # Wenn Evaluation oder Vollerhebung, dann sind alle anderen Felder notwendig
         for k, field in self.fields.items():
@@ -54,10 +61,11 @@ class VeranstaltungPrimaerDozentForm(forms.ModelForm):
         if kwargs.pop("is_dynamic_form", False):
             super(VeranstaltungPrimaerDozentForm, self).__init__(*args, **kwargs)
         else:
-            previous_step_data = kwargs.pop('basisdaten')
+            previous_step_data = kwargs.pop('basisdaten', None)
             super(VeranstaltungPrimaerDozentForm, self).__init__(*args, **kwargs)
-            self.fields['primaerdozent'].queryset = previous_step_data['ergebnis_empfaenger']
-            self.fields['primaerdozent'].required = True
+            if previous_step_data is not None:
+                self.fields['primaerdozent'].queryset = previous_step_data['ergebnis_empfaenger']
+                self.fields['primaerdozent'].required = True
 
     class Meta:
         model = Veranstaltung
@@ -78,6 +86,11 @@ class VeranstaltungFreieFragen(forms.ModelForm):
 
 class VeranstaltungTutorenForm(forms.Form):
     csv_tutoren = forms.CharField(label='CSV', widget=forms.Textarea)
+
+    def __init__(self, *args, **kwargs):
+        preset_csv = kwargs.pop("preset_csv", None)
+        super(VeranstaltungTutorenForm, self).__init__(*args, **kwargs)
+        self.fields["csv_tutoren"].initial = preset_csv
 
 
 class UploadFileForm(forms.Form):

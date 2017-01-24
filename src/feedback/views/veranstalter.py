@@ -1,5 +1,6 @@
 # coding=utf-8
 
+from django import forms
 from django.conf import settings
 from django.views.decorators.http import require_safe
 from django.contrib import auth
@@ -7,8 +8,10 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.shortcuts import render
 from django.shortcuts import render_to_response
-from formtools.wizard.views import SessionWizardView
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
 
+from formtools.wizard.views import SessionWizardView
 from feedback.models import Veranstaltung
 from feedback.forms import VeranstaltungEvaluationForm, VeranstaltungBasisdatenForm, VeranstaltungPrimaerDozentForm, \
     VeranstaltungDozentDatenForm, VeranstaltungFreieFragen, VeranstaltungTutorenForm
@@ -27,7 +30,8 @@ def login(request):
             request.session['vid'] = v.id
             request.session['veranstaltung'] = unicode(v)
 
-            if v.status is Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR or Veranstaltung.STATUS_BESTELLUNG_GEOEFFNET:
+            if v.status == Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR or \
+                    v.status == Veranstaltung.STATUS_BESTELLUNG_GEOEFFNET:
                 return HttpResponseRedirect(reverse('veranstalter-index'))
 
     return render(request, 'veranstalter/login_failed.html')
@@ -39,7 +43,8 @@ VERANSTALTER_VIEW_TEMPLATES = {
     "primaerdozent": "formtools/wizard/primaerdozent.html",
     "verantwortlicher_address": "formtools/wizard/address.html",
     "freie_fragen": "formtools/wizard/freiefragen.html",
-    "tutoren": "formtools/wizard/tutoren.html"
+    "tutoren": "formtools/wizard/tutoren.html",
+    "zusammenfassung": "formtools/wizard/zusammenfassung.html"
 }
 
 
@@ -72,8 +77,9 @@ def show_primaerdozent_form(wizard):
 def show_tutor_form(wizard):
     show_summary_form = perform_evalution(wizard)
     if show_summary_form:
-        v = wizard.get_instance()
-        return v.has_uebung()
+        cleaned_data = wizard.get_cleaned_data_for_step('basisdaten') or {}
+        v_typ = cleaned_data.get('typ', '')
+        return v_typ == "vu"
     return show_summary_form
 
 
@@ -84,7 +90,8 @@ class VeranstalterWizard(SessionWizardView):
         ('primaerdozent', VeranstaltungPrimaerDozentForm),
         ('verantwortlicher_address', VeranstaltungDozentDatenForm),
         ('freie_fragen', VeranstaltungFreieFragen),
-        ('tutoren', VeranstaltungTutorenForm)
+        ('tutoren', VeranstaltungTutorenForm),
+        ('zusammenfassung', forms.Form)
     ]
 
     condition_dict = {
@@ -106,29 +113,70 @@ class VeranstalterWizard(SessionWizardView):
     def get_context_data(self, form, **kwargs):
         context = super(VeranstalterWizard, self).get_context_data(form=form, **kwargs)
         context.update({'veranstaltung': self.get_instance()})
+        if self.steps.current == "zusammenfassung":
+            all_form_data = []
+            for step_form in self.form_list:
+                form_obj = self.get_form(
+                    step=step_form,
+                    data=self.storage.get_step_data(step_form),
+                    files=self.storage.get_step_files(step_form),
+                )
+
+                if form_obj.is_valid():
+                    for field_key, field_obj in form_obj.fields.items():
+                        cleaned_d = form_obj.cleaned_data[field_key]
+                        field_value = ""
+
+                        if isinstance(field_obj, forms.fields.BooleanField):
+                            field_value = "Ja" if cleaned_d else "Nein"
+                        elif isinstance(field_obj, forms.fields.TypedChoiceField):
+                            for key, choice in field_obj.choices:
+                                if key == cleaned_d:
+                                    field_value = choice
+                                    break
+                        else:
+                            field_value = form_obj.cleaned_data[field_key]
+
+                        field_label = field_obj.label
+
+                        if field_label is None:
+                            field_label = field_key
+
+                        all_form_data.append({
+                            'label': field_label,
+                            'value': field_value
+                        })
+
+            context.update({'all_form_data':  all_form_data})
         return context
 
     def get_form_instance(self, step):
         if step == "verantwortlicher_address":
             basisdaten = self.get_cleaned_data_for_step('basisdaten')
-            return basisdaten["verantwortlich"]
+            if basisdaten:
+                return basisdaten["verantwortlich"]
         return self.get_instance()
 
     def get_form_kwargs(self, step=None):
         kwargs = super(VeranstalterWizard, self).get_form_kwargs(step)
         if step == 'primaerdozent':
             basisdaten = self.get_cleaned_data_for_step('basisdaten')
-            kwargs.update({'basisdaten': basisdaten})
+            if basisdaten is not None:
+                kwargs.update({'basisdaten': basisdaten})
+        elif step == 'tutoren':
+            veranstaltung = self.get_form_instance(step)
+            if veranstaltung is not None:
+                kwargs.update({'preset_csv': veranstaltung.kleingruppen})
         return kwargs
 
     def get_template_names(self):
         return [VERANSTALTER_VIEW_TEMPLATES[self.steps.current]]
 
     def done(self, form_list, **kwargs):
+        cleaned_data = self.get_cleaned_data_for_step('basisdaten') or {}
+        ergebnis_empfaenger = cleaned_data.get('ergebnis_empfaenger', None)
         if not any(isinstance(x, VeranstaltungPrimaerDozentForm) for x in form_list):
-            # preselect primaer dozent
-            cleaned_data = self.get_cleaned_data_for_step('basisdaten') or {}
-            ergebnis_empfaenger = cleaned_data.get('ergebnis_empfaenger', None)
+            # preselect Primärdozent
             if ergebnis_empfaenger is not None:
                 form_primar = VeranstaltungPrimaerDozentForm(is_dynamic_form=True,
                                                              data={'primaerdozent': ergebnis_empfaenger[0].id},
@@ -136,18 +184,31 @@ class VeranstalterWizard(SessionWizardView):
                 form_primar.is_valid()
                 form_list.append(form_primar)
 
-        form_data = process_form_data(form_list)
         instance = self.get_instance()
 
         save_to_db(self.request, instance, form_list)
+        context = self.get_context_data('zusammenfassung')
+        send_mail_to_verantwortliche(ergebnis_empfaenger, context)
 
-        return render_to_response('formtools/wizard/zusammenfassung.html', {'form_data': form_data,
-                                                                            'form_list': form_list})
+        return render_to_response('formtools/wizard/bestellung_done.html', )
 
 
-def process_form_data(form_list):
-    form_data = [form.cleaned_data for form in form_list]
-    return form_data
+def send_mail_to_verantwortliche(ergebnis_empfaenger, context):
+    """
+    Sendet eine Email an die Ergebnis-Empfaenger mit der Zusammenfassung der Bestellung
+    """
+    msg_html = render_to_string('formtools/wizard/zusammenfassung.html', context)
+
+    if ergebnis_empfaenger is not None:
+        for e in ergebnis_empfaenger:
+            send_mail(
+                'Evaluation der Lehrveranstaltungen - Zusammenfassung der Daten',
+                'Nachfolgend finder Sie Informationen zu Ihrer Bestellung',
+                settings.DEFAULT_FROM_EMAIL,
+                [e.email],
+                html_message=msg_html,
+                fail_silently=False,
+            )
 
 
 def save_to_db(request, instance, form_list):
@@ -160,12 +221,14 @@ def save_to_db(request, instance, form_list):
             if isinstance(form, VeranstaltungTutorenForm):
                 if key == "csv_tutoren":
                     instance.csv_to_tutor(val)
+                    setattr(instance, "kleingruppen", val)
             elif isinstance(form.instance, Veranstaltung):
                 setattr(instance, key, val)
             else:
                 setattr(form.instance, key, val)
 
-        if not isinstance(form, VeranstaltungTutorenForm) and not isinstance(form.instance, Veranstaltung):
+        if not isinstance(form, VeranstaltungTutorenForm) \
+                and hasattr(form, 'instance') and not isinstance(form.instance, Veranstaltung):
             form.instance.save()
 
     instance.set_next_state()
