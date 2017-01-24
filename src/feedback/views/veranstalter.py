@@ -8,11 +8,13 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.shortcuts import render
 from django.shortcuts import render_to_response
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+
 from formtools.wizard.views import SessionWizardView
 from feedback.models import Veranstaltung
 from feedback.forms import VeranstaltungEvaluationForm, VeranstaltungBasisdatenForm, VeranstaltungPrimaerDozentForm, \
     VeranstaltungDozentDatenForm, VeranstaltungFreieFragen, VeranstaltungTutorenForm
-from django.core.mail import send_mail
 
 
 @require_safe
@@ -119,10 +121,12 @@ class VeranstalterWizard(SessionWizardView):
                     data=self.storage.get_step_data(step_form),
                     files=self.storage.get_step_files(step_form),
                 )
+
                 if form_obj.is_valid():
                     for field_key, field_obj in form_obj.fields.items():
                         cleaned_d = form_obj.cleaned_data[field_key]
                         field_value = ""
+
                         if isinstance(field_obj, forms.fields.BooleanField):
                             field_value = "Ja" if cleaned_d else "Nein"
                         elif isinstance(field_obj, forms.fields.TypedChoiceField):
@@ -134,12 +138,15 @@ class VeranstalterWizard(SessionWizardView):
                             field_value = form_obj.cleaned_data[field_key]
 
                         field_label = field_obj.label
+
                         if field_label is None:
                             field_label = field_key
+
                         all_form_data.append({
                             'label': field_label,
                             'value': field_value
                         })
+
             context.update({'all_form_data':  all_form_data})
         return context
 
@@ -169,7 +176,7 @@ class VeranstalterWizard(SessionWizardView):
         cleaned_data = self.get_cleaned_data_for_step('basisdaten') or {}
         ergebnis_empfaenger = cleaned_data.get('ergebnis_empfaenger', None)
         if not any(isinstance(x, VeranstaltungPrimaerDozentForm) for x in form_list):
-            # preselect primaer dozent
+            # preselect Primärdozent
             if ergebnis_empfaenger is not None:
                 form_primar = VeranstaltungPrimaerDozentForm(is_dynamic_form=True,
                                                              data={'primaerdozent': ergebnis_empfaenger[0].id},
@@ -180,19 +187,28 @@ class VeranstalterWizard(SessionWizardView):
         instance = self.get_instance()
 
         save_to_db(self.request, instance, form_list)
-
-        if ergebnis_empfaenger is not None:
-            all_data_str = self.get_all_cleaned_data().__str__()
-            for e in ergebnis_empfaenger:
-                send_mail(
-                    'Evaluation der Lehrveranstaltungen - Zusammenfassung der Daten',
-                    all_data_str,
-                    settings.DEFAULT_FROM_EMAIL,
-                    [e.email],
-                    fail_silently=False,
-                )
+        context = self.get_context_data('zusammenfassung')
+        send_mail_to_verantwortliche(ergebnis_empfaenger, context)
 
         return render_to_response('formtools/wizard/bestellung_done.html', )
+
+
+def send_mail_to_verantwortliche(ergebnis_empfaenger, context):
+    """
+    Sendet eine Email an die Ergebnis-Empfaenger mit der Zusammenfassung der Bestellung
+    """
+    msg_html = render_to_string('formtools/wizard/zusammenfassung.html', context)
+
+    if ergebnis_empfaenger is not None:
+        for e in ergebnis_empfaenger:
+            send_mail(
+                'Evaluation der Lehrveranstaltungen - Zusammenfassung der Daten',
+                'Nachfolgend finder Sie Informationen zu Ihrer Bestellung',
+                settings.DEFAULT_FROM_EMAIL,
+                [e.email],
+                html_message=msg_html,
+                fail_silently=False,
+            )
 
 
 def save_to_db(request, instance, form_list):
