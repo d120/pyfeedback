@@ -136,7 +136,8 @@ class VeranstalterIndexTest(TestCase):
     def test_post_keine_evaluation(self):
         Einstellung.objects.create(name='bestellung_erlaubt', wert='1')
         c = login_veranstalter(self.v)
-        response_firststep = c.post('/veranstalter/', {"veranstalter_wizard-current_step": "evaluation"})
+        response_firststep = c.post('/veranstalter/', {"evaluation-evaluieren": False,
+                                                        "veranstalter_wizard-current_step": "evaluation"})
         self.assertTemplateUsed(response_firststep, "formtools/wizard/zusammenfassung.html")
         response_second = c.post('/veranstalter/', {"veranstalter_wizard-current_step": "zusammenfassung"})
 
