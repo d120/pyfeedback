@@ -337,6 +337,11 @@ class Veranstaltung(models.Model):
         (STATUS_ERGEBNISSE_VERSANDT, 'Ergebnisse versandt'),
     )
 
+    BOOL_CHOICES = (
+    (True, 'Ja'),
+    (False, 'Nein'),
+    )
+
     # TODO: not the final version of status transition
     STATUS_UEBERGANG = {
         STATUS_ANGELEGT: (STATUS_GEDRUCKT, STATUS_BESTELLUNG_GEOEFFNET),
@@ -361,7 +366,7 @@ class Veranstaltung(models.Model):
     lv_nr = models.CharField(max_length=15, blank=True, verbose_name=u'LV-Nummer')
     status = models.IntegerField(choices=STATUS_CHOICES, default=STATUS_ANGELEGT)
     grundstudium = models.BooleanField()
-    evaluieren = models.BooleanField()
+    evaluieren = models.BooleanField(choices=BOOL_CHOICES, default=True)
     veranstalter = models.ManyToManyField(Person, blank=True,
                                           help_text=u'Alle Personen, die mit der Veranstaltung befasst sind und z.B. Fragebögen bestellen können sollen.')
 
