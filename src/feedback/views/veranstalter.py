@@ -127,9 +127,7 @@ class VeranstalterWizard(SessionWizardView):
                         cleaned_d = form_obj.cleaned_data[field_key]
                         field_value = ""
 
-                        if isinstance(field_obj, forms.fields.BooleanField):
-                            field_value = "Ja" if cleaned_d else "Nein"
-                        elif isinstance(field_obj, forms.fields.TypedChoiceField):
+                        if isinstance(field_obj, forms.fields.TypedChoiceField):
                             for key, choice in field_obj.choices:
                                 if key == cleaned_d:
                                     field_value = choice
