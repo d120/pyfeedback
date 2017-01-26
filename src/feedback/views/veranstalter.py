@@ -10,6 +10,7 @@ from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
+from django.utils.lru_cache import lru_cache
 
 from formtools.wizard.views import SessionWizardView
 from feedback.models import Veranstaltung
@@ -48,13 +49,14 @@ VERANSTALTER_VIEW_TEMPLATES = {
 }
 
 
+@lru_cache()
 def perform_evalution(wizard):
     """
     Wenn wir keine Vollerhebung haben, und der Veranstalter nicht evauliert, dann
     springt der Wizard direkt zur Zusammenfassung.
     """
     cleaned_data = wizard.get_cleaned_data_for_step('evaluation') or {}
-    v = Veranstaltung.objects.get(id=wizard.request.session['vid'])
+    v = wizard.get_instance()
 
     if v.semester.vollerhebung:
         return True
@@ -62,6 +64,7 @@ def perform_evalution(wizard):
     return cleaned_data.get('evaluieren', True)
 
 
+@lru_cache()
 def show_primaerdozent_form(wizard):
     show_summary_form = perform_evalution(wizard)
     if show_summary_form:
@@ -74,6 +77,7 @@ def show_primaerdozent_form(wizard):
     return show_summary_form
 
 
+@lru_cache()
 def show_tutor_form(wizard):
     show_summary_form = perform_evalution(wizard)
     if show_summary_form:
@@ -102,8 +106,18 @@ class VeranstalterWizard(SessionWizardView):
         'tutoren': show_tutor_form
     }
 
+    veranstaltung_obj = None
+    all_veranstalter = None
+
     def get_instance(self):
-        return Veranstaltung.objects.get(id=self.request.session['vid'])
+        if self.veranstaltung_obj is None:
+            self.veranstaltung_obj = Veranstaltung.objects.select_related().filter(id=self.request.session['vid'])[0]
+        return self.veranstaltung_obj
+
+    def get_all_veranstalter(self):
+        if self.all_veranstalter is None:
+            self.all_veranstalter = self.get_instance().veranstalter.all()
+        return self.all_veranstalter
 
     def get(self, request, *args, **kwargs):
         if self.request.user.username != settings.USERNAME_VERANSTALTER:
@@ -113,6 +127,7 @@ class VeranstalterWizard(SessionWizardView):
     def get_context_data(self, form, **kwargs):
         context = super(VeranstalterWizard, self).get_context_data(form=form, **kwargs)
         context.update({'veranstaltung': self.get_instance()})
+
         if self.steps.current == "zusammenfassung":
             all_form_data = []
             for step_form in self.form_list:
@@ -157,7 +172,10 @@ class VeranstalterWizard(SessionWizardView):
 
     def get_form_kwargs(self, step=None):
         kwargs = super(VeranstalterWizard, self).get_form_kwargs(step)
-        if step == 'primaerdozent':
+
+        if step == "basisdaten":
+            kwargs.update({'all_veranstalter': self.get_all_veranstalter()})
+        elif step == 'primaerdozent':
             basisdaten = self.get_cleaned_data_for_step('basisdaten')
             if basisdaten is not None:
                 kwargs.update({'basisdaten': basisdaten})

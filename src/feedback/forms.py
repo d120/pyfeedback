@@ -16,10 +16,11 @@ class VeranstaltungEvaluationForm(forms.ModelForm):
 
 class VeranstaltungBasisdatenForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
+        veranstalter_queryset = kwargs.pop('all_veranstalter', None)
+
         super(VeranstaltungBasisdatenForm, self).__init__(*args, **kwargs)
 
         # Schränke QuerySet nur auf den Veranstalter ein
-        veranstalter_queryset = kwargs['instance'].veranstalter.all()
         self.fields['verantwortlich'].queryset = veranstalter_queryset
         self.fields['ergebnis_empfaenger'].queryset = veranstalter_queryset
 
