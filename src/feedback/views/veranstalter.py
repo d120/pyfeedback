@@ -54,7 +54,7 @@ def perform_evalution(wizard):
     springt der Wizard direkt zur Zusammenfassung.
     """
     cleaned_data = wizard.get_cleaned_data_for_step('evaluation') or {}
-    v = Veranstaltung.objects.get(id=wizard.request.session['vid'])
+    v = wizard.get_instance()
 
     if v.semester.vollerhebung:
         return True
@@ -102,8 +102,18 @@ class VeranstalterWizard(SessionWizardView):
         'tutoren': show_tutor_form
     }
 
+    veranstaltung_obj = None
+    all_veranstalter = None
+
     def get_instance(self):
-        return Veranstaltung.objects.get(id=self.request.session['vid'])
+        if self.veranstaltung_obj is None:
+            self.veranstaltung_obj = Veranstaltung.objects.select_related().filter(id=self.request.session['vid'])[0]
+        return self.veranstaltung_obj
+
+    def get_all_veranstalter(self):
+        if self.all_veranstalter is None:
+            self.all_veranstalter = self.get_instance().veranstalter.all()
+        return self.all_veranstalter
 
     def get(self, request, *args, **kwargs):
         if self.request.user.username != settings.USERNAME_VERANSTALTER:
@@ -157,7 +167,10 @@ class VeranstalterWizard(SessionWizardView):
 
     def get_form_kwargs(self, step=None):
         kwargs = super(VeranstalterWizard, self).get_form_kwargs(step)
-        if step == 'primaerdozent':
+
+        if step == "basisdaten":
+            kwargs.update({'all_veranstalter': self.get_all_veranstalter()})
+        elif step == 'primaerdozent':
             basisdaten = self.get_cleaned_data_for_step('basisdaten')
             if basisdaten is not None:
                 kwargs.update({'basisdaten': basisdaten})
