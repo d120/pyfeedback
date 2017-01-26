@@ -11,6 +11,7 @@ class VeranstaltungEvaluationForm(forms.ModelForm):
     class Meta:
         model = Veranstaltung
         fields = ('evaluieren',)
+        widgets = {'evaluieren': forms.RadioSelect}
 
 
 class VeranstaltungBasisdatenForm(forms.ModelForm):
