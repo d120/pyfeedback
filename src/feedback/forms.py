@@ -3,7 +3,7 @@
 from django import forms
 from django.forms import extras
 
-from feedback.models import Person, Veranstaltung, Kommentar, BarcodeScanner, BarcodeScannEvent
+from feedback.models import Person, Veranstaltung, Kommentar, BarcodeScannEvent
 from django.core.exceptions import ValidationError
 
 
@@ -132,18 +132,6 @@ class PersonUpdateForm(forms.ModelForm):
         fields = ('anschrift', 'fachgebiet')
 
 
-# class VeranstaltungFreiFragenForm(forms.ModelForm):
-#     class Meta:
-#         model = Veranstaltung
-#         fields = ('freiefrage1', 'freiefrage2')
-
-
-# class VeranstaltungKleingruppenForm(forms.ModelForm):
-#     class Meta:
-#         model = Veranstaltung
-#         fields = ('kleingruppen',)
-
-
 class CreateBarcodeScannEventForm(forms.ModelForm):
     """Handelt die erste haelfte von Barcode scanns"""
     scanner_token = forms.CharField()
@@ -162,7 +150,7 @@ class CreateBarcodeScannEventForm(forms.ModelForm):
             barcode_decoded = Veranstaltung.decode_barcode(cd['barcode'])
             cd['veranstaltung'] = barcode_decoded['veranstaltung']
 
-            if (barcode_decoded['tutorgroup'] >= 1):
+            if barcode_decoded['tutorgroup'] >= 1:
                 cd['tutorgroup'] = barcode_decoded['tutorgroup']
 
         return cd
