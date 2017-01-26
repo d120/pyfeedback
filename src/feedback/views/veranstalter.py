@@ -10,6 +10,7 @@ from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
+from django.utils.lru_cache import lru_cache
 
 from formtools.wizard.views import SessionWizardView
 from feedback.models import Veranstaltung
@@ -48,6 +49,7 @@ VERANSTALTER_VIEW_TEMPLATES = {
 }
 
 
+@lru_cache()
 def perform_evalution(wizard):
     """
     Wenn wir keine Vollerhebung haben, und der Veranstalter nicht evauliert, dann
@@ -62,6 +64,7 @@ def perform_evalution(wizard):
     return cleaned_data.get('evaluieren', True)
 
 
+@lru_cache()
 def show_primaerdozent_form(wizard):
     show_summary_form = perform_evalution(wizard)
     if show_summary_form:
@@ -74,6 +77,7 @@ def show_primaerdozent_form(wizard):
     return show_summary_form
 
 
+@lru_cache()
 def show_tutor_form(wizard):
     show_summary_form = perform_evalution(wizard)
     if show_summary_form:
@@ -123,6 +127,7 @@ class VeranstalterWizard(SessionWizardView):
     def get_context_data(self, form, **kwargs):
         context = super(VeranstalterWizard, self).get_context_data(form=form, **kwargs)
         context.update({'veranstaltung': self.get_instance()})
+
         if self.steps.current == "zusammenfassung":
             all_form_data = []
             for step_form in self.form_list:
