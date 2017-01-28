@@ -66,7 +66,7 @@ class VeranstaltungPrimaerDozentForm(forms.ModelForm):
             previous_step_data = kwargs.pop('basisdaten', None)
             super(VeranstaltungPrimaerDozentForm, self).__init__(*args, **kwargs)
             if previous_step_data is not None:
-                self.fields['primaerdozent'].queryset = previous_step_data['ergebnis_empfaenger']
+                self.fields['primaerdozent'].queryset = previous_step_data.get('ergebnis_empfaenger', None)
                 self.fields['primaerdozent'].required = True
 
     class Meta:
