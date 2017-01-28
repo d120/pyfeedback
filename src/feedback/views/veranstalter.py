@@ -53,8 +53,11 @@ def perform_evalution(wizard):
     Wenn wir keine Vollerhebung haben, und der Veranstalter nicht evauliert, dann
     springt der Wizard direkt zur Zusammenfassung.
     """
-    cleaned_data = wizard.get_cleaned_data_for_step('evaluation') or {}
-    v = Veranstaltung.objects.get(id=wizard.request.session['vid'])
+    if not wizard.cached_obj.get("cleaned_data_evaluation", {}):
+        wizard.cached_obj["cleaned_data_evaluation"] = wizard.get_cleaned_data_for_step('evaluation') or {}
+    cleaned_data = wizard.cached_obj["cleaned_data_evaluation"]
+
+    v = wizard.get_instance()
 
     if v.semester.vollerhebung:
         return True
@@ -65,7 +68,7 @@ def perform_evalution(wizard):
 def show_primaerdozent_form(wizard):
     show_summary_form = perform_evalution(wizard)
     if show_summary_form:
-        cleaned_data = wizard.get_cleaned_data_for_step('basisdaten') or {}
+        cleaned_data = wizard.get_cleaned_basisdaten()
         ergebnis_empfaenger = cleaned_data.get('ergebnis_empfaenger', None)
         if ergebnis_empfaenger is not None:
             if ergebnis_empfaenger.count() == 1:
@@ -77,7 +80,7 @@ def show_primaerdozent_form(wizard):
 def show_tutor_form(wizard):
     show_summary_form = perform_evalution(wizard)
     if show_summary_form:
-        cleaned_data = wizard.get_cleaned_data_for_step('basisdaten') or {}
+        cleaned_data = wizard.get_cleaned_basisdaten()
         v_typ = cleaned_data.get('typ', '')
         return v_typ == "vu"
     return show_summary_form
@@ -102,8 +105,27 @@ class VeranstalterWizard(SessionWizardView):
         'tutoren': show_tutor_form
     }
 
+    cached_obj = {}
+
+    def dispatch(self, request, *args, **kwargs):
+        self.cached_obj = {}
+        return super(VeranstalterWizard, self).dispatch(request, *args, **kwargs)
+
     def get_instance(self):
-        return Veranstaltung.objects.get(id=self.request.session['vid'])
+        if self.cached_obj.get("veranstaltung_obj", None) is None:
+            self.cached_obj["veranstaltung_obj"] = Veranstaltung.objects.\
+                select_related().filter(id=self.request.session['vid'])[0]
+        return self.cached_obj["veranstaltung_obj"]
+
+    def get_all_veranstalter(self):
+        if self.cached_obj.get("all_veranstalter", None) is None:
+            self.cached_obj["all_veranstalter"] = self.get_instance().veranstalter.all()
+        return self.cached_obj["all_veranstalter"]
+
+    def get_cleaned_basisdaten(self):
+        if not self.cached_obj.get("cleaned_data_basisdaten", {}):
+            self.cached_obj["cleaned_data_basisdaten"] = self.get_cleaned_data_for_step('basisdaten') or {}
+        return self.cached_obj["cleaned_data_basisdaten"]
 
     def get(self, request, *args, **kwargs):
         if self.request.user.username != settings.USERNAME_VERANSTALTER:
@@ -113,6 +135,7 @@ class VeranstalterWizard(SessionWizardView):
     def get_context_data(self, form, **kwargs):
         context = super(VeranstalterWizard, self).get_context_data(form=form, **kwargs)
         context.update({'veranstaltung': self.get_instance()})
+
         if self.steps.current == "zusammenfassung":
             all_form_data = []
             for step_form in self.form_list:
@@ -150,15 +173,18 @@ class VeranstalterWizard(SessionWizardView):
 
     def get_form_instance(self, step):
         if step == "verantwortlicher_address":
-            basisdaten = self.get_cleaned_data_for_step('basisdaten')
+            basisdaten = self.get_cleaned_basisdaten()
             if basisdaten:
                 return basisdaten["verantwortlich"]
         return self.get_instance()
 
     def get_form_kwargs(self, step=None):
         kwargs = super(VeranstalterWizard, self).get_form_kwargs(step)
-        if step == 'primaerdozent':
-            basisdaten = self.get_cleaned_data_for_step('basisdaten')
+
+        if step == "basisdaten":
+            kwargs.update({'all_veranstalter': self.get_all_veranstalter()})
+        elif step == 'primaerdozent':
+            basisdaten = self.get_cleaned_basisdaten()
             if basisdaten is not None:
                 kwargs.update({'basisdaten': basisdaten})
         elif step == 'tutoren':
@@ -171,7 +197,7 @@ class VeranstalterWizard(SessionWizardView):
         return [VERANSTALTER_VIEW_TEMPLATES[self.steps.current]]
 
     def done(self, form_list, **kwargs):
-        cleaned_data = self.get_cleaned_data_for_step('basisdaten') or {}
+        cleaned_data = self.get_cleaned_basisdaten()
         ergebnis_empfaenger = cleaned_data.get('ergebnis_empfaenger', None)
         if not any(isinstance(x, VeranstaltungPrimaerDozentForm) for x in form_list):
             # preselect Primärdozent
