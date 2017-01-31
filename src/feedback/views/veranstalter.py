@@ -12,7 +12,7 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
 from formtools.wizard.views import SessionWizardView
-from feedback.models import Veranstaltung
+from feedback.models import Veranstaltung, Tutor
 from feedback.forms import VeranstaltungEvaluationForm, VeranstaltungBasisdatenForm, VeranstaltungPrimaerDozentForm, \
     VeranstaltungDozentDatenForm, VeranstaltungFreieFragen, VeranstaltungTutorenForm
 
@@ -215,16 +215,20 @@ class VeranstalterWizard(SessionWizardView):
 
         save_to_db(self.request, instance, form_list)
         context = self.get_context_data('zusammenfassung')
-        send_mail_to_verantwortliche(ergebnis_empfaenger, context)
+        send_mail_to_verantwortliche(ergebnis_empfaenger, context, instance)
 
         return render_to_response('formtools/wizard/bestellung_done.html', )
 
 
-def send_mail_to_verantwortliche(ergebnis_empfaenger, context):
+def send_mail_to_verantwortliche(ergebnis_empfaenger, context, veranstaltung):
     """
     Sendet eine Email an die Ergebnis-Empfaenger mit der Zusammenfassung der Bestellung
     """
-    msg_html = render_to_string('formtools/wizard/zusammenfassung.html', context)
+    if context.get('tutoren_csv', None) is not None:
+        tutoren = Tutor.objects.filter(veranstaltung=veranstaltung)
+        context.update({'tutoren': tutoren})
+
+    msg_html = render_to_string('formtools/wizard/email_zusammenfassung.html', context)
 
     if ergebnis_empfaenger is not None:
         for e in ergebnis_empfaenger:

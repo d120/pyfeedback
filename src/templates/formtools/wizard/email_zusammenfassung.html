@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Zusammenfassung der Bestelldaten</title>
+
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+        .summary_table {
+            border-spacing: 5px;
+        }
+        .summary_table th {
+            text-align: left;
+            vertical-align: top;
+        }
+        .summary_table td p {
+            margin-bottom: 0px;
+        }
+        .tutoren_title {
+            font-weight: bold;
+            font-size: 16px;
+            margin-left: 5px;
+            margin-bottom: 0px;
+        }
+        #table_tutoren_csvview {
+            margin-bottom: 8px;
+        }
+
+        #table_tutoren_csvview table {
+            border-spacing: 10px;
+            border: 1px solid #636363;
+        }
+        #table_tutoren_csvview th, #table_tutoren_csvview td {
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h2>Zusammenfassung der Daten</h2>
+
+    <table class="summary_table">
+
+        {% for form_data in all_form_data %}
+            <tr>
+                <th>{{ form_data.label }}</th>
+                <td>
+                    {% if form_data.value.all %}
+                        {% for query in form_data.value %}
+                            <p>{{ query }}</p>
+                        {% endfor %}
+                    {% else %}
+                        {{ form_data.value }}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+
+    </table>
+    {% if tutoren %}
+        <p class="tutoren_title">Tutoren</p>
+        <div id="table_tutoren_csvview">
+            <table>
+                <tr>
+                    <th>Num</th>
+                    <th>Vorname</th>
+                    <th>Nachname</th>
+                    <th>Email</th>
+                    <th>Anmerkung</th>
+                </tr>
+                {% for tutor in tutoren %}
+                    <tr>
+                        <td>{{ tutor.nummer }}</td>
+                        <td>{{ tutor.vorname }}</td>
+                        <td>{{ tutor.nachname }}</td>
+                        <td>{{ tutor.email }}</td>
+                        <td>{{ tutor.anmerkung }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    {% endif %}
+</body>
+</html>
