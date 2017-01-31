@@ -22,6 +22,11 @@
             list-style-type: none;
             margin: 0px;
         }
+        .wizard_form_table label.required:after {
+            color: #636363;
+            content: '*'
+        }
+
     </style>
 {% endblock %}
 {% block head %}
@@ -44,6 +49,7 @@
             {% endblock %}
         </table>
         {% block feedback_veranstalter_extra %}{% endblock %}
+        <p style="color: #636363;">*Pflichtfelder</p>
         {% if wizard.steps.prev %}
             <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.first }}">Erster Schritt</button>&nbsp;
             <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">Zurück</button>&nbsp;
@@ -57,5 +63,6 @@
             <input type="submit" name="save" value="Speichern"/>
         {% endif %}
     </form>
+
 {% endblock %}
 
