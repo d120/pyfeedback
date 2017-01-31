@@ -12,7 +12,7 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
 from formtools.wizard.views import SessionWizardView
-from feedback.models import Veranstaltung, Tutor
+from feedback.models import Veranstaltung, Tutor, past_semester_orders
 from feedback.forms import VeranstaltungEvaluationForm, VeranstaltungBasisdatenForm, VeranstaltungPrimaerDozentForm, \
     VeranstaltungDozentDatenForm, VeranstaltungFreieFragen, VeranstaltungTutorenForm
 
@@ -136,7 +136,11 @@ class VeranstalterWizard(SessionWizardView):
         context = super(VeranstalterWizard, self).get_context_data(form=form, **kwargs)
         context.update({'veranstaltung': self.get_instance()})
 
-        if self.steps.current == "zusammenfassung":
+        if self.steps.current == "basisdaten":
+            past_sem_data = past_semester_orders(self.get_instance())
+            context.update({'past_semester_data': past_sem_data})
+
+        elif self.steps.current == "zusammenfassung":
             all_form_data = []
             for step_form in self.form_list:
                 form_obj = self.get_form(

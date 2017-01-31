@@ -37,6 +37,7 @@
 
     <form action="" method="post">
         {% csrf_token %}
+        {% block feedback_veranstalter_pre_form %}{% endblock %}
         <table class="wizard_form_table">
             {{ wizard.management_form }}
             {% block feedback_veranstalter_form %}
