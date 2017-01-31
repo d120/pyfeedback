@@ -163,10 +163,13 @@ class VeranstalterWizard(SessionWizardView):
                         if field_label is None:
                             field_label = field_key
 
-                        all_form_data.append({
-                            'label': field_label,
-                            'value': field_value
-                        })
+                        if isinstance(form_obj, VeranstaltungTutorenForm) and field_key == "csv_tutoren":
+                            context.update({"tutoren_csv": field_value})
+                        else:
+                            all_form_data.append({
+                                'label': field_label,
+                                'value': field_value
+                            })
 
             context.update({'all_form_data':  all_form_data})
         return context

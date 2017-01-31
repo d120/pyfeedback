@@ -20,77 +20,24 @@
 {% endblock %}
 
 {% block extra_header %}
+    <link rel="stylesheet" type="text/css" href="{% static 'tutoren.css' %}" />
+
     <script type="text/javascript" src="{% static 'jquery/jquery-1.4.2.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'jquery/jquery-ui-1.8.6.custom.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'tutoren.js' %}"></script>
 
-    <style>
-        .wizard_form_table {
-            float: left;
-        }
-        #confirm_csv {
-            margin-top: 70px;
-        }
-        #table_tutoren_csvview table {
-            border-spacing: 10px;
-        }
-        #table_tutoren_csvview th, #table_tutoren_csvview td {
-            text-align: left;
-        }
-        .p_error_csv {
-            font-weight: bold;
-            color: #FF0000;
-        }
-        .clear_div {
-            clear: both;
-        }
-    </style>
 {% endblock %}
 
 {% block javascript_block %}
 <script>
     $(document).ready(function() {
-        var create_csv_table = function() {
-            var csv = $("#id_tutoren-csv_tutoren").val();
-            var div_context = $("#table_tutoren_csvview");
-            div_context.empty();
-
-            var table_elem = $("<table>").appendTo(div_context);
-
-            var column_names = ["Nachname", "Vorname", "E-Mail", "Bemerkung"];
-
-            var csv_lines = csv.split("\n");
-
-            var head_row = $("<tr>").appendTo(table_elem);
-            for(var column_key = 0; column_key < column_names.length; column_key++) {
-                $("<th>").text(column_names[column_key]).appendTo(head_row);
-            }
-
-            $.each(csv_lines, function(key, value) {
-                if(value == "") return true;
-                var row_items = value.split(",");
-                var count_csv_columns = row_items.length;
-                if(count_csv_columns > 4) {
-                    div_context.html('<p class="p_error_csv">CSV Fehlerhaft: ' +
-                            'Bei min. einem Tutor mehr als 4 Spalten eingefügt</p>')
-                    return false;
-                }
-                var new_row = $("<tr>");
-
-                var i = 0;
-                for(;i < count_csv_columns; i++) {
-                    $("<td>").text(row_items[i]).appendTo(new_row);
-                }
-                for(; i <= 4;i++) {
-                    $("<td>").appendTo(new_row);
-                }
-                new_row.appendTo(table_elem);
-            });
-
+        $("#confirm_csv").click(function() {
+            create_csv_table(
+                $("#table_tutoren_csvview"),
+                $("#id_tutoren-csv_tutoren").val()
+            );
             return false;
-        }
-
-
-        $("#confirm_csv").click(create_csv_table);
+        });
     });
 </script>
 {% endblock %}
