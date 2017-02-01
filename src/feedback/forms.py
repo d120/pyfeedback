@@ -86,18 +86,36 @@ class VeranstaltungPrimaerDozentForm(forms.ModelForm):
         fields = ('primaerdozent',)
 
 
+class ReadOnlyText(forms.TextInput):
+    input_type = 'text'
+
+    def render(self, name, value, attrs=None):
+        if value is None:
+            value = ''
+        return value
+
+
 class VeranstaltungDozentDatenForm(forms.ModelForm):
     required_css_class = 'required'
+
+    def __init__(self, *args, **kwargs):
+        super(VeranstaltungDozentDatenForm, self).__init__(*args, **kwargs)
+        if self.instance:
+            self.fields['title'] = forms.CharField(widget=ReadOnlyText, initial=self.instance.full_name(), label="")
+            self.order_fields(['title', 'email', 'anschrift'])
+
+        for k, field in self.fields.items():
+            if k == 'title':
+                field.required = False
+            else:
+                field.required = True
+
+    def clean_title(self):
+        return self.fields['title'].initial
 
     class Meta:
         model = Person
         fields = ('email', 'anschrift')
-
-    def __init__(self, *args, **kwargs):
-        super(VeranstaltungDozentDatenForm, self).__init__(*args, **kwargs)
-
-        for k, field in self.fields.items():
-            field.required = True
 
 
 class VeranstaltungFreieFragen(forms.ModelForm):
@@ -179,3 +197,4 @@ class CreateBarcodeScannEventForm(forms.ModelForm):
                 cd['tutorgroup'] = barcode_decoded['tutorgroup']
 
         return cd
+
