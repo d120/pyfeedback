@@ -100,7 +100,7 @@ class VeranstaltungDozentDatenForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(VeranstaltungDozentDatenForm, self).__init__(*args, **kwargs)
-        if self.instance:
+        if isinstance(self.instance, Person):
             self.fields['title'] = forms.CharField(widget=ReadOnlyText, initial=self.instance.full_name(), label="")
             self.order_fields(['title', 'email', 'anschrift'])
 
