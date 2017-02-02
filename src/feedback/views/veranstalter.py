@@ -87,7 +87,11 @@ def show_tutor_form(wizard):
 
 
 def swap(collection, i, j):
-    collection[i], collection[j] = collection[j], collection[i]
+    # swap elements of summary data and ignore IndexError of no evaluation
+    try:
+        collection[i], collection[j] = collection[j], collection[i]
+    except IndexError:
+        pass
 
 class VeranstalterWizard(SessionWizardView):
     form_list = [
