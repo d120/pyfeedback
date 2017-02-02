@@ -37,11 +37,11 @@
     <h2>Zusammenfassung der Daten</h2>
 
     <table class="summary_table">
-
         {% for form_data in all_form_data %}
             <tr>
-                <th>{{ form_data.label }}</th>
-                <td>
+                {% if form_data.label %}
+                    <th>{{ form_data.label }}</th>
+                    <td>
                     {% if form_data.value.all %}
                         {% for query in form_data.value %}
                             <p>{{ query }}</p>
@@ -49,7 +49,10 @@
                     {% else %}
                         {{ form_data.value }}
                     {% endif %}
-                </td>
+                {% else %}
+
+                {% endif %}
+                    </td>
             </tr>
         {% endfor %}
 

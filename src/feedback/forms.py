@@ -102,7 +102,7 @@ class VeranstaltungDozentDatenForm(forms.ModelForm):
         super(VeranstaltungDozentDatenForm, self).__init__(*args, **kwargs)
         if isinstance(self.instance, Person):
             self.fields['title'] = forms.CharField(widget=ReadOnlyText, initial=self.instance.full_name(), label="")
-            self.order_fields(['title', 'email', 'anschrift'])
+            self.order_fields(['title', 'anschrift', 'email'])
 
         for k, field in self.fields.items():
             if k == 'title':
@@ -115,7 +115,7 @@ class VeranstaltungDozentDatenForm(forms.ModelForm):
 
     class Meta:
         model = Person
-        fields = ('email', 'anschrift')
+        fields = ('anschrift', 'email')
 
 
 class VeranstaltungFreieFragen(forms.ModelForm):

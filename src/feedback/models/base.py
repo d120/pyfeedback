@@ -170,7 +170,9 @@ class Person(models.Model):
     nachname = models.CharField(_('last name'), max_length=30, blank=True)
     email = models.EmailField(_('e-mail'), blank=True)
     anschrift = models.CharField(_('anschrift'), max_length=80, blank=True,
-                                 help_text='Bitte geben sie die Anschrift so an, dass der Versand per Hauspost problemlos erfolgen kann.')
+                                 help_text='Bitte geben Sie die Anschrift an, ' +
+                                            u'z.B Gebäude S1|01 Raum A1, Karolinenplatz 5 64289 Darmstadt')
+
     fachgebiet = models.ForeignKey(Fachgebiet, null=True, blank=True)
 
     def full_name(self):
