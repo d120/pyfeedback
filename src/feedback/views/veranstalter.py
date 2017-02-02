@@ -46,6 +46,15 @@ VERANSTALTER_VIEW_TEMPLATES = {
     "tutoren": "formtools/wizard/tutoren.html",
     "zusammenfassung": "formtools/wizard/zusammenfassung.html"
 }
+VERANSTALTER_WIZARD_STEPS = {
+    "evaluation": "Evaluation",
+    "basisdaten": "Basisdaten",
+    "primaerdozent": "Primärdozent",
+    "verantwortlicher_address": "Verantwortlicher",
+    "freie_fragen": "Freie Fragen",
+    "tutoren": "Tutoren",
+    "zusammenfassung": "Zusammenfassung"
+}
 
 
 def perform_evalution(wizard):
@@ -142,6 +151,19 @@ class VeranstalterWizard(SessionWizardView):
     def get_context_data(self, form, **kwargs):
         context = super(VeranstalterWizard, self).get_context_data(form=form, **kwargs)
         context.update({'veranstaltung': self.get_instance()})
+
+        progressbar = []
+        step_active = True
+        for step_key in self.form_list:
+            progressbar.append({
+                'step_value': VERANSTALTER_WIZARD_STEPS[step_key],
+                'step_active': step_active,
+                'step_key': step_key if step_key in self.steps.all else None
+            })
+            if step_active:
+                if step_key == self.steps.current:
+                    step_active = False
+        context.update({'progressbar': progressbar})
 
         if self.steps.current == "basisdaten":
             past_sem_data = past_semester_orders(self.get_instance())
