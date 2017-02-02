@@ -24,6 +24,9 @@
             margin-left: 5px;
             margin-bottom: 0px;
         }
+        .summary-label:first-letter {
+            text-transform: uppercase;
+        }
         #table_tutoren_csvview {
             margin-bottom: 8px;
         }
@@ -34,14 +37,13 @@
 {% endblock %}
 
 {% block feedback_veranstalter_form %}
-    <h2>Zusammenfassung der Daten</h2>
+    <h2>Zusammenfassung der Fragebogenbestellung</h2>
 
     <table class="summary_table">
         {% for form_data in all_form_data %}
             <tr>
-                {% if form_data.label %}
-                    <th>{{ form_data.label }}</th>
-                    <td>
+                <th class="summary-label">{{ form_data.label }}</th>
+                <td>
                     {% if form_data.value.all %}
                         {% for query in form_data.value %}
                             <p>{{ query }}</p>
@@ -49,10 +51,7 @@
                     {% else %}
                         {{ form_data.value }}
                     {% endif %}
-                {% else %}
-
-                {% endif %}
-                    </td>
+                </td>
             </tr>
         {% endfor %}
 

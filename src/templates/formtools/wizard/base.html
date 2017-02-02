@@ -28,6 +28,7 @@
         }
 
     </style>
+    {% block child_extra_header %}{% endblock %}
 {% endblock %}
 {% block head %}
     {{ wizard.form.media }}
@@ -38,7 +39,7 @@
         <p>Schritt {{ wizard.steps.step1 }} von {{ wizard.steps.count }}</p>
     {% endif %}
 
-    <p>Bestellung für {{ veranstaltung }} {{ veranstaltung.semester }}</p>
+    <p>Bestellung für {{ veranstaltung.name }} {{ veranstaltung.semester }}</p>
 
     <form action="" method="post">
         {% csrf_token %}

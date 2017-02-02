@@ -25,10 +25,12 @@
             margin-left: 5px;
             margin-bottom: 0px;
         }
+        .summary-label:first-letter {
+            text-transform: uppercase;
+        }
         #table_tutoren_csvview {
             margin-bottom: 8px;
         }
-
         #table_tutoren_csvview table {
             border-spacing: 10px;
             border: 1px solid #636363;
@@ -39,13 +41,13 @@
     </style>
 </head>
 <body>
-    <h2>Zusammenfassung der Daten</h2>
+    <h2>Zusammenfassung der Fragebogenbestellung</h2>
 
     <table class="summary_table">
 
         {% for form_data in all_form_data %}
             <tr>
-                <th>{{ form_data.label }}</th>
+                <th class="summary-label">{{ form_data.label }}</th>
                 <td>
                     {% if form_data.value.all %}
                         {% for query in form_data.value %}

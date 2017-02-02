@@ -86,6 +86,9 @@ def show_tutor_form(wizard):
     return show_summary_form
 
 
+def swap(collection, i, j):
+    collection[i], collection[j] = collection[j], collection[i]
+
 class VeranstalterWizard(SessionWizardView):
     form_list = [
         ('evaluation', VeranstaltungEvaluationForm),
@@ -175,6 +178,8 @@ class VeranstalterWizard(SessionWizardView):
                                 'value': field_value
                             })
 
+            swap(all_form_data, 5, 6)
+            swap(all_form_data, 6, 7)
             context.update({'all_form_data':  all_form_data})
         return context
 

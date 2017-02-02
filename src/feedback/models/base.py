@@ -3,7 +3,6 @@
 from __future__ import unicode_literals
 
 import random
-import re
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -168,11 +167,10 @@ class Person(models.Model):
     geschlecht = models.CharField(max_length=1, choices=GESCHLECHT_CHOICES, blank=True, verbose_name=u'Anrede')
     vorname = models.CharField(_('first name'), max_length=30, blank=True)
     nachname = models.CharField(_('last name'), max_length=30, blank=True)
-    email = models.EmailField(_('e-mail'), blank=True)
+    email = models.EmailField(_('E-Mail'), blank=True)
     anschrift = models.CharField(_('anschrift'), max_length=80, blank=True,
-                                 help_text='Bitte geben Sie die Anschrift an, ' +
-                                            u'z.B Gebäude S1|01 Raum A1, Karolinenplatz 5 64289 Darmstadt')
-
+                                 help_text='Tragen Sie bitte nur die Anschrift ohne Namen ein, '
+                                           'da der Name automatisch hinzugefügt wird.')
     fachgebiet = models.ForeignKey(Fachgebiet, null=True, blank=True)
 
     def full_name(self):
