@@ -8,13 +8,23 @@ from django.core.exceptions import ValidationError
 
 
 class VeranstaltungEvaluationForm(forms.ModelForm):
+    required_css_class = 'required'
+
     class Meta:
         model = Veranstaltung
         fields = ('evaluieren',)
         widgets = {'evaluieren': forms.RadioSelect}
 
+    def __init__(self, *args, **kwargs):
+        super(VeranstaltungEvaluationForm, self).__init__(*args, **kwargs)
+
+        for k, field in self.fields.items():
+            field.required = True
+
 
 class VeranstaltungBasisdatenForm(forms.ModelForm):
+    required_css_class = 'required'
+
     def __init__(self, *args, **kwargs):
         veranstalter_queryset = kwargs.pop('all_veranstalter', None)
 
@@ -59,6 +69,8 @@ class VeranstaltungBasisdatenForm(forms.ModelForm):
 
 
 class VeranstaltungPrimaerDozentForm(forms.ModelForm):
+    required_css_class = 'required'
+
     def __init__(self, *args, **kwargs):
         if kwargs.pop("is_dynamic_form", False):
             super(VeranstaltungPrimaerDozentForm, self).__init__(*args, **kwargs)
@@ -75,19 +87,31 @@ class VeranstaltungPrimaerDozentForm(forms.ModelForm):
 
 
 class VeranstaltungDozentDatenForm(forms.ModelForm):
+    required_css_class = 'required'
+
+    def __init__(self, *args, **kwargs):
+        super(VeranstaltungDozentDatenForm, self).__init__(*args, **kwargs)
+
+        for k, field in self.fields.items():
+            field.required = True
+
     class Meta:
         model = Person
-        fields = ('email', 'anschrift')
+        fields = ('anschrift', 'email')
 
 
 class VeranstaltungFreieFragen(forms.ModelForm):
+    required_css_class = 'required'
+
     class Meta:
         model = Veranstaltung
         fields = ('freiefrage1', 'freiefrage2')
 
 
 class VeranstaltungTutorenForm(forms.Form):
-    csv_tutoren = forms.CharField(label='CSV', widget=forms.Textarea)
+    required_css_class = 'required'
+
+    csv_tutoren = forms.CharField(label='CSV', widget=forms.Textarea, required=False)
 
     def __init__(self, *args, **kwargs):
         preset_csv = kwargs.pop("preset_csv", None)
@@ -155,3 +179,4 @@ class CreateBarcodeScannEventForm(forms.ModelForm):
                 cd['tutorgroup'] = barcode_decoded['tutorgroup']
 
         return cd
+

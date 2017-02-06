@@ -12,7 +12,7 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
 from formtools.wizard.views import SessionWizardView
-from feedback.models import Veranstaltung
+from feedback.models import Veranstaltung, Tutor, past_semester_orders
 from feedback.forms import VeranstaltungEvaluationForm, VeranstaltungBasisdatenForm, VeranstaltungPrimaerDozentForm, \
     VeranstaltungDozentDatenForm, VeranstaltungFreieFragen, VeranstaltungTutorenForm
 
@@ -45,6 +45,15 @@ VERANSTALTER_VIEW_TEMPLATES = {
     "freie_fragen": "formtools/wizard/freiefragen.html",
     "tutoren": "formtools/wizard/tutoren.html",
     "zusammenfassung": "formtools/wizard/zusammenfassung.html"
+}
+VERANSTALTER_WIZARD_STEPS = {
+    "evaluation": "Evaluation",
+    "basisdaten": "Basisdaten",
+    "primaerdozent": "Primärdozent",
+    "verantwortlicher_address": "Verantwortlicher",
+    "freie_fragen": "Freie Fragen",
+    "tutoren": "Tutoren",
+    "zusammenfassung": "Zusammenfassung"
 }
 
 
@@ -85,6 +94,13 @@ def show_tutor_form(wizard):
         return v_typ == "vu"
     return show_summary_form
 
+
+def swap(collection, i, j):
+    # swap elements of summary data and ignore IndexError of no evaluation
+    try:
+        collection[i], collection[j] = collection[j], collection[i]
+    except IndexError:
+        pass
 
 class VeranstalterWizard(SessionWizardView):
     form_list = [
@@ -136,7 +152,24 @@ class VeranstalterWizard(SessionWizardView):
         context = super(VeranstalterWizard, self).get_context_data(form=form, **kwargs)
         context.update({'veranstaltung': self.get_instance()})
 
-        if self.steps.current == "zusammenfassung":
+        progressbar = []
+        step_active = True
+        for step_key in self.form_list:
+            progressbar.append({
+                'step_value': VERANSTALTER_WIZARD_STEPS[step_key],
+                'step_active': step_active,
+                'step_key': step_key if step_key in self.steps.all else None
+            })
+            if step_active:
+                if step_key == self.steps.current:
+                    step_active = False
+        context.update({'progressbar': progressbar})
+
+        if self.steps.current == "basisdaten":
+            past_sem_data = past_semester_orders(self.get_instance())
+            context.update({'past_semester_data': past_sem_data})
+
+        elif self.steps.current == "zusammenfassung":
             all_form_data = []
             for step_form in self.form_list:
                 form_obj = self.get_form(
@@ -163,11 +196,16 @@ class VeranstalterWizard(SessionWizardView):
                         if field_label is None:
                             field_label = field_key
 
-                        all_form_data.append({
-                            'label': field_label,
-                            'value': field_value
-                        })
+                        if isinstance(form_obj, VeranstaltungTutorenForm) and field_key == "csv_tutoren":
+                            context.update({"tutoren_csv": field_value})
+                        else:
+                            all_form_data.append({
+                                'label': field_label,
+                                'value': field_value
+                            })
 
+            swap(all_form_data, 5, 6)
+            swap(all_form_data, 6, 7)
             context.update({'all_form_data':  all_form_data})
         return context
 
@@ -212,16 +250,20 @@ class VeranstalterWizard(SessionWizardView):
 
         save_to_db(self.request, instance, form_list)
         context = self.get_context_data('zusammenfassung')
-        send_mail_to_verantwortliche(ergebnis_empfaenger, context)
+        send_mail_to_verantwortliche(ergebnis_empfaenger, context, instance)
 
         return render_to_response('formtools/wizard/bestellung_done.html', )
 
 
-def send_mail_to_verantwortliche(ergebnis_empfaenger, context):
+def send_mail_to_verantwortliche(ergebnis_empfaenger, context, veranstaltung):
     """
     Sendet eine Email an die Ergebnis-Empfaenger mit der Zusammenfassung der Bestellung
     """
-    msg_html = render_to_string('formtools/wizard/zusammenfassung.html', context)
+    if context.get('tutoren_csv', None) is not None:
+        tutoren = Tutor.objects.filter(veranstaltung=veranstaltung)
+        context.update({'tutoren': tutoren})
+
+    msg_html = render_to_string('formtools/wizard/email_zusammenfassung.html', context)
 
     if ergebnis_empfaenger is not None:
         for e in ergebnis_empfaenger:

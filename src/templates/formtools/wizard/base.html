@@ -22,27 +22,79 @@
             list-style-type: none;
             margin: 0px;
         }
+        .wizard_form_table label.required:after {
+            color: #636363;
+            content: '*'
+        }
+
+        .progressbar_container {
+            overflow: hidden;
+            margin-bottom: 7px;
+        }
+        .progressbar_container .progress_bar_item:first-child {
+            border-radius: 7px 0px 0px 7px;
+        }
+        .progressbar_container .progress_bar_item:last-child {
+            border-radius: 0px 7px 7px 0px;
+        }
+
+
+        .progress_bar_item {
+            float: left;
+            padding: 5px;
+            background-color: #b5b5b5;
+            cursor: default;
+            border-right: 1px solid #636363;
+        }
+        .progress_bar_item.item_active {
+            background-color: rgba(0, 255, 0, 0.75);
+            cursor: pointer;
+        }
+        .item_disabled_active {
+            background-color: rgba(0, 255, 0, 0.75);
+        }
+        .progress_bar_item.item_active:hover {
+            background-color: rgba(0, 255, 0, 0.38);
+        }
+
     </style>
+    {% block child_extra_header %}{% endblock %}
 {% endblock %}
 {% block head %}
     {{ wizard.form.media }}
 {% endblock %}
 
 {% block content %}
-    {% if wizard.steps.count %}
-        <p>Schritt {{ wizard.steps.step1 }} von {{ wizard.steps.count }}</p>
-    {% endif %}
 
-    <p>Bestellung für {{ veranstaltung }} {{ veranstaltung.semester }}</p>
 
     <form action="" method="post">
         {% csrf_token %}
+        <div class="progressbar_container">
+            {% for step in progressbar %}
+                {% if step.step_active %}
+                    {% if step.step_key %}
+                        <button class="progress_bar_item item_active" name="wizard_goto_step" type="submit" value="{{step.step_key }}">
+                            {{ step.step_value }}
+                        </button>
+                    {% else %}
+                        <div class="progress_bar_item item_disabled_active">{{ step.step_value }}</div>
+                    {% endif %}
+                {% else %}
+                    <div class="progress_bar_item">{{ step.step_value }}</div>
+                {% endif %}
+
+            {% endfor %}
+        </div>
+
+        <p>Bestellung für {{ veranstaltung.name }} {{ veranstaltung.semester }}</p>
+        {% block feedback_veranstalter_pre_form %}{% endblock %}
         <table class="wizard_form_table">
             {{ wizard.management_form }}
             {% block feedback_veranstalter_form %}
             {% endblock %}
         </table>
         {% block feedback_veranstalter_extra %}{% endblock %}
+        <p style="color: #636363;">*Pflichtfelder</p>
         {% if wizard.steps.prev %}
             <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.first }}">Erster Schritt</button>&nbsp;
             <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">Zurück</button>&nbsp;
@@ -56,5 +108,6 @@
             <input type="submit" name="save" value="Speichern"/>
         {% endif %}
     </form>
+
 {% endblock %}
 

@@ -1,6 +1,21 @@
-{% extends "formtools/wizard/base.html" %}
+{% extends "formtools/wizard/base.html" %}{% load static %}
+
+{% block child_extra_header %}
+    <script type="text/javascript" src="{% static 'jquery/jquery-1.4.2.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'jquery/jquery-ui-1.8.6.custom.min.js' %}"></script>
+{% endblock %}
 
 {% block feedback_veranstalter_form %}
-    <h3>Erfassung der Daten des Verantwortlichen</h3>
+    <h3>Erfassung der Daten des Verantwortlichen: <b class="verantwortlich">{{ veranstaltung.primaerdozent.full_name }}</b></h3>
     {{ wizard.form }}
+{% endblock %}
+
+{% block javascript_block %}
+<script>
+    $(document).ready(function() {
+        var verantwortlich = $(".verantwortlich").text();
+        var name = "<tr><th></th><td>" + verantwortlich + "</td></tr>";
+        $("tbody").prepend(name);
+    });
+</script>
 {% endblock %}
