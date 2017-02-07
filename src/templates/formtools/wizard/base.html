@@ -66,11 +66,11 @@
 {% endblock %}
 
 {% block content %}
-
-
     <form action="" method="post">
         {% csrf_token %}
+        <a style="float: right" href="{% url 'logout' %}">ausloggen</a>
         <p style="font-size: 14px">Bestellung für <b>{{ veranstaltung.name }}</b>  {{ veranstaltung.semester }}</p>
+
         <div class="progressbar_container">
             {% for step in progressbar %}
                 {% if step.step_active %}
