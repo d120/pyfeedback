@@ -70,6 +70,7 @@
 
     <form action="" method="post">
         {% csrf_token %}
+        <p style="font-size: 14px">Bestellung für <b>{{ veranstaltung.name }}</b>  {{ veranstaltung.semester }}</p>
         <div class="progressbar_container">
             {% for step in progressbar %}
                 {% if step.step_active %}
@@ -87,7 +88,7 @@
             {% endfor %}
         </div>
 
-        <p>Bestellung für {{ veranstaltung.name }} {{ veranstaltung.semester }}</p>
+
         {% block feedback_veranstalter_pre_form %}{% endblock %}
         <table class="wizard_form_table">
             {{ wizard.management_form }}
