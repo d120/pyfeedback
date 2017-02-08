@@ -1,6 +1,19 @@
-{% extends "formtools/wizard/base.html" %}
+{% extends "formtools/wizard/base.html" %}{% load static %}
 
 {% block feedback_veranstalter_form %}
     <h3>Erfassung der Freien Fragen</h3>
+    <img src="{% static "img/freiefragen.png" %}" alt="Freie Fragen Feld" width="600" height="71"/>
+    <p>
+        Auf dem Fragebogen zu Ihrer Veranstaltung können Sie bis zu
+        zwei selbst formulierte Fragen an die Studierenden stellen.
+        Die Studierenden können jede der Fragen mit einem von fünf Werten zwischen
+        &bdquo;<i>trifft zu</i>&ldquo; und &bdquo;<i>trifft nicht zu</i>&ldquo; beantworten.
+    </p>
+
+    <p>
+        Bitte geben Sie hier Ihre freien Fragen ein. Falls Sie keine eigenen Fragen
+        stellen möchten, klicken Sie einfach auf weiter.
+    </p>
+
     {{ wizard.form }}
 {% endblock %}

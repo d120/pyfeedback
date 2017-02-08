@@ -14,7 +14,7 @@ from django.template.loader import render_to_string
 from formtools.wizard.views import SessionWizardView
 from feedback.models import Veranstaltung, Tutor, past_semester_orders
 from feedback.forms import VeranstaltungEvaluationForm, VeranstaltungBasisdatenForm, VeranstaltungPrimaerDozentForm, \
-    VeranstaltungDozentDatenForm, VeranstaltungFreieFragen, VeranstaltungTutorenForm
+    VeranstaltungDozentDatenForm, VeranstaltungFreieFragen, VeranstaltungTutorenForm, VeranstaltungVeroeffentlichung
 
 
 @require_safe
@@ -44,6 +44,7 @@ VERANSTALTER_VIEW_TEMPLATES = {
     "verantwortlicher_address": "formtools/wizard/address.html",
     "freie_fragen": "formtools/wizard/freiefragen.html",
     "tutoren": "formtools/wizard/tutoren.html",
+    "veroeffentlichen": "formtools/wizard/veroeffentlichen.html",
     "zusammenfassung": "formtools/wizard/zusammenfassung.html"
 }
 VERANSTALTER_WIZARD_STEPS = {
@@ -53,6 +54,7 @@ VERANSTALTER_WIZARD_STEPS = {
     "verantwortlicher_address": "Verantwortlicher",
     "freie_fragen": "Freie Fragen",
     "tutoren": "Tutoren",
+    "veroeffentlichen": "Veroeffentlichen",
     "zusammenfassung": "Zusammenfassung"
 }
 
@@ -110,6 +112,7 @@ class VeranstalterWizard(SessionWizardView):
         ('verantwortlicher_address', VeranstaltungDozentDatenForm),
         ('freie_fragen', VeranstaltungFreieFragen),
         ('tutoren', VeranstaltungTutorenForm),
+        ('veroeffentlichen', VeranstaltungVeroeffentlichung),
         ('zusammenfassung', forms.Form)
     ]
 
@@ -118,7 +121,8 @@ class VeranstalterWizard(SessionWizardView):
         'primaerdozent': show_primaerdozent_form,
         'verantwortlicher_address': perform_evalution,
         'freie_fragen': perform_evalution,
-        'tutoren': show_tutor_form
+        'tutoren': show_tutor_form,
+        'veroeffentlichen': perform_evalution,
     }
 
     cached_obj = {}
@@ -168,6 +172,8 @@ class VeranstalterWizard(SessionWizardView):
         if self.steps.current == "basisdaten":
             past_sem_data = past_semester_orders(self.get_instance())
             context.update({'past_semester_data': past_sem_data})
+        if self.steps.current == "verantwortlicher_address":
+            context.update({'basisdaten': self.get_cleaned_basisdaten()})
 
         elif self.steps.current == "zusammenfassung":
             all_form_data = []

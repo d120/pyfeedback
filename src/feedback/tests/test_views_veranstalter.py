@@ -114,16 +114,21 @@ class VeranstalterIndexTest(TestCase):
             "tutoren-csv_tutoren": "Müller,Max,muller.max@web.de,Bemerkung1\nMustermann,Erika,erika.mustermann@aa.de"
         })
 
-        self.assertTemplateUsed(response_sixth_step, "formtools/wizard/zusammenfassung.html")
+        self.assertTemplateUsed(response_sixth_step, "formtools/wizard/veroeffentlichen.html")
 
-        response_seventh_step = c.post('/veranstalter/', {
+        response_seventh_step = c.post('/veranstalter/', {'veroeffentlichen-veroeffentlichen': True,
+                                    "veranstalter_wizard-current_step": "veroeffentlichen"})
+
+        self.assertTemplateUsed(response_seventh_step, "formtools/wizard/zusammenfassung.html")
+
+        response_eight_step = c.post('/veranstalter/', {
             "veranstalter_wizard-current_step": "zusammenfassung"
         })
 
         self.v.refresh_from_db()
         self.p.refresh_from_db()
 
-        self.assertTemplateUsed(response_seventh_step, "formtools/wizard/bestellung_done.html")
+        self.assertTemplateUsed(response_eight_step, "formtools/wizard/bestellung_done.html")
 
         self.assertTrue(self.v.evaluieren)
         self.assertEqual(self.v.primaerdozent, self.p)
@@ -221,17 +226,21 @@ class VeranstalterIndexTest(TestCase):
             "veranstalter_wizard-current_step": "tutoren",
             "tutoren-csv_tutoren": "Müller,Max,muller.max@web.de,Bemerkung1\nMustermann,Erika,erika.mustermann@aa.de"
         })
+        self.assertTemplateUsed(response_sixth_step, "formtools/wizard/veroeffentlichen.html")
 
-        self.assertTemplateUsed(response_sixth_step, "formtools/wizard/zusammenfassung.html")
+        response_seventh_step = c.post('/veranstalter/', {'veroeffentlichen-veroeffentlichen': True,
+                                    "veranstalter_wizard-current_step": "veroeffentlichen"})
 
-        response_seventh_step = c.post('/veranstalter/', {
+        self.assertTemplateUsed(response_seventh_step, "formtools/wizard/zusammenfassung.html")
+
+        response_eight_step = c.post('/veranstalter/', {
             "veranstalter_wizard-current_step": "zusammenfassung"
         })
 
         self.v.refresh_from_db()
         self.p.refresh_from_db()
 
-        self.assertTemplateUsed(response_seventh_step, "formtools/wizard/bestellung_done.html")
+        self.assertTemplateUsed(response_eight_step, "formtools/wizard/bestellung_done.html")
         self.assertTrue(self.v.evaluieren)
         self.assertEqual(self.v.primaerdozent, self.p2)
         self.assertEqual(Tutor.objects.count(), 2)
@@ -257,11 +266,13 @@ class VeranstalterIndexTest(TestCase):
             "verantwortlicher_address-email": "test@test.de",
             "verantwortlicher_address-anschrift": "Alexanderstrasse 8, 64287 Darmstadt"
         })
-        response_fourth_step = c.post('/veranstalter/', {
+        c.post('/veranstalter/', {
             "veranstalter_wizard-current_step": "freie_fragen",
             "freie_fragen-freifrage1": "Ist das die erste Frage?",
             "freie_fragen-freifrage2": "Ist das die zweite Frage?"
         })
+        response_fourth_step = c.post('/veranstalter/', {'veroeffentlichen-veroeffentlichen': True,
+                                  "veranstalter_wizard-current_step": "veroeffentlichen"})
         self.assertEqual(Tutor.objects.count(), 0)
 
         self.v.refresh_from_db()

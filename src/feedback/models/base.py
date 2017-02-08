@@ -389,6 +389,7 @@ class Veranstaltung(models.Model):
     freiefrage1 = models.TextField(verbose_name='1. Freie Frage', blank=True)
     freiefrage2 = models.TextField(verbose_name='2. Freie Frage', blank=True)
     kleingruppen = models.TextField(verbose_name='Kleingruppen', blank=True)
+    veroeffentlichen = models.BooleanField(default=True, choices=BOOL_CHOICES)
 
     def get_next_state(self):
         try:

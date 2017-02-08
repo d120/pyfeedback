@@ -47,11 +47,12 @@
             border-right: 1px solid #636363;
         }
         .progress_bar_item.item_active {
-            background-color: rgba(0, 255, 0, 0.75);
+            background-color: rgba(126, 255, 48, 0.75);
             cursor: pointer;
         }
         .item_disabled_active {
-            background-color: rgba(0, 255, 0, 0.75);
+            background-color: rgb(1, 99, 34);
+            color: #ffffff;
         }
         .progress_bar_item.item_active:hover {
             background-color: rgba(0, 255, 0, 0.38);
@@ -65,10 +66,11 @@
 {% endblock %}
 
 {% block content %}
-
-
     <form action="" method="post">
         {% csrf_token %}
+        <a style="float: right" href="{% url 'logout' %}">ausloggen</a>
+        <p style="font-size: 14px">Bestellung für <b>{{ veranstaltung.name }}</b>  {{ veranstaltung.semester }}</p>
+
         <div class="progressbar_container">
             {% for step in progressbar %}
                 {% if step.step_active %}
@@ -86,7 +88,7 @@
             {% endfor %}
         </div>
 
-        <p>Bestellung für {{ veranstaltung.name }} {{ veranstaltung.semester }}</p>
+
         {% block feedback_veranstalter_pre_form %}{% endblock %}
         <table class="wizard_form_table">
             {{ wizard.management_form }}
@@ -94,9 +96,8 @@
             {% endblock %}
         </table>
         {% block feedback_veranstalter_extra %}{% endblock %}
-        <p style="color: #636363;">*Pflichtfelder</p>
+        <p style="color: #636363;">*Pflichtfeld</p>
         {% if wizard.steps.prev %}
-            <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.first }}">Erster Schritt</button>&nbsp;
             <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">Zurück</button>&nbsp;
         {% endif %}
 
