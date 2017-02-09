@@ -472,6 +472,15 @@ class Veranstaltung(models.Model):
 
         return code
 
+    def get_evasys_list_veranstalter(self):
+        personen = []
+        if self.primaerdozent is not None:
+            personen.append(self.primaerdozent)
+        for per in self.ergebnis_empfaenger.all():
+            if per.pk != self.primaerdozent.pk:
+                personen.append(per)
+        return personen
+
     @staticmethod
     def decode_barcode(barcode):
         if (ean_checksum_valid(barcode) != True):
