@@ -17,20 +17,25 @@
 		<turnout>{{lv.anzahl}}</turnout>{% comment %} anzahl der bestellten bögen {% endcomment %}
 		<p_o_study>Informatik</p_o_study>{% comment %} static {% endcomment %}
 		<survey>
+			{% if ubung_export %}
+			<EvaSysRef type="Survey" key="{{lv.get_evasys_survery_key_uebung}}" />{% comment %} Wenn wir eine Übung haben su-pk-u {% endcomment %}
+			{% else %}
 			<EvaSysRef type="Survey" key="{{lv.get_evasys_survery_key}}" />{% comment %} der pk der lv für diesen survery in form su-pk {% endcomment %}
-			{% if lv.get_evasys_bogen_uebung %}<EvaSysRef type="Survey" key="{{lv.get_evasys_survery_key_uebung}}" />{% comment %} Wenn wir eine Übung haben su-pk-u {% endcomment %}{% endif %}
+			{% endif %}
 		</survey>
 		<external_id>{{lv.get_evasys_key}}</external_id>{% comment %} same as key {% endcomment %}
 	</Lecture>
-	<Survey key="{{lv.get_evasys_survery_key}}">{% comment %} der pk der lv für diesen survery in form su-pk {% endcomment %}
-		<survey_form>{{lv.get_evasys_bogen}}</survey_form>{% comment %} depends on the language set by user {% endcomment %}
+
+	{% if ubung_export %}
+	<Survey key="{{lv.get_evasys_survery_key_uebung}}">{% comment %} der pk der lv für diesen survery in form su-pk {% endcomment %}
+		<survey_form>{{lv.get_evasys_bogen_uebung}}</survey_form>{% comment %} depends on the language set by user {% endcomment %}
 		<survey_period>{{lv.semester.evasys}}</survey_period>{% comment %} the current semester {% endcomment %}
 		<survey_type>{{lv.get_evasys_umfragetyp}}</survey_type>{% comment %} coversheet or hardcopy {% endcomment %}
 		<survey_verify>0</survey_verify>{% comment %} static {% endcomment %}
 	</Survey>
-	{% if lv.get_evasys_bogen_uebung %}{% comment %} Füge zweite Umfrage für Übung an {% endcomment %}
-	<Survey key="{{lv.get_evasys_survery_key_uebung}}">{% comment %} der pk der lv für diesen survery in form su-pk {% endcomment %}
-		<survey_form>{{lv.get_evasys_bogen_uebung}}</survey_form>{% comment %} depends on the language set by user {% endcomment %}
+	{% else %}
+	<Survey key="{{lv.get_evasys_survery_key}}">{% comment %} der pk der lv für diesen survery in form su-pk {% endcomment %}
+		<survey_form>{{lv.get_evasys_bogen}}</survey_form>{% comment %} depends on the language set by user {% endcomment %}
 		<survey_period>{{lv.semester.evasys}}</survey_period>{% comment %} the current semester {% endcomment %}
 		<survey_type>{{lv.get_evasys_umfragetyp}}</survey_type>{% comment %} coversheet or hardcopy {% endcomment %}
 		<survey_verify>0</survey_verify>{% comment %} static {% endcomment %}
