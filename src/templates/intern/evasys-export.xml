@@ -3,7 +3,7 @@
 	xsi:noNamespaceSchemaLocation="http://evaluation.tu-darmstadt.de/evasys/doc/xml-import.xsd">
 	{% for lv in veranst %}<Lecture key="{{lv.get_evasys_key}}">{% comment %} our lv pk in form of lv-pk {% endcomment %}
 		<dozs>
-			{% for cur_person in lv.ergebnis_empfaenger.all %}
+			{% for cur_person in lv.get_evasys_list_veranstalter %}
 			<doz>{% comment %} erste person ist prim. doz. die Personen die das Ergebnis erhalten sollen {% endcomment %}
 				<EvaSysRef type="Person" key="{{cur_person.get_evasys_key}}" />
 			</doz>
