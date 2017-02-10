@@ -172,6 +172,8 @@ class VeranstalterWizard(SessionWizardView):
         if self.steps.current == "basisdaten":
             past_sem_data = past_semester_orders(self.get_instance())
             context.update({'past_semester_data': past_sem_data})
+        if self.steps.current == "verantwortlicher_address":
+            context.update({'basisdaten': self.get_cleaned_basisdaten()})
 
         elif self.steps.current == "zusammenfassung":
             all_form_data = []
