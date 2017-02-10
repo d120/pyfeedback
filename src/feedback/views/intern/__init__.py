@@ -71,14 +71,30 @@ def export_veranstaltungen(request):
         data = {'semester': Semester.objects.order_by('-semester')}
         return render(request, 'intern/export_veranstaltungen.html', data)
 
+    # POST request
     try:
         semester = Semester.objects.get(semester=request.POST['semester'])
     except (Semester.DoesNotExist, KeyError):
         return HttpResponseRedirect(reverse('export_veranstaltungen'))
 
-    veranst = Veranstaltung.objects.filter(semester=semester, evaluieren=True, anzahl__gt=0).select_related('verantwortlich')
+    ubung_export = False
+    if request.POST.get("xml_ubung", None) is not None:
+        ubung_export = True
+
+    if ubung_export:
+        # nur Übungen
+        veranst = Veranstaltung.objects.filter(semester=semester, evaluieren=True,
+                                               anzahl__gt=0, typ='vu').select_related('verantwortlich')
+    else:
+        veranst = Veranstaltung.objects.filter(semester=semester, evaluieren=True,
+                                               anzahl__gt=0).select_related('verantwortlich')
+
     if not veranst.count():
-        messages.error(request, u'Für das ausgewählte Semester (%s) liegen keine Bestellungen vor!' % semester)
+        if ubung_export:
+            messages.error(request, u'Für das ausgewählte Semester (%s) liegen keine Bestellungen '
+                                    u'für Vorlesungen mit Übung vor!' % semester)
+        else:
+            messages.error(request, u'Für das ausgewählte Semester (%s) liegen keine Bestellungen vor!' % semester)
         return HttpResponseRedirect(reverse('export_veranstaltungen'))
 
     missing_verantwortlich = veranst.filter(verantwortlich=None)
@@ -96,20 +112,27 @@ def export_veranstaltungen(request):
     person_set = set()
 
     data = {}
-    data['veranst'] = veranst
 
+    data['veranst'] = veranst
+    data['ubung_export'] = ubung_export
     for ver in veranst:
         for cur_empf in ver.ergebnis_empfaenger.all():
             person_set.add(cur_empf)
 
     data['person'] = list(person_set)
 
-    xml_out=render(request, 'intern/evasys-export.xml', data)
+    xml_out = render(request, 'intern/evasys-export.xml', data)
 
     response = HttpResponse(xml_out, content_type='application/xml')
-    response['Content-Disposition'] = 'attachment; filename="veranstaltungen.xml"'
+
+    filename = "veranstaltungen"
+    if ubung_export:
+        filename = "ubung"
+
+    response['Content-Disposition'] = 'attachment; filename="' + filename + '.xml"'
 
     return response
+
 
 def translate_to_latex(text):
     dic = {'&':'\&',
