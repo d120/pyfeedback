@@ -119,6 +119,14 @@ class VeranstaltungTutorenForm(forms.Form):
         self.fields["csv_tutoren"].initial = preset_csv
 
 
+class VeranstaltungVeroeffentlichung(forms.ModelForm):
+    required_css_class = 'required'
+
+    class Meta:
+        model = Veranstaltung
+        fields = ('veroeffentlichen',)
+
+
 class UploadFileForm(forms.Form):
     file = forms.FileField(label='Datei')
 
