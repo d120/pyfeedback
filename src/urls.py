@@ -63,6 +63,7 @@ urlpatterns += [
     url(r'^intern/export_veranstaltungen/$', feedback.views.intern.export_veranstaltungen, name='export_veranstaltungen'),
     url(r'^intern/generate_letters/$', feedback.views.intern.generate_letters, name='generate_letters'),
     url(r'^intern/import_ergebnisse/$', feedback.views.intern.import_ergebnisse, name='import_ergebnisse'),
+    url(r'^intern/status_final/$', feedback.views.intern.status_final, name='status_final'),
     url(r'^intern/sync_ergebnisse/$', feedback.views.intern.sync_ergebnisse, name='sync_ergebnisse'),
     url(r'^intern/fragebogensprache/$', feedback.views.intern.fragebogensprache, name='fragebogensprache'),
     url(r'^intern/lange_ohne_evaluation/$', feedback.views.intern.lange_ohne_evaluation, name='lange_ohne_evaluation'),

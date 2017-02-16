@@ -318,7 +318,9 @@ class Veranstaltung(models.Model):
     STATUS_ANGELEGT = 100
     STATUS_BESTELLUNG_GEOEFFNET = 200
     STATUS_KEINE_EVALUATION = 300
+    STATUS_KEINE_EVALUATION_FINAL = 301
     STATUS_BESTELLUNG_LIEGT_VOR = 500
+    STATUS_BESTELLUNG_WIRD_VERARBEITET = 501
     STATUS_GEDRUCKT = 600
     STATUS_VERSANDT = 700
     STATUS_BOEGEN_EINGEGANGEN = 800
@@ -329,7 +331,9 @@ class Veranstaltung(models.Model):
         (STATUS_ANGELEGT, 'Angelegt'),
         (STATUS_BESTELLUNG_GEOEFFNET, 'Bestellung geöffnet'),
         (STATUS_KEINE_EVALUATION, 'Keine Evaluation'),
+        (STATUS_KEINE_EVALUATION_FINAL, 'Keine Evaluation final'),
         (STATUS_BESTELLUNG_LIEGT_VOR, 'Bestellung liegt vor'),
+        (STATUS_BESTELLUNG_WIRD_VERARBEITET, 'Bestellung wird verarbeitet'),
         (STATUS_GEDRUCKT, 'Gedruckt'),
         (STATUS_VERSANDT, 'Versandt'),
         (STATUS_BOEGEN_EINGEGANGEN, 'Bögen eingegangen'),

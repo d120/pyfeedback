@@ -403,3 +403,23 @@ def sync_ergebnisse(request):
 @user_passes_test(lambda u: u.is_superuser)
 def ergebnisse(request):
     return public.index(request)
+
+@user_passes_test(lambda u: u.is_superuser)
+@require_http_methods(('HEAD', 'GET', 'POST'))
+def status_final(request):
+    try:
+        veranstaltungen = Veranstaltung.objects.filter(semester = Semester.current())
+    except (Veranstaltung.DoesNotExist, KeyError):
+        messages.warning(request, u'Keine passende Veranstaltungen gefunden.')
+        return HttpResponseRedirect(reverse('intern-index'))
+
+    for v in veranstaltungen:
+        if v.status == Veranstaltung.STATUS_KEINE_EVALUATION:
+            v.status = Veranstaltung.STATUS_KEINE_EVALUATION_FINAL;
+            v.save()
+        elif v.status == Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR:
+            v.status = Veranstaltung.STATUS_BESTELLUNG_WIRD_VERARBEITET;
+            v.save()
+
+    messages.success(request, u'Zustände wurden aktualisiert.')
+    return HttpResponseRedirect(reverse('intern-index'))

@@ -22,6 +22,7 @@
     {% if cur_semester %}{{cur_semester.short}}{% else %}nicht Vorhanden{% endif %})</li>
     <li><a href="{% url 'import_vv' %}">Veranstaltungen aus VV importieren</a> (vor Bestellphase)</li>
     <li><a href="{% url 'import_vv_edit_users' %}">Fehlende Personendaten nachtragen</a> (vor Bestellphase)</li>
+    <li><a href="{% url 'status_final' %}">Bestellung endgültig abschließen</a> (nach Bestellphase)</li>
     <li><a href="{% url 'generate_letters' %}">Anschreiben für Veranstalter erzeugen</a> (nach Bestellphase)</li>
     <li><a href="{% url 'export_veranstaltungen' %}">Veranstaltungen für EvaSys exportieren</a> (vor dem Scannen)</li>
     <li><a href="{% url 'import_ergebnisse' %}">Ergebnisse aus EvaSys importieren</a> (nach dem Scannen)</li>
