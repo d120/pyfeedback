@@ -56,6 +56,8 @@ class ExportVeranstaltungenTest(NonSuTestMixin, TestCase):
 
         _, v1 = get_veranstaltung('v')
         s, v2 = get_veranstaltung('vu')
+        empty_semester = Semester.objects.create(semester=20120, fragebogen='2009', sichtbarkeit='ADM')
+
         p = Person.objects.create(vorname='Je', nachname='Mand', email='je@ma.nd', geschlecht='w')
         v1.veranstalter.add(p)
         v2.veranstalter.add(p)
@@ -84,6 +86,10 @@ class ExportVeranstaltungenTest(NonSuTestMixin, TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response['Location'].endswith('/intern/export_veranstaltungen/'))
 
+        response = self.client.post(path, {'semester': empty_semester.semester, 'xml_ubung': True}, **{'REMOTE_USER': 'super'})
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response['Location'].endswith('/intern/export_veranstaltungen/'))
+
         # keine Sprache angegeben
         v2.verantwortlich = p
         v2.save()
@@ -98,68 +104,168 @@ class ExportVeranstaltungenTest(NonSuTestMixin, TestCase):
         self.assertRegexpMatches(response['Content-Disposition'],
                                  r'^attachment; filename="[a-zA-Z0-9_-]+\.xml"$')
 
-        # TODO: Use SimpleTestCase.assertXMLEqual when Django is on newer version
-        self.assertEqual(response.content,
+        self.assertXMLEqual(response.content,
                          '''<?xml version="1.0" encoding="UTF-8"?>
 <EvaSys xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-\txsi:noNamespaceSchemaLocation="http://evaluation.tu-darmstadt.de/evasys/doc/xml-import.xsd">
-\t<Lecture key="lv-1">
-\t\t<dozs>
-\t\t\t
-\t\t</dozs>
-\t\t<name>Stoning I</name>
-\t\t<orgroot>FB 20</orgroot>
-\t\t<short>123v-SS11</short>
-\t\t<period>SS11</period>
-\t\t<type>Vorlesung</type>
-\t\t<turnout>42</turnout>
-\t\t<p_o_study>Informatik</p_o_study>
-\t\t<survey>
-\t\t\t<EvaSysRef type="Survey" key="su-1" />
-\t\t\t
-\t\t</survey>
-\t\t<external_id>lv-1</external_id>
-\t</Lecture>
-\t<Survey key="su-1">
-\t\t<survey_form>FB20Vv1e</survey_form>
-\t\t<survey_period>SS11</survey_period>
-\t\t<survey_type>coversheet</survey_type>
-\t\t<survey_verify>0</survey_verify>
-\t</Survey>
-\t
-\t<Lecture key="lv-2">
-\t\t<dozs>
-\t\t\t
-\t\t</dozs>
-\t\t<name>Stoning I</name>
-\t\t<orgroot>FB 20</orgroot>
-\t\t<short>123vu-SS11</short>
-\t\t<period>SS11</period>
-\t\t<type>Vorlesung + Übung</type>
-\t\t<turnout>23</turnout>
-\t\t<p_o_study>Informatik</p_o_study>
-\t\t<survey>
-\t\t\t<EvaSysRef type="Survey" key="su-2" />
-\t\t\t<EvaSysRef type="Survey" key="su-2-u" />
-\t\t</survey>
-\t\t<external_id>lv-2</external_id>
-\t</Lecture>
-\t<Survey key="su-2">
-\t\t<survey_form>FB20Vv1</survey_form>
-\t\t<survey_period>SS11</survey_period>
-\t\t<survey_type>coversheet</survey_type>
-\t\t<survey_verify>0</survey_verify>
-\t</Survey>
-\t
-\t<Survey key="su-2-u">
-\t\t<survey_form>FB20Üv1</survey_form>
-\t\t<survey_period>SS11</survey_period>
-\t\t<survey_type>coversheet</survey_type>
-\t\t<survey_verify>0</survey_verify>
-\t</Survey>
-\t
-\t
-\t
+xsi:noNamespaceSchemaLocation="http://evaluation.tu-darmstadt.de/evasys/doc/xml-import.xsd">
+<Lecture key="lv-1">
+<dozs>
+
+</dozs>
+<name>Stoning I</name>
+<orgroot>FB 20</orgroot>
+<short>123v-SS11</short>
+<period>SS11</period>
+<type>Vorlesung</type>
+<turnout>42</turnout>
+<p_o_study>Informatik</p_o_study>
+<survey>
+<EvaSysRef type="Survey" key="su-1" />
+</survey>
+<external_id>lv-1</external_id>
+</Lecture>
+<Survey key="su-1">
+<survey_form>FB20Vv1e</survey_form>
+<survey_period>SS11</survey_period>
+<survey_type>coversheet</survey_type>
+<survey_verify>0</survey_verify>
+</Survey>
+<Lecture key="lv-2">
+<dozs>
+
+</dozs>
+<name>Stoning I</name>
+<orgroot>FB 20</orgroot>
+<short>123vu-SS11</short>
+<period>SS11</period>
+<type>Vorlesung + Übung</type>
+<turnout>23</turnout>
+<p_o_study>Informatik</p_o_study>
+<survey>
+<EvaSysRef type="Survey" key="su-2" />
+</survey>
+<external_id>lv-2</external_id>
+</Lecture>
+<Survey key="su-2">
+<survey_form>FB20Vv1</survey_form>
+<survey_period>SS11</survey_period>
+<survey_type>coversheet</survey_type>
+<survey_verify>0</survey_verify>
+</Survey>
+</EvaSys>
+''')
+        response = self.client.post(path, {'semester': s.semester, 'xml_ubung': True}, **{'REMOTE_USER': 'super'})
+        self.assertRegexpMatches(response['Content-Disposition'],
+                                 r'^attachment; filename="[a-zA-Z0-9_-]+\.xml"$')
+
+        self.assertXMLEqual(response.content, '''<?xml version="1.0" encoding="UTF-8"?>
+<EvaSys xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:noNamespaceSchemaLocation="http://evaluation.tu-darmstadt.de/evasys/doc/xml-import.xsd">
+<Lecture key="lv-2">
+<dozs>
+
+</dozs>
+<name>Stoning I</name>
+<orgroot>FB 20</orgroot>
+<short>123vu-SS11</short>
+<period>SS11</period>
+<type>Vorlesung + Übung</type>
+<turnout>23</turnout>
+<p_o_study>Informatik</p_o_study>
+<survey>
+<EvaSysRef type="Survey" key="su-2-u" />
+</survey>
+<external_id>lv-2</external_id>
+</Lecture>
+<Survey key="su-2-u">
+<survey_form>FB20\xc3\x9cv1</survey_form>
+<survey_period>SS11</survey_period>
+<survey_type>coversheet</survey_type>
+<survey_verify>0</survey_verify>
+</Survey>
+</EvaSys>
+''')
+
+    def test_export_veranstaltungen_post_primaerdozent(self):
+        path = '/intern/export_veranstaltungen/'
+        self.client.login(username='supers', password='pw')
+
+        s, v = get_veranstaltung('v')
+        p1 = Person.objects.create(vorname='Je', nachname='Mand', email='je@ma.nd', geschlecht='w')
+        p2 = Person.objects.create(vorname='Prim', nachname='Ardozent', email='prim@ardoz.ent', geschlecht='m')
+        p3 = Person.objects.create(vorname='Je1', nachname='Mand1', email='je1@ma.nd', geschlecht='m')
+
+        v.veranstalter.add(p1)
+        v.veranstalter.add(p2)
+        v.veranstalter.add(p3)
+        v.ergebnis_empfaenger.add(p1)
+        v.ergebnis_empfaenger.add(p2)
+        v.ergebnis_empfaenger.add(p3)
+
+        v.grundstudium = True
+        v.sprache = 'en'
+        v.verantwortlich = p1
+        v.primaerdozent = p2
+        v.anzahl = 42
+        v.save()
+
+        response = self.client.post(path, {'semester': s.semester}, **{'REMOTE_USER': 'super'})
+        self.assertRegexpMatches(response['Content-Disposition'],
+                                 r'^attachment; filename="[a-zA-Z0-9_-]+\.xml"$')
+
+        self.assertXMLEqual(response.content,
+                             '''<?xml version="1.0" encoding="UTF-8"?>
+<EvaSys xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:noNamespaceSchemaLocation="http://evaluation.tu-darmstadt.de/evasys/doc/xml-import.xsd">
+<Lecture key="lv-1">
+<dozs>
+<doz>
+<EvaSysRef type="Person" key="pe-2" />
+</doz>
+<doz>
+<EvaSysRef type="Person" key="pe-1" />
+</doz>
+<doz>
+<EvaSysRef type="Person" key="pe-3" />
+</doz>
+</dozs>
+<name>Stoning I</name>
+<orgroot>FB 20</orgroot>
+<short>123v-SS11</short>
+<period>SS11</period>
+<type>Vorlesung</type>
+<turnout>42</turnout>
+<p_o_study>Informatik</p_o_study>
+<survey>
+<EvaSysRef type="Survey" key="su-1" />
+</survey>
+<external_id>lv-1</external_id>
+</Lecture>
+<Survey key="su-1">
+<survey_form>FB20Vv1e</survey_form>
+<survey_period>SS11</survey_period>
+<survey_type>coversheet</survey_type>
+<survey_verify>0</survey_verify>
+</Survey>
+<Person key="pe-1">
+<firstname>Je</firstname>
+<lastname>Mand</lastname>
+<email>je@ma.nd</email>
+<gender>f</gender>
+<external_id>pe-1</external_id>
+</Person><Person key="pe-2">
+<firstname>Prim</firstname>
+<lastname>Ardozent</lastname>
+<email>prim@ardoz.ent</email>
+<gender>m</gender>
+<external_id>pe-2</external_id>
+</Person><Person key="pe-3">
+<firstname>Je1</firstname>
+<lastname>Mand1</lastname>
+<email>je1@ma.nd</email>
+<gender>m</gender>
+<external_id>pe-3</external_id>
+</Person>
 </EvaSys>
 ''')
 
