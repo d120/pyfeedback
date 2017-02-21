@@ -1,7 +1,7 @@
 # coding=utf-8
 
 from feedback.models.base import Einstellung, Mailvorlage, Person, Semester, Veranstaltung, \
-    Tutor, BarcodeScanner, BarcodeScannEvent, BarcodeAllowedState, Log, FachgebietEmail, Fachgebiet
+    Tutor, BarcodeScanner, BarcodeScannEvent, BarcodeAllowedState, Log
 from feedback.models.imports import ImportPerson, ImportCategory, ImportVeranstaltung
 from feedback.models.fragebogen import Fragebogen, Ergebnis, Kommentar
 from feedback.models.fragebogen2008 import Fragebogen2008, Ergebnis2008
