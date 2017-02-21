@@ -288,4 +288,77 @@ class VeranstalterIndexTest(TestCase):
         self.assertTemplateUsed(response_fourth_step, "formtools/wizard/zusammenfassung.html")
         self.assertEqual(Tutor.objects.count(), 0)
 
+    def test_status_changes(self):
+        Einstellung.objects.create(name='bestellung_erlaubt', wert='1')
+        c = login_veranstalter(self.v)
+
+        c.post('/veranstalter/bestellung', {"evaluation-evaluieren": False,
+                                                                 "veranstalter_wizard-current_step": "evaluation"})
+
+        c.post('/veranstalter/bestellung', {"veranstalter_wizard-current_step": "zusammenfassung"})
+
+        self.v.refresh_from_db()
+        self.assertFalse(self.v.evaluieren)
+        self.assertEqual(self.v.status, Veranstaltung.STATUS_KEINE_EVALUATION)
+
+        c.post('/veranstalter/bestellung', {
+            'evaluation-evaluieren': True,
+            "veranstalter_wizard-current_step": "evaluation"})
+
+        c.post('/veranstalter/bestellung', {
+            "veranstalter_wizard-current_step": "basisdaten",
+            "basisdaten-typ": "vu",
+            "basisdaten-anzahl": 22,
+            "basisdaten-sprache": "de",
+            "basisdaten-verantwortlich": self.p.id,
+            "basisdaten-ergebnis_empfaenger": [self.p.id, self.p2.id],
+            "save": "Speichern"
+        })
+
+        c.post('/veranstalter/bestellung', {
+            "veranstalter_wizard-current_step": "primaerdozent",
+            "primaerdozent-primaerdozent": self.p.id
+        })
+
+        c.post('/veranstalter/bestellung', {
+            "veranstalter_wizard-current_step": "verantwortlicher_address",
+            "verantwortlicher_address-email": "test@test.de",
+            "verantwortlicher_address-anschrift": "Alexanderstrasse 8, 64287 Darmstadt"
+        })
+
+        c.post('/veranstalter/bestellung', {
+            "veranstalter_wizard-current_step": "freie_fragen",
+            "freie_fragen-freifrage1": "Ist das die erste Frage?",
+            "freie_fragen-freifrage2": "Ist das die zweite Frage?"
+        })
+
+        c.post('/veranstalter/bestellung', {
+            "veranstalter_wizard-current_step": "tutoren",
+            "tutoren-csv_tutoren": "Müller,Max,muller.max@web.de,Bemerkung1\nMustermann,Erika,erika.mustermann@aa.de"
+        })
+
+        c.post('/veranstalter/bestellung', {
+            'veroeffentlichen-veroeffentlichen': True,
+            "veranstalter_wizard-current_step": "veroeffentlichen"})
+
+
+        c.post('/veranstalter/bestellung', {
+            "veranstalter_wizard-current_step": "zusammenfassung"
+        })
+
+        self.v.refresh_from_db()
+        self.p.refresh_from_db()
+
+        self.assertTrue(self.v.evaluieren)
+        self.assertEqual(self.v.status, Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR)
+
+        c.post('/veranstalter/bestellung', {"evaluation-evaluieren": False,
+                                            "veranstalter_wizard-current_step": "evaluation"})
+
+        c.post('/veranstalter/bestellung', {"veranstalter_wizard-current_step": "zusammenfassung"})
+
+        self.v.refresh_from_db()
+        self.assertFalse(self.v.evaluieren)
+        self.assertEqual(self.v.status, Veranstaltung.STATUS_KEINE_EVALUATION)
+
 
