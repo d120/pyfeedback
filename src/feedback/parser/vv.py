@@ -12,8 +12,9 @@ def parse_vv_xml(xmlfile):
     # Fix &nbsp; in XML File @see http://stackoverflow.com/a/7265260
     # @see http://effbot.org/elementtree/elementtree-xmlparser.htm#tag-ET.XMLParser.entity
     parser = ElementTree.XMLParser()
-    parser.parser.UseForeignDTD(True)
-    parser.entity['nbsp'] = unichr(160)
+    # TODO: below code is not possible in Python3 anymore
+    # parser.parser.UseForeignDTD(True)
+    parser.entity['nbsp'] = chr(160)
 
     etree = ElementTree.ElementTree()
 

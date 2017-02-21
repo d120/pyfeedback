@@ -21,14 +21,14 @@ from feedback.forms import VeranstaltungEvaluationForm, VeranstaltungBasisdatenF
 def login(request):
     if 'vid' in request.GET and 'token' in request.GET:
         vid = int(request.GET['vid'])
-        token = unicode(request.GET['token'])
+        token = str(request.GET['token'])
 
         user = auth.authenticate(vid=vid, token=token)
         if user:
             auth.login(request, user)
             v = Veranstaltung.objects.get(id=vid)
             request.session['vid'] = v.id
-            request.session['veranstaltung'] = unicode(v)
+            request.session['veranstaltung'] = str(v)
 
             if v.status == Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR or \
                     v.status == Veranstaltung.STATUS_BESTELLUNG_GEOEFFNET:
@@ -185,7 +185,7 @@ class VeranstalterWizard(SessionWizardView):
                 )
 
                 if form_obj.is_valid():
-                    for field_key, field_obj in form_obj.fields.items():
+                    for field_key, field_obj in list(form_obj.fields.items()):
                         cleaned_d = form_obj.cleaned_data[field_key]
                         field_value = ""
 
@@ -289,7 +289,7 @@ def save_to_db(request, instance, form_list):
     und setzt den Status einer Veranstaltung auf den nächsten validen Zustand
     """
     for form in form_list:
-        for key, val in form.cleaned_data.iteritems():
+        for key, val in form.cleaned_data.items():
             if isinstance(form, VeranstaltungTutorenForm):
                 if key == "csv_tutoren":
                     instance.csv_to_tutor(val)

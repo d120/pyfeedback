@@ -1,6 +1,6 @@
 # coding=utf-8
 
-from StringIO import StringIO
+from io import StringIO
 
 from django.conf import settings
 from django.test import TestCase
@@ -25,11 +25,6 @@ class InternVvTest(NonSuTestMixin):
         response = self.client.post(path, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.templates[0].name, 'intern/import_vv.html')
         self.assertTrue(isinstance(response.context['form'], UploadFileForm))
-
-        #        f = StringIO('blablabla')
-        #        f.name = 'test.csv'
-        #        response = self.client.post(self.path, {'file': f})
-        #        f.close()
 
         with open(settings.TESTDATA_PATH + 'vv_test.xml', 'r') as f:
             response = self.client.post(path, {'file': f}, **{'REMOTE_USER': 'super'})

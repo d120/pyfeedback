@@ -1,6 +1,8 @@
 # coding=utf-8
 
-#TODO: Fehlerbehandlung bei kaputten Dateien
+# TODO: Fehlerbehandlung bei kaputten Dateien
+
+
 def parse_ergebnisse(semester, csvfile):
     import csv
     from feedback.models import get_model, Veranstaltung
@@ -13,13 +15,14 @@ def parse_ergebnisse(semester, csvfile):
     grenzVeranstFragebogen = 16
     
     # Kopfzeile überspringen
-    reader.next()
+    next(reader)
 
     # Einlesen der Zeilen der CSV-Datei
     combined = {}
     for row in reader:
         # Transkodierung iso8859-15 -> Unicode
-        converted = [unicode(cell, 'iso8859-15') for cell in row]
+        # TODO: Python kodiert durch die str() Funktion direkt zu Unicode
+        converted = [str(cell) for cell in row]
         veranstaltung = converted[:grenzVeranstFragebogen]
         fragebogen = converted[grenzVeranstFragebogen:]
         
@@ -36,31 +39,31 @@ def parse_ergebnisse(semester, csvfile):
     fbcount = 0
     fbmodel = get_model('Fragebogen', semester)
     
-    for veranst in combined.values():
+    for veranst in list(combined.values()):
         try:
             v = Veranstaltung.objects.get(name=veranst['v'][5], lv_nr=veranst['v'][6], semester=semester)
             
         except Veranstaltung.DoesNotExist:
             try:
                 v = Veranstaltung.objects.get(name=veranst['v'][5], semester=semester)
-                warnings.append((u'Die Veranstaltung "%s" hat in der Datenbank die ' + \
+                warnings.append(('Die Veranstaltung "%s" hat in der Datenbank die ' + \
                     'Lehrveranstaltungsnummer "%s", in der CSV-Datei aber "%s". Die Ergebnisse ' + \
                     'wurden trotzdem importiert.') % (v.name, v.lv_nr, veranst['v'][6]))
                 
             except Veranstaltung.DoesNotExist:
                 try:
                     v = Veranstaltung.objects.get(lv_nr=veranst['v'][6], semester=semester)
-                    warnings.append((u'Die Veranstaltung mit der Lehrveranstaltungsnummer "%s" hat in ' + \
+                    warnings.append(('Die Veranstaltung mit der Lehrveranstaltungsnummer "%s" hat in ' + \
                         'der Datenbank den Namen "%s", in der CSV-Datei aber "%s". Die Ergebnisse ' + \
                         'wurden trotzdem importiert.') % (v.lv_nr, v.name, veranst['v'][5]))
                     
                 except Veranstaltung.DoesNotExist:
-                    errors.append((u'Die Veranstaltung "%s" (%s) existiert im System nicht und ' + \
+                    errors.append(('Die Veranstaltung "%s" (%s) existiert im System nicht und ' + \
                         'wurde deshalb nicht importiert!') % (veranst['v'][5], veranst['v'][6]))
                     continue
                 
         if fbmodel.objects.filter(veranstaltung=v).count():
-            errors.append((u'In der Datenbank existieren bereits Fragebögen zur Veranstaltung ' + \
+            errors.append(('In der Datenbank existieren bereits Fragebögen zur Veranstaltung ' + \
                           '"%s". Sie wurde deshalb nicht importiert!') % v.name)
             continue
             

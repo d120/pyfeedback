@@ -187,7 +187,7 @@ class PublicVeranstaltungTest(TestCase):
         self.assertEqual(ctx['v'], self.v)
         with self.assertRaises(KeyError):
             ctx['restricted']
-        self.assertEqual(ctx['parts'], zip(Ergebnis2009.parts, self.e.values()))
+        self.assertEqual(ctx['parts'], list(zip(Ergebnis2009.parts, list(self.e.values()))))
         self.assertEqual(ctx['ergebnis'], self.e)
         with self.assertRaises(KeyError):
             ctx['kommentar']
@@ -201,14 +201,14 @@ class PublicVeranstaltungTest(TestCase):
         response = self.client.get('/ergebnisse/%d/' % self.v.id, **extra)
         ctx = response.context
         self.assertEqual(ctx['v'], self.v)
-        self.assertEqual(ctx['parts'], zip(Ergebnis2009.parts_vl, self.e.values()))
+        self.assertEqual(ctx['parts'], list(zip(Ergebnis2009.parts_vl, list(self.e.values()))))
         self.assertEqual(ctx['ergebnis'], self.e)
 
     def test_kommentar(self):
         self.s.sichtbarkeit = 'ALL'
         self.s.save()
         p = Person.objects.create()
-        k = Kommentar.objects.create(veranstaltung=self.v, autor=p, text=u'Ganz ganz toll!')
+        k = Kommentar.objects.create(veranstaltung=self.v, autor=p, text='Ganz ganz toll!')
         extra = {'REMOTE_ADDR': '130.83.0.1'}
         response = self.client.get('/ergebnisse/%d/' % self.v.id, **extra)
         ctx = response.context
