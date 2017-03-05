@@ -142,12 +142,6 @@ class ExportVeranstaltungenTest(NonSuTestMixin, TestCase):
                                 <survey_verify>0</survey_verify>
                             </Survey>
                         </EvaSys>'''.encode('utf-8')
-        print("Response")
-        print(response.content)
-        print(type(response.content))
-        print("Test")
-        print(test_xml)
-        print(type(test_xml))
         self.assertXMLEqual(response.content, test_xml)
 
         response = self.client.post(path, {'semester': s.semester, 'xml_ubung': True}, **{'REMOTE_USER': 'super'})
