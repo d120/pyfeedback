@@ -53,9 +53,9 @@ def barcodedrop(request):
         except (Veranstaltung.DoesNotExist, KeyError):
             response_message = "Veranstaltung nicht gefunden."
         except ValueError as e:
-            response_message = str(e.message)
+            response_message = str(e)
         except TypeError as e:
-            response_message = str(e.message)
+            response_message = str(e)
 
         return JsonResponse({"success": success, "message": response_message})
     else:

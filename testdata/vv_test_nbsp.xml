@@ -1,31 +1,31 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE CourseCatalogue [<!ENTITY nbsp "&#0160;">]>
 <CourseCatalogue>
 <CourseCatalogueArea>
 <Name>Sommersemester 2012</Name>
-<RemarkPublic>&lt;strong&gt;Vorlesungsverzeichnis des Sommersemesters 2012 der Technischen Universität Darmstadt&lt;/strong&gt;
+<RemarkPublic>&lt;strong&gt;Vorlesungsverzeichnis des Sommersemesters 2012 der Technischen UniversitÃ¤t Darmstadt&lt;/strong&gt;
 
 Hinweise:
-In Einzelfällen kann es noch zu weiteren Bearbeitungen des Vorlesungsverzeichnisses durch die Fachbereiche kommen. Sollten Sie Fragen zu den angebotenen Lehrveranstaltungen haben, schauen Sie bitte auf den Webseiten des zuständigen Fachbereichs nach, ob Zusatzhinweise gegeben werden. Links hierzu finden Sie über die &lt;a href=&quot;http://www.tu-darmstadt.de/universitaet/fachbereiche/index.de.jsp&quot;&gt;Homepage der TU Darmstadt&lt;/a&gt; oder nach Aufklappen der jeweiligen Fachbereichsebenen im Vorlesungsverzeichnis.
+In EinzelfÃ¤llen kann es noch zu weiteren Bearbeitungen des Vorlesungsverzeichnisses durch die Fachbereiche kommen. Sollten Sie Fragen zu den angebotenen Lehrveranstaltungen haben, schauen Sie bitte auf den Webseiten des zustÃ¤ndigen Fachbereichs nach, ob Zusatzhinweise gegeben werden. Links hierzu finden Sie Ã¼ber die &lt;a href=&quot;http://www.tu-darmstadt.de/universitaet/fachbereiche/index.de.jsp&quot;&gt;Homepage der TU Darmstadt&lt;/a&gt; oder nach Aufklappen der jeweiligen Fachbereichsebenen im Vorlesungsverzeichnis.
 
-Nach erfolgreichem Login finden Sie die Bereiche und damit auch die Modul- und Lehrveranstaltungsangebote Ihrer Prüfungsordnung unter dem Punkt &lt;strong&gt;&quot;Veranstaltungen&quot; -&gt; &quot;Anmeldung&quot;&lt;/strong&gt;
-&lt;strong&gt;WICHTIG!&lt;/strong&gt; Bachelor- und Masterstudierende melden sich bitte &lt;strong&gt; nur über diesen Weg&lt;/strong&gt; zu Modulen und Lehrveranstaltungen an!
+Nach erfolgreichem Login finden Sie die Bereiche und damit auch die Modul- und Lehrveranstaltungsangebote Ihrer PrÃ¼fungsordnung unter dem Punkt &lt;strong&gt;&quot;Veranstaltungen&quot; -&gt; &quot;Anmeldung&quot;&lt;/strong&gt;
+&lt;strong&gt;WICHTIG!&lt;/strong&gt; Bachelor- und Masterstudierende melden sich bitte &lt;strong&gt; nur Ã¼ber diesen Weg&lt;/strong&gt; zu Modulen und Lehrveranstaltungen an!
 
-&lt;strong&gt;Die Anmeldung über die Lehrveranstaltungssuche ist ausschliesslich für Diplom- und Magisterstudierende zulässig! Die Modulkontexte für Bachelor- und Masterstudierende werden hier nicht erfasst. Dies kann dazu führen, dass eine Prüfungsanmeldung nicht möglich ist!&lt;/strong&gt;
+&lt;strong&gt;Die Anmeldung Ã¼ber die Lehrveranstaltungssuche ist ausschliesslich fÃ¼r Diplom- und Magisterstudierende zulÃ¤ssig! Die Modulkontexte fÃ¼r Bachelor- und Masterstudierende werden hier nicht erfasst. Dies kann dazu fÃ¼hren, dass eine PrÃ¼fungsanmeldung nicht mÃ¶glich ist!&lt;/strong&gt;
 
 Bei allgemeinen Fragen wenden Sie sich bitte per &lt;a href=&quot;mailto:tucan@tu-darmstadt.de&quot;&gt;Email an unseren Support&lt;/a&gt;
 
-Bitte beachten Sie auch unsere Anleitungen zur Modul-, Lehrveranstaltungs- und Prüfungsanmeldung sowie weiteren Hilfen, Tipps und Tricks auf &lt;a href=&quot;http://www.info.tucan.tu-darmstadt.de/studium/stud/bachelorundmaster/index.de.jsp&quot;&gt;unseren Supportseiten.&lt;/a&gt;
+Bitte beachten Sie auch unsere Anleitungen zur Modul-, Lehrveranstaltungs- und PrÃ¼fungsanmeldung sowie weiteren Hilfen, Tipps und Tricks auf &lt;a href=&quot;http://www.info.tucan.tu-darmstadt.de/studium/stud/bachelorundmaster/index.de.jsp&quot;&gt;unseren Supportseiten.&lt;/a&gt;
 
 </RemarkPublic>
 <CourseCatalogueArea>
-<Name>Alle Orientierungs- und Einführungsveranstaltungen</Name>
+<Name>Alle Orientierungs- und EinfÃ¼hrungsveranstaltungen</Name>
 <RemarkPublic>Weitere Informationen zum Studium an der TU Darmstadt erhalten Sie &lt;a href=&quot;http://www.tu-darmstadt.de/studieren/index.de.jsp&quot;&gt;hier&lt;/a&gt;.</RemarkPublic>
 <Course>
 <Number>20-00-0001-ov</Number>
 <Name>Orientierungsveranstaltung &nbsp;</Name>
 <Appointment>	</Appointment>
 <AdditionalInformation></AdditionalInformation>
-<InstructorString>Johannes Fürnkranz</InstructorString>
+<InstructorString>Johannes FÃ¼rnkranz</InstructorString>
 </Course>
 <Course>
 <Number></Number>
@@ -54,7 +54,7 @@ Bitte beachten Sie auch unsere Anleitungen zur Modul-, Lehrveranstaltungs- und P
 <Name>Orientierungsveranstaltung</Name>
 <Appointment>	</Appointment>
 <AdditionalInformation></AdditionalInformation>
-<InstructorString>Johannes Fürnkranz</InstructorString>
+<InstructorString>Johannes FÃ¼rnkranz</InstructorString>
 </Course>
 </CourseCatalogueArea>
 <CourseCatalogueArea>
@@ -63,11 +63,11 @@ Bitte beachten Sie auch unsere Anleitungen zur Modul-, Lehrveranstaltungs- und P
 <Course>
 <Number>20-00-0004-iv</Number>
 <Name>Grundlagen der Informatik I</Name>
-<Appointment>6 UE / Wöchentlich 2 UE Di 8?9:40 S202/C205;S202/C110 ab 10.04.12; 2 UE Mo 13:30?15:10 S202/C205;S202/C110 ab 16.04.12</Appointment>
+<Appointment>6 UE / WÃ¶chentlich 2 UE Di 8?9:40 S202/C205;S202/C110 ab 10.04.12; 2 UE Mo 13:30?15:10 S202/C205;S202/C110 ab 16.04.12</Appointment>
 <AdditionalInformation>.
 
 </AdditionalInformation>
-<InstructorString>Guido Rößling</InstructorString>
+<InstructorString>Guido RÃ¶ÃŸling</InstructorString>
 <Smallgroups>
 <Smallgroup>
 <Name>Grundlagen der Informatik I - Gr. 1</Name>
@@ -75,7 +75,7 @@ Bitte beachten Sie auch unsere Anleitungen zur Modul-, Lehrveranstaltungs- und P
 <AdditionalInformation>
 
 </AdditionalInformation>
-<InstructorString>Guido Rößling</InstructorString>
+<InstructorString>Guido RÃ¶ÃŸling</InstructorString>
 </Smallgroup>
 <Smallgroup>
 <Name>Grundlagen der Informatik I - Gr. 10</Name>
@@ -83,7 +83,7 @@ Bitte beachten Sie auch unsere Anleitungen zur Modul-, Lehrveranstaltungs- und P
 <AdditionalInformation>
 
 </AdditionalInformation>
-<InstructorString>Guido Rößling</InstructorString>
+<InstructorString>Guido RÃ¶ÃŸling</InstructorString>
 </Smallgroup>
 <Smallgroup>
 <Name>Grundlagen der Informatik I - Gr. 11</Name>
@@ -91,7 +91,7 @@ Bitte beachten Sie auch unsere Anleitungen zur Modul-, Lehrveranstaltungs- und P
 <AdditionalInformation>
 
 </AdditionalInformation>
-<InstructorString>Guido Rößling</InstructorString>
+<InstructorString>Guido RÃ¶ÃŸling</InstructorString>
 </Smallgroup>
 <Smallgroup>
 <Name>Grundlagen der Informatik I - Gr. 12</Name>
@@ -99,7 +99,7 @@ Bitte beachten Sie auch unsere Anleitungen zur Modul-, Lehrveranstaltungs- und P
 <AdditionalInformation>
 
 </AdditionalInformation>
-<InstructorString>Guido Rößling</InstructorString>
+<InstructorString>Guido RÃ¶ÃŸling</InstructorString>
 </Smallgroup>
 <Smallgroup>
 <Name>Grundlagen der Informatik I - Gr. 13</Name>
@@ -107,7 +107,7 @@ Bitte beachten Sie auch unsere Anleitungen zur Modul-, Lehrveranstaltungs- und P
 <AdditionalInformation>
 
 </AdditionalInformation>
-<InstructorString>Guido Rößling</InstructorString>
+<InstructorString>Guido RÃ¶ÃŸling</InstructorString>
 </Smallgroup>
 <Smallgroup>
 <Name>Grundlagen der Informatik I - Gr. 14</Name>
@@ -115,7 +115,7 @@ Bitte beachten Sie auch unsere Anleitungen zur Modul-, Lehrveranstaltungs- und P
 <AdditionalInformation>
 
 </AdditionalInformation>
-<InstructorString>Guido Rößling</InstructorString>
+<InstructorString>Guido RÃ¶ÃŸling</InstructorString>
 </Smallgroup>
 <Smallgroup>
 <Name>Grundlagen der Informatik I - Gr. 15</Name>
@@ -123,7 +123,7 @@ Bitte beachten Sie auch unsere Anleitungen zur Modul-, Lehrveranstaltungs- und P
 <AdditionalInformation>
 
 </AdditionalInformation>
-<InstructorString>Guido Rößling</InstructorString>
+<InstructorString>Guido RÃ¶ÃŸling</InstructorString>
 </Smallgroup>
 <Smallgroup>
 <Name>Grundlagen der Informatik I - Gr. 16</Name>
@@ -131,7 +131,7 @@ Bitte beachten Sie auch unsere Anleitungen zur Modul-, Lehrveranstaltungs- und P
 <AdditionalInformation>
 
 </AdditionalInformation>
-<InstructorString>Guido Rößling</InstructorString>
+<InstructorString>Guido RÃ¶ÃŸling</InstructorString>
 </Smallgroup>
 <Smallgroup>
 <Name>Grundlagen der Informatik I - Gr. 2</Name>
@@ -139,7 +139,7 @@ Bitte beachten Sie auch unsere Anleitungen zur Modul-, Lehrveranstaltungs- und P
 <AdditionalInformation>
 
 </AdditionalInformation>
-<InstructorString>Guido Rößling</InstructorString>
+<InstructorString>Guido RÃ¶ÃŸling</InstructorString>
 </Smallgroup>
 <Smallgroup>
 <Name>Grundlagen der Informatik I - Gr. 3</Name>
@@ -147,7 +147,7 @@ Bitte beachten Sie auch unsere Anleitungen zur Modul-, Lehrveranstaltungs- und P
 <AdditionalInformation>
 
 </AdditionalInformation>
-<InstructorString>Guido Rößling</InstructorString>
+<InstructorString>Guido RÃ¶ÃŸling</InstructorString>
 </Smallgroup>
 <Smallgroup>
 <Name>Grundlagen der Informatik I - Gr. 4</Name>
@@ -155,7 +155,7 @@ Bitte beachten Sie auch unsere Anleitungen zur Modul-, Lehrveranstaltungs- und P
 <AdditionalInformation>
 
 </AdditionalInformation>
-<InstructorString>Guido Rößling</InstructorString>
+<InstructorString>Guido RÃ¶ÃŸling</InstructorString>
 </Smallgroup>
 <Smallgroup>
 <Name>Grundlagen der Informatik I - Gr. 5</Name>
@@ -163,7 +163,7 @@ Bitte beachten Sie auch unsere Anleitungen zur Modul-, Lehrveranstaltungs- und P
 <AdditionalInformation>
 
 </AdditionalInformation>
-<InstructorString>Guido Rößling</InstructorString>
+<InstructorString>Guido RÃ¶ÃŸling</InstructorString>
 </Smallgroup>
 <Smallgroup>
 <Name>Grundlagen der Informatik I - Gr. 6</Name>
@@ -171,7 +171,7 @@ Bitte beachten Sie auch unsere Anleitungen zur Modul-, Lehrveranstaltungs- und P
 <AdditionalInformation>
 
 </AdditionalInformation>
-<InstructorString>Guido Rößling</InstructorString>
+<InstructorString>Guido RÃ¶ÃŸling</InstructorString>
 </Smallgroup>
 <Smallgroup>
 <Name>Grundlagen der Informatik I - Gr. 7</Name>
@@ -179,7 +179,7 @@ Bitte beachten Sie auch unsere Anleitungen zur Modul-, Lehrveranstaltungs- und P
 <AdditionalInformation>
 
 </AdditionalInformation>
-<InstructorString>Guido Rößling</InstructorString>
+<InstructorString>Guido RÃ¶ÃŸling</InstructorString>
 </Smallgroup>
 <Smallgroup>
 <Name>Grundlagen der Informatik I - Gr. 8</Name>
@@ -187,7 +187,7 @@ Bitte beachten Sie auch unsere Anleitungen zur Modul-, Lehrveranstaltungs- und P
 <AdditionalInformation>
 
 </AdditionalInformation>
-<InstructorString>Guido Rößling</InstructorString>
+<InstructorString>Guido RÃ¶ÃŸling</InstructorString>
 </Smallgroup>
 <Smallgroup>
 <Name>Grundlagen der Informatik I - Gr. 9</Name>
@@ -195,7 +195,7 @@ Bitte beachten Sie auch unsere Anleitungen zur Modul-, Lehrveranstaltungs- und P
 <AdditionalInformation>
 
 </AdditionalInformation>
-<InstructorString>Guido Rößling</InstructorString>
+<InstructorString>Guido RÃ¶ÃŸling</InstructorString>
 </Smallgroup>
 </Smallgroups>
 </Course>
@@ -209,7 +209,7 @@ Bitte beachten Sie auch unsere Anleitungen zur Modul-, Lehrveranstaltungs- und P
 <Course>
 <Number>20-00-0005-iv</Number>
 <Name>Grundlagen der Informatik II</Name>
-<Appointment>8 UE / Wöchentlich 2 UE Di 15:10?16:50 ab 10.04.12; 2 UE Do 8?9:40 S101/A1 ab 12.04.12</Appointment>
+<Appointment>8 UE / WÃ¶chentlich 2 UE Di 15:10?16:50 ab 10.04.12; 2 UE Do 8?9:40 S101/A1 ab 12.04.12</Appointment>
 <AdditionalInformation></AdditionalInformation>
 <InstructorString>Karsten Weihe</InstructorString>
 <Smallgroups>

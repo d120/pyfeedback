@@ -104,6 +104,7 @@ def swap(collection, i, j):
     except IndexError:
         pass
 
+
 class VeranstalterWizard(SessionWizardView):
     form_list = [
         ('evaluation', VeranstaltungEvaluationForm),
@@ -250,7 +251,9 @@ class VeranstalterWizard(SessionWizardView):
                                                              data={'primaerdozent': ergebnis_empfaenger[0].id},
                                                              instance=self.get_instance())
                 form_primar.is_valid()
-                form_list.append(form_primar)
+                # TODO: Python3 does not allow append() on dict() anymore
+                # form_list.append(form_primar)
+                list(form_list).append(form_primar)
 
         instance = self.get_instance()
 

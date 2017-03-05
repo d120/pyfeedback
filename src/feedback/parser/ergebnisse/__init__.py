@@ -9,7 +9,7 @@ def parse_ergebnisse(semester, csvfile):
 
     parser = _get_parser(semester)
     reader = csv.reader(csvfile, delimiter=';')
-    
+
     # Die letzte Spalte die noch zur Veranstaltung gehört. 
     # Alle diese Spalten sind gleich für jeden Fragebogen einer Veranstaltung
     grenzVeranstFragebogen = 16

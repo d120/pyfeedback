@@ -4,6 +4,7 @@ import csv
 import os
 import subprocess
 
+from io import TextIOWrapper
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
@@ -21,6 +22,7 @@ from feedback.models import Veranstaltung, Semester, Einstellung, Mailvorlage, g
 from feedback.forms import UploadFileForm
 from feedback.views import public
 from django.db.models import Q
+
 
 @user_passes_test(lambda u: u.is_superuser)
 @require_safe
@@ -49,10 +51,12 @@ def index(request):
                                                  'width_progressbar': width_progressbar,
                                                  'width_progressbar_success': width_progressbar_success,})
 
+
 @user_passes_test(lambda u: u.is_superuser)
 @require_safe
 def lange_ohne_evaluation(request):
     return render(request, 'intern/lange_ohne_evaluation.html', {'veranstaltungen': long_not_ordert()})
+
 
 @user_passes_test(lambda u: u.is_superuser)
 @require_safe
@@ -63,6 +67,7 @@ def fragebogensprache(request):
 
     data = {'veranstaltungen': veranstaltungen}
     return render(request, 'intern/fragebogensprache.html', data)
+
 
 @user_passes_test(lambda u: u.is_superuser)
 @require_http_methods(('HEAD', 'GET', 'POST'))
@@ -332,6 +337,7 @@ def sendmail(request):
 
     return render(request, 'intern/sendmail.html', data)
 
+
 @user_passes_test(lambda u: u.is_superuser)
 @require_http_methods(('HEAD', 'GET', 'POST'))
 def import_ergebnisse(request):
@@ -345,7 +351,8 @@ def import_ergebnisse(request):
 
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
-            warnings, errors, vcount, fbcount = parse_ergebnisse(semester, request.FILES['file'])
+            warnings, errors, vcount, fbcount = parse_ergebnisse(semester,
+                                                                 TextIOWrapper(request.FILES['file'].file, encoding='utf-8'))
             if fbcount:
                 messages.success(request,
                     '%u Veranstaltungen mit insgesamt %u Fragebögen wurden erfolgreich importiert.' %
@@ -365,6 +372,7 @@ def import_ergebnisse(request):
         data['form'] = UploadFileForm()
 
     return render(request, 'intern/import_ergebnisse.html', data)
+
 
 @user_passes_test(lambda u: u.is_superuser)
 @require_http_methods(('HEAD', 'GET', 'POST'))
