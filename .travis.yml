@@ -11,7 +11,7 @@ env:
 cache: pip
 
 python: 
-  - "2.7"
+  - "3.6.0"
 
 install:
   - pip install -r requirements.txt
