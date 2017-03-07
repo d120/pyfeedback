@@ -557,6 +557,11 @@ class Veranstaltung(models.Model):
         else:
             return "Der Veranstalter Link wird erst nach dem Anlegen angezeigt"
 
+    def allow_order(self):
+        return self.status == Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR or \
+                self.status == Veranstaltung.STATUS_BESTELLUNG_GEOEFFNET or \
+                self.status == Veranstaltung.STATUS_KEINE_EVALUATION
+
     def csv_to_tutor(self, csv_content):
         """Erzeuge Tutoren Objekte aus der CSV Eingabe der Veranstalter"""
         input_clean = csv_content.strip()

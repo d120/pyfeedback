@@ -44,6 +44,7 @@ def veranstalter_dashboard(request):
 
     data["veranstaltung"] = veranst
     data["logs"] = Log.objects.filter(veranstaltung=veranst).order_by('timestamp')
+    data["allow_order"] = veranst.allow_order()
 
     if veranst.status >= Veranstaltung.STATUS_BESTELLUNG_GEOEFFNET:
         bestellung = []
@@ -192,7 +193,11 @@ class VeranstalterWizard(SessionWizardView):
     def get(self, request, *args, **kwargs):
         if self.request.user.username != settings.USERNAME_VERANSTALTER:
             return render(self.request, 'veranstalter/not_authenticated.html')
-        return super(VeranstalterWizard, self).get(request, *args, **kwargs)
+        veranstaltung = self.get_instance()
+        if veranstaltung.allow_order():
+            return super(VeranstalterWizard, self).get(request, *args, **kwargs)
+        else:
+            return HttpResponseRedirect(reverse('veranstalter-index'))
 
     def get_context_data(self, form, **kwargs):
         context = super(VeranstalterWizard, self).get_context_data(form=form, **kwargs)
