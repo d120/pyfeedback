@@ -1,0 +1,143 @@
+{% extends "d120_base.html" %}
+
+{% block title %}
+    Veranstalterbereich
+{% endblock %}
+
+{% block extra_header %}
+    <style>
+        .header_veranst {
+            color: #5b5b5b;
+        }
+        .subHeaderDashboard {
+            margin: 15px 0px;
+            font-size: 13px;
+            font-weight: bold;
+
+        }
+        .borderLine {
+            border: 1px solid #767676;
+            padding: 5px;
+        }
+        .dashboardTable {
+            font-size: 13px;
+            margin: 0px;
+            padding: 5px;
+        }
+        .dashboardTableBordered {
+            border: 1px solid #767676;
+        }
+        .dashboardTable td {
+            padding: 10px;
+            text-align: left;
+        }
+        .dashboardTable th {
+            text-align: left;
+            padding: 3px 5px;
+            vertical-align: top;
+        }
+        .dashboardOrderContainer {
+            display: inline-block;
+        }
+        .tableTutoren td {
+            font-weight: normal;
+        }
+        .orderHeadContainer .orderButton {
+            margin-top: 14px;
+            margin-left: 10px;
+            padding: 2px;
+        }
+        .orderHeadContainer {
+            overflow: hidden;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+
+    <h1><span class="header_veranst">{{ veranstaltung.name }} - </span>Dashboard</h1>
+
+    <p class="subHeaderDashboard">Status</p>
+    <span class="borderLine">{{ veranstaltung.get_status_display }}</span>
+
+    <p class="subHeaderDashboard">Log</p>
+    <table class="dashboardTable dashboardTableBordered">
+        <tr>
+            <th>Datum</th>
+            <th>Status</th>
+        </tr>
+        {% for log in logs %}
+        <tr>
+            <td>{{ log.timestamp }}</td>
+            <td>{{ log.get_status_display }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    {% if bestellung %}
+        <div class="orderHeadContainer">
+            <span style="display: block; float: left" class="subHeaderDashboard">Aktuelle Bestellung</span>
+            {% if allow_order %}
+                <button class="orderButton" onclick="window.location='{% url 'veranstalter-bestellung' %}';">Bestellung ändern</button>
+            {% endif %}
+        </div>
+        <div class="dashboardOrderContainer dashboardTableBordered">
+
+            <table class="dashboardTable">
+                {% for row in bestellung %}
+                <tr>
+                    <th>{{ row.0 }}</th>
+                    <td>{{ row.1 | linebreaksbr}}</td>
+                </tr>
+                {% endfor %}
+                {% if tutoren %}
+                <tr>
+                    <th>Tutoren</th>
+                    <th>
+                        <table class="tableTutoren">
+                            <tr>
+                                <th>Num</th>
+                                <th>Vorname</th>
+                                <th>Nachname</th>
+                                <th>Email</th>
+                                <th>Anmerkung</th>
+                            </tr>
+                            {% for tutor in tutoren %}
+                                <tr>
+                                    <td>{{ tutor.nummer }}</td>
+                                    <td>{{ tutor.vorname }}</td>
+                                    <td>{{ tutor.nachname }}</td>
+                                    <td>{{ tutor.email }}</td>
+                                    <td>{{ tutor.anmerkung }}</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </th>
+                </tr>
+                {% endif %}
+            </table>
+        </div>
+    {% else %}
+        {% if allow_order %}
+            <button style="padding: 2px;" onclick="window.location='{% url 'veranstalter-bestellung' %}';">Bestellung durchführen</button>
+        {% endif %}
+    {% endif %}
+
+
+{% endblock %}
+{% block backlink %}
+    <!-- kein Backlink -->
+{% endblock %}
+
+{% block javascript_block %}
+<script>
+    {% if bestellung %}
+    $(document).ready(function() {
+        create_csv_table(
+                $("#table_tutoren_csvview"),
+                $("#table_tutoren_csvview").val()
+        );
+    });
+    {% endif %}
+</script>
+{% endblock %}
