@@ -10,7 +10,8 @@ from django.test import TestCase
 from django.core.urlresolvers import reverse
 
 from feedback.forms import UploadFileForm
-from feedback.models import Semester, Person, Veranstaltung, Fragebogen2009, Mailvorlage, Einstellung
+from feedback.models import Semester, Person, Veranstaltung, Fragebogen2009, Mailvorlage, Einstellung, \
+    Fachgebiet, FachgebietEmail
 from feedback.tests.tools import NonSuTestMixin, get_veranstaltung
 
 from feedback import tests
@@ -369,8 +370,14 @@ class SendmailTest(NonSuTestMixin, TestCase):
         v1.anzahl = 42
         v1.sprache = 'de'
         v1.save()
-        v1.veranstalter.add(Person.objects.create(vorname='Pe', nachname='Ter', email='pe@ter.bla'))
-        v1.veranstalter.add(Person.objects.create(vorname='Pa', nachname='Ul', email='pa@ul.bla'))
+
+        fb = Fachgebiet.objects.create(name="Fachgebiet1", kuerzel="FB1")
+        FachgebietEmail.objects.create(fachgebiet=fb, email_suffix="ul.bla", email_sekretaerin="sek@ul.bla")
+        p1 = Person.objects.create(vorname='Pe', nachname='Ter', email='pe@ter.bla')
+        p2 = Person.objects.create(vorname='Pa', nachname='Ul', email='pa@ul.bla', fachgebiet=fb)
+
+        v1.veranstalter.add(p1)
+        v1.veranstalter.add(p2)
         mv = Mailvorlage.objects.create(subject='Testmail', body='Dies ist eine Testmail.')
         Einstellung.objects.create(name='bestellung_erlaubt', wert='0')
 
@@ -425,3 +432,4 @@ class SendmailTest(NonSuTestMixin, TestCase):
         # Hier wird in Eclipse ein Fehler angezeigt; mail.outbox gibt es während der Testläufe
         # aber wirklich (siehe https://docs.djangoproject.com/en/1.4/topics/testing/#email-services)
         self.assertEqual(len(mail.outbox), 2)
+        self.assertEqual(len(mail.outbox[0].to), 3)  # an zwei veranstalter und sekretaerin
