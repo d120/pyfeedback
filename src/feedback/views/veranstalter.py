@@ -12,7 +12,7 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
 from formtools.wizard.views import SessionWizardView
-from feedback.models import Veranstaltung, Tutor, past_semester_orders
+from feedback.models import Veranstaltung, Tutor, past_semester_orders, Log
 from feedback.forms import VeranstaltungEvaluationForm, VeranstaltungBasisdatenForm, VeranstaltungPrimaerDozentForm, \
     VeranstaltungDozentDatenForm, VeranstaltungFreieFragen, VeranstaltungTutorenForm, VeranstaltungVeroeffentlichung
 
@@ -30,12 +30,53 @@ def login(request):
             request.session['vid'] = v.id
             request.session['veranstaltung'] = str(v)
 
-            if v.status == Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR or \
-                    v.status == Veranstaltung.STATUS_BESTELLUNG_GEOEFFNET:
-                return HttpResponseRedirect(reverse('veranstalter-index'))
+            return HttpResponseRedirect(reverse('veranstalter-index'))
 
     return render(request, 'veranstalter/login_failed.html')
 
+
+def veranstalter_dashboard(request):
+    if request.user.username != settings.USERNAME_VERANSTALTER:
+        return render(request, 'veranstalter/not_authenticated.html')
+
+    data = {}
+    veranst = Veranstaltung.objects.get(id=request.session['vid'])
+
+    data["veranstaltung"] = veranst
+    data["logs"] = Log.objects.filter(veranstaltung=veranst).order_by('timestamp')
+
+    if veranst.status >= Veranstaltung.STATUS_BESTELLUNG_GEOEFFNET:
+        bestellung = []
+        bestellung.append(("Evaluieren", veranst.get_evaluieren_display))
+        if veranst.evaluieren:
+            bestellung.append(("Typ", veranst.get_typ_display))
+            bestellung.append(("Anazhl", veranst.anzahl))
+            bestellung.append(("Sprache", veranst.get_sprache_display))
+            bestellung.append(("Verantwortlich", veranst.verantwortlich.__unicode__() + '\n'
+                               + veranst.verantwortlich.anschrift + '\n'
+                               + veranst.verantwortlich.email))
+
+            ergebnis_empfanger_str = ""
+            for empfaenger in veranst.ergebnis_empfaenger.all():
+                ergebnis_empfanger_str += empfaenger.__unicode__() + "\n"
+            bestellung.append(("Ergebnis Empfänger", ergebnis_empfanger_str))
+
+            if veranst.auswertungstermin:
+                bestellung.append(("Auswertungstermin", veranst.auswertungstermin))
+
+            bestellung.append(("Primärdozent", veranst.primaerdozent))
+            bestellung.append(("Freie Frage 1", veranst.freiefrage1))
+            bestellung.append(("Freie Frage 2", veranst.freiefrage2))
+            bestellung.append(("Veröffentlichen", veranst.get_veroeffentlichen_display))
+
+            data["tutoren"] = Tutor.objects.filter(veranstaltung=veranst)
+
+        data["bestellung"] = bestellung
+
+    return render(request, 'veranstalter/dashboard.html', data)
+
+
+# # # WIZARD # # #
 
 VERANSTALTER_VIEW_TEMPLATES = {
     "evaluation": "formtools/wizard/evaluation.html",

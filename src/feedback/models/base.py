@@ -346,7 +346,8 @@ class Veranstaltung(models.Model):
     STATUS_UEBERGANG = {
         STATUS_ANGELEGT: (STATUS_GEDRUCKT, STATUS_BESTELLUNG_GEOEFFNET),
         STATUS_BESTELLUNG_GEOEFFNET: (STATUS_KEINE_EVALUATION, STATUS_BESTELLUNG_LIEGT_VOR),
-        STATUS_BESTELLUNG_LIEGT_VOR: (STATUS_GEDRUCKT, STATUS_BESTELLUNG_LIEGT_VOR),
+        STATUS_KEINE_EVALUATION: (STATUS_BESTELLUNG_LIEGT_VOR,),
+        STATUS_BESTELLUNG_LIEGT_VOR: (STATUS_GEDRUCKT, STATUS_BESTELLUNG_LIEGT_VOR, STATUS_KEINE_EVALUATION),
         STATUS_GEDRUCKT: (STATUS_VERSANDT,),
         STATUS_VERSANDT: (STATUS_BOEGEN_EINGEGANGEN,),
         STATUS_BOEGEN_EINGEGANGEN: (STATUS_BOEGEN_GESCANNT,),
@@ -407,7 +408,10 @@ class Veranstaltung(models.Model):
                 self.status = status[0]
 
         elif self.status == self.STATUS_BESTELLUNG_LIEGT_VOR:
-            self.status = status[1]
+            if self.evaluieren:
+                self.status = status[1]
+            else:
+                self.status = status[2]
 
         else:
             self.status = status[0]

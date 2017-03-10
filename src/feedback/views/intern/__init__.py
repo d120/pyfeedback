@@ -18,7 +18,7 @@ from django.views.decorators.http import require_safe, require_http_methods
 
 from feedback import tools
 from feedback.parser.ergebnisse import parse_ergebnisse
-from feedback.models import Veranstaltung, Semester, Einstellung, Mailvorlage, get_model, long_not_ordert
+from feedback.models import Veranstaltung, Semester, Einstellung, Mailvorlage, get_model, long_not_ordert, FachgebietEmail
 from feedback.forms import UploadFileForm
 from feedback.views import public
 from django.db.models import Q
@@ -318,6 +318,15 @@ def sendmail(request):
                 })
                 body = tools.render_email(data['body'], context)
                 recipients = [p.email for p in v.veranstalter.all() if p.email]
+
+                for p in v.veranstalter.all():
+                    fg = p.fachgebiet
+                    if fg is not None:
+                        fg_mails = FachgebietEmail.objects.filter(fachgebiet=fg)
+                        for fg_mail in fg_mails:
+                            if (fg_mail.email_sekretaerin is not None) \
+                                    and (fg_mail.email_sekretaerin not in recipients):
+                                recipients.append(fg_mail.email_sekretaerin)
 
                 if not recipients:
                     messages.warning(request, ('An die Veranstalter von "%s" wurde keine Mail ' +

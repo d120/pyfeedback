@@ -1,7 +1,7 @@
 # coding=utf-8
 
-
 from io import StringIO
+
 
 from django.conf import settings
 from django.core import mail
@@ -9,7 +9,9 @@ from django.test import TestCase
 from django.core.urlresolvers import reverse
 
 from feedback.forms import UploadFileForm
+
 from feedback.models import Semester, Person, Veranstaltung, Fragebogen2009, Mailvorlage, Einstellung
+
 from feedback.tests.tools import NonSuTestMixin, get_veranstaltung
 
 from feedback import tests
@@ -179,6 +181,7 @@ class ExportVeranstaltungenTest(NonSuTestMixin, TestCase):
                         '''
         self.checkXMLEqual(test_xml, response.content.decode('utf-8'))
 
+
     def test_export_veranstaltungen_post_primaerdozent(self):
         path = '/intern/export_veranstaltungen/'
         self.client.login(username='supers', password='pw')
@@ -203,6 +206,7 @@ class ExportVeranstaltungenTest(NonSuTestMixin, TestCase):
         v.save()
 
         response = self.client.post(path, {'semester': s.semester}, **{'REMOTE_USER': 'super'})
+
         self.assertRegex(response['Content-Disposition'], r'^attachment; filename="[a-zA-Z0-9_-]+\.xml"$')
         test_xml = '''<?xml version="1.0" encoding="UTF-8"?>\n
         <EvaSys xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n\t
@@ -227,7 +231,6 @@ class ExportVeranstaltungenTest(NonSuTestMixin, TestCase):
         self.checkXMLEqual(test_xml, response.content.decode('utf-8'))
 
 
-#
 class ImportErgebnisseTest(NonSuTestMixin, TestCase):
     def setUp(self):
         super(ImportErgebnisseTest, self).setUp()
@@ -326,8 +329,10 @@ class SendmailTest(NonSuTestMixin, TestCase):
         v1.anzahl = 42
         v1.sprache = 'de'
         v1.save()
+
         v1.veranstalter.add(Person.objects.create(vorname='Pe', nachname='Ter', email='pe@ter.bla'))
         v1.veranstalter.add(Person.objects.create(vorname='Pa', nachname='Ul', email='pa@ul.bla'))
+
         mv = Mailvorlage.objects.create(subject='Testmail', body='Dies ist eine Testmail.')
         Einstellung.objects.create(name='bestellung_erlaubt', wert='0')
 
@@ -382,3 +387,5 @@ class SendmailTest(NonSuTestMixin, TestCase):
         # Hier wird in Eclipse ein Fehler angezeigt; mail.outbox gibt es während der Testläufe
         # aber wirklich (siehe https://docs.djangoproject.com/en/1.4/topics/testing/#email-services)
         self.assertEqual(len(mail.outbox), 2)
+        self.assertEqual(len(mail.outbox[0].to), 3)  # an zwei veranstalter und sekretaerin
+
