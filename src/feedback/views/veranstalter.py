@@ -52,13 +52,13 @@ def veranstalter_dashboard(request):
             bestellung.append(("Typ", veranst.get_typ_display))
             bestellung.append(("Anazhl", veranst.anzahl))
             bestellung.append(("Sprache", veranst.get_sprache_display))
-            bestellung.append(("Verantwortlich", veranst.verantwortlich.__unicode__() + '\n'
+            bestellung.append(("Verantwortlich", veranst.verantwortlich.__str__() + '\n'
                                + veranst.verantwortlich.anschrift + '\n'
                                + veranst.verantwortlich.email))
 
             ergebnis_empfanger_str = ""
             for empfaenger in veranst.ergebnis_empfaenger.all():
-                ergebnis_empfanger_str += empfaenger.__unicode__() + "\n"
+                ergebnis_empfanger_str += empfaenger.__str__() + "\n"
             bestellung.append(("Ergebnis Empfänger", ergebnis_empfanger_str))
 
             if veranst.auswertungstermin:
