@@ -1,36 +1,69 @@
-{% extends "bestellung_base.html" %} {% block title %}Interner Bereich{% endblock %} {% block content %}
-<h1>Interner Bereich</h1>
-<ul>
-    <li><a href="{% url 'admin:index' %}" target="_blank">Verwaltung der Daten</a></li>
-    <li><a href="{% url 'rechte-uebernehmen' %}">zu Veranstalter-Account wechseln</a></li>
-    <li><a href="{% url 'sendmail' %}">Mail an Veranstalter verschicken</a></li>
-    <li><a href="{% url 'fragebogensprache' %}">Zuordnung Veranstaltungen zu Fragebogensprache</a></li>
-    <li><a href="{% url 'lange_ohne_evaluation' %}">Veranstaltungen die lange nicht mehr evaluiert wurden</a></li>
-    <li><a href="{% url 'logout' %}">Ausloggen</a></li>
-</ul>
-<h3>Status der Rückmeldungen durch die Veranstalter</h3>
-<p>Aktuell haben wir {{ruck_veranst}} Rückmeldungen von {{all_veranst}} Veranstaltungen.</p> 
-<div style="width:{{width_progressbar}}px; background-color:#eeeeec;">
-    <div style="width:{{width_progressbar_success}}px; background-color:#babdb6;">
-        <p style="text-align:center;">{{relativ_result|floatformat:-2}}%</p>
+{% extends "bestellung_base.html" %}
+{% load static %}
+{% block title %}
+    Interner Bereich
+{% endblock %}
+
+{% block extra_header %}
+    <script type="text/javascript" src="{% static 'jquery/jquery-3.1.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}" />
+{% endblock %}
+
+{% block content %}
+    <h1>Interner Bereich</h1>
+    <ul>
+        <li><a href="{% url 'admin:index' %}" target="_blank">Verwaltung der Daten</a></li>
+        <li><a href="{% url 'rechte-uebernehmen' %}">zu Veranstalter-Account wechseln</a></li>
+        <li><a href="{% url 'sendmail' %}">Mail an Veranstalter verschicken</a></li>
+        <li><a href="{% url 'fragebogensprache' %}">Zuordnung Veranstaltungen zu Fragebogensprache</a></li>
+        <li><a href="{% url 'lange_ohne_evaluation' %}">Veranstaltungen die lange nicht mehr evaluiert wurden</a></li>
+        <li><a href="{% url 'logout' %}">Ausloggen</a></li>
+    </ul>
+    <h3>Status der Rückmeldungen durch die Veranstalter</h3>
+    <p>Aktuell haben wir {{ruck_veranst}} Rückmeldungen von {{all_veranst}} Veranstaltungen.</p>
+    <div style="width:{{width_progressbar}}px; background-color:#eeeeec;">
+        <div style="width:{{width_progressbar_success}}px; background-color:#babdb6;">
+            <p style="text-align:center;">{{relativ_result|floatformat:-2}}%</p>
+        </div>
     </div>
-</div>
-<h3>Ablauf</h3>
-<p>Dies sind nicht alle nötigen Schritte; siehe <a href="https://www.fachschaft.informatik.tu-darmstadt.de/trac/fs/wiki/Untergruppen/Feedback" target="_blank">Ablauf im Trac</a>.</p>
-<ol>
-    <li><a href="{% url 'admin:feedback_semester_add' %}" target="_blank">neues Semester anlegen</a> (aktuell: 
-    {% if cur_semester %}{{cur_semester.short}}{% else %}nicht Vorhanden{% endif %})</li>
-    <li><a href="{% url 'import_vv' %}">Veranstaltungen aus VV importieren</a> (vor Bestellphase)</li>
-    <li><a href="{% url 'import_vv_edit_users' %}">Fehlende Personendaten nachtragen</a> (vor Bestellphase)</li>
-    <li><a href="{% url 'status_final' %}">Bestellung endgültig abschließen</a> (nach Bestellphase)</li>
-    <li><a href="{% url 'generate_letters' %}">Anschreiben für Veranstalter erzeugen</a> (nach Bestellphase)</li>
-    <li><a href="{% url 'export_veranstaltungen' %}">Veranstaltungen für EvaSys exportieren</a> (vor dem Scannen)</li>
-    <li><a href="{% url 'import_ergebnisse' %}">Ergebnisse aus EvaSys importieren</a> (nach dem Scannen)</li>
-    <li><a href="{% url 'sync_ergebnisse' %}">Rankings berechnen</a> (nach dem Ergebnis-Import)</li>
-    {% if cur_semester %}
-    <li><a href="{% url 'admin:feedback_semester_change' cur_semester.id %}" target="_blank">Ergebnisse veröffentlichen</a> (aktuell: sichtbar für {{cur_semester.get_sichtbarkeit_display}})</li>
-    {% endif %}
-</ol>
+    <h3>Ablauf</h3>
+    <p>Dies sind nicht alle nötigen Schritte; siehe <a href="https://www.fachschaft.informatik.tu-darmstadt.de/trac/fs/wiki/Untergruppen/Feedback" target="_blank">Ablauf im Trac</a>.</p>
+
+    <ol>
+        <li><a href="{% url 'admin:feedback_semester_add' %}" target="_blank">neues Semester anlegen</a> (aktuell:
+        {% if cur_semester %}{{cur_semester.short}}{% else %}nicht Vorhanden{% endif %})</li>
+        <li><a href="{% url 'import_vv' %}">Veranstaltungen aus VV importieren</a> (vor Bestellphase)</li>
+        <li><a href="{% url 'import_vv_edit_users' %}">Fehlende Personendaten nachtragen</a> (vor Bestellphase)</li>
+        <li><a href="#orderCloseModal" data-toggle="modal" data-target="#orderCloseModal">Bestellphase abschließen</a> (nach Bestellphase)</li>
+        <li><a href="{% url 'generate_letters' %}">Anschreiben für Veranstalter erzeugen</a> (nach Bestellphase)</li>
+        <li><a href="{% url 'export_veranstaltungen' %}">Veranstaltungen für EvaSys exportieren</a> (vor dem Scannen)</li>
+        <li><a href="{% url 'import_ergebnisse' %}">Ergebnisse aus EvaSys importieren</a> (nach dem Scannen)</li>
+        <li><a href="{% url 'sync_ergebnisse' %}">Rankings berechnen</a> (nach dem Ergebnis-Import)</li>
+        {% if cur_semester %}
+        <li><a href="{% url 'admin:feedback_semester_change' cur_semester.id %}" target="_blank">Ergebnisse veröffentlichen</a> (aktuell: sichtbar für {{cur_semester.get_sichtbarkeit_display}})</li>
+        {% endif %}
+    </ol>
+
+    <div class="modal fade" id="orderCloseModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title">Bestellphase abschließen?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                  <p>Sie sind dabei die Bestellphase zu beenden. Möchten Sie das wirklich tun?</p>
+              </div>
+              <div class="modal-footer">
+                  <a href="{% url 'status_final' %}"><button type="button" class="btn btn-danger">Ja</button></a>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Nein</button>
+              </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block backlink %}<!-- kein Backlink -->{% endblock %}

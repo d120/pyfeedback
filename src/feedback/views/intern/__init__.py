@@ -1,6 +1,5 @@
 # coding=utf-8
 
-import csv
 import os
 import subprocess
 
@@ -22,13 +21,14 @@ from feedback.forms import UploadFileForm
 from feedback.views import public
 from django.db.models import Q
 
+
 @user_passes_test(lambda u: u.is_superuser)
 @require_safe
 def index(request):
     cur_semester = Semester.current()
     all_veranst = Veranstaltung.objects.filter(semester=cur_semester)
 
-    #Veranstaltung für die es Rückmeldungen gibt
+    # Veranstaltung für die es Rückmeldungen gibt
     ruck_veranst = all_veranst.filter(Q(anzahl__gt=0)|Q(evaluieren=False))
 
     num_all_veranst = all_veranst.count()
@@ -36,7 +36,7 @@ def index(request):
 
     relativ_result = 0
 
-    if (num_all_veranst >= 1):
+    if num_all_veranst >= 1:
         relativ_result = (100/float(num_all_veranst)) * num_ruck_veranst
 
     width_progressbar = 500
@@ -49,10 +49,12 @@ def index(request):
                                                  'width_progressbar': width_progressbar,
                                                  'width_progressbar_success': width_progressbar_success,})
 
+
 @user_passes_test(lambda u: u.is_superuser)
 @require_safe
 def lange_ohne_evaluation(request):
     return render(request, 'intern/lange_ohne_evaluation.html', {'veranstaltungen': long_not_ordert()})
+
 
 @user_passes_test(lambda u: u.is_superuser)
 @require_safe
@@ -63,6 +65,7 @@ def fragebogensprache(request):
 
     data = {'veranstaltungen': veranstaltungen}
     return render(request, 'intern/fragebogensprache.html', data)
+
 
 @user_passes_test(lambda u: u.is_superuser)
 @require_http_methods(('HEAD', 'GET', 'POST'))
@@ -111,10 +114,11 @@ def export_veranstaltungen(request):
 
     person_set = set()
 
-    data = {}
+    data = {
+        'veranst': veranst,
+        'ubung_export': ubung_export
+    }
 
-    data['veranst'] = veranst
-    data['ubung_export'] = ubung_export
     for ver in veranst:
         for cur_empf in ver.ergebnis_empfaenger.all():
             person_set.add(cur_empf)
@@ -135,24 +139,28 @@ def export_veranstaltungen(request):
 
 
 def translate_to_latex(text):
-    dic = {'&':'\&',
-           '%':'\%',
-           '$':'\$',
-           '#':'\#',
-           '_':'\_',
-           '"':'"{}',
-           '~':'\~{}',
-           '^':'\\textasciicircum',
+    dic = {
+        '&': '\&',
+        '%': '\%',
+        '$': '\$',
+        '#': '\#',
+        '_': '\_',
+        '"': '"{}',
+        '~': '\~{}',
+        '^': '\\textasciicircum',
     }
+
     for i, j in dic.iteritems():
             text = text.replace(i, j)
     return text
 
+
 @user_passes_test(lambda u: u.is_superuser)
 @require_http_methods(('HEAD', 'GET', 'POST'))
 def generate_letters(request):
-    data = {}
-    data['semester'] = Semester.objects.all()
+    data = {
+        'semester': Semester.objects.all()
+    }
 
     datefilename = settings.LATEX_PATH + 'erhebungswoche.inc'
 
@@ -184,7 +192,7 @@ def generate_letters(request):
         templatename = 'aufkleber'
 
     # aus Sicherheitsgründen TeX-Befehle in Abgabedatum-String deaktivieren
-    #TODO: Kalender-Widget einführen, nur noch dessen Format akzeptieren
+    # TODO: Kalender-Widget einführen, nur noch dessen Format akzeptieren
     try:
         abgabedatum = request.POST['erhebungswoche'].replace('\\', '')
     except KeyError:
@@ -194,6 +202,7 @@ def generate_letters(request):
 
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=%s.pdf' % (templatename)
+
     if vorlage != 'Aufkleber':
         veranst = Veranstaltung.objects.filter(semester=semester, evaluieren=True, anzahl__gt=0).order_by('sprache','anzahl')
     elif 'anzahlaufkleber' in request.POST and request.POST['anzahlaufkleber'].isdigit():
@@ -202,19 +211,20 @@ def generate_letters(request):
         veranst = Veranstaltung.objects.filter(semester=semester, evaluieren=True, anzahl__gt=anzahl).order_by('sprache','anzahl')
     else:
         veranst = Veranstaltung.objects.filter(semester=semester, evaluieren=True, anzahl__gt=0).order_by('sprache','anzahl')
+
     if not veranst.count():
         messages.error(request, 'Für das ausgewählte Semester (%s) liegen keine Bestellungen vor oder die Mindesteilnehmeranzahl ist zu hoch!' % semester)
         return HttpResponseRedirect(reverse('generate_letters'))
 
     lines = []
     for v in veranst:
-        eva_id=v.get_barcode_number()
+        eva_id = v.get_barcode_number()
         empfaenger = unicode(v.verantwortlich.full_name())
         line = u'\\adrentry{%s}{%s}{%s}{%s}{%s}{%s}{%s}{%s}{%s}\n' % (
                         translate_to_latex(v.verantwortlich.full_name()), translate_to_latex(v.verantwortlich.anschrift), translate_to_latex(v.name), v.anzahl, v.sprache, v.get_typ_display(), eva_id, v.freiefrage1.strip(), v.freiefrage2.strip())
         lines.append(smart_str(line))
 
-    #TODO: prüfen, ob nötige Dateien schreibbar sind (abgabedatum.inc, anschreiben.{log,aux,pdf}, veranstalter.adr)
+    # TODO: prüfen, ob nötige Dateien schreibbar sind (abgabedatum.inc, anschreiben.{log,aux,pdf}, veranstalter.adr)
 
     with open(latexpath + 'veranstalter.adr', 'w') as f:
         f.writelines(lines)
@@ -234,12 +244,14 @@ def generate_letters(request):
         response.write(f.read())
     return response
 
+
 @user_passes_test(lambda u: u.is_superuser)
 @require_http_methods(('HEAD', 'GET', 'POST'))
 def sendmail(request):
-    data = {}
-    data['semester'] = Semester.objects.order_by('-semester')
-    data['vorlagen'] = Mailvorlage.objects.all()
+    data = {
+        'semester': Semester.objects.order_by('-semester'),
+        'vorlagen': Mailvorlage.objects.all()
+    }
 
     if request.method == 'POST':
         try:
@@ -357,9 +369,10 @@ def import_ergebnisse(request):
         if form.is_valid():
             warnings, errors, vcount, fbcount = parse_ergebnisse(semester, request.FILES['file'])
             if fbcount:
-                messages.success(request,
-                    u'%u Veranstaltungen mit insgesamt %u Fragebögen wurden erfolgreich importiert.' %
-                    (vcount, fbcount))
+                messages.success(
+                    request,
+                    u'%u Veranstaltungen mit insgesamt %u Fragebögen wurden erfolgreich importiert.' % (vcount, fbcount)
+                )
             else:
                 warnings.append(u'Es konnten keine Fragebögen importiert werden.')
 
@@ -376,6 +389,7 @@ def import_ergebnisse(request):
 
     return render(request, 'intern/import_ergebnisse.html', data)
 
+
 @user_passes_test(lambda u: u.is_superuser)
 @require_http_methods(('HEAD', 'GET', 'POST'))
 def sync_ergebnisse(request):
@@ -388,21 +402,21 @@ def sync_ergebnisse(request):
     except (Semester.DoesNotExist, KeyError):
         return HttpResponseRedirect(reverse('sync_ergebnisse'))
 
-    Fragebogen = get_model('Fragebogen', semester)
-    Ergebnis = get_model('Ergebnis', semester)
-    Ergebnis.objects.filter(veranstaltung__semester=semester).delete()
+    fragebogen = get_model('Fragebogen', semester)
+    ergebnis = get_model('Ergebnis', semester)
+    ergebnis.objects.filter(veranstaltung__semester=semester).delete()
 
     found_something = False
     for v in Veranstaltung.objects.filter(semester=semester):
-        fbs = Fragebogen.objects.filter(veranstaltung=v)
+        fbs = fragebogen.objects.filter(veranstaltung=v)
         if len(fbs):
             found_something = True
             data = {'veranstaltung': v, 'anzahl': len(fbs)}
-            for part in Ergebnis.parts + Ergebnis.hidden_parts:
-                result, count = tools.get_average(Ergebnis, fbs, part[0])
+            for part in ergebnis.parts + ergebnis.hidden_parts:
+                result, count = tools.get_average(ergebnis, fbs, part[0])
                 data[part[0]] = result
                 data[part[0]+'_count'] = count
-            Ergebnis.objects.create(**data)
+            ergebnis.objects.create(**data)
 
     if not found_something:
         messages.warning(request, u'Für das %s liegen keine Ergebnisse vor.' % semester)
@@ -410,26 +424,28 @@ def sync_ergebnisse(request):
         messages.success(request, u'Das Ranking für das %s wurde erfolgreich berechnet.' % semester)
     return HttpResponseRedirect(reverse('sync_ergebnisse'))
 
+
 @user_passes_test(lambda u: u.is_superuser)
 def ergebnisse(request):
     return public.index(request)
+
 
 @user_passes_test(lambda u: u.is_superuser)
 @require_http_methods(('HEAD', 'GET', 'POST'))
 def status_final(request):
     try:
-        veranstaltungen = Veranstaltung.objects.filter(semester = Semester.current())
+        veranstaltungen = Veranstaltung.objects.filter(semester=Semester.current())
     except (Veranstaltung.DoesNotExist, KeyError):
-        messages.warning(request, u'Keine passende Veranstaltungen gefunden.')
+        messages.warning(request, u'Keine passenden Veranstaltungen für das aktuelle Semester gefunden.')
         return HttpResponseRedirect(reverse('intern-index'))
 
     for v in veranstaltungen:
         if v.status == Veranstaltung.STATUS_KEINE_EVALUATION:
-            v.status = Veranstaltung.STATUS_KEINE_EVALUATION_FINAL;
+            v.status = Veranstaltung.STATUS_KEINE_EVALUATION_FINAL
             v.save()
         elif v.status == Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR:
-            v.status = Veranstaltung.STATUS_BESTELLUNG_WIRD_VERARBEITET;
+            v.status = Veranstaltung.STATUS_BESTELLUNG_WIRD_VERARBEITET
             v.save()
 
-    messages.success(request, u'Zustände wurden aktualisiert.')
+    messages.success(request, u'Alle Status wurden erfolgreich aktualisiert.')
     return HttpResponseRedirect(reverse('intern-index'))
