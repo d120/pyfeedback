@@ -1,7 +1,5 @@
 # coding=utf-8
 
-import os
-
 from StringIO import StringIO
 
 from django.conf import settings
@@ -18,8 +16,42 @@ from feedback import tests
 
 
 class CloseOrderTest(NonSuTestMixin, TestCase):
-    def test_close_order(self):
-        pass
+    def setUp(self):
+        self.client.login(username='supers', password='pw')
+        self.s, self.v = get_veranstaltung('vu')
+
+    def test_close_order_bestellung_liegt_vor_post(self):
+        path = '/intern/status_final/'
+        self.v.status = Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR
+        self.v.save()
+
+        response = self.client.post(path, {'auswahl': 'ja', 'submit': 'Bestätigen'}, **{'REMOTE_USER': 'super'})
+
+        self.v.refresh_from_db()
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(self.v.status, Veranstaltung.STATUS_BESTELLUNG_WIRD_VERARBEITET)
+
+    def test_close_order_keine_evaluation_post(self):
+        path = '/intern/status_final/'
+        self.v.status = Veranstaltung.STATUS_KEINE_EVALUATION
+        self.v.save()
+
+        response = self.client.post(path, {'auswahl': 'ja', 'submit': 'Bestätigen'}, **{'REMOTE_USER': 'super'})
+
+        self.v.refresh_from_db()
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(self.v.status, Veranstaltung.STATUS_KEINE_EVALUATION_FINAL)
+
+    def test_close_order_refuse(self):
+        path = '/intern/status_final/'
+        self.v.status = Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR
+        self.v.save()
+
+        response = self.client.post(path, {'auswahl': 'nein', 'submit': 'Bestätigen'}, **{'REMOTE_USER': 'super'})
+
+        self.v.refresh_from_db()
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(self.v.status, Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR)
 
 
 class InternMiscTest(NonSuTestMixin, TestCase):
