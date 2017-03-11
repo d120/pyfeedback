@@ -13,8 +13,11 @@ from django.shortcuts import render
 from django.template import RequestContext
 from django.utils.encoding import smart_str
 from django.views.decorators.http import require_safe, require_http_methods
+from django.contrib.auth.mixins import UserPassesTestMixin
+from django.views.generic import FormView
 
 from feedback import tools
+from feedback.forms import CloseOrderForm
 from feedback.parser.ergebnisse import parse_ergebnisse
 from feedback.models import Veranstaltung, Semester, Einstellung, Mailvorlage, get_model, long_not_ordert, FachgebietEmail
 from feedback.forms import UploadFileForm
@@ -430,15 +433,29 @@ def ergebnisse(request):
     return public.index(request)
 
 
-@user_passes_test(lambda u: u.is_superuser)
-@require_http_methods(('HEAD', 'GET', 'POST'))
-def status_final(request):
-    try:
-        veranstaltungen = Veranstaltung.objects.filter(semester=Semester.current())
-    except (Veranstaltung.DoesNotExist, KeyError):
-        messages.warning(request, u'Keine passenden Veranstaltungen für das aktuelle Semester gefunden.')
-        return HttpResponseRedirect(reverse('intern-index'))
+# @user_passes_test(lambda u: u.is_superuser)
+# @require_http_methods(('HEAD', 'GET', 'POST'))
+# def status_final(request):
+#     try:
+#         veranstaltungen = Veranstaltung.objects.filter(semester=Semester.current())
+#     except (Veranstaltung.DoesNotExist, KeyError):
+#         messages.warning(request, u'Keine passenden Veranstaltungen für das aktuelle Semester gefunden.')
+#         return HttpResponseRedirect(reverse('intern-index'))
+#
+#     for v in veranstaltungen:
+#         if v.status == Veranstaltung.STATUS_KEINE_EVALUATION or v.status == Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR:
+#             if v.status == Veranstaltung.STATUS_KEINE_EVALUATION:
+#                 v.status = Veranstaltung.STATUS_KEINE_EVALUATION_FINAL
+#                 v.save()
+#             elif v.status == Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR:
+#                 v.status = Veranstaltung.STATUS_BESTELLUNG_WIRD_VERARBEITET
+#                 v.save()
+#             messages.success(request, u'Alle Status wurden erfolgreich aktualisiert.')
+#
+#     return HttpResponseRedirect(reverse('intern-index'))
 
+
+def update_veranstaltungen_status(veranstaltungen):
     for v in veranstaltungen:
         if v.status == Veranstaltung.STATUS_KEINE_EVALUATION:
             v.status = Veranstaltung.STATUS_KEINE_EVALUATION_FINAL
@@ -447,5 +464,39 @@ def status_final(request):
             v.status = Veranstaltung.STATUS_BESTELLUNG_WIRD_VERARBEITET
             v.save()
 
-    messages.success(request, u'Alle Status wurden erfolgreich aktualisiert.')
-    return HttpResponseRedirect(reverse('intern-index'))
+
+class CloseOrderFormView(UserPassesTestMixin, FormView):
+    template_name = 'intern/status_final.html'
+    form_class = CloseOrderForm
+
+    def post(self, request, *args, **kwargs):
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        if form.is_valid:
+            choice = self.get_form_kwargs().get('data').get('auswahl')
+            if choice == 'ja':
+                return self.form_valid(form)
+            else:
+                return self.form_invalid(form)
+
+    def form_valid(self, form):
+        update_veranstaltungen_status(self.get_queryset())
+        messages.success(self.request, u'Alle Status wurden erfolgreich aktualisiert.')
+        return super(CloseOrderFormView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        return HttpResponseRedirect(reverse('intern-index'))
+
+    def get_queryset(self):
+        try:
+            veranstaltungen = Veranstaltung.objects.filter(semester=Semester.current())
+            return veranstaltungen
+        except (Veranstaltung.DoesNotExist, KeyError):
+            messages.warning(self.request, u'Keine passenden Veranstaltungen für das aktuelle Semester gefunden.')
+            return HttpResponseRedirect(reverse('intern-index'))
+
+    def get_success_url(self):
+        return reverse('intern-index')
+
+    def test_func(self):
+        return self.request.user.is_superuser

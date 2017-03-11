@@ -17,6 +17,11 @@ from feedback.tests.tools import NonSuTestMixin, get_veranstaltung
 from feedback import tests
 
 
+class CloseOrderTest(NonSuTestMixin, TestCase):
+    def test_close_order(self):
+        pass
+
+
 class InternMiscTest(NonSuTestMixin, TestCase):
     def test_index(self):
         path = tests.INDEX_END
