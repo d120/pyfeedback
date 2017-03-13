@@ -241,6 +241,13 @@ def sendmail(request):
     data['semester'] = Semester.objects.order_by('-semester')
     data['vorlagen'] = Mailvorlage.objects.all()
 
+    status_choises = []
+    status_choises.append((0, 'Alle Veranstaltungen'))
+    for choise_key, choise in Veranstaltung.STATUS_CHOICES:
+        status_choises.append((choise_key, choise))
+
+    data["veranstaltung_status_choises"] = status_choises
+
     if request.method == 'POST':
         try:
             semester = Semester.objects.get(semester=request.POST['semester'])
@@ -253,15 +260,16 @@ def sendmail(request):
         data['semester_selected'] = semester
         data['subject_rendered'] = "Evaluation: %s" % data['subject']
 
-        veranstaltungen = Veranstaltung.objects.filter(semester=semester)
-        if data['recipient'] == 'cur_sem_missing_order':
-            veranstaltungen = veranstaltungen.filter(anzahl=None, evaluieren=True)
-        elif data['recipient'] == 'cur_sem_ordert':
-            veranstaltungen = veranstaltungen.filter(evaluieren=True, anzahl__gt=0)
-        elif data['recipient'] == 'cur_sem_results':
-            # Veranstaltungen ohne Ergebnisse ausfiltern
-            flt = {str('ergebnis'+data['semester_selected'].fragebogen): None}
-            veranstaltungen = veranstaltungen.exclude(**flt)
+        veranstaltungen = Veranstaltung.objects.filter(semester=semester, status=data['recipient'])
+
+        # if data['recipient'] == 'cur_sem_missing_order':
+        #    veranstaltungen = veranstaltungen.filter(anzahl=None, evaluieren=True)
+        # elif data['recipient'] == 'cur_sem_ordert':
+        #    veranstaltungen = veranstaltungen.filter(evaluieren=True, anzahl__gt=0)
+        # elif data['recipient'] == 'cur_sem_results':
+        #    # Veranstaltungen ohne Ergebnisse ausfiltern
+        #    flt = {str('ergebnis'+data['semester_selected'].fragebogen): None}
+        #    veranstaltungen = veranstaltungen.exclude(**flt)
 
         color_span = '<span style="color:blue">{}</span>'
         link_veranstalter = 'https://www.fachschaft.informatik.tu-darmstadt.de%s' % reverse('veranstalter-login')
@@ -285,12 +293,12 @@ def sendmail(request):
             data['to'] = "Veranstalter von %d Veranstaltungen" % veranstaltungen.count()
             data['body_rendered'] = tools.render_email(data['body'], demo_context)
 
-            if data['recipient'] == 'cur_sem_missing_order':
+            if data['recipient'] <= Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR:
                 if Einstellung.get('bestellung_erlaubt') == '0':
                     messages.warning(request, u'Bestellungen sind aktuell nicht erlaubt! Bist du ' +
                                      u'sicher, dass du trotzdem die Dozenten anschreiben willst, ' +
                                      u'die noch nicht bestellt haben?')
-            elif data['recipient'] == 'cur_sem_results':
+            elif data['recipient'] == Veranstaltung.STATUS_ERGEBNISSE_VERSANDT:
                 if semester.sichtbarkeit != 'VER':
                     messages.warning(request, u'Die Sichtbarkeit der Ergebnisse des ausgewählten ' +
                                      u'Semesters ist aktuell nicht auf "Veranstalter" ' +

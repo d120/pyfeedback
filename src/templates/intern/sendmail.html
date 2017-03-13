@@ -8,7 +8,22 @@
 <form method="post" action="">{% csrf_token %}
 <p>{% include 'includes/semesterauswahl.html' %}</p>
 <p>
-Mail senden an...<br />
+<label for="selectRecipient" >
+    Mail senden an Veranstaltung mit dem Status:
+    <select id="selectRecipient" name="recipient">
+        {% for choise in veranstaltung_status_choises %}
+            <option value="{{ choise.0 }}">{{ choise.1 }}</option>
+        {% endfor %}
+    </select>
+</label>
+
+
+
+
+
+</p>
+
+<!--
 <input type="radio" name="recipient" id="recipient_cur_sem_all" value="cur_sem_all"{% if recipient == "cur_sem_all" %} checked="checked"{% endif %} /> 
  <label for="recipient_cur_sem_all">...alle Veranstalter.</label><br />
 <input type="radio" name="recipient" id="recipient_cur_sem_missing_order" value="cur_sem_missing_order"{% if not recipient or recipient == "cur_sem_missing_order" %} checked="checked"{% endif %} />
@@ -17,7 +32,7 @@ Mail senden an...<br />
  <label for="recipient_cur_sem_ordert">...alle Veranstalter von Veranstaltungen, für die Bögen bestellt wurden.</label><br />
 <input type="radio" name="recipient" id="recipient_cur_sem_results" value="cur_sem_results"{% if recipient == "cur_sem_results" %} checked="checked"{% endif %} />
  <label for="recipient_cur_sem_results">...alle Veranstalter von Veranstaltungen, für die Ergebnisse vorliegen.</label><br />
-</p>
+-->
 
 <p>
 <label for="vorlage">Vorlage:</label><br />
