@@ -492,3 +492,4 @@ class SendmailTest(NonSuTestMixin, TestCase):
         # aber wirklich (siehe https://docs.djangoproject.com/en/1.4/topics/testing/#email-services)
         self.assertEqual(len(mail.outbox), 2)
         self.assertEqual(len(mail.outbox[0].to), 3)  # an zwei veranstalter und sekretaerin
+
