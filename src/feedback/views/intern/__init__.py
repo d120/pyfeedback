@@ -433,32 +433,14 @@ def ergebnisse(request):
     return public.index(request)
 
 
-# @user_passes_test(lambda u: u.is_superuser)
-# @require_http_methods(('HEAD', 'GET', 'POST'))
-# def status_final(request):
-#     try:
-#         veranstaltungen = Veranstaltung.objects.filter(semester=Semester.current())
-#     except (Veranstaltung.DoesNotExist, KeyError):
-#         messages.warning(request, u'Keine passenden Veranstaltungen für das aktuelle Semester gefunden.')
-#         return HttpResponseRedirect(reverse('intern-index'))
-#
-#     for v in veranstaltungen:
-#         if v.status == Veranstaltung.STATUS_KEINE_EVALUATION or v.status == Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR:
-#             if v.status == Veranstaltung.STATUS_KEINE_EVALUATION:
-#                 v.status = Veranstaltung.STATUS_KEINE_EVALUATION_FINAL
-#                 v.save()
-#             elif v.status == Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR:
-#                 v.status = Veranstaltung.STATUS_BESTELLUNG_WIRD_VERARBEITET
-#                 v.save()
-#             messages.success(request, u'Alle Status wurden erfolgreich aktualisiert.')
-#
-#     return HttpResponseRedirect(reverse('intern-index'))
+def is_no_evaluation_final(status):
+    return status == Veranstaltung.STATUS_KEINE_EVALUATION or status == Veranstaltung.STATUS_ANGELEGT or \
+           status == Veranstaltung.STATUS_BESTELLUNG_GEOEFFNET
 
 
-# TODO: change status to final if status == 'angelegt' or 'bestellung geoeffnet'
 def update_veranstaltungen_status(veranstaltungen):
     for v in veranstaltungen:
-        if v.status == Veranstaltung.STATUS_KEINE_EVALUATION:
+        if is_no_evaluation_final(v.status):
             v.status = Veranstaltung.STATUS_KEINE_EVALUATION_FINAL
             v.save()
         elif v.status == Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR:

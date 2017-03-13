@@ -42,6 +42,28 @@ class CloseOrderTest(NonSuTestMixin, TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(self.v.status, Veranstaltung.STATUS_KEINE_EVALUATION_FINAL)
 
+    def test_close_order_status_angelegt_post(self):
+        path = '/intern/status_final/'
+        self.v.status = Veranstaltung.STATUS_ANGELEGT
+        self.v.save()
+
+        response = self.client.post(path, {'auswahl': 'ja', 'submit': 'Bestätigen'}, **{'REMOTE_USER': 'super'})
+
+        self.v.refresh_from_db()
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(self.v.status, Veranstaltung.STATUS_KEINE_EVALUATION_FINAL)
+
+    def test_close_order_bestellung_geoeffnet_post(self):
+        path = '/intern/status_final/'
+        self.v.status = Veranstaltung.STATUS_BESTELLUNG_GEOEFFNET
+        self.v.save()
+
+        response = self.client.post(path, {'auswahl': 'ja', 'submit': 'Bestätigen'}, **{'REMOTE_USER': 'super'})
+
+        self.v.refresh_from_db()
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(self.v.status, Veranstaltung.STATUS_KEINE_EVALUATION_FINAL)
+
     def test_close_order_refuse(self):
         path = '/intern/status_final/'
         self.v.status = Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR
