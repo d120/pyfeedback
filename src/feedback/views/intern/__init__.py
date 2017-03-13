@@ -455,6 +455,7 @@ def ergebnisse(request):
 #     return HttpResponseRedirect(reverse('intern-index'))
 
 
+# TODO: change status to final if status == 'angelegt' or 'bestellung geoeffnet'
 def update_veranstaltungen_status(veranstaltungen):
     for v in veranstaltungen:
         if v.status == Veranstaltung.STATUS_KEINE_EVALUATION:
