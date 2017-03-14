@@ -4,6 +4,7 @@ import csv
 import os
 import subprocess
 
+from django.db.models import Q
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
@@ -22,13 +23,14 @@ from feedback.forms import UploadFileForm
 from feedback.views import public
 from django.db.models import Q
 
+
 @user_passes_test(lambda u: u.is_superuser)
 @require_safe
 def index(request):
     cur_semester = Semester.current()
     all_veranst = Veranstaltung.objects.filter(semester=cur_semester)
 
-    #Veranstaltung für die es Rückmeldungen gibt
+    # Veranstaltung für die es Rückmeldungen gibt
     ruck_veranst = all_veranst.filter(Q(anzahl__gt=0)|Q(evaluieren=False))
 
     num_all_veranst = all_veranst.count()
@@ -36,7 +38,7 @@ def index(request):
 
     relativ_result = 0
 
-    if (num_all_veranst >= 1):
+    if num_all_veranst >= 1:
         relativ_result = (100/float(num_all_veranst)) * num_ruck_veranst
 
     width_progressbar = 500
@@ -49,10 +51,12 @@ def index(request):
                                                  'width_progressbar': width_progressbar,
                                                  'width_progressbar_success': width_progressbar_success,})
 
+
 @user_passes_test(lambda u: u.is_superuser)
 @require_safe
 def lange_ohne_evaluation(request):
     return render(request, 'intern/lange_ohne_evaluation.html', {'veranstaltungen': long_not_ordert()})
+
 
 @user_passes_test(lambda u: u.is_superuser)
 @require_safe
@@ -63,6 +67,7 @@ def fragebogensprache(request):
 
     data = {'veranstaltungen': veranstaltungen}
     return render(request, 'intern/fragebogensprache.html', data)
+
 
 @user_passes_test(lambda u: u.is_superuser)
 @require_http_methods(('HEAD', 'GET', 'POST'))
@@ -111,10 +116,11 @@ def export_veranstaltungen(request):
 
     person_set = set()
 
-    data = {}
+    data = {
+        'veranst': veranst,
+        'ubung_export': ubung_export
+    }
 
-    data['veranst'] = veranst
-    data['ubung_export'] = ubung_export
     for ver in veranst:
         for cur_empf in ver.ergebnis_empfaenger.all():
             person_set.add(cur_empf)
@@ -148,11 +154,13 @@ def translate_to_latex(text):
             text = text.replace(i, j)
     return text
 
+
 @user_passes_test(lambda u: u.is_superuser)
 @require_http_methods(('HEAD', 'GET', 'POST'))
 def generate_letters(request):
-    data = {}
-    data['semester'] = Semester.objects.all()
+    data = {
+        'semester': Semester.objects.all()
+    }
 
     datefilename = settings.LATEX_PATH + 'erhebungswoche.inc'
 
@@ -184,7 +192,7 @@ def generate_letters(request):
         templatename = 'aufkleber'
 
     # aus Sicherheitsgründen TeX-Befehle in Abgabedatum-String deaktivieren
-    #TODO: Kalender-Widget einführen, nur noch dessen Format akzeptieren
+    # TODO: Kalender-Widget einführen, nur noch dessen Format akzeptieren
     try:
         abgabedatum = request.POST['erhebungswoche'].replace('\\', '')
     except KeyError:
@@ -214,7 +222,7 @@ def generate_letters(request):
                         translate_to_latex(v.verantwortlich.full_name()), translate_to_latex(v.verantwortlich.anschrift), translate_to_latex(v.name), v.anzahl, v.sprache, v.get_typ_display(), eva_id, v.freiefrage1.strip(), v.freiefrage2.strip())
         lines.append(smart_str(line))
 
-    #TODO: prüfen, ob nötige Dateien schreibbar sind (abgabedatum.inc, anschreiben.{log,aux,pdf}, veranstalter.adr)
+    # TODO: prüfen, ob nötige Dateien schreibbar sind (abgabedatum.inc, anschreiben.{log,aux,pdf}, veranstalter.adr)
 
     with open(latexpath + 'veranstalter.adr', 'w') as f:
         f.writelines(lines)
@@ -234,15 +242,16 @@ def generate_letters(request):
         response.write(f.read())
     return response
 
+
 @user_passes_test(lambda u: u.is_superuser)
 @require_http_methods(('HEAD', 'GET', 'POST'))
 def sendmail(request):
-    data = {}
-    data['semester'] = Semester.objects.order_by('-semester')
-    data['vorlagen'] = Mailvorlage.objects.all()
+    data = {
+        'semester': Semester.objects.order_by('-semester'),
+        'vorlagen': Mailvorlage.objects.all(),
+    }
 
-    status_choises = []
-    status_choises.append((0, 'Alle Veranstaltungen'))
+    status_choises = [(0, 'Alle Veranstaltungen')]
     for choise_key, choise in Veranstaltung.STATUS_CHOICES:
         status_choises.append((choise_key, choise))
 
@@ -251,25 +260,24 @@ def sendmail(request):
     if request.method == 'POST':
         try:
             semester = Semester.objects.get(semester=request.POST['semester'])
-            data['recipient'] = request.POST['recipient']
             data['subject'] = request.POST['subject']
             data['body'] = request.POST['body']
+            # FIXME: Bug hier wenn man von Vorschau zu Ändern geht. Grund: requst.POST.getlist() baut aus der Liste vom ersten POST, wieder eine Liste dieser Liste im zweiten POST :((
+            data['recipient'] = request.POST.getlist('recipient')
         except (Semester.DoesNotExist, KeyError):
             return HttpResponseRedirect(reverse('sendmail'))
 
         data['semester_selected'] = semester
         data['subject_rendered'] = "Evaluation: %s" % data['subject']
 
-        veranstaltungen = Veranstaltung.objects.filter(semester=semester, status=data['recipient'])
-
-        # if data['recipient'] == 'cur_sem_missing_order':
-        #    veranstaltungen = veranstaltungen.filter(anzahl=None, evaluieren=True)
-        # elif data['recipient'] == 'cur_sem_ordert':
-        #    veranstaltungen = veranstaltungen.filter(evaluieren=True, anzahl__gt=0)
-        # elif data['recipient'] == 'cur_sem_results':
-        #    # Veranstaltungen ohne Ergebnisse ausfiltern
-        #    flt = {str('ergebnis'+data['semester_selected'].fragebogen): None}
-        #    veranstaltungen = veranstaltungen.exclude(**flt)
+        veranstaltungen = []
+        for status in data['recipient']:
+            all_veranstaltungen_for_semester = Veranstaltung.objects.filter(semester=semester)
+            filtered = Veranstaltung.objects.filter(semester=semester, status=int(status))
+            if status == '0':
+                veranstaltungen.append(all_veranstaltungen_for_semester)
+            elif filtered.count() > 0:
+                veranstaltungen.append(filtered)
 
         color_span = '<span style="color:blue">{}</span>'
         link_veranstalter = 'https://www.fachschaft.informatik.tu-darmstadt.de%s' % reverse('veranstalter-login')
@@ -290,7 +298,7 @@ def sendmail(request):
         elif 'vorschau' in request.POST:
             data['vorschau'] = True
             data['from'] = settings.DEFAULT_FROM_EMAIL
-            data['to'] = "Veranstalter von %d Veranstaltungen" % veranstaltungen.count()
+            data['to'] = "Veranstalter von %d Veranstaltungen" % len(veranstaltungen)
             data['body_rendered'] = tools.render_email(data['body'], demo_context)
 
             if data['recipient'] <= Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR:
@@ -312,40 +320,41 @@ def sendmail(request):
             mails = []
 
             # Mails für die Veranstaltungen
-            for v in veranstaltungen:
-                subject = data['subject']
-                context = RequestContext(request, {
-                    'veranstaltung': v.name,
-                    'link_veranstalter': link_veranstalter + (link_suffix_format %
-                                                              (v.id, v.access_token)),
-                })
-                body = tools.render_email(data['body'], context)
-                recipients = [p.email for p in v.veranstalter.all() if p.email]
+            for queryset in veranstaltungen:
+                for v in queryset:
+                    subject = data['subject']
+                    context = RequestContext(request, {
+                        'veranstaltung': v.name,
+                        'link_veranstalter': link_veranstalter + (link_suffix_format %
+                                                                  (v.id, v.access_token)),
+                    })
+                    body = tools.render_email(data['body'], context)
+                    recipients = [p.email for p in v.veranstalter.all() if p.email]
 
-                for p in v.veranstalter.all():
-                    fg = p.fachgebiet
-                    if fg is not None:
-                        fg_mails = FachgebietEmail.objects.filter(fachgebiet=fg)
-                        for fg_mail in fg_mails:
-                            if (fg_mail.email_sekretaerin is not None) \
-                                    and (fg_mail.email_sekretaerin not in recipients):
-                                recipients.append(fg_mail.email_sekretaerin)
+                    for p in v.veranstalter.all():
+                        fg = p.fachgebiet
+                        if fg is not None:
+                            fg_mails = FachgebietEmail.objects.filter(fachgebiet=fg)
+                            for fg_mail in fg_mails:
+                                if (fg_mail.email_sekretaerin is not None) \
+                                        and (fg_mail.email_sekretaerin not in recipients):
+                                    recipients.append(fg_mail.email_sekretaerin)
 
-                if not recipients:
-                    messages.warning(request, (u'An die Veranstalter von "%s" wurde keine Mail ' +
-                                     u'verschickt, da keine Adressen hinterlegt waren.') % v.name)
-                    continue
-                mails.append((subject, body, settings.DEFAULT_FROM_EMAIL, recipients))
+                    if not recipients:
+                        messages.warning(request, (u'An die Veranstalter von "%s" wurde keine Mail ' +
+                                         u'verschickt, da keine Adressen hinterlegt waren.') % v.name)
+                        continue
+                    mails.append((subject, body, settings.DEFAULT_FROM_EMAIL, recipients))
 
-            # Kopie für das Feedback-Team
-            subject = data['subject_rendered']
-            body = tools.render_email(data['body'], demo_context)
-            mails.append((subject, body, settings.DEFAULT_FROM_EMAIL, [settings.DEFAULT_FROM_EMAIL]))
+                # Kopie für das Feedback-Team
+                subject = data['subject_rendered']
+                body = tools.render_email(data['body'], demo_context)
+                mails.append((subject, body, settings.DEFAULT_FROM_EMAIL, [settings.DEFAULT_FROM_EMAIL]))
 
-            # Mails senden
-            send_mass_mail(mails)
-            messages.success(request, '%d E-Mails wurden erfolgreich versandt!' % (len(mails)-1))
-            return HttpResponseRedirect(reverse('intern-index'))
+                # Mails senden
+                send_mass_mail(mails)
+                messages.success(request, '%d E-Mails wurden erfolgreich versandt!' % (len(mails)-1))
+                return HttpResponseRedirect(reverse('intern-index'))
 
     return render(request, 'intern/sendmail.html', data)
 
@@ -383,6 +392,7 @@ def import_ergebnisse(request):
         data['form'] = UploadFileForm()
 
     return render(request, 'intern/import_ergebnisse.html', data)
+
 
 @user_passes_test(lambda u: u.is_superuser)
 @require_http_methods(('HEAD', 'GET', 'POST'))
