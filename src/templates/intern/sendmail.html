@@ -22,10 +22,21 @@
     <p>{% include 'includes/semesterauswahl.html' %}</p>
     <p>
         <label for="selectRecipient" >
-            Mail senden an Veranstaltung mit dem Status:
+            Mail senden an Veranstalter der Veranstaltung mit Bestellstatus:
             <select multiple class="chosen-select" style="width: 175px;" data-placeholder="Wähle einen Status..." id="selectRecipient" name="recipient">
-                {% for choise in veranstaltung_status_choises %}
-                    <option value="{{ choise.0 }}">{{ choise.1 }}</option>
+                {% for choice in veranstaltung_status_choices %}
+                    <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                {% endfor %}
+            </select>
+        </label>
+    </p>
+
+    <p>
+        <label for="selectTutoren">
+            Mail auch an die Tutoren der jeweiligen Veranstaltungen schicken?
+            <select id="selectTutoren" name="tutoren">
+                {% for choice in tutoren_choices %}
+                    <option value="{{ choice.0 }}">{{ choice.1 }}</option>
                 {% endfor %}
             </select>
         </label>

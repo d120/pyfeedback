@@ -11,7 +11,7 @@ from django.core.urlresolvers import reverse
 
 from feedback.forms import UploadFileForm
 from feedback.models import Semester, Person, Veranstaltung, Fragebogen2009, Mailvorlage, Einstellung, \
-    Fachgebiet, FachgebietEmail
+    Fachgebiet, FachgebietEmail, Tutor
 from feedback.tests.tools import NonSuTestMixin, get_veranstaltung
 
 from feedback import tests
@@ -365,77 +365,116 @@ class SendmailTest(NonSuTestMixin, TestCase):
 
     def test_post(self):
         self.client.login(username='supers', password='pw')
-        get_veranstaltung('v')
+
         s, v1 = get_veranstaltung('vu')
         v1.anzahl = 42
         v1.sprache = 'de'
         v1.save()
 
-        fb = Fachgebiet.objects.create(name="Fachgebiet1", kuerzel="FB1")
-        FachgebietEmail.objects.create(fachgebiet=fb, email_suffix="ul.bla", email_sekretaerin="sek@ul.bla")
-        p1 = Person.objects.create(vorname='Pe', nachname='Ter', email='pe@ter.bla')
-        p2 = Person.objects.create(vorname='Pa', nachname='Ul', email='pa@ul.bla', fachgebiet=fb)
+        default_params = {
+            'semester': s, 'status': Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR, 'grundstudium': False,
+            'evaluieren': True, 'sprache': 'de', 'anzahl': 44, 'lv_nr': '234vu'
+        }
+        v2 = Veranstaltung.objects.create(typ='vu', name='Stoning III', **default_params)
+        v2.save()
+
+        fg1 = Fachgebiet.objects.create(name="Fachgebiet1", kuerzel="FB1")
+        fg2 = Fachgebiet.objects.create(name="Fachgebiet2", kuerzel="FB2")
+        FachgebietEmail.objects.create(fachgebiet=fg1, email_suffix="fg1.com", email_sekretaerin="sek@fg1.com")
+        FachgebietEmail.objects.create(fachgebiet=fg2, email_suffix="fg2.com", email_sekretaerin="sek@fg2.com")
+
+        p1 = Person.objects.create(vorname='Peter', nachname='Pan', email='peter@fg1.com', fachgebiet=fg1)
+        p2 = Person.objects.create(vorname='Pan', nachname='Peter', email='pan@fg2.com', fachgebiet=fg2)
+
+        t = Tutor.objects.create(nummer=1, vorname='Max', nachname='Mux',
+                                 email='max@fg1.com', anmerkung='', veranstaltung=v1)
 
         v1.veranstalter.add(p1)
-        v1.veranstalter.add(p2)
+        v2.veranstalter.add(p2)
+
         mv = Mailvorlage.objects.create(subject='Testmail', body='Dies ist eine Testmail.')
         Einstellung.objects.create(name='bestellung_erlaubt', wert='0')
 
-        data = {
+        post_data = {
             'uebernehmen': 'x',
             'recipient': [Veranstaltung.STATUS_BESTELLUNG_GEOEFFNET],
+            'tutoren': 'False',
             'subject': 'abc',
             'body': 'xyz'
         }
 
         # kein Semester angegeben
-        response = self.client.post(self.path, data, **{'REMOTE_USER': 'super'})
+        response = self.client.post(self.path, post_data, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response['Location'].endswith('/intern/sendmail/'))
 
         # Vorlage übernehmen; Vorlage nicht angegeben
-        data['semester'] = s.semester
-        response = self.client.post(self.path, data, **{'REMOTE_USER': 'super'})
+        post_data['semester'] = s.semester
+        response = self.client.post(self.path, post_data, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response['Location'].endswith('/intern/sendmail/'))
 
         # Vorlage übernehmen; Vorlage ist angegeben
-        data['vorlage'] = mv.id
-        response = self.client.post(self.path, data, **{'REMOTE_USER': 'super'})
+        post_data['vorlage'] = mv.id
+        response = self.client.post(self.path, post_data, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.templates[0].name, 'intern/sendmail.html')
         self.assertEqual(response.context['subject'], mv.subject)
         self.assertEqual(response.context['body'], mv.body)
 
         # Vorschau; Empfänger ist auf Veranstalter mit fehlenden Bestellungen eingestellt
-        del data['uebernehmen']
-        data['vorschau'] = 'x'
-        response = self.client.post(self.path, data, **{'REMOTE_USER': 'super'})
+        del post_data['uebernehmen']
+        post_data['vorschau'] = 'x'
+        response = self.client.post(self.path, post_data, **{'REMOTE_USER': 'super'})
         self.assertIn('intern/sendmail_preview.html', (t.name for t in response.templates))
         self.assertTrue(response.context['vorschau'])
 
         # Vorschau; Empfänger ist auf Veranstaltungen mit Ergebnissen eingestellt
-        data['recipient'] = [Veranstaltung.STATUS_ERGEBNISSE_VERSANDT]
-        response = self.client.post(self.path, data, **{'REMOTE_USER': 'super'})
+        post_data['recipient'] = [Veranstaltung.STATUS_ERGEBNISSE_VERSANDT]
+        response = self.client.post(self.path, post_data, **{'REMOTE_USER': 'super'})
         self.assertIn('intern/sendmail_preview.html', (t.name for t in response.templates))
         self.assertTrue(response.context['vorschau'])
 
         # Vorschau: Check if the replacements are highlighted
         color_span = '<span style="color:blue">{}</span>'
-        self.assertEqual(color_span.format('Grundlagen der Agrarphilosophie I') , response.context['veranstaltung'])
+        self.assertEqual(color_span.format('Grundlagen der Agrarphilosophie I'), response.context['veranstaltung'])
         link_veranstalter = 'https://www.fachschaft.informatik.tu-darmstadt.de%s' % reverse('veranstalter-login')
         link_suffix_format = '?vid=%d&token=%s'
         self.assertEqual(color_span.format(link_veranstalter + (link_suffix_format % (1337, '0123456789abcdef'))),
                          response.context['link_veranstalter'])
 
-        # Senden
-        del data['vorschau']
-        data['senden'] = 'x'
-        data['recipient'] = [0]  # 0 ist hierbei der Code für alle Veranstaltungen
-        del data['vorlage']
-        response = self.client.post(self.path, data, **{'REMOTE_USER': 'super'})
+        # Senden an alle Veranstaltungen ohne Tutoren
+        del post_data['vorschau']
+        post_data['senden'] = 'x'
+        post_data['recipient'] = [0]  # 0 ist hierbei der Code für alle Veranstaltungen
+        del post_data['vorlage']
+        response = self.client.post(self.path, post_data, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response['Location'], tests.LOGIN_URL)
         # Hier wird in Eclipse ein Fehler angezeigt; mail.outbox gibt es während der Testläufe
         # aber wirklich (siehe https://docs.djangoproject.com/en/1.4/topics/testing/#email-services)
-        self.assertEqual(len(mail.outbox), 2)
-        self.assertEqual(len(mail.outbox[0].to), 3)  # an zwei veranstalter und sekretaerin
+        self.assertEqual(len(mail.outbox), 3)  # an 2 Veranstalter und Kopie an Feedback-Team
+        self.assertEqual(len(mail.outbox[0].to), 2)  # an Veranstalter und Sekretaerin
+        self.assertEqual(len(mail.outbox[1].to), 2)
+
+        # Senden an eine bestimmte Veranstaltung ohne Tutoren
+        del mail.outbox[:]
+        post_data['recipient'] = Veranstaltung.STATUS_BESTELLUNG_GEOEFFNET
+        response = self.client.post(self.path, post_data, **{'REMOTE_USER': 'super'})
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response['Location'], tests.LOGIN_URL)
+        self.assertEqual(len(mail.outbox), 2)  # an 1 Veranstalter und Kopie an Feedback-Team
+        self.assertEqual(len(mail.outbox[0].to), 2)  # an Veranstalter und Sekretaerin
+
+        # Senden an eine bestimmte Veranstaltung mit Tutoren ==> ohne Sekretaerin
+        del mail.outbox[:]
+        post_data['recipient'] = Veranstaltung.STATUS_BESTELLUNG_GEOEFFNET
+        post_data['tutoren'] = 'True'
+        response = self.client.post(self.path, post_data, **{'REMOTE_USER': 'super'})
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response['Location'], tests.LOGIN_URL)
+        self.assertEqual(len(mail.outbox), 2)  # an 1 Veranstalter und Kopie an Feedback-Team
+        self.assertEqual(len(mail.outbox[0].to), 2)  # an Veranstalter und Tutor
+        self.assertEqual(mail.outbox[0].to[1], 'max@fg1.com')  # E-Mail Adresse des Tutors
+
+
+
