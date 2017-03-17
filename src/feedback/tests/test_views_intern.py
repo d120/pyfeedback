@@ -489,5 +489,3 @@ class SendmailTest(NonSuTestMixin, TestCase):
         self.assertEqual(len(mail.outbox), 2)  # an 1 Veranstalter und Kopie an Feedback-Team
         self.assertEqual(len(mail.outbox[0].to), 2)  # an Veranstalter und Tutor
         self.assertEqual(mail.outbox[0].to[1], 'max@fg1.com')  # E-Mail Adresse des Tutors
-
-

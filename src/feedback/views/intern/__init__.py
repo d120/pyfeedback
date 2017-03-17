@@ -380,15 +380,6 @@ def sendmail(request):
                 else:
                     add_sekretaerin_mail(recipients, v)
 
-                for p in v.veranstalter.all():
-                    fg = p.fachgebiet
-                    if fg is not None:
-                        fg_mails = FachgebietEmail.objects.filter(fachgebiet=fg)
-                        for fg_mail in fg_mails:
-                            if (fg_mail.email_sekretaerin is not None) \
-                                    and (fg_mail.email_sekretaerin not in recipients):
-                                recipients.append(fg_mail.email_sekretaerin)
-
                 if not recipients:
                     messages.warning(request,
                                      (u'An die Veranstalter von "%s" wurde keine Mail ' +
