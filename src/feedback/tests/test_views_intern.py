@@ -491,4 +491,3 @@ class SendmailTest(NonSuTestMixin, TestCase):
         self.assertEqual(mail.outbox[0].to[1], 'max@fg1.com')  # E-Mail Adresse des Tutors
 
 
-
