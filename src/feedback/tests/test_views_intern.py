@@ -1,5 +1,7 @@
 # coding=utf-8
 
+import os
+
 from StringIO import StringIO
 
 from django.conf import settings
@@ -440,36 +442,41 @@ class SendmailTest(NonSuTestMixin, TestCase):
         mv = Mailvorlage.objects.create(subject='Testmail', body='Dies ist eine Testmail.')
         Einstellung.objects.create(name='bestellung_erlaubt', wert='0')
 
-        params = {'uebernehmen': 'x', 'recipient': 'cur_sem_missing_order', 'subject': 'abc', 'body': 'xyz'}
+        data = {
+            'uebernehmen': 'x',
+            'recipient': [Veranstaltung.STATUS_BESTELLUNG_GEOEFFNET],
+            'subject': 'abc',
+            'body': 'xyz'
+        }
 
         # kein Semester angegeben
-        response = self.client.post(self.path, params, **{'REMOTE_USER': 'super'})
+        response = self.client.post(self.path, data, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response['Location'].endswith('/intern/sendmail/'))
 
         # Vorlage übernehmen; Vorlage nicht angegeben
-        params['semester'] = s.semester
-        response = self.client.post(self.path, params, **{'REMOTE_USER': 'super'})
+        data['semester'] = s.semester
+        response = self.client.post(self.path, data, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response['Location'].endswith('/intern/sendmail/'))
 
         # Vorlage übernehmen; Vorlage ist angegeben
-        params['vorlage'] = mv.id
-        response = self.client.post(self.path, params, **{'REMOTE_USER': 'super'})
+        data['vorlage'] = mv.id
+        response = self.client.post(self.path, data, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.templates[0].name, 'intern/sendmail.html')
         self.assertEqual(response.context['subject'], mv.subject)
         self.assertEqual(response.context['body'], mv.body)
 
         # Vorschau; Empfänger ist auf Veranstalter mit fehlenden Bestellungen eingestellt
-        del params['uebernehmen']
-        params['vorschau'] = 'x'
-        response = self.client.post(self.path, params, **{'REMOTE_USER': 'super'})
+        del data['uebernehmen']
+        data['vorschau'] = 'x'
+        response = self.client.post(self.path, data, **{'REMOTE_USER': 'super'})
         self.assertIn('intern/sendmail_preview.html', (t.name for t in response.templates))
         self.assertTrue(response.context['vorschau'])
 
         # Vorschau; Empfänger ist auf Veranstaltungen mit Ergebnissen eingestellt
-        params['recipient'] = 'cur_sem_results'
-        response = self.client.post(self.path, params, **{'REMOTE_USER': 'super'})
+        data['recipient'] = [Veranstaltung.STATUS_ERGEBNISSE_VERSANDT]
+        response = self.client.post(self.path, data, **{'REMOTE_USER': 'super'})
         self.assertIn('intern/sendmail_preview.html', (t.name for t in response.templates))
         self.assertTrue(response.context['vorschau'])
 
@@ -478,18 +485,18 @@ class SendmailTest(NonSuTestMixin, TestCase):
         self.assertEqual(color_span.format('Grundlagen der Agrarphilosophie I') , response.context['veranstaltung'])
         link_veranstalter = 'https://www.fachschaft.informatik.tu-darmstadt.de%s' % reverse('veranstalter-login')
         link_suffix_format = '?vid=%d&token=%s'
-        self.assertEqual(color_span.format(link_veranstalter + (link_suffix_format % (1337, '0123456789abcdef'))) , response.context['link_veranstalter'])
+        self.assertEqual(color_span.format(link_veranstalter + (link_suffix_format % (1337, '0123456789abcdef'))),
+                         response.context['link_veranstalter'])
 
         # Senden
-        del params['vorschau']
-        params['senden'] = 'x'
-        params['recipient'] = 'cur_sem_all'
-        del params['vorlage']
-        response = self.client.post(self.path, params, **{'REMOTE_USER': 'super'})
+        del data['vorschau']
+        data['senden'] = 'x'
+        data['recipient'] = [0]  # 0 ist hierbei der Code für alle Veranstaltungen
+        del data['vorlage']
+        response = self.client.post(self.path, data, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response['Location'], tests.LOGIN_URL)
         # Hier wird in Eclipse ein Fehler angezeigt; mail.outbox gibt es während der Testläufe
         # aber wirklich (siehe https://docs.djangoproject.com/en/1.4/topics/testing/#email-services)
         self.assertEqual(len(mail.outbox), 2)
         self.assertEqual(len(mail.outbox[0].to), 3)  # an zwei veranstalter und sekretaerin
-
