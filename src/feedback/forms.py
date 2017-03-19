@@ -165,6 +165,16 @@ class PersonUpdateForm(forms.ModelForm):
         fields = ('anschrift', 'fachgebiet')
 
 
+CLOSE_ORDER_CHOICES = (
+    ('ja', 'Ja'),
+    ('nein', 'Nein')
+)
+
+
+class CloseOrderForm(forms.Form):
+    auswahl = forms.ChoiceField(choices=CLOSE_ORDER_CHOICES)
+
+
 class CreateBarcodeScannEventForm(forms.ModelForm):
     """Handelt die erste haelfte von Barcode scanns"""
     scanner_token = forms.CharField()

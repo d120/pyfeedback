@@ -1,0 +1,15 @@
+{% extends "bestellung_base.html" %}
+{% load static %}
+{% block title %}
+    Interner Bereich
+{% endblock %}
+
+{% block content %}
+    <h2>Bestellphase abschließen?</h2>
+    <p>Sie sind dabei die Bestellphase zu beenden. Möchten Sie das wirklich tun?</p>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        &nbsp;<input type="submit" name="submit" value="Bestätigen" />
+    </form>
+{% endblock %}
