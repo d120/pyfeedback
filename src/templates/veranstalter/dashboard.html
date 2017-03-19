@@ -55,7 +55,12 @@
 
 {% block content %}
 
-    <h1><span class="header_veranst">{{ veranstaltung.name }} - </span>Dashboard</h1>
+    <h1>
+        <span class="header_veranst">{{ veranstaltung.name }} - </span>
+        Dashboard
+    </h1>
+
+    <a href="{% url 'veranstalter-logout' %}">Ausloggen</a>
 
     <p class="subHeaderDashboard">Status</p>
     <span class="borderLine">{{ veranstaltung.get_status_display }}</span>
