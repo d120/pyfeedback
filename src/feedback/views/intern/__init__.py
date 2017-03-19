@@ -251,6 +251,12 @@ def generate_letters(request):
 
 
 def get_relevant_veranstaltungen(chosen_status_list, semester):
+    """
+    Gibt die relevanten Veranstaltungen für die ausgewählten Status zurück.
+    :param chosen_status_list: List
+    :param semester: Semester
+    :return: List
+    """
     veranstaltungen = []
     for status in chosen_status_list:
         if status == 0:
@@ -263,6 +269,11 @@ def get_relevant_veranstaltungen(chosen_status_list, semester):
 
 
 def process_status_post_data_from(post_list):
+    """
+    Da Django POST Daten in Unicode wrapped, casten wir die Statuscodes aus dem POST-Request zu Integers.
+    :param post_list: List
+    :return: List
+    """
     processed_data = []
     for data in post_list:
         processed_data.append(int(data))
@@ -270,6 +281,11 @@ def process_status_post_data_from(post_list):
 
 
 def get_demo_context(request):
+    """
+    Setzt ein paar Variablen, die für einen Demo Context gebraucht werden.
+    :param request: POST
+    :return: RequestContext, String, String
+    """
     color_span = '<span style="color:blue">{}</span>'
     link_veranstalter = 'https://www.fachschaft.informatik.tu-darmstadt.de%s' % reverse('veranstalter-login')
     link_suffix_format = '?vid=%d&token=%s'
@@ -281,6 +297,10 @@ def get_demo_context(request):
 
 
 def set_up_choices():
+    """
+    Setzt die Auswahlmöglichkeiten für die View.
+    :return: List, List
+    """
     tutoren_choices = [(False, 'Nein'), (True, 'Ja')]
     status_choices = [(0, 'Alle Veranstaltungen')]
     for choice_key, choice in Veranstaltung.STATUS_CHOICES:
@@ -289,6 +309,11 @@ def set_up_choices():
 
 
 def add_sekretaerin_mail(recipients, veranstaltung):
+    """
+    Fügt die E-Mail Adresse der Sekretärin in die Empfängerlist hinzu.
+    :param recipients: List
+    :param veranstaltung: Veranstaltung
+    """
     for person in veranstaltung.veranstalter.all():
         fachgebiet = person.fachgebiet
         if fachgebiet is not None:
@@ -301,6 +326,7 @@ def add_sekretaerin_mail(recipients, veranstaltung):
 @user_passes_test(lambda u: u.is_superuser)
 @require_http_methods(('HEAD', 'GET', 'POST'))
 def sendmail(request):
+    """Die View-Funktion für den Mailversand."""
     data = {
         'semester': Semester.objects.order_by('-semester'),
         'vorlagen': Mailvorlage.objects.all(),
@@ -502,6 +528,7 @@ def update_veranstaltungen_status(veranstaltungen):
 
 
 class CloseOrderFormView(UserPassesTestMixin, FormView):
+    """Definiert die View für das Beenden der Bestellphase."""
     template_name = 'intern/status_final.html'
     form_class = CloseOrderForm
 
