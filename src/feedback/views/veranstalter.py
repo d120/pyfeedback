@@ -36,6 +36,7 @@ def login(request):
 
 
 def veranstalter_dashboard(request):
+    """Definiert den Dashboard für die Veranstalter-View."""
     if request.user.username != settings.USERNAME_VERANSTALTER:
         return render(request, 'veranstalter/not_authenticated.html')
 
@@ -76,8 +77,9 @@ def veranstalter_dashboard(request):
     return render(request, 'veranstalter/dashboard.html', data)
 
 
-# # # WIZARD # # #
+# ---------------------------------------- START WIZARD ---------------------------------------- #
 
+# Alle Templates, die vom Wizard gebraucht werden.
 VERANSTALTER_VIEW_TEMPLATES = {
     "evaluation": "formtools/wizard/evaluation.html",
     "basisdaten": "formtools/wizard/basisdaten.html",
@@ -88,6 +90,8 @@ VERANSTALTER_VIEW_TEMPLATES = {
     "veroeffentlichen": "formtools/wizard/veroeffentlichen.html",
     "zusammenfassung": "formtools/wizard/zusammenfassung.html"
 }
+
+# Alle Schritte, die vom Wizard gebraucht werden.
 VERANSTALTER_WIZARD_STEPS = {
     "evaluation": "Evaluation",
     "basisdaten": "Basisdaten",
@@ -118,6 +122,7 @@ def perform_evalution(wizard):
 
 
 def show_primaerdozent_form(wizard):
+    """Bestimmt, ob man die Form für den Primärdozenten anzeigt."""
     show_summary_form = perform_evalution(wizard)
     if show_summary_form:
         cleaned_data = wizard.get_cleaned_basisdaten()
@@ -130,6 +135,7 @@ def show_primaerdozent_form(wizard):
 
 
 def show_tutor_form(wizard):
+    """Bestimmt, ob man die Form für die Tutoren anzeigt."""
     show_summary_form = perform_evalution(wizard)
     if show_summary_form:
         cleaned_data = wizard.get_cleaned_basisdaten()
@@ -139,6 +145,7 @@ def show_tutor_form(wizard):
 
 
 def swap(collection, i, j):
+    """Einfache Swap-Funktion, die für die Darstellung von Daten in der Zusammenfassung gebraucht wird."""
     # swap elements of summary data and ignore IndexError of no evaluation
     try:
         collection[i], collection[j] = collection[j], collection[i]
@@ -147,6 +154,7 @@ def swap(collection, i, j):
 
 
 class VeranstalterWizard(SessionWizardView):
+    """Definiert den Wizard für den Bestellprozess."""
     form_list = [
         ('evaluation', VeranstaltungEvaluationForm),
         ('basisdaten', VeranstaltungBasisdatenForm),
@@ -309,7 +317,10 @@ class VeranstalterWizard(SessionWizardView):
 
 def send_mail_to_verantwortliche(ergebnis_empfaenger, context, veranstaltung):
     """
-    Sendet eine Email an die Ergebnis-Empfaenger mit der Zusammenfassung der Bestellung
+    Sendet eine Email an die Ergebnis-Empfaenger mit der Zusammenfassung der Bestellung.
+    :param ergebnis_empfaenger: Empfänger der Ergebnisse
+    :param context: E-Mail Inhalt
+    :param veranstaltung: Veranstaltung
     """
     if context.get('tutoren_csv', None) is not None:
         tutoren = Tutor.objects.filter(veranstaltung=veranstaltung)
@@ -332,7 +343,10 @@ def send_mail_to_verantwortliche(ergebnis_empfaenger, context, veranstaltung):
 def save_to_db(request, instance, form_list):
     """
     Speichert alle eingegebenen Daten des Wizards auf das Modell
-    und setzt den Status einer Veranstaltung auf den nächsten validen Zustand
+    und setzt den Status einer Veranstaltung auf den nächsten validen Zustand.
+    :param request: aktueller Request
+    :param instance: die aktuelle Instanz
+    :param form_list: Liste aller Forms
     """
     for form in form_list:
         for key, val in form.cleaned_data.iteritems():
