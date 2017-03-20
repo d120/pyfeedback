@@ -106,8 +106,7 @@ if settings.DEBUG:
     # Ausschließlich in der Entwicklung nötig, damit statische Dateien (JS, CSS, Bilder...)
     # angezeigt werden. Im Server-Betrieb kümmert sich Apache darum.
     urlpatterns += [
-    url(r'^d120de/(?P<tail>.*)$', feedback.views.redirect,
-        {'redirect_to': 'http://www.d120.de/d120de/'}),
+        url(r'^d120de/(?P<tail>.*)$', feedback.views.redirect, {'redirect_to': 'http://www.d120.de/d120de/'}),
     ]
 
     import debug_toolbar
