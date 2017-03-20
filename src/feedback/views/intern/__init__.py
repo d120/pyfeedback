@@ -1,5 +1,7 @@
 # coding=utf-8
+
 import ast
+
 import os
 import subprocess
 
@@ -14,13 +16,20 @@ from django.shortcuts import render
 from django.template import RequestContext
 from django.utils.encoding import smart_str
 from django.views.decorators.http import require_safe, require_http_methods
+from django.contrib.auth.mixins import UserPassesTestMixin
+from django.views.generic import FormView
 
 from feedback import tools
+from feedback.forms import CloseOrderForm
+from feedback.parser.ergebnisse import parse_ergebnisse
+from feedback.models import Veranstaltung, Semester, Einstellung, Mailvorlage, get_model, long_not_ordert, FachgebietEmail
+
 from feedback.forms import UploadFileForm
 from feedback.parser.ergebnisse import parse_ergebnisse
 from feedback.views import public
 from feedback.models import Veranstaltung, Semester, Einstellung, Mailvorlage, get_model, long_not_ordert, \
     FachgebietEmail, Tutor
+
 
 
 @user_passes_test(lambda u: u.is_superuser)
@@ -30,6 +39,7 @@ def index(request):
     all_veranst = Veranstaltung.objects.filter(semester=cur_semester)
 
     # Veranstaltung für die es Rückmeldungen gibt
+
     ruck_veranst = all_veranst.filter(Q(anzahl__gt=0) | Q(evaluieren=False))
 
     num_all_veranst = all_veranst.count()
@@ -150,6 +160,7 @@ def translate_to_latex(text):
         '~': '\~{}',
         '^': '\\textasciicircum',
     }
+
     for i, j in dic.iteritems():
             text = text.replace(i, j)
     return text
@@ -219,7 +230,7 @@ def generate_letters(request):
 
     lines = []
     for v in veranst:
-        eva_id=v.get_barcode_number()
+        eva_id = v.get_barcode_number()
         empfaenger = unicode(v.verantwortlich.full_name())
         line = u'\\adrentry{%s}{%s}{%s}{%s}{%s}{%s}{%s}{%s}{%s}\n' % (
                         translate_to_latex(v.verantwortlich.full_name()), translate_to_latex(v.verantwortlich.anschrift), translate_to_latex(v.name), v.anzahl, v.sprache, v.get_typ_display(), eva_id, v.freiefrage1.strip(), v.freiefrage2.strip())
@@ -302,6 +313,7 @@ def sendmail(request):
         'vorlagen': Mailvorlage.objects.all(),
     }
 
+
     status_choices, tutoren_choices = set_up_choices()
     data['veranstaltung_status_choices'] = status_choices
     data['tutoren_choices'] = tutoren_choices
@@ -379,6 +391,15 @@ def sendmail(request):
                         recipients.append(dic['email'])
                 else:
                     add_sekretaerin_mail(recipients, v)
+
+                for p in v.veranstalter.all():
+                    fg = p.fachgebiet
+                    if fg is not None:
+                        fg_mails = FachgebietEmail.objects.filter(fachgebiet=fg)
+                        for fg_mail in fg_mails:
+                            if (fg_mail.email_sekretaerin is not None) \
+                                    and (fg_mail.email_sekretaerin not in recipients):
+                                recipients.append(fg_mail.email_sekretaerin)
 
                 if not recipients:
                     messages.warning(request,
@@ -480,3 +501,55 @@ def sync_ergebnisse(request):
 @user_passes_test(lambda u: u.is_superuser)
 def ergebnisse(request):
     return public.index(request)
+
+
+def is_no_evaluation_final(status):
+    return status == Veranstaltung.STATUS_KEINE_EVALUATION or status == Veranstaltung.STATUS_ANGELEGT or \
+           status == Veranstaltung.STATUS_BESTELLUNG_GEOEFFNET
+
+
+def update_veranstaltungen_status(veranstaltungen):
+    for v in veranstaltungen:
+        if is_no_evaluation_final(v.status):
+            v.status = Veranstaltung.STATUS_KEINE_EVALUATION_FINAL
+            v.save()
+        elif v.status == Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR:
+            v.status = Veranstaltung.STATUS_BESTELLUNG_WIRD_VERARBEITET
+            v.save()
+
+
+class CloseOrderFormView(UserPassesTestMixin, FormView):
+    template_name = 'intern/status_final.html'
+    form_class = CloseOrderForm
+
+    def post(self, request, *args, **kwargs):
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        if form.is_valid:
+            choice = self.get_form_kwargs().get('data').get('auswahl')
+            if choice == 'ja':
+                return self.form_valid(form)
+            else:
+                return self.form_invalid(form)
+
+    def form_valid(self, form):
+        update_veranstaltungen_status(self.get_queryset())
+        messages.success(self.request, u'Alle Status wurden erfolgreich aktualisiert.')
+        return super(CloseOrderFormView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        return HttpResponseRedirect(reverse('intern-index'))
+
+    def get_queryset(self):
+        try:
+            veranstaltungen = Veranstaltung.objects.filter(semester=Semester.current())
+            return veranstaltungen
+        except (Veranstaltung.DoesNotExist, KeyError):
+            messages.warning(self.request, u'Keine passenden Veranstaltungen für das aktuelle Semester gefunden.')
+            return HttpResponseRedirect(reverse('intern-index'))
+
+    def get_success_url(self):
+        return reverse('intern-index')
+
+    def test_func(self):
+        return self.request.user.is_superuser
