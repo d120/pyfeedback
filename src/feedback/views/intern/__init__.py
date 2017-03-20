@@ -1,5 +1,7 @@
 # coding=utf-8
 
+import ast
+
 import os
 import subprocess
 
@@ -8,6 +10,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.core.mail import send_mass_mail
 from django.core.urlresolvers import reverse
+from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.template import RequestContext
@@ -20,9 +23,12 @@ from feedback import tools
 from feedback.forms import CloseOrderForm
 from feedback.parser.ergebnisse import parse_ergebnisse
 from feedback.models import Veranstaltung, Semester, Einstellung, Mailvorlage, get_model, long_not_ordert, FachgebietEmail
+
 from feedback.forms import UploadFileForm
+from feedback.models import Veranstaltung, Semester, Einstellung, Mailvorlage, get_model, long_not_ordert, FachgebietEmail
+from feedback.parser.ergebnisse import parse_ergebnisse
 from feedback.views import public
-from django.db.models import Q
+
 
 
 @user_passes_test(lambda u: u.is_superuser)
@@ -32,7 +38,8 @@ def index(request):
     all_veranst = Veranstaltung.objects.filter(semester=cur_semester)
 
     # Veranstaltung für die es Rückmeldungen gibt
-    ruck_veranst = all_veranst.filter(Q(anzahl__gt=0)|Q(evaluieren=False))
+
+    ruck_veranst = all_veranst.filter(Q(anzahl__gt=0) | Q(evaluieren=False))
 
     num_all_veranst = all_veranst.count()
     num_ruck_veranst = ruck_veranst.count()
@@ -213,10 +220,11 @@ def generate_letters(request):
         anzahl = int(anzahl)
         veranst = Veranstaltung.objects.filter(semester=semester, evaluieren=True, anzahl__gt=anzahl).order_by('sprache','anzahl')
     else:
-        veranst = Veranstaltung.objects.filter(semester=semester, evaluieren=True, anzahl__gt=0).order_by('sprache','anzahl')
+        veranst = Veranstaltung.objects.filter(semester=semester, evaluieren=True, anzahl__gt=0).order_by('sprache', 'anzahl')
 
     if not veranst.count():
-        messages.error(request, 'Für das ausgewählte Semester (%s) liegen keine Bestellungen vor oder die Mindesteilnehmeranzahl ist zu hoch!' % semester)
+        messages.error(request, 'Für das ausgewählte Semester (%s) liegen '
+                                'keine Bestellungen vor oder die Mindesteilnehmeranzahl ist zu hoch!' % semester)
         return HttpResponseRedirect(reverse('generate_letters'))
 
     lines = []
@@ -236,7 +244,7 @@ def generate_letters(request):
     with open(os.devnull, 'w') as devnull:
         # PDF via LaTeX erzeugen
         ret = subprocess.call(['/usr/bin/pdflatex', '-interaction', 'batchmode', '-halt-on-error',
-                       templatename+'.tex'], cwd=latexpath, stdout=devnull, stderr=devnull)
+                               templatename+'.tex'], cwd=latexpath, stdout=devnull, stderr=devnull)
 
     if ret or hasattr(settings, 'TEST_LATEX_ERROR'):
         with open(latexpath + templatename + '.log', 'r') as f:
@@ -248,43 +256,70 @@ def generate_letters(request):
     return response
 
 
+def get_relevant_veranstaltungen(chosen_status_list, semester):
+    veranstaltungen = []
+    for status in chosen_status_list:
+        if status == 0:
+            for veranstaltung in Veranstaltung.objects.filter(semester=semester):
+                veranstaltungen.append(veranstaltung)
+        else:
+            for veranstaltung in Veranstaltung.objects.filter(semester=semester, status=status):
+                veranstaltungen.append(veranstaltung)
+    return veranstaltungen
+
+
+def process_status_post_data_from(post_list):
+    processed_data = []
+    for data in post_list:
+        processed_data.append(int(data))
+    return processed_data
+
+
+def get_demo_context(request):
+    color_span = '<span style="color:blue">{}</span>'
+    link_veranstalter = 'https://www.fachschaft.informatik.tu-darmstadt.de%s' % reverse('veranstalter-login')
+    link_suffix_format = '?vid=%d&token=%s'
+    demo_context = RequestContext(request, {
+        'veranstaltung': color_span.format('Grundlagen der Agrarphilosophie I'),
+        'link_veranstalter': color_span.format(link_veranstalter + (link_suffix_format % (1337, '0123456789abcdef'))),
+    })
+    return demo_context, link_suffix_format, link_veranstalter
+
+
+
 @user_passes_test(lambda u: u.is_superuser)
 @require_http_methods(('HEAD', 'GET', 'POST'))
 def sendmail(request):
     data = {
         'semester': Semester.objects.order_by('-semester'),
-        'vorlagen': Mailvorlage.objects.all()
+        'vorlagen': Mailvorlage.objects.all(),
     }
 
+    status_choises = [(0, 'Alle Veranstaltungen')]
+    for choise_key, choise in Veranstaltung.STATUS_CHOICES:
+        status_choises.append((choise_key, choise))
+
+    data["veranstaltung_status_choises"] = status_choises
+    
     if request.method == 'POST':
         try:
             semester = Semester.objects.get(semester=request.POST['semester'])
-            data['recipient'] = request.POST['recipient']
             data['subject'] = request.POST['subject']
             data['body'] = request.POST['body']
+
+            if 'recipient' in request.POST.keys():
+                data['recipient'] = process_status_post_data_from(request.POST.getlist('recipient'))
+            elif 'status_values' in request.POST.keys():
+                data['recipient'] = ast.literal_eval(request.POST.get('status_values'))
+
         except (Semester.DoesNotExist, KeyError):
             return HttpResponseRedirect(reverse('sendmail'))
 
         data['semester_selected'] = semester
         data['subject_rendered'] = "Evaluation: %s" % data['subject']
 
-        veranstaltungen = Veranstaltung.objects.filter(semester=semester)
-        if data['recipient'] == 'cur_sem_missing_order':
-            veranstaltungen = veranstaltungen.filter(anzahl=None, evaluieren=True)
-        elif data['recipient'] == 'cur_sem_ordert':
-            veranstaltungen = veranstaltungen.filter(evaluieren=True, anzahl__gt=0)
-        elif data['recipient'] == 'cur_sem_results':
-            # Veranstaltungen ohne Ergebnisse ausfiltern
-            flt = {str('ergebnis'+data['semester_selected'].fragebogen): None}
-            veranstaltungen = veranstaltungen.exclude(**flt)
-
-        color_span = '<span style="color:blue">{}</span>'
-        link_veranstalter = 'https://www.fachschaft.informatik.tu-darmstadt.de%s' % reverse('veranstalter-login')
-        link_suffix_format = '?vid=%d&token=%s'
-        demo_context = RequestContext(request, {
-            'veranstaltung': color_span.format('Grundlagen der Agrarphilosophie I'),
-            'link_veranstalter': color_span.format(link_veranstalter + (link_suffix_format % (1337, '0123456789abcdef'))),
-        })
+        veranstaltungen = get_relevant_veranstaltungen(data['recipient'], semester)
+        demo_context, link_suffix_format, link_veranstalter = get_demo_context(request)
 
         if 'uebernehmen' in request.POST:
             try:
@@ -297,21 +332,24 @@ def sendmail(request):
         elif 'vorschau' in request.POST:
             data['vorschau'] = True
             data['from'] = settings.DEFAULT_FROM_EMAIL
-            data['to'] = "Veranstalter von %d Veranstaltungen" % veranstaltungen.count()
+            data['to'] = "Veranstalter von %d Veranstaltungen" % len(veranstaltungen)
             data['body_rendered'] = tools.render_email(data['body'], demo_context)
 
-            if data['recipient'] == 'cur_sem_missing_order':
-                if Einstellung.get('bestellung_erlaubt') == '0':
-                    messages.warning(request, u'Bestellungen sind aktuell nicht erlaubt! Bist du ' +
-                                     u'sicher, dass du trotzdem die Dozenten anschreiben willst, ' +
-                                     u'die noch nicht bestellt haben?')
-            elif data['recipient'] == 'cur_sem_results':
-                if semester.sichtbarkeit != 'VER':
-                    messages.warning(request, u'Die Sichtbarkeit der Ergebnisse des ausgewählten ' +
-                                     u'Semesters ist aktuell nicht auf "Veranstalter" ' +
-                                     u'eingestellt! Bist du sicher, dass du trotzdem die ' +
-                                     u'Dozenten anschreiben willst, für deren Veranstaltungen '
-                                     u'Ergebnisse vorliegen?')
+            for status in data['recipient']:
+                if status <= Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR:
+                    if Einstellung.get('bestellung_erlaubt') == '0':
+                        messages.warning(request,
+                                         u'Bestellungen sind aktuell nicht erlaubt! Bist du ' +
+                                         u'sicher, dass du trotzdem die Dozenten anschreiben willst, ' +
+                                         u'die noch nicht bestellt haben?')
+                elif status == Veranstaltung.STATUS_ERGEBNISSE_VERSANDT:
+                    if semester.sichtbarkeit != 'VER':
+                        messages.warning(request,
+                                         u'Die Sichtbarkeit der Ergebnisse des ausgewählten ' +
+                                         u'Semesters ist aktuell nicht auf "Veranstalter" ' +
+                                         u'eingestellt! Bist du sicher, dass du trotzdem die ' +
+                                         u'Dozenten anschreiben willst, für deren Veranstaltungen '
+                                         u'Ergebnisse vorliegen?')
 
             return render(request, 'intern/sendmail_preview.html', data)
 
@@ -319,15 +357,23 @@ def sendmail(request):
             mails = []
 
             # Mails für die Veranstaltungen
+            print "VERANSTALTUNGEN ===> ", veranstaltungen
             for v in veranstaltungen:
                 subject = data['subject']
                 context = RequestContext(request, {
                     'veranstaltung': v.name,
-                    'link_veranstalter': link_veranstalter + (link_suffix_format %
-                                                              (v.id, v.access_token)),
+                    'link_veranstalter': link_veranstalter + (link_suffix_format % (v.id, v.access_token)),
                 })
                 body = tools.render_email(data['body'], context)
-                recipients = [p.email for p in v.veranstalter.all() if p.email]
+                recipients = [person.email for person in v.veranstalter.all() if person.email]
+
+                for person in v.veranstalter.all():
+                    fg = person.fachgebiet
+                    if fg is not None:
+                        fg_mails = FachgebietEmail.objects.filter(fachgebiet=fg)
+                        for fg_mail in fg_mails:
+                            if (fg_mail.email_sekretaerin is not None) and (fg_mail.email_sekretaerin not in recipients):
+                                recipients.append(fg_mail.email_sekretaerin)
 
                 for p in v.veranstalter.all():
                     fg = p.fachgebiet
@@ -339,8 +385,9 @@ def sendmail(request):
                                 recipients.append(fg_mail.email_sekretaerin)
 
                 if not recipients:
-                    messages.warning(request, (u'An die Veranstalter von "%s" wurde keine Mail ' +
-                                     u'verschickt, da keine Adressen hinterlegt waren.') % v.name)
+                    messages.warning(request,
+                                     (u'An die Veranstalter von "%s" wurde keine Mail ' +
+                                      u'verschickt, da keine Adressen hinterlegt waren.') % v.name)
                     continue
                 mails.append((subject, body, settings.DEFAULT_FROM_EMAIL, recipients))
 
