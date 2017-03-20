@@ -21,6 +21,7 @@ from django.views.generic import FormView
 
 from feedback import tools
 from feedback.forms import CloseOrderForm
+
 from feedback.parser.ergebnisse import parse_ergebnisse
 from feedback.models import Veranstaltung, Semester, Einstellung, Mailvorlage, get_model, long_not_ordert, FachgebietEmail
 
@@ -313,7 +314,6 @@ def sendmail(request):
         'vorlagen': Mailvorlage.objects.all(),
     }
 
-
     status_choices, tutoren_choices = set_up_choices()
     data['veranstaltung_status_choices'] = status_choices
     data['tutoren_choices'] = tutoren_choices
@@ -392,7 +392,7 @@ def sendmail(request):
                 else:
                     add_sekretaerin_mail(recipients, v)
 
-                for p in v.veranstalter.all():
+                    for p in v.veranstalter.all():
                     fg = p.fachgebiet
                     if fg is not None:
                         fg_mails = FachgebietEmail.objects.filter(fachgebiet=fg)
