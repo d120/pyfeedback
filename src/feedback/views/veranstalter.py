@@ -46,9 +46,8 @@ def veranstalter_dashboard(request):
     data["logs"] = Log.objects.filter(veranstaltung=veranst).order_by('timestamp')
     data["allow_order"] = veranst.allow_order()
 
-    if veranst.status >= Veranstaltung.STATUS_BESTELLUNG_GEOEFFNET:
-        bestellung = []
-        bestellung.append(("Evaluieren", veranst.get_evaluieren_display))
+    if veranst.status >= Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR:
+        bestellung = [("Evaluieren", veranst.get_evaluieren_display)]
         if veranst.evaluieren:
             bestellung.append(("Typ", veranst.get_typ_display))
             bestellung.append(("Anazhl", veranst.anzahl))
