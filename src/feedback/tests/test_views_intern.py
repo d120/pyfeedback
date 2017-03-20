@@ -1,7 +1,5 @@
 # coding=utf-8
 
-import os
-
 from StringIO import StringIO
 
 from django.conf import settings
@@ -523,6 +521,7 @@ class SendmailTest(NonSuTestMixin, TestCase):
 
         # Hier wird in Eclipse ein Fehler angezeigt; mail.outbox gibt es während der Testläufe
         # aber wirklich (siehe https://docs.djangoproject.com/en/1.4/topics/testing/#email-services)
+
         self.assertEqual(len(mail.outbox), 3)  # an 2 Veranstalter und Kopie an Feedback-Team
         self.assertEqual(len(mail.outbox[0].to), 2)  # an Veranstalter und Sekretaerin
         self.assertEqual(len(mail.outbox[1].to), 2)

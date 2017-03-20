@@ -187,6 +187,16 @@ class CloseOrderForm(forms.Form):
     auswahl = forms.ChoiceField(choices=CLOSE_ORDER_CHOICES)
 
 
+CLOSE_ORDER_CHOICES = (
+    ('ja', 'Ja'),
+    ('nein', 'Nein')
+)
+
+
+class CloseOrderForm(forms.Form):
+    auswahl = forms.ChoiceField(choices=CLOSE_ORDER_CHOICES)
+
+
 class CreateBarcodeScannEventForm(forms.ModelForm):
     """Definiert die Form für einen Barcodescan-Event"""
     scanner_token = forms.CharField()

@@ -1,5 +1,7 @@
 # coding=utf-8
+
 import ast
+
 import os
 import subprocess
 
@@ -19,11 +21,16 @@ from django.views.generic import FormView
 
 from feedback import tools
 from feedback.forms import CloseOrderForm
+
+from feedback.parser.ergebnisse import parse_ergebnisse
+from feedback.models import Veranstaltung, Semester, Einstellung, Mailvorlage, get_model, long_not_ordert, FachgebietEmail
+
 from feedback.forms import UploadFileForm
 from feedback.parser.ergebnisse import parse_ergebnisse
 from feedback.views import public
 from feedback.models import Veranstaltung, Semester, Einstellung, Mailvorlage, get_model, long_not_ordert, \
     FachgebietEmail, Tutor
+
 
 
 @user_passes_test(lambda u: u.is_superuser)
@@ -33,6 +40,7 @@ def index(request):
     all_veranst = Veranstaltung.objects.filter(semester=cur_semester)
 
     # Veranstaltung für die es Rückmeldungen gibt
+
     ruck_veranst = all_veranst.filter(Q(anzahl__gt=0) | Q(evaluieren=False))
 
     num_all_veranst = all_veranst.count()
@@ -332,6 +340,7 @@ def sendmail(request):
         'vorlagen': Mailvorlage.objects.all(),
     }
 
+
     status_choices, tutoren_choices = set_up_choices()
     data['veranstaltung_status_choices'] = status_choices
     data['tutoren_choices'] = tutoren_choices
@@ -409,6 +418,15 @@ def sendmail(request):
                         recipients.append(dic['email'])
                 else:
                     add_sekretaerin_mail(recipients, v)
+
+                for p in v.veranstalter.all():
+                    fg = p.fachgebiet
+                    if fg is not None:
+                        fg_mails = FachgebietEmail.objects.filter(fachgebiet=fg)
+                        for fg_mail in fg_mails:
+                            if (fg_mail.email_sekretaerin is not None) \
+                                    and (fg_mail.email_sekretaerin not in recipients):
+                                recipients.append(fg_mail.email_sekretaerin)
 
                 if not recipients:
                     messages.warning(request,
@@ -529,6 +547,7 @@ def update_veranstaltungen_status(veranstaltungen):
 
 class CloseOrderFormView(UserPassesTestMixin, FormView):
     """Definiert die View für das Beenden der Bestellphase."""
+
     template_name = 'intern/status_final.html'
     form_class = CloseOrderForm
 
