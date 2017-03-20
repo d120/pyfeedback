@@ -25,9 +25,10 @@ from feedback.parser.ergebnisse import parse_ergebnisse
 from feedback.models import Veranstaltung, Semester, Einstellung, Mailvorlage, get_model, long_not_ordert, FachgebietEmail
 
 from feedback.forms import UploadFileForm
-from feedback.models import Veranstaltung, Semester, Einstellung, Mailvorlage, get_model, long_not_ordert, FachgebietEmail
 from feedback.parser.ergebnisse import parse_ergebnisse
 from feedback.views import public
+from feedback.models import Veranstaltung, Semester, Einstellung, Mailvorlage, get_model, long_not_ordert, \
+    FachgebietEmail, Tutor
 
 
 
@@ -286,6 +287,23 @@ def get_demo_context(request):
     return demo_context, link_suffix_format, link_veranstalter
 
 
+def set_up_choices():
+    tutoren_choices = [(False, 'Nein'), (True, 'Ja')]
+    status_choices = [(0, 'Alle Veranstaltungen')]
+    for choice_key, choice in Veranstaltung.STATUS_CHOICES:
+        status_choices.append((choice_key, choice))
+    return status_choices, tutoren_choices
+
+
+def add_sekretaerin_mail(recipients, veranstaltung):
+    for person in veranstaltung.veranstalter.all():
+        fachgebiet = person.fachgebiet
+        if fachgebiet is not None:
+            mails = FachgebietEmail.objects.filter(fachgebiet=fachgebiet)
+            for mail in mails:
+                if (mail.email_sekretaerin is not None) and (mail.email_sekretaerin not in recipients):
+                    recipients.append(mail.email_sekretaerin)
+
 
 @user_passes_test(lambda u: u.is_superuser)
 @require_http_methods(('HEAD', 'GET', 'POST'))
@@ -295,17 +313,17 @@ def sendmail(request):
         'vorlagen': Mailvorlage.objects.all(),
     }
 
-    status_choises = [(0, 'Alle Veranstaltungen')]
-    for choise_key, choise in Veranstaltung.STATUS_CHOICES:
-        status_choises.append((choise_key, choise))
 
-    data["veranstaltung_status_choises"] = status_choises
-    
+    status_choices, tutoren_choices = set_up_choices()
+    data['veranstaltung_status_choices'] = status_choices
+    data['tutoren_choices'] = tutoren_choices
+
     if request.method == 'POST':
         try:
             semester = Semester.objects.get(semester=request.POST['semester'])
             data['subject'] = request.POST['subject']
             data['body'] = request.POST['body']
+            data['tutoren'] = request.POST['tutoren']
 
             if 'recipient' in request.POST.keys():
                 data['recipient'] = process_status_post_data_from(request.POST.getlist('recipient'))
@@ -333,6 +351,7 @@ def sendmail(request):
             data['vorschau'] = True
             data['from'] = settings.DEFAULT_FROM_EMAIL
             data['to'] = "Veranstalter von %d Veranstaltungen" % len(veranstaltungen)
+            data['is_tutoren'] = "und den Tutoren dieser Veranstaltungen"
             data['body_rendered'] = tools.render_email(data['body'], demo_context)
 
             for status in data['recipient']:
@@ -357,7 +376,6 @@ def sendmail(request):
             mails = []
 
             # Mails für die Veranstaltungen
-            print "VERANSTALTUNGEN ===> ", veranstaltungen
             for v in veranstaltungen:
                 subject = data['subject']
                 context = RequestContext(request, {
@@ -367,13 +385,12 @@ def sendmail(request):
                 body = tools.render_email(data['body'], context)
                 recipients = [person.email for person in v.veranstalter.all() if person.email]
 
-                for person in v.veranstalter.all():
-                    fg = person.fachgebiet
-                    if fg is not None:
-                        fg_mails = FachgebietEmail.objects.filter(fachgebiet=fg)
-                        for fg_mail in fg_mails:
-                            if (fg_mail.email_sekretaerin is not None) and (fg_mail.email_sekretaerin not in recipients):
-                                recipients.append(fg_mail.email_sekretaerin)
+                if data['tutoren'] == 'True':
+                    emails = Tutor.objects.filter(veranstaltung=v).values('email')
+                    for dic in emails:
+                        recipients.append(dic['email'])
+                else:
+                    add_sekretaerin_mail(recipients, v)
 
                 for p in v.veranstalter.all():
                     fg = p.fachgebiet
@@ -389,6 +406,7 @@ def sendmail(request):
                                      (u'An die Veranstalter von "%s" wurde keine Mail ' +
                                       u'verschickt, da keine Adressen hinterlegt waren.') % v.name)
                     continue
+
                 mails.append((subject, body, settings.DEFAULT_FROM_EMAIL, recipients))
 
             # Kopie für das Feedback-Team
@@ -398,7 +416,12 @@ def sendmail(request):
 
             # Mails senden
             send_mass_mail(mails)
-            messages.success(request, '%d E-Mails wurden erfolgreich versandt!' % (len(mails)-1))
+
+            if data['tutoren'] == 'True':
+                messages.success(request,
+                                 '%d Veranstaltungen wurden erfolgreich, samt Tutoren, benachrichtigt.' % (len(mails)-1))
+            else:
+                messages.success(request, '%d Veranstaltungen wurden erfolgreich benachrichtigt.' % (len(mails) - 1))
             return HttpResponseRedirect(reverse('intern-index'))
 
     return render(request, 'intern/sendmail.html', data)
