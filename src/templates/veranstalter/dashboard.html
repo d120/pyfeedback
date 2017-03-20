@@ -82,9 +82,7 @@
     {% if bestellung %}
         <div class="orderHeadContainer">
             <span style="display: block; float: left" class="subHeaderDashboard">Aktuelle Bestellung</span>
-            {% if allow_order %}
-                <button class="orderButton" onclick="window.location='{% url 'veranstalter-bestellung' %}';">Bestellung ändern</button>
-            {% endif %}
+            <button class="orderButton" onclick="window.location='{% url 'veranstalter-bestellung' %}';">Bestellung ändern</button>
         </div>
         <div class="dashboardOrderContainer dashboardTableBordered">
 
@@ -123,9 +121,7 @@
             </table>
         </div>
     {% else %}
-        {% if allow_order %}
-            <button style="padding: 2px;" onclick="window.location='{% url 'veranstalter-bestellung' %}';">Bestellung durchführen</button>
-        {% endif %}
+        <button style="padding: 2px;" onclick="window.location='{% url 'veranstalter-bestellung' %}';">Bestellung durchführen</button>
     {% endif %}
 
 
