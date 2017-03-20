@@ -9,16 +9,9 @@
         {% csrf_token %}
         <h2>Vorschau (Ersetzte Begriffe sind <span style="color: blue;">blau markiert</span>)</h2>
         <p>
-            <label><em>Absender:</em></label>
-            {{ from }}
-
-            <br>
-
-            <label><em>Empfänger:</em></label>
-            {{ to }} aus dem {{ semester_selected }}
-            {% if tutoren == 'True' %}
-                {{ is_tutoren }}
-            {% endif %}
+            <em>Absender:</em> {{ from }}
+            <br/>
+            <em>Empfänger:</em> {{ to }} aus dem {{ semester_selected }}
         </p>
 
         <pre>
@@ -30,7 +23,6 @@
         <input type="hidden" name="status_values" value="{{ recipient }}" />
         <input type="hidden" name="subject" value="{{ subject }}" />
         <input type="hidden" name="body" value="{{ body }}" />
-        <input type="hidden" name="tutoren" value="{{ tutoren }}" />
 
         <input type="submit" name="aendern" value="Ändern" />
         <input type="submit" name="senden" value="Mails senden" />
