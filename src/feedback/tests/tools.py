@@ -22,9 +22,9 @@ class NonSuTestMixin(TransactionTestCase):
         self.assertTrue(response['Location'].split('?')[0], tests.LOGIN_URL)
 
         self.assertTrue(self.client.login(username=settings.USERNAME_VERANSTALTER, password='pw'),
-                        u'Der Login mit dem Veranstalter-Account ist fehlgeschlagen. Wurde ' +
-                        u'moeglicherweise beim Ueberschreiben von setUp() der super()-Aufruf ' +
-                        u'vergessen?')
+                        'Der Login mit dem Veranstalter-Account ist fehlgeschlagen. Wurde ' +
+                        'moeglicherweise beim Ueberschreiben von setUp() der super()-Aufruf ' +
+                        'vergessen?')
         response = self.client.get(path)
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response['Location'].split('?')[0], tests.LOGIN_URL)

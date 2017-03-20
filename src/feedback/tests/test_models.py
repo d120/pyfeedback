@@ -1,6 +1,6 @@
 # coding=utf-8
 
-from types import UnicodeType
+# from types import UnicodeType
 
 from django.db import IntegrityError
 from django.test import TestCase, TransactionTestCase
@@ -123,8 +123,8 @@ class SemesterTest(TestCase):
         self.assertEqual(self.ss.long(), 'Sommersemester 2012')
 
     def test_unicode(self):
-        self.assertEqual(unicode(self.ws), 'Wintersemester 2011/2012')
-        self.assertEqual(unicode(self.ss), 'Sommersemester 2012')
+        self.assertEqual(str(self.ws), 'Wintersemester 2011/2012')
+        self.assertEqual(str(self.ss), 'Sommersemester 2012')
 
     def test_current(self):
         self.assertEqual(Semester.current(), self.ss)
@@ -221,7 +221,7 @@ class PersonTest(TestCase):
         self.assertEqual(self.p1.full_name(), 'Brian Cohen')
 
     def test_unicode(self):
-        self.assertEqual(unicode(self.p1), 'Cohen, Brian')
+        self.assertEqual(str(self.p1), 'Cohen, Brian')
 
     def test_create_from_import_person(self):
         ip = ImportPerson(vorname='Brian', nachname='Cohen')
@@ -275,7 +275,7 @@ class PersonTest(TestCase):
         update_url = reverse("admin:feedback_person_changelist")
 
         data = {'action': 'assign_fachgebiet_action',
-                '_selected_action': [unicode(f.pk) for f in [self.fb_p1]]}
+                '_selected_action': [str(f.pk) for f in [self.fb_p1]]}
 
         response = self.client.post(update_url, data, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.status_code, 200)
@@ -349,7 +349,7 @@ class VeranstaltungTest(TransactionTestCase):
         update_url = reverse("admin:feedback_veranstaltung_changelist")
 
         data = {'action': 'status_aendern_action',
-                '_selected_action': [unicode(f.pk) for f in [self.v[0]]]}
+                '_selected_action': [str(f.pk) for f in [self.v[0]]]}
 
         response = self.client.post(update_url, data, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.status_code, 200)
@@ -391,7 +391,7 @@ class VeranstaltungTest(TransactionTestCase):
         self.assertFalse(self.v[0].has_uebung())
 
     def test_unicode(self):
-        self.assertEqual(unicode(self.v[0]), 'Stoning I [v] (SS 2011)')
+        self.assertEqual(str(self.v[0]), 'Stoning I [v] (SS 2011)')
 
     def test_save(self):
         self.v[0].access_token = ''
@@ -436,9 +436,10 @@ class VeranstaltungTest(TransactionTestCase):
         self.assertEqual(url_parts[0],
                          'https://www.fachschaft.informatik.tu-darmstadt.de/veranstalter/login/?vid=%d' % ver_id)
         access_token = self.v[0].access_token
-        self.assertEquals('token=' + access_token, url_parts[1])
-        not_saved_v = Veranstaltung()
-        self.assertEqual(type(not_saved_v.link_veranstalter()), UnicodeType)
+        self.assertEqual('token=' + access_token, url_parts[1])
+        # FIXME: Is the below assert necessary? Since Python3 strings are all Unicode
+        # not_saved_v = Veranstaltung()
+        # self.assertEqual(type(not_saved_v.link_veranstalter()), UnicodeType)
 
 
 class EinstellungTest(TestCase):
@@ -451,8 +452,8 @@ class EinstellungTest(TestCase):
         self.assertEqual(Einstellung.get('sausage'), self.b.wert)
 
     def test_unicode(self):
-        self.assertEqual(unicode(self.a), 'spam = "bacon"')
-        self.assertEqual(unicode(self.b), 'sausage = "eggs"')
+        self.assertEqual(str(self.a), 'spam = "bacon"')
+        self.assertEqual(str(self.b), 'sausage = "eggs"')
 
     def test_unique(self):
         with self.assertRaises(IntegrityError):
@@ -464,7 +465,7 @@ class MailvorlageTest(TestCase):
         self.m = Mailvorlage.objects.create(subject='Nobody expects', body='the Spanish Inquisition')
 
     def test_unicode(self):
-        self.assertEqual(unicode(self.m), u'Nobody expects')
+        self.assertEqual(str(self.m), 'Nobody expects')
 
     def test_unique(self):
         with self.assertRaises(IntegrityError):
@@ -479,7 +480,7 @@ class ImportPersonTest(TestCase):
         self.assertEqual(self.ip.full_name(), 'Brian Cohen')
 
     def test_unicode(self):
-        self.assertEqual(unicode(self.ip), 'Cohen, Brian')
+        self.assertEqual(str(self.ip), 'Cohen, Brian')
 
 
 class ImportCategoryTest(TestCase):
@@ -487,7 +488,7 @@ class ImportCategoryTest(TestCase):
         self.ic = ImportCategory.objects.create(name='Spam')
 
     def test_unicode(self):
-        self.assertEqual(unicode(self.ic), 'Spam')
+        self.assertEqual(str(self.ic), 'Spam')
 
 
 class ImportVeranstaltungTest(TestCase):
@@ -497,7 +498,7 @@ class ImportVeranstaltungTest(TestCase):
                                                      category=self.c, is_attended_course=True)
 
     def test_unicode(self):
-        self.assertEqual(unicode(self.iv), 'Dead Parrot (42)')
+        self.assertEqual(str(self.iv), 'Dead Parrot (42)')
 
 
 class FragebogenTest(TestCase):
@@ -506,7 +507,7 @@ class FragebogenTest(TestCase):
         self.f = Fragebogen2009.objects.create(veranstaltung=self.v, v_gesamt=1)
 
     def test_unicode(self):
-        self.assertEqual(unicode(self.f), u'Fragebogen zu "Stoning I" (Vorlesung, SS 2011)')
+        self.assertEqual(str(self.f), 'Fragebogen zu "Stoning I" (Vorlesung, SS 2011)')
 
 
 class ErgebnisTest(TestCase):
@@ -527,15 +528,15 @@ class ErgebnisTest(TestCase):
         self.parts_hidden = [[3, 4], [None, 0]]
 
     def test_values(self):
-        self.assertListEqual(self.eu.values(), self.parts_vl + self.parts_ue)
-        self.assertListEqual(self.e.values(), self.parts_vl + self.parts_ue_empty)
+        self.assertListEqual(list(self.eu.values()), self.parts_vl + self.parts_ue)
+        self.assertListEqual(list(self.e.values()), self.parts_vl + self.parts_ue_empty)
 
     def test_all_values(self):
         self.assertListEqual(self.eu.all_values(), self.parts_vl + self.parts_ue + self.parts_hidden)
         self.assertListEqual(self.e.all_values(), self.parts_vl + self.parts_ue_empty + self.parts_hidden)
 
     def test_unicode(self):
-        self.assertEqual(unicode(self.e), u'Ergebnisse zu "Stoning I" (Vorlesung, Sommersemester 2011)')
+        self.assertEqual(str(self.e), 'Ergebnisse zu "Stoning I" (Vorlesung, Sommersemester 2011)')
 
     def test_unique(self):
         with self.assertRaises(IntegrityError):
@@ -560,7 +561,7 @@ class KommentarTest(TestCase):
         self.assertEqual(self.k.name(), 'Stoning I')
 
     def test_unicode(self):
-        self.assertEqual(unicode(self.k), u'Kommentar zu "Stoning I" (Vorlesung, Sommersemester 2011)')
+        self.assertEqual(str(self.k), 'Kommentar zu "Stoning I" (Vorlesung, Sommersemester 2011)')
 
     def test_unique(self):
         with self.assertRaises(IntegrityError):

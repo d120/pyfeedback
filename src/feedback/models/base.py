@@ -1,6 +1,6 @@
 # coding=utf-8
 
-from __future__ import unicode_literals
+
 
 import random
 
@@ -28,23 +28,23 @@ class Semester(models.Model):
 
     )
     SICHTBARKEIT_CHOICES = (
-        ('ADM', u'Administratoren'),
-        ('VER', u'Veranstalter'),
-        ('ALL', u'alle (öffentlich)'),
+        ('ADM', 'Administratoren'),
+        ('VER', 'Veranstalter'),
+        ('ALL', 'alle (öffentlich)'),
     )
 
-    semester = models.IntegerField(help_text=u'Aufbau: YYYYS, wobei YYYY = Jahreszahl und S = Semester (0=SS, 5=WS).',
+    semester = models.IntegerField(help_text='Aufbau: YYYYS, wobei YYYY = Jahreszahl und S = Semester (0=SS, 5=WS).',
                                    unique=True)
     fragebogen = models.CharField(max_length=5, choices=FRAGEBOGEN_CHOICES,
-                                  help_text=u'Verwendete Version des Fragebogens.')
+                                  help_text='Verwendete Version des Fragebogens.')
     sichtbarkeit = models.CharField(max_length=3, choices=SICHTBARKEIT_CHOICES,
-                                    help_text=u'Sichtbarkeit der Evaluationsergebnisse.<br /><em>' +
+                                    help_text='Sichtbarkeit der Evaluationsergebnisse.<br /><em>' +
                                               SICHTBARKEIT_CHOICES[0][1] +
-                                              u':</em> nur für Mitglieder des Feedback-Teams<br /><em>' +
+                                              ':</em> nur für Mitglieder des Feedback-Teams<br /><em>' +
                                               SICHTBARKEIT_CHOICES[1][1] +
-                                              u':</em> Veranstalter und Mitglieder des Feedback-Teams<br /><em>' +
+                                              ':</em> Veranstalter und Mitglieder des Feedback-Teams<br /><em>' +
                                               SICHTBARKEIT_CHOICES[2][1] +
-                                              u':</em> alle (beschränkt auf das Uninetz)<br />'
+                                              ':</em> alle (beschränkt auf das Uninetz)<br />'
                                     )
     vollerhebung = models.BooleanField(default=False)
 
@@ -54,9 +54,9 @@ class Semester(models.Model):
             sem = sem % modulus
 
         if self.semester % 10 == 0:
-            return u'%s%s%d' % (ss, space, sem)
+            return '%s%s%d' % (ss, space, sem)
         else:
-            return u'%s%s%d/%d' % (ws, space, sem, sem + 1)
+            return '%s%s%d/%d' % (ws, space, sem, sem + 1)
 
     def _format(self, ss, ws):
         return self._format_generic(ss, ws, ' ', 0)
@@ -84,7 +84,7 @@ class Semester(models.Model):
             year = (self.semester / 10) + 1
             month = 4
 
-        return datetime.datetime(year, month, day)
+        return datetime.datetime(int(year), int(month), int(day))
 
     def last_Auswertungstermin_to_late_human(self):
         """Der erste Tag der nach dem letzten Auswertungstermin liegt formatiert"""
@@ -95,7 +95,7 @@ class Semester(models.Model):
         """Die Jahre in denen der Auswertungstermin liegen kann"""
         return self.last_Auswertungstermin().year,
 
-    def __unicode__(self):
+    def __str__(self):
         return self.long()
 
     class Meta:
@@ -119,7 +119,7 @@ class Fachgebiet(models.Model):
     name = models.CharField(max_length=80)
     kuerzel = models.CharField(max_length=10)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     class Meta:
@@ -164,7 +164,7 @@ class Person(models.Model):
         'w': 'f',
     }
 
-    geschlecht = models.CharField(max_length=1, choices=GESCHLECHT_CHOICES, blank=True, verbose_name=u'Anrede')
+    geschlecht = models.CharField(max_length=1, choices=GESCHLECHT_CHOICES, blank=True, verbose_name='Anrede')
     vorname = models.CharField(_('first name'), max_length=30, blank=True)
     nachname = models.CharField(_('last name'), max_length=30, blank=True)
     email = models.EmailField(_('E-Mail'), blank=True)
@@ -174,7 +174,7 @@ class Person(models.Model):
     fachgebiet = models.ForeignKey(Fachgebiet, null=True, blank=True)
 
     def full_name(self):
-        return u'%s %s' % (self.vorname, self.nachname)
+        return '%s %s' % (self.vorname, self.nachname)
 
     def get_evasys_key(self):
         return "pe-%s" % self.id
@@ -182,8 +182,8 @@ class Person(models.Model):
     def get_evasys_geschlecht(self):
         return Person.GESCHLECHT_EVASYS_XML[self.geschlecht]
 
-    def __unicode__(self):
-        return u'%s, %s' % (self.nachname, self.vorname)
+    def __str__(self):
+        return '%s, %s' % (self.nachname, self.vorname)
 
     class Meta:
         verbose_name = 'Person'
@@ -364,27 +364,27 @@ class Veranstaltung(models.Model):
     typ = models.CharField(max_length=2, choices=TYP_CHOICES, help_text=vlNoEx)
     name = models.CharField(max_length=150)
     semester = models.ForeignKey(Semester)
-    lv_nr = models.CharField(max_length=15, blank=True, verbose_name=u'LV-Nummer')
+    lv_nr = models.CharField(max_length=15, blank=True, verbose_name='LV-Nummer')
     status = models.IntegerField(choices=STATUS_CHOICES, default=STATUS_ANGELEGT)
     grundstudium = models.BooleanField()
     evaluieren = models.BooleanField(choices=BOOL_CHOICES, default=True)
     veranstalter = models.ManyToManyField(Person, blank=True,
-                                          help_text=u'Alle Personen, die mit der Veranstaltung befasst sind und z.B. Fragebögen bestellen können sollen.')
+                                          help_text='Alle Personen, die mit der Veranstaltung befasst sind und z.B. Fragebögen bestellen können sollen.')
 
     sprache = models.CharField(max_length=2, choices=SPRACHE_CHOICES, null=True, blank=True)
     anzahl = models.IntegerField(null=True, blank=True)
     verantwortlich = models.ForeignKey(Person, related_name='verantwortlich', null=True, blank=True,
-                                       help_text=u'Diese Person wird von uns bei Rückfragen kontaktiert und bekommt die Fragenbögen zugeschickt')
+                                       help_text='Diese Person wird von uns bei Rückfragen kontaktiert und bekommt die Fragenbögen zugeschickt')
     ergebnis_empfaenger = models.ManyToManyField(Person, blank=True,
                                                  related_name='ergebnis_empfaenger',
-                                                 verbose_name=u'Empfänger der Ergebnisse',
-                                                 help_text=u'An diese Personen werden die Ergebnisse per E-Mail geschickt.')
+                                                 verbose_name='Empfänger der Ergebnisse',
+                                                 help_text='An diese Personen werden die Ergebnisse per E-Mail geschickt.')
     primaerdozent = models.ForeignKey(Person, related_name='primaerdozent', null=True, blank=True,
-                                       help_text=u'Die Person, die im Anschreiben erwähnt wird')
+                                       help_text='Die Person, die im Anschreiben erwähnt wird')
     auswertungstermin = models.DateField(null=True, blank=True,
-                                         verbose_name=u'Auswertungstermin',
-                                         help_text=u'An welchem Tag sollen Fragebögen für diese Veranstaltung ausgewerter werden? ' +
-                                                   u'Fragebögen die danach eintreffen werden nicht mehr ausgewertet.')
+                                         verbose_name='Auswertungstermin',
+                                         help_text='An welchem Tag sollen Fragebögen für diese Veranstaltung ausgewerter werden? ' +
+                                                   'Fragebögen die danach eintreffen werden nicht mehr ausgewertet.')
     bestelldatum = models.DateField(null=True, blank=True)
     access_token = models.CharField(max_length=16, blank=True)
     freiefrage1 = models.TextField(verbose_name='1. Freie Frage', blank=True)
@@ -505,8 +505,8 @@ class Veranstaltung(models.Model):
 
         return {'veranstaltung': veranstaltung, 'tutorgroup': tutorgroup}
 
-    def __unicode__(self):
-        return u"%s [%s] (%s)" % (self.name, self.typ, self.semester.short())
+    def __str__(self):
+        return "%s [%s] (%s)" % (self.name, self.typ, self.semester.short())
 
     def create_log(self, user, scanner, interface):
         Log.objects.create(veranstaltung=self, user=user, scanner=scanner, status=self.status, interface=interface)
@@ -533,7 +533,7 @@ class Veranstaltung(models.Model):
 
     def veranstalter_list(self):
         """Eine Liste aller Veranstalter dieser Veranstaltung"""
-        list = map(lambda x: x.full_name(), self.veranstalter.all())
+        list = [x.full_name() for x in self.veranstalter.all()]
         return ', '.join(list)
 
     def clean(self, *args, **kwargs):
@@ -606,8 +606,8 @@ class Tutor(models.Model):
     def get_barcode_number(self):
         return self.veranstaltung.get_barcode_number(tutorgruppe=self.nummer)
 
-    def __unicode__(self):
-        return u'%s %s %d' % (self.vorname, self.nachname, self.nummer)
+    def __str__(self):
+        return '%s %s %d' % (self.vorname, self.nachname, self.nummer)
 
     class Meta:
         verbose_name = 'Tutor'
@@ -629,15 +629,15 @@ class Einstellung(models.Model):
         verbose_name_plural = 'Einstellungen'
         app_label = 'feedback'
 
-    def __unicode__(self):
-        return u'%s = "%s"' % (self.name, self.wert)
+    def __str__(self):
+        return '%s = "%s"' % (self.name, self.wert)
 
 
 class Mailvorlage(models.Model):
     subject = models.CharField(max_length=100, unique=True)
     body = models.TextField()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.subject
 
     class Meta:
@@ -652,7 +652,7 @@ class BarcodeScanner(models.Model):
     token = models.CharField(max_length=64, unique=True)
     description = models.TextField()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.description
 
     class Meta:

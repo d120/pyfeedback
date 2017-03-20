@@ -18,7 +18,7 @@ class VeranstaltungEvaluationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(VeranstaltungEvaluationForm, self).__init__(*args, **kwargs)
 
-        for k, field in self.fields.items():
+        for k, field in list(self.fields.items()):
             field.required = True
 
 
@@ -58,7 +58,7 @@ class VeranstaltungBasisdatenForm(forms.ModelForm):
             self.fields['typ'].choices = choices
 
         # Wenn Evaluation oder Vollerhebung, dann sind alle anderen Felder notwendig
-        for k, field in self.fields.items():
+        for k, field in list(self.fields.items()):
             field.required = True
 
     class Meta:
@@ -92,7 +92,7 @@ class VeranstaltungDozentDatenForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(VeranstaltungDozentDatenForm, self).__init__(*args, **kwargs)
 
-        for k, field in self.fields.items():
+        for k, field in list(self.fields.items()):
             field.required = True
 
     class Meta:
@@ -149,7 +149,7 @@ class KommentarModelForm(forms.ModelForm):
         veranst = kwargs.pop('veranstaltung', None)
 
         if veranst is None:
-            raise KeyError(u'This form needs an veranstaltung=... parameter to function properly.')
+            raise KeyError('This form needs an veranstaltung=... parameter to function properly.')
 
         super(KommentarModelForm, self).__init__(*args, **kwargs)
         self.fields['autor'].queryset = veranst.veranstalter.all()

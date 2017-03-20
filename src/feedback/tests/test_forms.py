@@ -25,4 +25,4 @@ class KommentarModelFormTest(TestCase):
         forms.append(KommentarModelForm(veranstaltung=self.v))
         forms.append(KommentarModelForm(instance=self.k, veranstaltung=self.v))
         for f in forms:
-            self.assertItemsEqual(f.fields['autor'].queryset.all(), (self.p[0],))
+            self.assertCountEqual(f.fields['autor'].queryset.all(), (self.p[0],))
