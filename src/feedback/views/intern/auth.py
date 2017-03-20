@@ -30,12 +30,8 @@ def rechte_uebernehmen(request):
             request.session['vid'] = v
             request.session['veranstaltung'] = unicode(veranst)
 
-            if veranst.status == Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR or \
-                    veranst.status == Veranstaltung.STATUS_BESTELLUNG_GEOEFFNET:
-                return HttpResponseRedirect(reverse('veranstalter-index'))
-            else:
-                messages.warning(request, u'Fehler beim übernehmen der Rechte. '
-                                          u'Der Status der Veranstaltung ist nicht berechtigt.')
+            return HttpResponseRedirect(reverse('veranstalter-index'))
+
         except KeyError:
             pass
 
