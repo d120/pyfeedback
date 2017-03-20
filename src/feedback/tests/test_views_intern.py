@@ -1,7 +1,5 @@
 # coding=utf-8
 
-import os
-
 from StringIO import StringIO
 
 from django.conf import settings
@@ -15,6 +13,67 @@ from feedback.models import Semester, Person, Veranstaltung, Fragebogen2009, Mai
 from feedback.tests.tools import NonSuTestMixin, get_veranstaltung
 
 from feedback import tests
+
+
+class CloseOrderTest(NonSuTestMixin, TestCase):
+    def setUp(self):
+        self.client.login(username='supers', password='pw')
+        self.s, self.v = get_veranstaltung('vu')
+
+    def test_close_order_bestellung_liegt_vor_post(self):
+        path = '/intern/status_final/'
+        self.v.status = Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR
+        self.v.save()
+
+        response = self.client.post(path, {'auswahl': 'ja', 'submit': 'Bestätigen'}, **{'REMOTE_USER': 'super'})
+
+        self.v.refresh_from_db()
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(self.v.status, Veranstaltung.STATUS_BESTELLUNG_WIRD_VERARBEITET)
+
+    def test_close_order_keine_evaluation_post(self):
+        path = '/intern/status_final/'
+        self.v.status = Veranstaltung.STATUS_KEINE_EVALUATION
+        self.v.save()
+
+        response = self.client.post(path, {'auswahl': 'ja', 'submit': 'Bestätigen'}, **{'REMOTE_USER': 'super'})
+
+        self.v.refresh_from_db()
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(self.v.status, Veranstaltung.STATUS_KEINE_EVALUATION_FINAL)
+
+    def test_close_order_status_angelegt_post(self):
+        path = '/intern/status_final/'
+        self.v.status = Veranstaltung.STATUS_ANGELEGT
+        self.v.save()
+
+        response = self.client.post(path, {'auswahl': 'ja', 'submit': 'Bestätigen'}, **{'REMOTE_USER': 'super'})
+
+        self.v.refresh_from_db()
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(self.v.status, Veranstaltung.STATUS_KEINE_EVALUATION_FINAL)
+
+    def test_close_order_bestellung_geoeffnet_post(self):
+        path = '/intern/status_final/'
+        self.v.status = Veranstaltung.STATUS_BESTELLUNG_GEOEFFNET
+        self.v.save()
+
+        response = self.client.post(path, {'auswahl': 'ja', 'submit': 'Bestätigen'}, **{'REMOTE_USER': 'super'})
+
+        self.v.refresh_from_db()
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(self.v.status, Veranstaltung.STATUS_KEINE_EVALUATION_FINAL)
+
+    def test_close_order_refuse(self):
+        path = '/intern/status_final/'
+        self.v.status = Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR
+        self.v.save()
+
+        response = self.client.post(path, {'auswahl': 'nein', 'submit': 'Bestätigen'}, **{'REMOTE_USER': 'super'})
+
+        self.v.refresh_from_db()
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(self.v.status, Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR)
 
 
 class InternMiscTest(NonSuTestMixin, TestCase):
@@ -370,6 +429,7 @@ class SendmailTest(NonSuTestMixin, TestCase):
         v1.anzahl = 42
         v1.sprache = 'de'
         v1.save()
+
         fb = Fachgebiet.objects.create(name="Fachgebiet1", kuerzel="FB1")
         FachgebietEmail.objects.create(fachgebiet=fb, email_suffix="ul.bla", email_sekretaerin="sek@ul.bla")
         p1 = Person.objects.create(vorname='Pe', nachname='Ter', email='pe@ter.bla')
