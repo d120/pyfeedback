@@ -1,5 +1,7 @@
 # coding=utf-8
+
 import ast
+
 import os
 import subprocess
 
@@ -19,11 +21,16 @@ from django.views.generic import FormView
 
 from feedback import tools
 from feedback.forms import CloseOrderForm
+
+from feedback.parser.ergebnisse import parse_ergebnisse
+from feedback.models import Veranstaltung, Semester, Einstellung, Mailvorlage, get_model, long_not_ordert, FachgebietEmail
+
 from feedback.forms import UploadFileForm
 from feedback.parser.ergebnisse import parse_ergebnisse
 from feedback.views import public
 from feedback.models import Veranstaltung, Semester, Einstellung, Mailvorlage, get_model, long_not_ordert, \
     FachgebietEmail, Tutor
+
 
 
 @user_passes_test(lambda u: u.is_superuser)
@@ -33,6 +40,7 @@ def index(request):
     all_veranst = Veranstaltung.objects.filter(semester=cur_semester)
 
     # Veranstaltung für die es Rückmeldungen gibt
+
     ruck_veranst = all_veranst.filter(Q(anzahl__gt=0) | Q(evaluieren=False))
 
     num_all_veranst = all_veranst.count()
