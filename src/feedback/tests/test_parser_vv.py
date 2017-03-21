@@ -35,13 +35,13 @@ class VvParserTest(TransactionTestCase):
         try:
             return ImportCategory.objects.get(name=name, parent=parent)
         except ImportCategory.DoesNotExist:
-            self.fail(u'Kategorie "%s" (parent="%s") konnte nicht importiert werden.' % (name, parent))
+            self.fail('Kategorie "%s" (parent="%s") konnte nicht importiert werden.' % (name, parent))
 
     def _get_veranst_or_fail(self, typ, name, cat):
         try:
             return ImportVeranstaltung.objects.get(typ=typ, name=name, category=cat)
         except ImportVeranstaltung.DoesNotExist:
-            self.fail(u'Veranstaltung "%s" (category="%s") konnte nicht importiert werden.' % (name, cat))
+            self.fail('Veranstaltung "%s" (category="%s") konnte nicht importiert werden.' % (name, cat))
 
     def _parse_vv_xml(self, xmltestfile):
         parse_vv_xml(settings.TESTDATA_PATH + xmltestfile)

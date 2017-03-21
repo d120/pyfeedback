@@ -98,7 +98,7 @@ def veranstaltung(request, vid=None):
     else:
         parts = Ergebnis.parts
     ergebnis = get_object_or_404(Ergebnis, veranstaltung=veranstaltung)
-    data['parts'] = zip(parts, ergebnis.values())
+    data['parts'] = list(zip(parts, list(ergebnis.values())))
     data['ergebnis'] = ergebnis
 
     try:

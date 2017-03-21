@@ -21,14 +21,14 @@ from feedback.forms import VeranstaltungEvaluationForm, VeranstaltungBasisdatenF
 def login(request):
     if 'vid' in request.GET and 'token' in request.GET:
         vid = int(request.GET['vid'])
-        token = unicode(request.GET['token'])
+        token = str(request.GET['token'])
 
         user = auth.authenticate(vid=vid, token=token)
         if user:
             auth.login(request, user)
             v = Veranstaltung.objects.get(id=vid)
             request.session['vid'] = v.id
-            request.session['veranstaltung'] = unicode(v)
+            request.session['veranstaltung'] = str(v)
 
             return HttpResponseRedirect(reverse('veranstalter-index'))
 
@@ -53,13 +53,13 @@ def veranstalter_dashboard(request):
             bestellung.append(("Typ", veranst.get_typ_display))
             bestellung.append(("Anazhl", veranst.anzahl))
             bestellung.append(("Sprache", veranst.get_sprache_display))
-            bestellung.append(("Verantwortlich", veranst.verantwortlich.__unicode__() + '\n'
+            bestellung.append(("Verantwortlich", veranst.verantwortlich.__str__() + '\n'
                                + veranst.verantwortlich.anschrift + '\n'
                                + veranst.verantwortlich.email))
 
             ergebnis_empfanger_str = ""
             for empfaenger in veranst.ergebnis_empfaenger.all():
-                ergebnis_empfanger_str += empfaenger.__unicode__() + "\n"
+                ergebnis_empfanger_str += empfaenger.__str__() + "\n"
             bestellung.append(("Ergebnis Empfänger", ergebnis_empfanger_str))
 
             if veranst.auswertungstermin:
@@ -239,7 +239,7 @@ class VeranstalterWizard(SessionWizardView):
                 )
 
                 if form_obj.is_valid():
-                    for field_key, field_obj in form_obj.fields.items():
+                    for field_key, field_obj in list(form_obj.fields.items()):
                         cleaned_d = form_obj.cleaned_data[field_key]
                         field_value = ""
 
@@ -304,7 +304,9 @@ class VeranstalterWizard(SessionWizardView):
                                                              data={'primaerdozent': ergebnis_empfaenger[0].id},
                                                              instance=self.get_instance())
                 form_primar.is_valid()
-                form_list.append(form_primar)
+                # TODO: Python3 does not allow append() on dict() anymore
+                # form_list.append(form_primar)
+                list(form_list).append(form_primar)
 
         instance = self.get_instance()
 
@@ -349,7 +351,7 @@ def save_to_db(request, instance, form_list):
     :param form_list: Liste aller Forms
     """
     for form in form_list:
-        for key, val in form.cleaned_data.iteritems():
+        for key, val in form.cleaned_data.items():
             if isinstance(form, VeranstaltungTutorenForm):
                 if key == "csv_tutoren":
                     instance.csv_to_tutor(val)

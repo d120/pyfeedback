@@ -27,7 +27,7 @@ class InternAuthTest(NonSuTestMixin, TestCase):
         self.assertEqual(response.status_code, 401)
         self.assertEqual(response['WWW-Authenticate'], 'Basic realm="Feedback"')
 
-        extra = {'HTTP_AUTHORIZATION': 'Basic ' + b64encode('super:secretpw')}
+        extra = {'HTTP_AUTHORIZATION': 'Basic ' + str(b64encode(b'super:secretpw'))}
         response = self.client.get(tests.LOGIN_URL, **extra)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response['Location'], tests.INDEX_URL)

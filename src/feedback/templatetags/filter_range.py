@@ -6,4 +6,4 @@ register = template.Library()
 @register.filter(name='range')
 def filter_range(start, end):
     # workaround in templates: "for i in start_index|range:end_index"
-    return range(start, end)
+    return list(range(start, end))

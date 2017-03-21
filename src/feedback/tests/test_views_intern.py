@@ -1,8 +1,4 @@
-# coding=utf-8
-
-import os
-
-from StringIO import StringIO
+from io import StringIO
 
 from django.conf import settings
 from django.core import mail
@@ -10,72 +6,10 @@ from django.test import TestCase
 from django.core.urlresolvers import reverse
 
 from feedback.forms import UploadFileForm
-from feedback.models import Semester, Person, Veranstaltung, Fragebogen2009, Mailvorlage, Einstellung, \
-    Fachgebiet, FachgebietEmail, Tutor
+from feedback.models import Semester, Person, Veranstaltung, Fragebogen2009, Mailvorlage, Einstellung
 from feedback.tests.tools import NonSuTestMixin, get_veranstaltung
 
 from feedback import tests
-
-
-class CloseOrderTest(NonSuTestMixin, TestCase):
-    def setUp(self):
-        self.client.login(username='supers', password='pw')
-        self.s, self.v = get_veranstaltung('vu')
-
-    def test_close_order_bestellung_liegt_vor_post(self):
-        path = '/intern/status_final/'
-        self.v.status = Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR
-        self.v.save()
-
-        response = self.client.post(path, {'auswahl': 'ja', 'submit': 'Bestätigen'}, **{'REMOTE_USER': 'super'})
-
-        self.v.refresh_from_db()
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(self.v.status, Veranstaltung.STATUS_BESTELLUNG_WIRD_VERARBEITET)
-
-    def test_close_order_keine_evaluation_post(self):
-        path = '/intern/status_final/'
-        self.v.status = Veranstaltung.STATUS_KEINE_EVALUATION
-        self.v.save()
-
-        response = self.client.post(path, {'auswahl': 'ja', 'submit': 'Bestätigen'}, **{'REMOTE_USER': 'super'})
-
-        self.v.refresh_from_db()
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(self.v.status, Veranstaltung.STATUS_KEINE_EVALUATION_FINAL)
-
-    def test_close_order_status_angelegt_post(self):
-        path = '/intern/status_final/'
-        self.v.status = Veranstaltung.STATUS_ANGELEGT
-        self.v.save()
-
-        response = self.client.post(path, {'auswahl': 'ja', 'submit': 'Bestätigen'}, **{'REMOTE_USER': 'super'})
-
-        self.v.refresh_from_db()
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(self.v.status, Veranstaltung.STATUS_KEINE_EVALUATION_FINAL)
-
-    def test_close_order_bestellung_geoeffnet_post(self):
-        path = '/intern/status_final/'
-        self.v.status = Veranstaltung.STATUS_BESTELLUNG_GEOEFFNET
-        self.v.save()
-
-        response = self.client.post(path, {'auswahl': 'ja', 'submit': 'Bestätigen'}, **{'REMOTE_USER': 'super'})
-
-        self.v.refresh_from_db()
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(self.v.status, Veranstaltung.STATUS_KEINE_EVALUATION_FINAL)
-
-    def test_close_order_refuse(self):
-        path = '/intern/status_final/'
-        self.v.status = Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR
-        self.v.save()
-
-        response = self.client.post(path, {'auswahl': 'nein', 'submit': 'Bestätigen'}, **{'REMOTE_USER': 'super'})
-
-        self.v.refresh_from_db()
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(self.v.status, Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR)
 
 
 class InternMiscTest(NonSuTestMixin, TestCase):
@@ -111,6 +45,11 @@ class InternMiscTest(NonSuTestMixin, TestCase):
 
 
 class ExportVeranstaltungenTest(NonSuTestMixin, TestCase):
+    def checkXMLEqual(self, xml1, xml2):
+        xml1 = xml1.replace("\n", "").replace("\t", "").replace(" ", "")
+        xml2 = xml2.replace("\n", "").replace("\t", "").replace(" ", "")
+        self.assertEqual(xml1, xml2)
+
     def test_export_veranstaltungen_post(self):
         path = '/intern/export_veranstaltungen/'
         self.client.login(username='supers', password='pw')
@@ -162,91 +101,79 @@ class ExportVeranstaltungenTest(NonSuTestMixin, TestCase):
         # alles OK
         v2.sprache = 'de'
         v2.save()
+
         response = self.client.post(path, {'semester': s.semester}, **{'REMOTE_USER': 'super'})
-        self.assertRegexpMatches(response['Content-Disposition'],
-                                 r'^attachment; filename="[a-zA-Z0-9_-]+\.xml"$')
+        self.assertRegex(response['Content-Disposition'], r'^attachment; filename="[a-zA-Z0-9_-]+\.xml"$')
+        test_xml = '''<?xml version="1.0" encoding="UTF-8"?>
+                        <EvaSys xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://evaluation.tu-darmstadt.de/evasys/doc/xml-import.xsd">
+                            <Lecture key="lv-1">
+                                <dozs></dozs>
+                                <name>Stoning I</name>
+                                <orgroot>FB 20</orgroot>
+                                <short>123v-SS11</short>
+                                <period>SS11</period>
+                                <type>Vorlesung</type>
+                                <turnout>42</turnout>
+                                <p_o_study>Informatik</p_o_study>
+                                <survey><EvaSysRef type="Survey" key="su-1" /></survey>
+                                <external_id>lv-1</external_id>
+                            </Lecture>
+                            <Survey key="su-1">
+                                <survey_form>FB20Vv1e</survey_form>
+                                <survey_period>SS11</survey_period>
+                                <survey_type>coversheet</survey_type>
+                                <survey_verify>0</survey_verify>
+                            </Survey>
+                            <Lecture key="lv-2">
+                                <dozs></dozs>
+                                <name>Stoning I</name>
+                                <orgroot>FB 20</orgroot>
+                                <short>123vu-SS11</short>
+                                <period>SS11</period>
+                                <type>Vorlesung + Übung</type>
+                                <turnout>23</turnout>
+                                <p_o_study>Informatik</p_o_study>
+                                <survey><EvaSysRef type="Survey" key="su-2" /></survey>
+                                <external_id>lv-2</external_id>
+                            </Lecture>
+                            <Survey key="su-2">
+                                <survey_form>FB20Vv1</survey_form>
+                                <survey_period>SS11</survey_period>
+                                <survey_type>coversheet</survey_type>
+                                <survey_verify>0</survey_verify>
+                            </Survey>
+                        </EvaSys>'''
+        self.checkXMLEqual(test_xml, response.content.decode('utf-8'))
 
-        self.assertXMLEqual(response.content,
-                         '''<?xml version="1.0" encoding="UTF-8"?>
-<EvaSys xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xsi:noNamespaceSchemaLocation="http://evaluation.tu-darmstadt.de/evasys/doc/xml-import.xsd">
-<Lecture key="lv-1">
-<dozs>
-
-</dozs>
-<name>Stoning I</name>
-<orgroot>FB 20</orgroot>
-<short>123v-SS11</short>
-<period>SS11</period>
-<type>Vorlesung</type>
-<turnout>42</turnout>
-<p_o_study>Informatik</p_o_study>
-<survey>
-<EvaSysRef type="Survey" key="su-1" />
-</survey>
-<external_id>lv-1</external_id>
-</Lecture>
-<Survey key="su-1">
-<survey_form>FB20Vv1e</survey_form>
-<survey_period>SS11</survey_period>
-<survey_type>coversheet</survey_type>
-<survey_verify>0</survey_verify>
-</Survey>
-<Lecture key="lv-2">
-<dozs>
-
-</dozs>
-<name>Stoning I</name>
-<orgroot>FB 20</orgroot>
-<short>123vu-SS11</short>
-<period>SS11</period>
-<type>Vorlesung + Übung</type>
-<turnout>23</turnout>
-<p_o_study>Informatik</p_o_study>
-<survey>
-<EvaSysRef type="Survey" key="su-2" />
-</survey>
-<external_id>lv-2</external_id>
-</Lecture>
-<Survey key="su-2">
-<survey_form>FB20Vv1</survey_form>
-<survey_period>SS11</survey_period>
-<survey_type>coversheet</survey_type>
-<survey_verify>0</survey_verify>
-</Survey>
-</EvaSys>
-''')
         response = self.client.post(path, {'semester': s.semester, 'xml_ubung': True}, **{'REMOTE_USER': 'super'})
-        self.assertRegexpMatches(response['Content-Disposition'],
-                                 r'^attachment; filename="[a-zA-Z0-9_-]+\.xml"$')
-
-        self.assertXMLEqual(response.content, '''<?xml version="1.0" encoding="UTF-8"?>
-<EvaSys xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xsi:noNamespaceSchemaLocation="http://evaluation.tu-darmstadt.de/evasys/doc/xml-import.xsd">
-<Lecture key="lv-2">
-<dozs>
-
-</dozs>
-<name>Stoning I</name>
-<orgroot>FB 20</orgroot>
-<short>123vu-SS11</short>
-<period>SS11</period>
-<type>Vorlesung + Übung</type>
-<turnout>23</turnout>
-<p_o_study>Informatik</p_o_study>
-<survey>
-<EvaSysRef type="Survey" key="su-2-u" />
-</survey>
-<external_id>lv-2</external_id>
-</Lecture>
-<Survey key="su-2-u">
-<survey_form>FB20\xc3\x9cv1</survey_form>
-<survey_period>SS11</survey_period>
-<survey_type>coversheet</survey_type>
-<survey_verify>0</survey_verify>
-</Survey>
-</EvaSys>
-''')
+        self.assertRegex(response['Content-Disposition'], r'^attachment; filename="[a-zA-Z0-9_-]+\.xml"$')
+        test_xml = '''<?xml version="1.0" encoding="UTF-8"?>
+                        <EvaSys xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                        xsi:noNamespaceSchemaLocation="http://evaluation.tu-darmstadt.de/evasys/doc/xml-import.xsd">
+                        <Lecture key="lv-2">
+                        <dozs>
+                        </dozs>
+                        <name>Stoning I</name>
+                        <orgroot>FB 20</orgroot>
+                        <short>123vu-SS11</short>
+                        <period>SS11</period>
+                        <type>Vorlesung + Übung</type>
+                        <turnout>23</turnout>
+                        <p_o_study>Informatik</p_o_study>
+                        <survey>
+                        <EvaSysRef type="Survey" key="su-2-u" />
+                        </survey>
+                        <external_id>lv-2</external_id>
+                        </Lecture>
+                        <Survey key="su-2-u">
+                        <survey_form>FB20Üv1</survey_form>
+                        <survey_period>SS11</survey_period>
+                        <survey_type>coversheet</survey_type>
+                        <survey_verify>0</survey_verify>
+                        </Survey>
+                        </EvaSys>
+                        '''
+        self.checkXMLEqual(test_xml, response.content.decode('utf-8'))
 
     def test_export_veranstaltungen_post_primaerdozent(self):
         path = '/intern/export_veranstaltungen/'
@@ -272,64 +199,28 @@ xsi:noNamespaceSchemaLocation="http://evaluation.tu-darmstadt.de/evasys/doc/xml-
         v.save()
 
         response = self.client.post(path, {'semester': s.semester}, **{'REMOTE_USER': 'super'})
-        self.assertRegexpMatches(response['Content-Disposition'],
-                                 r'^attachment; filename="[a-zA-Z0-9_-]+\.xml"$')
+        self.assertRegex(response['Content-Disposition'], r'^attachment; filename="[a-zA-Z0-9_-]+\.xml"$')
+        test_xml = '''<?xml version="1.0" encoding="UTF-8"?>\n
+        <EvaSys xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n\t
+        xsi:noNamespaceSchemaLocation="http://evaluation.tu-darmstadt.de/evasys/doc/xml-import.xsd">\n\t
+        <Lecture key="lv-1">\n\t\t<dozs>\n\t\t\t\n\t\t\t<doz>\n\t\t\t\t<EvaSysRef type="Person" key="pe-2" />\n\t\t\t
+        </doz>\n\t\t\t\n\t\t\t<doz>\n\t\t\t\t<EvaSysRef type="Person" key="pe-1" />\n\t\t\t</doz>\n\t\t\t\n\t\t\t<doz>
+        \n\t\t\t\t<EvaSysRef type="Person" key="pe-3" />\n\t\t\t</doz>\n\t\t\t\n\t\t</dozs>\n\t\t<name>Stoning I</name>
+        \n\t\t<orgroot>FB 20</orgroot>\n\t\t<short>123v-SS11</short>\n\t\t<period>SS11</period>\n\t\t
+        <type>Vorlesung</type>\n\t\t<turnout>42</turnout>\n\t\t<p_o_study>Informatik</p_o_study>\n\t\t
+        <survey>\n\t\t\t\n\t\t\t<EvaSysRef type="Survey" key="su-1" />\n\t\t\t\n\t\t</survey>\n\t\t
+        <external_id>lv-1</external_id>\n\t</Lecture>\n\n\t\n\t<Survey key="su-1">\n\t\t
+        <survey_form>FB20Vv1e</survey_form>\n\t\t<survey_period>SS11</survey_period>\n\t\t
+        <survey_type>coversheet</survey_type>\n\t\t<survey_verify>0</survey_verify>\n\t</Survey>\n\t\n\t\n\t
+        <Person key="pe-1">\n\t\t<firstname>Je</firstname>\n\t\t<lastname>Mand</lastname>\n\t\t
+        <email>je@ma.nd</email>\n\t\t<gender>f</gender>\n\t\t<external_id>pe-1</external_id>\n\t
+        </Person><Person key="pe-2">\n\t\t<firstname>Prim</firstname>\n\t\t<lastname>Ardozent</lastname>\n\t\t
+        <email>prim@ardoz.ent</email>\n\t\t<gender>m</gender>\n\t\t<external_id>pe-2</external_id>\n\t</Person>
+        <Person key="pe-3">\n\t\t<firstname>Je1</firstname>\n\t\t<lastname>Mand1</lastname>\n\t\t
+        <email>je1@ma.nd</email>\n\t\t<gender>m</gender>\n\t\t<external_id>pe-3</external_id>\n\t</Person>\n
+        </EvaSys>\n'''
 
-        self.assertXMLEqual(response.content,
-                             '''<?xml version="1.0" encoding="UTF-8"?>
-<EvaSys xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xsi:noNamespaceSchemaLocation="http://evaluation.tu-darmstadt.de/evasys/doc/xml-import.xsd">
-<Lecture key="lv-1">
-<dozs>
-<doz>
-<EvaSysRef type="Person" key="pe-2" />
-</doz>
-<doz>
-<EvaSysRef type="Person" key="pe-1" />
-</doz>
-<doz>
-<EvaSysRef type="Person" key="pe-3" />
-</doz>
-</dozs>
-<name>Stoning I</name>
-<orgroot>FB 20</orgroot>
-<short>123v-SS11</short>
-<period>SS11</period>
-<type>Vorlesung</type>
-<turnout>42</turnout>
-<p_o_study>Informatik</p_o_study>
-<survey>
-<EvaSysRef type="Survey" key="su-1" />
-</survey>
-<external_id>lv-1</external_id>
-</Lecture>
-<Survey key="su-1">
-<survey_form>FB20Vv1e</survey_form>
-<survey_period>SS11</survey_period>
-<survey_type>coversheet</survey_type>
-<survey_verify>0</survey_verify>
-</Survey>
-<Person key="pe-1">
-<firstname>Je</firstname>
-<lastname>Mand</lastname>
-<email>je@ma.nd</email>
-<gender>f</gender>
-<external_id>pe-1</external_id>
-</Person><Person key="pe-2">
-<firstname>Prim</firstname>
-<lastname>Ardozent</lastname>
-<email>prim@ardoz.ent</email>
-<gender>m</gender>
-<external_id>pe-2</external_id>
-</Person><Person key="pe-3">
-<firstname>Je1</firstname>
-<lastname>Mand1</lastname>
-<email>je1@ma.nd</email>
-<gender>m</gender>
-<external_id>pe-3</external_id>
-</Person>
-</EvaSys>
-''')
+        self.checkXMLEqual(test_xml, response.content.decode('utf-8'))
 
 
 #
@@ -426,127 +317,64 @@ class SendmailTest(NonSuTestMixin, TestCase):
 
     def test_post(self):
         self.client.login(username='supers', password='pw')
-
+        get_veranstaltung('v')
         s, v1 = get_veranstaltung('vu')
         v1.anzahl = 42
         v1.sprache = 'de'
         v1.save()
-
-        default_params = {
-            'semester': s, 'status': Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR, 'grundstudium': False,
-            'evaluieren': True, 'sprache': 'de', 'anzahl': 44, 'lv_nr': '234vu'
-        }
-        v2 = Veranstaltung.objects.create(typ='vu', name='Stoning III', **default_params)
-        v2.save()
-
-        fg1 = Fachgebiet.objects.create(name="Fachgebiet1", kuerzel="FB1")
-        fg2 = Fachgebiet.objects.create(name="Fachgebiet2", kuerzel="FB2")
-        FachgebietEmail.objects.create(fachgebiet=fg1, email_suffix="fg1.com", email_sekretaerin="sek@fg1.com")
-        FachgebietEmail.objects.create(fachgebiet=fg2, email_suffix="fg2.com", email_sekretaerin="sek@fg2.com")
-
-        p1 = Person.objects.create(vorname='Peter', nachname='Pan', email='peter@fg1.com', fachgebiet=fg1)
-        p2 = Person.objects.create(vorname='Pan', nachname='Peter', email='pan@fg2.com', fachgebiet=fg2)
-
-        v1.veranstalter.add(p1)
-        v2.veranstalter.add(p2)
-
+        v1.veranstalter.add(Person.objects.create(vorname='Pe', nachname='Ter', email='pe@ter.bla'))
+        v1.veranstalter.add(Person.objects.create(vorname='Pa', nachname='Ul', email='pa@ul.bla'))
         mv = Mailvorlage.objects.create(subject='Testmail', body='Dies ist eine Testmail.')
         Einstellung.objects.create(name='bestellung_erlaubt', wert='0')
-        Tutor.objects.create(nummer=1, vorname='Max', nachname='Mux', email='max@fg1.com', anmerkung='',
-                             veranstaltung=v1)
 
-        post_data = {
-            'uebernehmen': 'x',
-            'recipient': [Veranstaltung.STATUS_BESTELLUNG_GEOEFFNET],
-            'tutoren': 'False',
-            'subject': 'abc',
-            'body': 'xyz'
-        }
+        params = {'uebernehmen': 'x', 'recipient': 'cur_sem_missing_order', 'subject': 'abc', 'body': 'xyz'}
 
-        # ----- kein Semester angegeben ----- #
-        response = self.client.post(self.path, post_data, **{'REMOTE_USER': 'super'})
-
+        # kein Semester angegeben
+        response = self.client.post(self.path, params, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response['Location'].endswith('/intern/sendmail/'))
 
-        # ----- Vorlage übernehmen; Vorlage nicht angegeben ----- #
-        post_data['semester'] = s.semester
-
-        response = self.client.post(self.path, post_data, **{'REMOTE_USER': 'super'})
-
+        # Vorlage übernehmen; Vorlage nicht angegeben
+        params['semester'] = s.semester
+        response = self.client.post(self.path, params, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response['Location'].endswith('/intern/sendmail/'))
 
-        # ----- Vorlage übernehmen; Vorlage ist angegeben ----- #
-        post_data['vorlage'] = mv.id
-
-        response = self.client.post(self.path, post_data, **{'REMOTE_USER': 'super'})
-
+        # Vorlage übernehmen; Vorlage ist angegeben
+        params['vorlage'] = mv.id
+        response = self.client.post(self.path, params, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.templates[0].name, 'intern/sendmail.html')
         self.assertEqual(response.context['subject'], mv.subject)
         self.assertEqual(response.context['body'], mv.body)
 
-        # ----- Vorschau; Empfänger ist auf Veranstalter mit fehlenden Bestellungen eingestellt ----- #
-        del post_data['uebernehmen']
-        post_data['vorschau'] = 'x'
-
-        response = self.client.post(self.path, post_data, **{'REMOTE_USER': 'super'})
-
+        # Vorschau; Empfänger ist auf Veranstalter mit fehlenden Bestellungen eingestellt
+        del params['uebernehmen']
+        params['vorschau'] = 'x'
+        response = self.client.post(self.path, params, **{'REMOTE_USER': 'super'})
         self.assertIn('intern/sendmail_preview.html', (t.name for t in response.templates))
         self.assertTrue(response.context['vorschau'])
 
-        # ----- Vorschau; Empfänger ist auf Veranstaltungen mit Ergebnissen eingestellt ----- #
-        post_data['recipient'] = [Veranstaltung.STATUS_ERGEBNISSE_VERSANDT]
-
-        response = self.client.post(self.path, post_data, **{'REMOTE_USER': 'super'})
-
+        # Vorschau; Empfänger ist auf Veranstaltungen mit Ergebnissen eingestellt
+        params['recipient'] = 'cur_sem_results'
+        response = self.client.post(self.path, params, **{'REMOTE_USER': 'super'})
         self.assertIn('intern/sendmail_preview.html', (t.name for t in response.templates))
         self.assertTrue(response.context['vorschau'])
 
-        # ----- Vorschau: Check if the replacements are highlighted ----- #
+        # Vorschau: Check if the replacements are highlighted
         color_span = '<span style="color:blue">{}</span>'
-        self.assertEqual(color_span.format('Grundlagen der Agrarphilosophie I'), response.context['veranstaltung'])
+        self.assertEqual(color_span.format('Grundlagen der Agrarphilosophie I') , response.context['veranstaltung'])
         link_veranstalter = 'https://www.fachschaft.informatik.tu-darmstadt.de%s' % reverse('veranstalter-login')
         link_suffix_format = '?vid=%d&token=%s'
-        self.assertEqual(color_span.format(link_veranstalter + (link_suffix_format % (1337, '0123456789abcdef'))),
-                         response.context['link_veranstalter'])
+        self.assertEqual(color_span.format(link_veranstalter + (link_suffix_format % (1337, '0123456789abcdef'))) , response.context['link_veranstalter'])
 
-        # ----- Senden an alle Veranstaltungen ohne Tutoren ----- #
-        del post_data['vorschau']
-        post_data['senden'] = 'x'
-        post_data['recipient'] = [0]  # 0 ist hierbei der Code für alle Veranstaltungen
-        del post_data['vorlage']
-
-        response = self.client.post(self.path, post_data, **{'REMOTE_USER': 'super'})
+        # Senden
+        del params['vorschau']
+        params['senden'] = 'x'
+        params['recipient'] = 'cur_sem_all'
+        del params['vorlage']
+        response = self.client.post(self.path, params, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response['Location'], tests.LOGIN_URL)
-
         # Hier wird in Eclipse ein Fehler angezeigt; mail.outbox gibt es während der Testläufe
         # aber wirklich (siehe https://docs.djangoproject.com/en/1.4/topics/testing/#email-services)
-        self.assertEqual(len(mail.outbox), 3)  # an 2 Veranstalter und Kopie an Feedback-Team
-        self.assertEqual(len(mail.outbox[0].to), 2)  # an Veranstalter und Sekretaerin
-        self.assertEqual(len(mail.outbox[1].to), 2)
-
-        # ----- Senden an eine bestimmte Veranstaltung ohne Tutoren ----- #
-        del mail.outbox[:]
-        post_data['recipient'] = Veranstaltung.STATUS_BESTELLUNG_GEOEFFNET
-
-        response = self.client.post(self.path, post_data, **{'REMOTE_USER': 'super'})
-
-        self.assertEqual(response.status_code, 302)
-        self.assertTrue(response['Location'], tests.LOGIN_URL)
-        self.assertEqual(len(mail.outbox), 2)  # an 1 Veranstalter und Kopie an Feedback-Team
-        self.assertEqual(len(mail.outbox[0].to), 2)  # an Veranstalter und Sekretaerin
-
-        # ----- Senden an eine bestimmte Veranstaltung mit Tutoren ==> ohne Sekretaerin ----- #
-        del mail.outbox[:]
-        post_data['recipient'] = Veranstaltung.STATUS_BESTELLUNG_GEOEFFNET
-        post_data['tutoren'] = 'True'
-
-        response = self.client.post(self.path, post_data, **{'REMOTE_USER': 'super'})
-
-        self.assertEqual(response.status_code, 302)
-        self.assertTrue(response['Location'], tests.LOGIN_URL)
-        self.assertEqual(len(mail.outbox), 2)  # an 1 Veranstalter und Kopie an Feedback-Team
-        self.assertEqual(len(mail.outbox[0].to), 2)  # an Veranstalter und Tutor
-        self.assertEqual(mail.outbox[0].to[1], 'max@fg1.com')  # E-Mail Adresse des Tutors
+        self.assertEqual(len(mail.outbox), 2)

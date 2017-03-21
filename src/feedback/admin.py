@@ -12,7 +12,8 @@ from feedback.models.base import Log, Fachgebiet, FachgebietEmail
 
 class PersonAdmin(admin.ModelAdmin):
     """Admin View für Personen"""
-    list_display = ('__unicode__', 'email', 'fachgebiet')
+    list_display = ('__str__', 'email', 'fachgebiet')
+   
     search_fields = ['vorname', 'nachname', 'email', ]
     list_filter = ('fachgebiet',)
 
@@ -37,8 +38,8 @@ class PersonAdmin(admin.ModelAdmin):
                 for person in queryset:
                     person_id_str = str(person.id)
                     if person_id_str in selected_persons:
-                        proposed_fachgebiet_id = request.POST.get("fachgebiet_" + person_id_str, 0);
-                        if proposed_fachgebiet_id > 0:
+                        proposed_fachgebiet_id = request.POST.get("fachgebiet_" + person_id_str, 0)
+                        if int(proposed_fachgebiet_id) > 0:
                             proposed_fachgebiet = Fachgebiet.objects.get(id=proposed_fachgebiet_id)
                             person.fachgebiet = proposed_fachgebiet
                             person.save()
@@ -130,7 +131,8 @@ class VeranstaltungAdmin(admin.ModelAdmin):
 
 class SemesterAdmin(admin.ModelAdmin):
     """Admin View für Semester"""
-    list_display = ('__unicode__', 'sichtbarkeit', 'fragebogen')
+    list_display = ('__str__', 'sichtbarkeit', 'fragebogen')
+
     list_filter = ('sichtbarkeit', 'fragebogen')
     ordering = ('-semester',)
 
