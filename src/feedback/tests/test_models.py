@@ -8,7 +8,7 @@ from django.utils.timezone import now
 from freezegun import freeze_time
 
 from feedback.models import get_model, Semester, Person, Veranstaltung, Einstellung, Mailvorlage
-from feedback.models.base import AlternativVorname, Log, BarcodeScanner, BarcodeAllowedState, Fachgebiet, FachgebietEmail
+from feedback.models.base import AlternativVorname, Log, BarcodeScanner, Fachgebiet, FachgebietEmail, BarcodeAllowedState
 from feedback.models import past_semester_orders
 from feedback.models import ImportPerson, ImportCategory, ImportVeranstaltung, Kommentar
 from feedback.models import Fragebogen2008, Fragebogen2009, Ergebnis2008, Ergebnis2009
@@ -292,7 +292,8 @@ class PersonTest(TestCase):
         self.assertEqual(self.fb_p1.fachgebiet, self.fachgebiet1)
 
 
-class BarcodeScannTest(TestCase):
+
+class BarcodeScanTest(TestCase):
     def setUp(self):
         self.barcode_scanner = BarcodeScanner.objects.create(token="LRh73Ds22", description="description1")
         self.barcode_scanner2 = BarcodeScanner.objects.create(token="KHzz211d", description="description2")
@@ -304,6 +305,7 @@ class BarcodeScannTest(TestCase):
                                                allow_state=Veranstaltung.STATUS_GEDRUCKT)
             BarcodeAllowedState.objects.create(barcode_scanner=self.barcode_scanner2,
                                                allow_state=Veranstaltung.STATUS_GEDRUCKT)
+
         except IntegrityError:
             self.fail()
 
@@ -346,8 +348,20 @@ class VeranstaltungTest(TransactionTestCase):
         self.assertEqual(self.v[0].status, Veranstaltung.STATUS_ANGELEGT)
         self.assertEqual(self.v[4].status, Veranstaltung.STATUS_GEDRUCKT)
 
-    def test_log(self):
+    def test_set_next_state(self):
+        veranstaltung = self.v[4]
+        veranstaltung.status = Veranstaltung.STATUS_BESTELLUNG_GEOEFFNET
+        veranstaltung.set_next_state()
+        self.assertEqual(veranstaltung.status, Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR)
 
+        veranstaltung.set_next_state()
+        self.assertEqual(veranstaltung.status, Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR)
+
+        veranstaltung.status = Veranstaltung.STATUS_GEDRUCKT
+        veranstaltung.set_next_state()
+        self.assertEqual(veranstaltung.status, Veranstaltung.STATUS_VERSANDT)
+
+    def test_log(self):
         self.v[0].log(None)
         self.assertEqual(Log.objects.count(), 0)
 

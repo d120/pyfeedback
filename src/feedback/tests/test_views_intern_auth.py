@@ -7,6 +7,7 @@ from django.test.utils import override_settings
 
 from feedback.tests.tools import NonSuTestMixin, get_veranstaltung
 from feedback import tests
+from feedback.models import Veranstaltung
 
 
 class InternAuthTest(NonSuTestMixin, TestCase):

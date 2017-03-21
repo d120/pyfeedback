@@ -3,7 +3,6 @@
 from __future__ import unicode_literals
 
 import random
-import re
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -21,6 +20,7 @@ import datetime
 
 
 class Semester(models.Model):
+    """Repräsentiert ein Semester der TUD."""
     FRAGEBOGEN_CHOICES = (
         ('2008', 'Fragebogen 2008'),
         ('2009', 'Fragebogen 2009'),
@@ -116,7 +116,7 @@ class Semester(models.Model):
 
 
 class Fachgebiet(models.Model):
-    """Repräsentiert ein Fachgebiet des Fachbereichs Informatik."""
+    """Repräsentiert ein Fachgebiet für das FB20"""
     name = models.CharField(max_length=80)
     kuerzel = models.CharField(max_length=10)
 
@@ -130,7 +130,7 @@ class Fachgebiet(models.Model):
 
 
 class FachgebietEmail(models.Model):
-    """Repräsentiert den Suffix der Email-Adresse einer Person. Als Suffix ist alles ab dem @-Symbol definiert."""
+    """Repräsentiert die E-Mail Domänen für die jeweiligen Fachgebiete des FBs 20."""
     fachgebiet = models.ForeignKey(Fachgebiet, related_name='fachgebiet')
     email_suffix = models.CharField(max_length=150,
                                     help_text="Hier soll der Domainname einer Email-Adresse eines Fachgebiets stehen.",
@@ -139,6 +139,11 @@ class FachgebietEmail(models.Model):
 
     @staticmethod
     def get_fachgebiet_from_email(email):
+        """
+        Gibt ein Fachgebiet anhand einer E-Mail Adresse zurück
+        :param email: E-Mail String
+        :return: Fachgebiet
+        """
         try:
             suffix = email.split('@')[-1]
             fg_id = FachgebietEmail.objects.get(email_suffix=suffix).fachgebiet_id
@@ -153,6 +158,7 @@ class FachgebietEmail(models.Model):
 
 
 class Person(models.Model):
+    """Repräsentiert eine Person der TUD aus dem FB20."""
     GESCHLECHT_CHOICES = (
         ('', ''),
         ('m', 'Herr'),
@@ -168,9 +174,10 @@ class Person(models.Model):
     geschlecht = models.CharField(max_length=1, choices=GESCHLECHT_CHOICES, blank=True, verbose_name=u'Anrede')
     vorname = models.CharField(_('first name'), max_length=30, blank=True)
     nachname = models.CharField(_('last name'), max_length=30, blank=True)
-    email = models.EmailField(_('e-mail'), blank=True)
+    email = models.EmailField(_('E-Mail'), blank=True)
     anschrift = models.CharField(_('anschrift'), max_length=80, blank=True,
-                                 help_text='Bitte geben sie die Anschrift so an, dass der Versand per Hauspost problemlos erfolgen kann.')
+                                 help_text='Tragen Sie bitte nur die Anschrift ohne Namen ein, '
+                                           'da der Name automatisch hinzugefügt wird.')
     fachgebiet = models.ForeignKey(Fachgebiet, null=True, blank=True)
 
     def full_name(self):
@@ -193,6 +200,11 @@ class Person(models.Model):
 
     @staticmethod
     def create_from_import_person(ip):
+        """
+        Erstellt Personen aus dem Import
+        :param ip: die importierte Person
+        :return: Person
+        """
         # Prüfen, ob Benutzer existiert
         try:
             return Person.objects.filter(vorname=ip.vorname, nachname=ip.nachname)[0]
@@ -204,6 +216,11 @@ class Person(models.Model):
 
     @staticmethod
     def persons_to_edit(semester=None):
+        """
+        Gibt die Personen zurück, die noch bearbeitet werden müssen.
+        :param semester: bei None, das aktuelle Semester, ansonsten das Angegebene.
+        :return: Person
+        """
         if semester is None:
             semester = Semester.current()
         return Person.objects.filter(Q(geschlecht='') | Q(email=''), veranstaltung__semester=semester)\
@@ -211,18 +228,40 @@ class Person(models.Model):
 
     @staticmethod
     def all_edited_persons():
+        """
+        Gibt alle Personen zurück, die schon bearbeitet wurden.
+        :return: Person
+        """
         return Person.objects.filter(~Q(geschlecht='') & ~Q(email='')).order_by('id').distinct()
 
     @staticmethod
     def persons_with_similar_names(vorname, nachname):
+        """
+        Gibt alle Personen zurück, die sich im Namen ähneln.
+        :param vorname: String
+        :param nachname: String
+        :return: Person
+        """
         return Person.all_edited_persons().filter(vorname__startswith=vorname, nachname=nachname)
 
     @staticmethod
     def veranstaltungen(person):
+        """
+        Gibt die Veranstaltungen einer Person zurück.
+        :param person: Person
+        :return: Veranstaltung
+        """
         return Veranstaltung.objects.filter(veranstalter=person)
 
     @staticmethod
     def replace_veranstalter(new, old):
+        """
+        Ersetzt einen "alten" Veranstalter durch einen "neuen".
+        Zum Beispiel wenn Dozenten sich beim Namen ähneln und dementsprechend identisch sind.
+        Wenn dies der Fall ist, wird ersetzt und ein AlternativVorname erzeugt, der sich die ähnlichen Namen merkt.
+        :param new: die neue Person
+        :param old: die alte Person
+        """
         veranstaltungen = Person.veranstaltungen(new)
 
         # replace every lecture held by 'new' with 'old'
@@ -236,15 +275,22 @@ class Person(models.Model):
 
     @staticmethod
     def is_veranstalter(person):
+        """
+        prüft, ob eine Person ein Veranstalter ist.
+        :param person: Person
+        :return: True, wenn Veranstalter, ansonsten False
+        """
         return Person.veranstaltungen(person).count() > 0
 
 
 class AlternativVorname(models.Model):
+    """Repräsentiert einen alternativen Vornamen für eine Person."""
     vorname = models.CharField(_('first name'), max_length=30, blank=True)
     person = models.ForeignKey(Person, on_delete=models.CASCADE)
 
 
 class Veranstaltung(models.Model):
+    """Repräsentiert eine Veranstaltung der TUD."""
     TYP_CHOICES = (
         ('v', 'Vorlesung'),
         ('vu', 'Vorlesung mit Übung'),
@@ -316,6 +362,11 @@ class Veranstaltung(models.Model):
 
     # Vorlesungsstatus
     STATUS_ANGELEGT = 100
+    STATUS_BESTELLUNG_GEOEFFNET = 200
+    STATUS_KEINE_EVALUATION = 300
+    STATUS_KEINE_EVALUATION_FINAL = 310
+    STATUS_BESTELLUNG_LIEGT_VOR = 500
+    STATUS_BESTELLUNG_WIRD_VERARBEITET = 510
     STATUS_GEDRUCKT = 600
     STATUS_VERSANDT = 700
     STATUS_BOEGEN_EINGEGANGEN = 800
@@ -324,15 +375,29 @@ class Veranstaltung(models.Model):
 
     STATUS_CHOICES = (
         (STATUS_ANGELEGT, 'Angelegt'),
+        (STATUS_BESTELLUNG_GEOEFFNET, 'Bestellung geöffnet'),
+        (STATUS_KEINE_EVALUATION, 'Keine Evaluation'),
+        (STATUS_KEINE_EVALUATION_FINAL, 'Keine Evaluation final'),
+        (STATUS_BESTELLUNG_LIEGT_VOR, 'Bestellung liegt vor'),
+        (STATUS_BESTELLUNG_WIRD_VERARBEITET, 'Bestellung wird verarbeitet'),
         (STATUS_GEDRUCKT, 'Gedruckt'),
         (STATUS_VERSANDT, 'Versandt'),
         (STATUS_BOEGEN_EINGEGANGEN, 'Bögen eingegangen'),
         (STATUS_BOEGEN_GESCANNT, 'Bögen gescannt'),
-        (STATUS_ERGEBNISSE_VERSANDT, 'Ergebnisse versandt')
+        (STATUS_ERGEBNISSE_VERSANDT, 'Ergebnisse versandt'),
     )
 
+    BOOL_CHOICES = (
+    (True, 'Ja'),
+    (False, 'Nein'),
+    )
+
+    # TODO: not the final version of status transition
     STATUS_UEBERGANG = {
-        STATUS_ANGELEGT: (STATUS_GEDRUCKT,),
+        STATUS_ANGELEGT: (STATUS_GEDRUCKT, STATUS_BESTELLUNG_GEOEFFNET),
+        STATUS_BESTELLUNG_GEOEFFNET: (STATUS_KEINE_EVALUATION, STATUS_BESTELLUNG_LIEGT_VOR),
+        STATUS_KEINE_EVALUATION: (STATUS_BESTELLUNG_LIEGT_VOR,),
+        STATUS_BESTELLUNG_LIEGT_VOR: (STATUS_GEDRUCKT, STATUS_BESTELLUNG_LIEGT_VOR, STATUS_KEINE_EVALUATION),
         STATUS_GEDRUCKT: (STATUS_VERSANDT,),
         STATUS_VERSANDT: (STATUS_BOEGEN_EINGEGANGEN,),
         STATUS_BOEGEN_EINGEGANGEN: (STATUS_BOEGEN_GESCANNT,),
@@ -352,7 +417,7 @@ class Veranstaltung(models.Model):
     lv_nr = models.CharField(max_length=15, blank=True, verbose_name=u'LV-Nummer')
     status = models.IntegerField(choices=STATUS_CHOICES, default=STATUS_ANGELEGT)
     grundstudium = models.BooleanField()
-    evaluieren = models.BooleanField()
+    evaluieren = models.BooleanField(choices=BOOL_CHOICES, default=True)
     veranstalter = models.ManyToManyField(Person, blank=True,
                                           help_text=u'Alle Personen, die mit der Veranstaltung befasst sind und z.B. Fragebögen bestellen können sollen.')
 
@@ -364,6 +429,8 @@ class Veranstaltung(models.Model):
                                                  related_name='ergebnis_empfaenger',
                                                  verbose_name=u'Empfänger der Ergebnisse',
                                                  help_text=u'An diese Personen werden die Ergebnisse per E-Mail geschickt.')
+    primaerdozent = models.ForeignKey(Person, related_name='primaerdozent', null=True, blank=True,
+                                       help_text=u'Die Person, die im Anschreiben erwähnt wird')
     auswertungstermin = models.DateField(null=True, blank=True,
                                          verbose_name=u'Auswertungstermin',
                                          help_text=u'An welchem Tag sollen Fragebögen für diese Veranstaltung ausgewerter werden? ' +
@@ -373,12 +440,36 @@ class Veranstaltung(models.Model):
     freiefrage1 = models.TextField(verbose_name='1. Freie Frage', blank=True)
     freiefrage2 = models.TextField(verbose_name='2. Freie Frage', blank=True)
     kleingruppen = models.TextField(verbose_name='Kleingruppen', blank=True)
+    veroeffentlichen = models.BooleanField(default=True, choices=BOOL_CHOICES)
 
     def get_next_state(self):
+        """
+        Gibt den nächsten Status einer Veranstaltung zurück.
+        :return: Status einer Veranstaltung
+        """
         try:
             return self.STATUS_UEBERGANG[self.status][0]  # TODO: Sobald es mehrere Zustande gibt
         except KeyError:
             return None
+
+    def set_next_state(self):
+        """Setzt den nächsten Status einer Veranstaltung."""
+        status = self.STATUS_UEBERGANG[self.status]
+
+        if self.status == self.STATUS_BESTELLUNG_GEOEFFNET:
+            if self.evaluieren:
+                self.status = status[1]
+            else:
+                self.status = status[0]
+
+        elif self.status == self.STATUS_BESTELLUNG_LIEGT_VOR:
+            if self.evaluieren:
+                self.status = status[1]
+            else:
+                self.status = status[2]
+
+        else:
+            self.status = status[0]
 
     def get_evasys_typ(self):
         return Veranstaltung.VORLESUNGSTYP[self.typ]
@@ -441,6 +532,15 @@ class Veranstaltung(models.Model):
 
         return code
 
+    def get_evasys_list_veranstalter(self):
+        personen = []
+        if self.primaerdozent is not None:
+            personen.append(self.primaerdozent)
+        for per in self.ergebnis_empfaenger.all():
+            if per.pk != self.primaerdozent.pk:
+                personen.append(per)
+        return personen
+
     @staticmethod
     def decode_barcode(barcode):
         if (ean_checksum_valid(barcode) != True):
@@ -464,14 +564,27 @@ class Veranstaltung(models.Model):
         return u"%s [%s] (%s)" % (self.name, self.typ, self.semester.short())
 
     def create_log(self, user, scanner, interface):
+        """
+        Erstellt einen Log wenn sich bei einer Veranstaltung etwas geändert hat.
+        :param user: Über welche Benutzer die Änderung erfolgt ist.
+        :param scanner: Über welchen Barcodescanner die Änderung erfolgt ist.
+        :param interface: Über welches Interface die Änderung erfolgt ist.
+        """
         Log.objects.create(veranstaltung=self, user=user, scanner=scanner, status=self.status, interface=interface)
 
-    # TODO: Logging for transitions via Frontend
-    def log(self, interface):
+    def log(self, interface, is_frontend=False):
+        """
+        Die Logging-Funktion
+        :param interface: Über welches Interface die Änderung erfolgt ist.
+        :param is_frontend: Checkt, ob die Änderung über das Frontend erfolgt ist.
+        """
         if isinstance(interface, BarcodeScanner):
             self.create_log(None, interface, Log.SCANNER)
         elif isinstance(interface, User):
-            self.create_log(interface, None, Log.ADMIN)
+            if is_frontend:
+                self.create_log(interface, None, Log.FRONTEND)
+            else:
+                self.create_log(interface, None, Log.ADMIN)
 
     def auwertungstermin_to_late_msg(self):
         toLateDate = self.semester.last_Auswertungstermin_to_late_human()
@@ -492,7 +605,7 @@ class Veranstaltung(models.Model):
     def clean(self, *args, **kwargs):
         super(Veranstaltung, self).clean(*args, **kwargs)
 
-        if self.auswertungstermin != None and self.auswertungstermin > self.semester.last_Auswertungstermin().date():
+        if self.auswertungstermin is not None and self.id is not None and self.auswertungstermin > self.semester.last_Auswertungstermin().date():
             raise ValidationError(self.auwertungstermin_to_late_msg())
 
     def save(self, *args, **kwargs):
@@ -510,11 +623,19 @@ class Veranstaltung(models.Model):
         else:
             return "Der Veranstalter Link wird erst nach dem Anlegen angezeigt"
 
-    def csv_to_tutor(self):
+    def allow_order(self):
+        """Überprüft anhand des Status' der Veranstaltung, ob bestellt werden darf."""
+        return self.status == Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR or \
+                self.status == Veranstaltung.STATUS_BESTELLUNG_GEOEFFNET or \
+                self.status == Veranstaltung.STATUS_KEINE_EVALUATION
+
+    def csv_to_tutor(self, csv_content):
         """Erzeuge Tutoren Objekte aus der CSV Eingabe der Veranstalter"""
-        input_clean = self.kleingruppen.strip()
+        input_clean = csv_content.strip()
         input_lines = input_clean.splitlines()
         nummer = 1
+
+        Tutor.objects.filter(veranstaltung=self).delete()
         for l in input_lines:
             # skip empty lines
             if len(l.strip()) > 1:
@@ -522,17 +643,17 @@ class Veranstaltung(models.Model):
                 # skip lines which are not well formated
                 if len(row) > 1:
                     row = [x.strip() for x in row]
-                    anmerkungInput = ''
+                    anmerkung_input = ''
                     if len(row) > 3:
-                        anmerkungInput = row[3]
+                        anmerkung_input = row[3]
 
-                    Tutor.objects.get_or_create(
+                    Tutor.objects.create(
                         veranstaltung=self,
                         nummer=nummer,
                         nachname=row[0],
                         vorname=row[1],
                         email=row[2],
-                        anmerkung=anmerkungInput,
+                        anmerkung=anmerkung_input
                     )
 
                     nummer += 1
@@ -546,7 +667,7 @@ class Veranstaltung(models.Model):
 
 
 class Tutor(models.Model):
-    """Ein Tutor der eine Übung einer Lehrveranstaltung hält"""
+    """Repräsentiert Tutoren für eine Veranstaltung."""
     nummer = models.PositiveSmallIntegerField()
     vorname = models.CharField(_('first name'), max_length=30)
     nachname = models.CharField(_('last name'), max_length=30)
@@ -555,6 +676,7 @@ class Tutor(models.Model):
     veranstaltung = models.ForeignKey(Veranstaltung)
 
     def get_barcode_number(self):
+        """Gibt die Barcodenummer anhand der Tutorennummer zurück."""
         return self.veranstaltung.get_barcode_number(tutorgruppe=self.nummer)
 
     def __unicode__(self):
@@ -568,6 +690,7 @@ class Tutor(models.Model):
 
 
 class Einstellung(models.Model):
+    """Repräsentiert die Einstellungen für die Evaluation."""
     name = models.CharField(max_length=100, unique=True)
     wert = models.CharField(max_length=255, blank=True)
 
@@ -585,6 +708,7 @@ class Einstellung(models.Model):
 
 
 class Mailvorlage(models.Model):
+    """Repräsentiert eine Mailvorlage"""
     subject = models.CharField(max_length=100, unique=True)
     body = models.TextField()
 
@@ -599,7 +723,7 @@ class Mailvorlage(models.Model):
 
 
 class BarcodeScanner(models.Model):
-    """Ein Barcode Scanner der fuer das Scannen von Barcodes benutzt wird"""
+    """Repräsentiert einen Barcodescanner."""
     token = models.CharField(max_length=64, unique=True)
     description = models.TextField()
 
@@ -613,18 +737,19 @@ class BarcodeScanner(models.Model):
 
 
 class BarcodeAllowedState(models.Model):
+    """Repräsentiert die erlaubten Zustände für einen Barcodescanner."""
     barcode_scanner = models.ForeignKey(BarcodeScanner)
     allow_state = models.IntegerField(choices=Veranstaltung.STATUS_CHOICES, null=True)
 
     class Meta:
         verbose_name = 'Erlaubter Zustand'
-        verbose_name_plural = 'Erlaubte Zustaende'
+        verbose_name_plural = 'Erlaubte Zustände'
         unique_together = (('barcode_scanner', 'allow_state'),)
         app_label = 'feedback'
 
 
 class BarcodeScannEvent(models.Model):
-    """Stell den Scann eines Barcodes dar"""
+    """Repräsentiert einen Scan-Event für einen Barcodescanner"""
     veranstaltung = models.ForeignKey(Veranstaltung)
     scanner = models.ForeignKey(BarcodeScanner)
     tutorgroup = models.ForeignKey(Tutor, null=True, blank=True)
@@ -637,14 +762,13 @@ class BarcodeScannEvent(models.Model):
         app_label = 'feedback'
 
     def save(self, *args, **kwargs):
-        """Extrahiere die Veranstaltungsdaten aus dem Barcode
-        teil zwei zum ModelForm"""
+        """Extrahiere die Veranstaltungsdaten aus dem Barcode teil zwei zum ModelForm"""
         barcode_decode = Veranstaltung.decode_barcode(self.barcode)
         verst_obj = Veranstaltung.objects.get(pk=barcode_decode['veranstaltung'])
         self.veranstaltung = verst_obj
         self.veranstaltung.log(self.scanner)
 
-        if (barcode_decode['tutorgroup'] >= 1):
+        if barcode_decode['tutorgroup'] >= 1:
             tutorgroup = Tutor.objects.get(veranstaltung=verst_obj, nummer=barcode_decode['tutorgroup'])
             self.tutorgroup = tutorgroup
 
@@ -652,7 +776,7 @@ class BarcodeScannEvent(models.Model):
 
 
 class Log(models.Model):
-    """Ein Logger für die Zustandsübergänge der Veranstaltungen."""
+    """Repräsentiert einen Logger für die Zustandsübergänge von Veranstaltungen."""
     FRONTEND = 'fe'
     SCANNER = 'bs'
     ADMIN = 'ad'

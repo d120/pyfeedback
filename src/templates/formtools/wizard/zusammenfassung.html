@@ -1,0 +1,74 @@
+{% extends "formtools/wizard/base.html" %}{% load static %}
+
+{% block child_extra_header %}
+    <link rel="stylesheet" type="text/css" href="{% static 'tutoren.css' %}" />
+
+    <script type="text/javascript" src="{% static 'jquery/jquery-1.4.2.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'jquery/jquery-ui-1.8.6.custom.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'tutoren.js' %}"></script>
+
+    <style>
+        .summary_table {
+            border-spacing: 5px;
+        }
+        .summary_table th {
+            text-align: left;
+            vertical-align: top;
+        }
+        .summary_table td p {
+            margin-bottom: 0px;
+        }
+        .tutoren_title {
+            font-weight: bold;
+            font-size: 12px;
+            margin-left: 5px;
+            margin-bottom: 0px;
+        }
+        .summary-label:first-letter {
+            text-transform: uppercase;
+        }
+        #table_tutoren_csvview {
+            margin-bottom: 8px;
+        }
+        #table_tutoren_csvview table {
+            border: 1px solid #636363;
+        }
+    </style>
+{% endblock %}
+
+{% block feedback_veranstalter_form %}
+    <h2>Zusammenfassung der Fragebogenbestellung</h2>
+
+    <table class="summary_table">
+        {% for form_data in all_form_data %}
+            <tr>
+                <th class="summary-label">{{ form_data.label }}</th>
+                <td>
+                    {% if form_data.value.all %}
+                        {% for query in form_data.value %}
+                            <p>{{ query }}</p>
+                        {% endfor %}
+                    {% else %}
+                        {{ form_data.value }}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+
+    </table>
+    {% if tutoren_csv %}
+        <p class="tutoren_title">Tutoren</p>
+        <div id="table_tutoren_csvview">{{ tutoren_csv }}</div>
+    {% endif %}
+{% endblock %}
+
+{% block javascript_block %}
+<script>
+    $(document).ready(function() {
+        create_csv_table(
+            $("#table_tutoren_csvview"),
+            $("#table_tutoren_csvview").text()
+        );
+    });
+</script>
+{% endblock %}

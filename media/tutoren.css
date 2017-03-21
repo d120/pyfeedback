@@ -1,0 +1,19 @@
+.wizard_form_table {
+    float: left;
+}
+#confirm_csv {
+    margin-top: 70px;
+}
+#table_tutoren_csvview table {
+    border-spacing: 10px;
+}
+#table_tutoren_csvview th, #table_tutoren_csvview td {
+    text-align: left;
+}
+.p_error_csv {
+    font-weight: bold;
+    color: #FF0000;
+}
+.clear_div {
+    clear: both;
+}

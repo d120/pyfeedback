@@ -1,69 +1,103 @@
-{% extends "bestellung_base.html" %} {% block title %}Veranstalterbereich{% endblock %} {% block content %}
-<h1>Herzlich willkommen!</h1>
+{% extends "bestellung_base.html" %}
+{% block title %}
+    Veranstalterbereich
+{% endblock %}
+{% block content %}
 
-<p>
-	eingeloggt für <strong>{{veranstaltung.name}} ({{veranstaltung.semester.short}})</strong>
-	<br />
-	<a href="{% url 'logout' %}">ausloggen</a>
-</p>
+    <h1>Herzlich willkommen!</h1>
 
-{% if order_form and veranstaltung.semester.vollerhebung %}
-<h2>Information zur Vollerhebung</h2> In diesem Semester findet eine Vollerhebung aller Lehrveranstaltungen am Fachbereich Informatik statt. Die Teilnahme an der Evaluation der Lehre ist somit laut §4 Abs. 9 Richtlinien für den Bereich der Lehrveranstaltungsevaluation der Technischen Universität
-Darmstadt veröffentlicht in der <a href="https://www.intern.tu-darmstadt.de/media/dezernat_ii/satzungsbeilagen/sb_14_III.pdf">Satzungsbeilage 2014-III</a>
-<strong>verpflichtend</strong> für alle Lehrveranstaltungen. Falls Ihre Veranstaltung eine Service-Veranstaltung ist und die Evaluation durch einen anderen Fachbereich durchgeführt wird setzen Sie sich bitte mit uns in Verbindung:
-<a href="mailto:feedback@fachschaft.informatik.tu-darmstadt.de">feedback@fachschaft.informatik.tu-darmstadt.de</a> {% endif %}
-<h2>Fragebogenbestellung Schritt 1 von 5</h2>
-<h3>Ablauf</h3>
-<ol>
-	<li><strong>Basisdaten</strong></li>
-	<li>Datenüberprüfung</li>
-	<li>Freie Fragen</li>
-	<li>Details zur Übung</li>
-	<li>Zusammenfassung</li>
-</ol>
-<h3>Basisdaten</h3> {% if not order_form %}
-<p>Im Moment können keine Fragebögen bestellt werden. Sie erhalten eine E-Mail, sobald dies wieder möglich ist.</p>
-{% else %}
-<p>Bitte geben Sie an, wie viele Fragebögen Sie in welcher Sprache benötigen. {% if paper_dict|length > 0 %} Zur Orientierung finden Sie hier die Anzahl bestellter und ausgefüllter Bögen vergangener Semester:</p>
-<table>
-	<tr>
-		<th>Semester</th>
-		<th>Bestellte Bögen</th>
-		<th>Ausgefüllte Bögen</th>
-	</tr>
-	{% for cur_sem in paper_dict %}
-	<td>{{ cur_sem.veranstaltung.semester }}</td>
-	<td>{{ cur_sem.anzahl_bestellung }}</td>
-	<td>{{ cur_sem.anzahl_ruecklauf }}</td>
-	</tr>
-	{% endfor %}
-</table>
-{% else %}
-</p>
-{% endif %}
+    <p>
+        eingeloggt für <strong>{{veranstaltung.name}} ({{veranstaltung.semester.short}})</strong>
+	    <br />
+	    <a href="{% url 'logout' %}">ausloggen</a>
+    </p>
 
-<form action="" method="post" enctype="multipart/form-data" accept-charset="utf-8">{% csrf_token %}
-	<table>{{order_form}}</table>
-	<div>
-		<input type="submit" name="submit" value="Weiter" />&nbsp;
-		<input type="reset" name="reset" value="Zurücksetzen" />
-	</div>
-</form>
-{% endif %}
+    {% if order_form and veranstaltung.semester.vollerhebung %}
+        <h2>Information zur Vollerhebung</h2>
+        In diesem Semester findet eine Vollerhebung aller Lehrveranstaltungen am Fachbereich Informatik statt.
+        Die Teilnahme an der Evaluation der Lehre ist somit laut §4 Abs. 9 Richtlinien für den Bereich der
+        Lehrveranstaltungsevaluation der Technischen Universität Darmstadt veröffentlicht in der
+        <a href="https://www.intern.tu-darmstadt.de/media/dezernat_ii/satzungsbeilagen/sb_14_III.pdf">Satzungsbeilage 2014-III</a>
+        <strong>verpflichtend</strong> für alle Lehrveranstaltungen. Falls Ihre Veranstaltung eine Service-Veranstaltung
+        ist und die Evaluation durch einen anderen Fachbereich durchgeführt wird setzen Sie sich bitte mit uns in Verbindung:
+        <a href="mailto:feedback@fachschaft.informatik.tu-darmstadt.de">feedback@fachschaft.informatik.tu-darmstadt.de</a>
+    {% endif %}
 
-<h2>Kommentar</h2> {% if not comment_form %}
-<p>Für diese Veranstaltung können im Moment noch keine Kommentare verfasst werden. Sie erhalten eine E-Mail, sobald dies möglich ist.</p>
-{% else %}
-<p>Sie können hier einen Kommentar zum <a href="{% url 'public-veranstaltung' veranstaltung.id %}">Evaluationsergebnis</a> verfassen. Dieser Kommentar wird auf der zugehörigen Ergebnis-Seite hochschul-öffentlich angezeigt werden.</p>
+    <h2>Fragebogenbestellung Schritt 1 von 5</h2>
+    <h3>Ablauf</h3>
 
-<p>Um einen Kommentar wieder zu entfernen, löschen Sie bitte den vorhandenen Kommentartext.</p>
+    <ol>
+	    <li><strong>Basisdaten</strong></li>
+	    <li>Datenüberprüfung</li>
+	    <li>Freie Fragen</li>
+	    <li>Details zur Übung</li>
+	    <li>Zusammenfassung</li>
+    </ol>
 
-<form action="" method="post" enctype="multipart/form-data" accept-charset="utf-8">{% csrf_token %}
-	<table>{{comment_form}}</table>
-	<div>
-		<input type="submit" name="submit" value="Speichern" />&nbsp;
-		<input type="reset" name="reset" value="Zurücksetzen" />
-	</div>
-</form>
-{% endif %} {% endblock %} {% block backlink %}
-<!-- kein Backlink -->{% endblock %}
+    <h3>Basisdaten</h3>
+    {% if not order_form %}
+        <p>
+            Im Moment können keine Fragebögen bestellt werden. Sie erhalten eine E-Mail, sobald dies wieder möglich ist.
+        </p>
+    {% else %}
+        <p>Bitte geben Sie an, wie viele Fragebögen Sie in welcher Sprache benötigen.
+            {% if paper_dict|length > 0 %}
+                Zur Orientierung finden Sie hier die Anzahl bestellter und ausgefüllter Bögen vergangener Semester:</p>
+                <table>
+                    <tr>
+                        <th>Semester</th>
+                        <th>Bestellte Bögen</th>
+                        <th>Ausgefüllte Bögen</th>
+                    </tr>
+                    {% for cur_sem in paper_dict %}
+                        <tr>
+                            <td>{{ cur_sem.veranstaltung.semester }}</td>
+                            <td>{{ cur_sem.anzahl_bestellung }}</td>
+                            <td>{{ cur_sem.anzahl_ruecklauf }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% else %}
+                </p>
+            {% endif %}
+
+
+        <form action="" method="post" enctype="multipart/form-data" accept-charset="utf-8">
+            {% csrf_token %}
+            <table>{{order_form}}</table>
+	        <div>
+		        <input type="submit" name="submit" value="Weiter" />&nbsp;
+		        <input type="reset" name="reset" value="Zurücksetzen" />
+	        </div>
+        </form>
+    {% endif %}
+
+
+    <h2>Kommentar</h2>
+    {% if not comment_form %}
+        <p>
+            Für diese Veranstaltung können im Moment noch keine Kommentare verfasst werden.
+            Sie erhalten eine E-Mail, sobald dies möglich ist.
+        </p>
+    {% else %}
+        <p>
+            Sie können hier einen Kommentar zum
+            <a href="{% url 'public-veranstaltung' veranstaltung.id %}">Evaluationsergebnis</a> verfassen.
+            Dieser Kommentar wird auf der zugehörigen Ergebnis-Seite hochschul-öffentlich angezeigt werden.
+        </p>
+
+        <p>Um einen Kommentar wieder zu entfernen, löschen Sie bitte den vorhandenen Kommentartext.</p>
+
+        <form action="" method="post" enctype="multipart/form-data" accept-charset="utf-8">
+            {% csrf_token %}
+	        <table>{{comment_form}}</table>
+	        <div>
+		        <input type="submit" name="submit" value="Speichern" />&nbsp;
+		        <input type="reset" name="reset" value="Zurücksetzen" />
+	        </div>
+        </form>
+    {% endif %}
+{% endblock %}
+{% block backlink %}
+    <!-- kein Backlink -->
+{% endblock %}

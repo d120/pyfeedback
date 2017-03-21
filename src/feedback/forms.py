@@ -3,48 +3,45 @@
 from django import forms
 from django.forms import extras
 
-from feedback.models import Person, Veranstaltung, Kommentar, BarcodeScanner, BarcodeScannEvent
+from feedback.models import Person, Veranstaltung, Kommentar, BarcodeScannEvent
 from django.core.exceptions import ValidationError
 
 
-class UploadFileForm(forms.Form):
-    file = forms.FileField(label='Datei')
+class VeranstaltungEvaluationForm(forms.ModelForm):
+    """Definiert die Form für den 1. Schritt des Wizards"""
+    required_css_class = 'required'
 
-
-class PersonForm(forms.ModelForm):
     class Meta:
-        model = Person
-        fields = ('geschlecht', 'email')
+        model = Veranstaltung
+        fields = ('evaluieren',)
+        widgets = {'evaluieren': forms.RadioSelect}
 
-    def clean(self):
-        geschlecht = self.cleaned_data.get('geschlecht')
-        email = self.cleaned_data.get('email')
+    def __init__(self, *args, **kwargs):
+        super(VeranstaltungEvaluationForm, self).__init__(*args, **kwargs)
 
-        if not geschlecht or not email:
-            raise forms.ValidationError('Das Feld für die Anrede oder Email ist leer.')
+        for k, field in self.fields.items():
+            field.required = True
 
 
-class BestellungModelForm(forms.ModelForm):
-    def __init__(self, data=None, *args, **kwargs):
-        super(BestellungModelForm, self).__init__(data, *args, **kwargs)
-        if 'instance' not in kwargs:
-            raise KeyError(u'This form needs an instance=... parameter to function properly.')
-        veranstalter_queryset = kwargs['instance'].veranstalter.all()
+class VeranstaltungBasisdatenForm(forms.ModelForm):
+    """Definiert die Form für den 2. Schritt des Wizards."""
+    required_css_class = 'required'
+
+    def __init__(self, *args, **kwargs):
+        veranstalter_queryset = kwargs.pop('all_veranstalter', None)
+
+        super(VeranstaltungBasisdatenForm, self).__init__(*args, **kwargs)
+
+        # Schränke QuerySet nur auf den Veranstalter ein
         self.fields['verantwortlich'].queryset = veranstalter_queryset
         self.fields['ergebnis_empfaenger'].queryset = veranstalter_queryset
-        # Es findet eine Vollerhebung statt unterbinde austragen
-        if kwargs['instance'].semester.vollerhebung == True:
-            del self.fields['evaluieren']
 
-        # FIXME: Django haengt sonst einen Hilfetext an der nicht zum Widget past
-        self.fields['ergebnis_empfaenger'].help_text = u'An diese Personen werden die Ergebnisse per E-Mail geschickt.'
+        # Keine negative Anzahl möglich
+        self.fields['anzahl'] = forms.IntegerField(min_value=1)
 
-        # Hänge den Hinweis auf den letzten möglichen Termin an.
-        self.fields['auswertungstermin'].help_text += ' ' + kwargs['instance'].auwertungstermin_to_late_msg()
-
-        # Nutze ein Widget bei dem nur das jahr des letzten Auswertungstermins angegeben werden kann 
-        yearsTuple = kwargs['instance'].semester.auswertungstermin_years()
-        self.fields['auswertungstermin'].widget = extras.SelectDateWidget(years=(yearsTuple))
+        # Nutze ein Widget bei dem nur das jahr des letzten Auswertungstermins angegeben werden kann
+        years_tuple = kwargs['instance'].semester.auswertungstermin_years()
+        self.fields['auswertungstermin'].widget = extras.SelectDateWidget(years=years_tuple)
 
         # Auswertungstermin kann nur gewählt werden wenn es ein Seminar oder Praktikum ist
         if kwargs['instance'].typ not in ['se', 'pr']:
@@ -62,28 +59,115 @@ class BestellungModelForm(forms.ModelForm):
 
             self.fields['typ'].choices = choices
 
-            # wenn wir Formular geschickt bekommen
-            # Wenn die Checkbox nicht gesetzt ist sie False
-        if data and (data.get('evaluieren', False) != False or
-                             kwargs['instance'].semester.vollerhebung == True):
-            # nur wenn Evaluieren angeklickt ist oder Vollerhebung sind die anderen Felder erforderlich
-            for k, field in self.fields.items():
-                field.required = True
-            # min value einfach im Feld zu setzen geht nicht siehe: http://stackoverflow.com/a/3470992
-            self.fields['anzahl'] = forms.IntegerField(min_value=1)
+        # Wenn Evaluation oder Vollerhebung, dann sind alle anderen Felder notwendig
+        for k, field in self.fields.items():
+            field.required = True
 
     class Meta:
         model = Veranstaltung
-        fields = (
-        'evaluieren', 'typ', 'anzahl', 'sprache', 'verantwortlich', 'ergebnis_empfaenger', 'auswertungstermin')
-        widgets = {'ergebnis_empfaenger': forms.CheckboxSelectMultiple}
+        fields = ('typ', 'anzahl', 'sprache', 'verantwortlich', 'ergebnis_empfaenger', 'auswertungstermin')
+        widgets = {'ergebnis_empfaenger': forms.CheckboxSelectMultiple,
+                   'auswertungstermin': forms.SelectDateWidget}
+
+
+class VeranstaltungPrimaerDozentForm(forms.ModelForm):
+    """Definiert die Form für den 3. Schritt des Wizards."""
+    required_css_class = 'required'
+
+    def __init__(self, *args, **kwargs):
+        if kwargs.pop("is_dynamic_form", False):
+            super(VeranstaltungPrimaerDozentForm, self).__init__(*args, **kwargs)
+        else:
+            previous_step_data = kwargs.pop('basisdaten', None)
+            super(VeranstaltungPrimaerDozentForm, self).__init__(*args, **kwargs)
+            if previous_step_data is not None:
+                self.fields['primaerdozent'].queryset = previous_step_data.get('ergebnis_empfaenger', None)
+                self.fields['primaerdozent'].required = True
+
+    class Meta:
+        model = Veranstaltung
+        fields = ('primaerdozent',)
+
+
+class VeranstaltungDozentDatenForm(forms.ModelForm):
+    """Definiert die Form für den 4. Schritt des Wizards."""
+    required_css_class = 'required'
+
+    def __init__(self, *args, **kwargs):
+        super(VeranstaltungDozentDatenForm, self).__init__(*args, **kwargs)
+
+        for k, field in self.fields.items():
+            field.required = True
+
+    class Meta:
+        model = Person
+        fields = ('anschrift', 'email')
+
+
+class VeranstaltungFreieFragen(forms.ModelForm):
+    """Definiert die Form für den 5. Schritt des Wizards."""
+    required_css_class = 'required'
+
+    class Meta:
+        model = Veranstaltung
+        fields = ('freiefrage1', 'freiefrage2')
+
+
+class VeranstaltungTutorenForm(forms.Form):
+    """Definiert die Form für den 6. Schritt des Wizards."""
+    required_css_class = 'required'
+
+    csv_tutoren = forms.CharField(label='CSV', widget=forms.Textarea, required=False)
+
+    def __init__(self, *args, **kwargs):
+        preset_csv = kwargs.pop("preset_csv", None)
+        super(VeranstaltungTutorenForm, self).__init__(*args, **kwargs)
+        self.fields["csv_tutoren"].initial = preset_csv
+
+
+class VeranstaltungVeroeffentlichung(forms.ModelForm):
+    """Definiert die Form für den 7. Schritt des Wizards."""
+    required_css_class = 'required'
+
+    class Meta:
+        model = Veranstaltung
+        fields = ('veroeffentlichen',)
+
+
+class UploadFileForm(forms.Form):
+    """Definiert die Form für den XML Import."""
+    file = forms.FileField(label='Datei')
+
+
+class PersonForm(forms.ModelForm):
+    """Definiert die Form für die Bearbeitung von Personen."""
+    class Meta:
+        model = Person
+        fields = ('geschlecht', 'email')
+
+    def clean(self):
+        geschlecht = self.cleaned_data.get('geschlecht')
+        email = self.cleaned_data.get('email')
+
+        if not geschlecht or not email:
+            raise forms.ValidationError('Das Feld für die Anrede oder Email ist leer.')
+
+
+class PersonUpdateForm(forms.ModelForm):
+    """Definiert die Form für die Nachpflege von Personendaten"""
+    class Meta:
+        model = Person
+        fields = ('anschrift', 'fachgebiet')
 
 
 class KommentarModelForm(forms.ModelForm):
+    """Definiert die Form für Kommentare."""
     def __init__(self, *args, **kwargs):
         veranst = kwargs.pop('veranstaltung', None)
-        if veranst == None:
+
+        if veranst is None:
             raise KeyError(u'This form needs an veranstaltung=... parameter to function properly.')
+
         super(KommentarModelForm, self).__init__(*args, **kwargs)
         self.fields['autor'].queryset = veranst.veranstalter.all()
 
@@ -92,26 +176,19 @@ class KommentarModelForm(forms.ModelForm):
         exclude = ('veranstaltung',)
 
 
-class PersonUpdateForm(forms.ModelForm):
-    class Meta:
-        model = Person
-        fields = ('anschrift', 'fachgebiet')
+CLOSE_ORDER_CHOICES = (
+    ('ja', 'Ja'),
+    ('nein', 'Nein')
+)
 
 
-class VeranstaltungFreiFragenForm(forms.ModelForm):
-    class Meta:
-        model = Veranstaltung
-        fields = ('freiefrage1', 'freiefrage2')
-
-
-class VeranstaltungKleingruppenForm(forms.ModelForm):
-    class Meta:
-        model = Veranstaltung
-        fields = ('kleingruppen',)
+class CloseOrderForm(forms.Form):
+    """Definiert die Form für das Beenden der Bestellphase"""
+    auswahl = forms.ChoiceField(choices=CLOSE_ORDER_CHOICES)
 
 
 class CreateBarcodeScannEventForm(forms.ModelForm):
-    """Handelt die erste haelfte von Barcode scanns"""
+    """Definiert die Form für einen Barcodescan-Event"""
     scanner_token = forms.CharField()
 
     class Meta:
@@ -122,13 +199,14 @@ class CreateBarcodeScannEventForm(forms.ModelForm):
         super(CreateBarcodeScannEventForm, self).clean()
         cd = self.cleaned_data
 
-        if (cd['scanner'].token != cd['scanner_token']):
+        if cd['scanner'].token != cd['scanner_token']:
             raise ValidationError(ValidationError('Token dose not match', code='tokendmatch'))
         else:
             barcode_decoded = Veranstaltung.decode_barcode(cd['barcode'])
             cd['veranstaltung'] = barcode_decoded['veranstaltung']
 
-            if (barcode_decoded['tutorgroup'] >= 1):
+            if barcode_decoded['tutorgroup'] >= 1:
                 cd['tutorgroup'] = barcode_decoded['tutorgroup']
 
         return cd
+

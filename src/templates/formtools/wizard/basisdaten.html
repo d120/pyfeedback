@@ -1,0 +1,25 @@
+{% extends "formtools/wizard/base.html" %}
+
+{% block feedback_veranstalter_pre_form %}
+    <h3>Erfassung der Basisdaten</h3>
+    {% if past_semester_data %}
+        <table style="border: 1px solid #636363;">
+            <tr>
+                <th>Veranstaltung</th>
+                <th>Bestellte Bögen</th>
+                <th>Rückläufe</th>
+            </tr>
+            {% for data in past_semester_data %}
+                <tr>
+                    <td>{{ data.veranstaltung }}</td>
+                    <td>{{ data.anzahl_bestellung }}</td>
+                    <td>{{ data.anzahl_ruecklauf }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+{% endblock %}
+
+{% block feedback_veranstalter_form %}
+    {{ wizard.form }}
+{% endblock %}
