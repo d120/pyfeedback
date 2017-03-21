@@ -663,7 +663,13 @@ class BarcodeScanner(models.Model):
 
 class BarcodeAllowedState(models.Model):
     barcode_scanner = models.ForeignKey(BarcodeScanner)
-    allow_state = models.IntegerField(choices=Veranstaltung.STATUS_CHOICES, null=True, unique=True)
+    allow_state = models.IntegerField(choices=Veranstaltung.STATUS_CHOICES, null=True)
+
+    class Meta:
+        verbose_name = 'Erlaubter Zustand'
+        verbose_name_plural = 'Erlaubte Zustaende'
+        unique_together = (('barcode_scanner', 'allow_state'),)
+        app_label = 'feedback'
 
 
 class BarcodeScannEvent(models.Model):
