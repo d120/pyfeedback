@@ -292,6 +292,7 @@ class PersonTest(TestCase):
         self.assertEqual(self.fb_p1.fachgebiet, self.fachgebiet1)
 
 
+
 class BarcodeScanTest(TestCase):
     def setUp(self):
         self.barcode_scanner = BarcodeScanner.objects.create(token="LRh73Ds22", description="description1")
@@ -311,6 +312,7 @@ class BarcodeScanTest(TestCase):
     def test_same_state_onscanner(self):
         BarcodeAllowedState.objects.create(barcode_scanner=self.barcode_scanner,
                                            allow_state=Veranstaltung.STATUS_GEDRUCKT)
+
         with self.assertRaises(IntegrityError):
             BarcodeAllowedState.objects.create(barcode_scanner=self.barcode_scanner,
                                                allow_state=Veranstaltung.STATUS_GEDRUCKT)
