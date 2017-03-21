@@ -292,7 +292,7 @@ class PersonTest(TestCase):
         self.assertEqual(self.fb_p1.fachgebiet, self.fachgebiet1)
 
 
-class BarcodeScannTest(TestCase):
+class BarcodeScanTest(TestCase):
     def setUp(self):
         self.barcode_scanner = BarcodeScanner.objects.create(token="LRh73Ds22", description="description1")
         self.barcode_scanner2 = BarcodeScanner.objects.create(token="KHzz211d", description="description2")
