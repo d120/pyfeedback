@@ -54,11 +54,11 @@ class GetAverageTest(TestCase):
 
 class ToolsTest(TestCase):
     def test_render_email(self):
-        template = u'Die Antwort ist {{op}} {{antwort}}.'
+        template = 'Die Antwort ist {{op}} {{antwort}}.'
         context = Context({'op': '>', 'antwort': 41})
         self.assertEqual(render_email(template, context), 'Die Antwort ist > 41.')
 
-        template = u'Das ist {% kein gültiges Template.'
+        template = 'Das ist {% kein gültiges Template.'
         self.assertEqual(render_email(template, context), '!!! Syntaxfehler im Mailtext !!!')
 
     def test_ean_calc(self):

@@ -5,12 +5,12 @@
 
 Pyfeedback is a web application created to assist the feedback to modules at TU Darmstadt.
 
-It is written in Python 2.7 and utilizes the newest version of the django web framework.
+It is written in Python 3 and utilizes the newest version of the django web framework.
 
 ## Requirements
 
 To use pyfeedback the following tools have to be installed:
-* pip and virtualenv for python 2
+* pip and virtualenv for python 3
 * texlive + texlive-lang-german (to generate letters)
 * [latex tuddesign](http://exp1.fkp.physik.tu-darmstadt.de/tuddesign/)
 

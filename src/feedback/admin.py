@@ -11,17 +11,14 @@ from feedback.models.base import Log, Fachgebiet, FachgebietEmail
 
 
 class PersonAdmin(admin.ModelAdmin):
-    """Admin View für Personen"""
-    list_display = ('__unicode__', 'email', 'fachgebiet')
+    list_display = ('__str__', 'email', 'fachgebiet')
     search_fields = ['vorname', 'nachname', 'email', ]
     list_filter = ('fachgebiet',)
 
     class FachgebietZuweisenForm(forms.Form):
-        """Form für die Zuweisung von einem Fachgebiet für eine Person."""
         _selected_action = forms.CharField(widget=forms.MultipleHiddenInput)
 
     def assign_fachgebiet_action(self, request, queryset):
-        """Definiert eine Admin-Action für die Fachgebietzuweisung."""
         form = None
         suggestion_list = []
 
@@ -37,8 +34,8 @@ class PersonAdmin(admin.ModelAdmin):
                 for person in queryset:
                     person_id_str = str(person.id)
                     if person_id_str in selected_persons:
-                        proposed_fachgebiet_id = request.POST.get("fachgebiet_" + person_id_str, 0);
-                        if proposed_fachgebiet_id > 0:
+                        proposed_fachgebiet_id = request.POST.get("fachgebiet_" + person_id_str, 0)
+                        if int(proposed_fachgebiet_id) > 0:
                             proposed_fachgebiet = Fachgebiet.objects.get(id=proposed_fachgebiet_id)
                             person.fachgebiet = proposed_fachgebiet
                             person.save()
@@ -61,7 +58,6 @@ class PersonAdmin(admin.ModelAdmin):
 
 
 class LogInline(admin.TabularInline):
-    """Admin View für Log"""
     model = Log
     readonly_fields = ('veranstaltung', 'user', 'scanner', 'timestamp', 'status', 'interface')
     can_delete = False
@@ -71,7 +67,6 @@ class LogInline(admin.TabularInline):
 
 
 class VeranstaltungAdmin(admin.ModelAdmin):
-    """Admin View für Veranstaltung"""
     fieldsets = [
         ('Stammdaten', {'fields':
                             ['typ', 'name', 'semester', 'status', 'lv_nr', 'grundstudium', 'evaluieren',
@@ -90,20 +85,17 @@ class VeranstaltungAdmin(admin.ModelAdmin):
     inlines = [LogInline, ]
 
     def save_model(self, request, obj, form, change):
-        """Definiert eine Post-Save Operation."""
         super(VeranstaltungAdmin, self).save_model(request, obj, form, change)
+        # Post-Save Operation
         for changed_att in form.changed_data:
-            # Wenn sich der Status ändert, wird es geloggt.
-            if changed_att == "status":
+            if changed_att == "status": # Wenn Status sich aendert, wird es notiert
                 obj.log(request.user)
 
     class StatusAendernForm(forms.Form):
-        """Definiert eine Form für Änderung einen Status'."""
         _selected_action = forms.CharField(widget=forms.MultipleHiddenInput)
         status = forms.ChoiceField(choices=Veranstaltung.STATUS_CHOICES)
 
     def status_aendern_action(self, request, queryset):
-        """Beschreibt eine Admin-Action für die Statusänderung."""
         form = None
 
         if 'apply' in request.POST:
@@ -129,31 +121,26 @@ class VeranstaltungAdmin(admin.ModelAdmin):
 
 
 class SemesterAdmin(admin.ModelAdmin):
-    """Admin View für Semester"""
-    list_display = ('__unicode__', 'sichtbarkeit', 'fragebogen')
+    list_display = ('__str__', 'sichtbarkeit', 'fragebogen')
     list_filter = ('sichtbarkeit', 'fragebogen')
     ordering = ('-semester',)
 
 
 class EinstellungAdmin(admin.ModelAdmin):
-    """Admin View für Einstellung"""
     list_display = ('name', 'wert')
     list_editable = ('wert',)
 
 
 class MailvorlageAdmin(admin.ModelAdmin):
-    """Admin View für Mailvorlage"""
     list_display = ('subject',)
 
 
 class KommentarAdmin(admin.ModelAdmin):
-    """Admin View für Kommentar"""
     list_display = ('typ', 'name', 'semester', 'autor')
     list_display_links = ('name',)
 
 
 class TutorAdmin(admin.ModelAdmin):
-    """Admin View für Tutor"""
     fieldsets = [
         ('Stammdaten', {'fields':
                             ['vorname', 'nachname', 'email',
@@ -174,18 +161,15 @@ class TutorAdmin(admin.ModelAdmin):
 
 
 class BarcodeScannEventAdmin(admin.ModelAdmin):
-    """Admin View für BarcodeScannEvent"""
     list_display = ('veranstaltung', 'timestamp',)
     readonly_fields = ('veranstaltung', 'timestamp',)
 
 
 class BarcodeAllowedStateInline(admin.TabularInline):
-    """Admin View für BarcodeAllowedState"""
     model = BarcodeAllowedState
 
 
 class BarcodeScannerAdmin(admin.ModelAdmin):
-    """Admin View für BarcodeScanner"""
     inlines = [
         BarcodeAllowedStateInline,
     ]
@@ -193,13 +177,11 @@ class BarcodeScannerAdmin(admin.ModelAdmin):
 
 
 class FachgebietEmailAdminInline(admin.TabularInline):
-    """Admin View für FachgebietEmail"""
     model = FachgebietEmail
     extra = 1
 
 
 class FachgebietAdmin(admin.ModelAdmin):
-    """Admin View für Fachgebiet"""
     list_display = ('name', 'kuerzel')
     list_display_links = ('name',)
     inlines = (FachgebietEmailAdminInline,)

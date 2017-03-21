@@ -52,11 +52,6 @@ urlpatterns += [url(r'^deadlines/$', VeranstaltungsDeadlines.as_view(), name='De
 # Veranstalter-Views
 urlpatterns += [
     url(r'^veranstalter/login/$', feedback.views.veranstalter.login, name='veranstalter-login'),
-    url(r'^veranstalter/logout/$',
-        django.contrib.auth.views.logout,
-        {'template_name': "veranstalter/logout.html"},
-        name='veranstalter-logout'),
-
     url(r'^veranstalter/bestellung', VeranstalterWizard.as_view(), name='veranstalter-bestellung'),
     url(r'^veranstalter/', feedback.views.veranstalter.veranstalter_dashboard, name='veranstalter-index')
 ]
@@ -68,7 +63,6 @@ urlpatterns += [
     url(r'^intern/export_veranstaltungen/$', feedback.views.intern.export_veranstaltungen, name='export_veranstaltungen'),
     url(r'^intern/generate_letters/$', feedback.views.intern.generate_letters, name='generate_letters'),
     url(r'^intern/import_ergebnisse/$', feedback.views.intern.import_ergebnisse, name='import_ergebnisse'),
-    url(r'^intern/status_final/$', feedback.views.intern.CloseOrderFormView.as_view(), name='status_final'),
     url(r'^intern/sync_ergebnisse/$', feedback.views.intern.sync_ergebnisse, name='sync_ergebnisse'),
     url(r'^intern/fragebogensprache/$', feedback.views.intern.fragebogensprache, name='fragebogensprache'),
     url(r'^intern/lange_ohne_evaluation/$', feedback.views.intern.lange_ohne_evaluation, name='lange_ohne_evaluation'),
@@ -106,7 +100,8 @@ if settings.DEBUG:
     # Ausschließlich in der Entwicklung nötig, damit statische Dateien (JS, CSS, Bilder...)
     # angezeigt werden. Im Server-Betrieb kümmert sich Apache darum.
     urlpatterns += [
-        url(r'^d120de/(?P<tail>.*)$', feedback.views.redirect, {'redirect_to': 'http://www.d120.de/d120de/'}),
+    url(r'^d120de/(?P<tail>.*)$', feedback.views.redirect,
+        {'redirect_to': 'http://www.d120.de/d120de/'}),
     ]
 
     import debug_toolbar

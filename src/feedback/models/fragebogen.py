@@ -95,8 +95,8 @@ class Fragebogen(models.Model):
 
     veranstaltung = models.ForeignKey('feedback.Veranstaltung')
 
-    def __unicode__(self):
-        return u'Fragebogen zu "%s" (%s, %s)' % (self.veranstaltung.name,
+    def __str__(self):
+        return 'Fragebogen zu "%s" (%s, %s)' % (self.veranstaltung.name,
                                                  self.veranstaltung.get_typ_display(),
                                                  self.veranstaltung.semester.short())
 
@@ -126,7 +126,7 @@ class Ergebnis(models.Model):
     def all_values(self):
         """auch versteckte Ergebnisse pro Veranstaltung in Liste zusammenfassen"""
 
-        return self.values() + self._do_get_values(self.hidden_parts)
+        return list(self.values()) + self._do_get_values(self.hidden_parts)
 
     def _do_get_values(self, parts):
         values = []
@@ -137,8 +137,8 @@ class Ergebnis(models.Model):
 
         return values
 
-    def __unicode__(self):
-        return u'Ergebnisse zu "%s" (%s, %s)' % (
+    def __str__(self):
+        return 'Ergebnisse zu "%s" (%s, %s)' % (
         self.veranstaltung.name, self.veranstaltung.get_typ_display(), self.veranstaltung.semester)
 
     class Meta:
@@ -165,5 +165,5 @@ class Kommentar(models.Model):
     def name(self):
         return self.veranstaltung.name
 
-    def __unicode__(self):
+    def __str__(self):
         return 'Kommentar zu "%s" (%s, %s)' % (self.name(), self.typ(), self.semester())
