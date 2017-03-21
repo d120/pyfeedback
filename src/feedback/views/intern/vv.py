@@ -22,6 +22,7 @@ from feedback.forms import PersonForm, UploadFileForm
 @user_passes_test(lambda u: u.is_superuser)
 @require_http_methods(('HEAD', 'GET', 'POST'))
 def import_vv(request):
+    """Zuständig für den Import des Vorlesungsverzeichnisses durch eine XML."""
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
@@ -38,15 +39,18 @@ def import_vv(request):
 @user_passes_test(lambda u: u.is_superuser)
 @require_http_methods(('HEAD', 'GET', 'POST'))
 def import_vv_edit(request):
+    """Zuständig für die Bearbeitung des importierten XMLs."""
     data = {}
 
     if request.method in ('HEAD', 'GET'):
         # VV zur Auswahl von Vorlesungen anzeigen
         data['semester'] = Semester.objects.all()
-
         category_tree = ImportCategory.objects.all().prefetch_related('ivs')
-        if category_tree:  # prufen, ob die Liste leer ist
-            data['vv'] = category_tree[1:]  # erste root-Kategorie ignorieren
+
+        # prüfen, ob die Liste leer ist
+        if category_tree:
+            # erste root-Kategorie ignorieren
+            data['vv'] = category_tree[1:]
 
             remaining_close_tags = ImportCategory.objects.all().aggregate(sum_lvl=Sum('rel_level'))
             if remaining_close_tags['sum_lvl'] is None:
@@ -54,19 +58,22 @@ def import_vv_edit(request):
             else:
                 data['remaining_close_tags'] = remaining_close_tags['sum_lvl']
             return render(request, 'intern/import_vv_edit.html', data)
+
         else:
             messages.error(request, 'Bevor zu importierende Veranstaltungen ausgewählt werden ' +
                            'können, muss zunächst eine VV-XML-Datei hochgeladen werden.')
+
             return HttpResponseRedirect(reverse('import_vv'))
     else:
         # gewählte Veranstaltungen übernehmen und Personen zuordnen
-
         # Liste der ausgewählten Veranstaltungen holen
         v_str = [ele[1] for ele in request.POST.lists() if ele[0] == 'v']
         if not len(v_str):
             messages.warning(request, u'Es wurden keine Veranstaltungen für den Import ausgewählt!')
             return HttpResponseRedirect(reverse('import_vv_edit'))
-        v_ids = [int(ele) for ele in v_str[0]]  # IDs von unicode nach int konvertieren
+
+        # IDs von unicode nach int konvertieren
+        v_ids = [int(ele) for ele in v_str[0]]
 
         # ausgewähltes Semester holen
         try:
@@ -78,11 +85,10 @@ def import_vv_edit(request):
         data['v'] = []
         for iv in ImportVeranstaltung.objects.filter(id__in=v_ids):
             try:
-                v = Veranstaltung.objects.create(typ=iv.typ, name=iv.name, status=Veranstaltung.STATUS_ANGELEGT, semester=semester,
-                                                 lv_nr=iv.lv_nr, grundstudium=False, evaluieren=True)
+                v = Veranstaltung.objects.create(typ=iv.typ, name=iv.name, status=Veranstaltung.STATUS_ANGELEGT,
+                                                 semester=semester, lv_nr=iv.lv_nr, grundstudium=False, evaluieren=True)
             except IntegrityError:
-                # Veranstaltung wurde bereits importiert (kann vorkommen, wenn sie im VV in
-                # mehreren Kategorien vorkommt)
+                # Veranstaltung wurde bereits importiert (kann vorkommen, wenn sie in mehreren Kategorien auftaucht.)
                 continue
 
             # Accounts für Veranstalter erstellen, falls nötig
@@ -96,6 +102,7 @@ def import_vv_edit(request):
 
 
 class PersonFormView(UserPassesTestMixin, ListView):
+    """Definiert die View für die Anzeige aller zu bearbeitenden Personen."""
     model = Person
     template_name = 'intern/import_vv_edit_users.html'
     context_object_name = 'persons'
@@ -108,6 +115,7 @@ class PersonFormView(UserPassesTestMixin, ListView):
 
 
 class PersonFormUpdateView(UserPassesTestMixin, UpdateView):
+    """Definiert die View für die Bearbeitung von der Personen."""
     model = Person
     form_class = PersonForm
     template_name = 'intern/import_vv_edit_users_update.html'
@@ -133,7 +141,8 @@ class PersonFormUpdateView(UserPassesTestMixin, UpdateView):
         messages.success(self.request, u'Benutzerdatensätze wurden erfolgreich gespeichert.')
 
         if p.fachgebiet is not None:
-            messages.success(self.request, u' '.join((p.full_name(), ' wurde dem Fachbereich ', str(p.fachgebiet), ' zugewiesen.')).encode('utf-8'))
+            messages.success(self.request, u' '.join((p.full_name(), ' wurde dem Fachbereich ',
+                                                      str(p.fachgebiet), ' zugewiesen.')).encode('utf-8'))
 
         return super(PersonFormUpdateView, self).form_valid(form)
 
@@ -164,6 +173,7 @@ class PersonFormUpdateView(UserPassesTestMixin, UpdateView):
 
 
 class SimilarNamesView(UserPassesTestMixin, DetailView):
+    """Definiert die View für die Anzeige von ähnlichen Namen von Personen."""
     model = Person
     template_name = 'intern/import_vv_edit_users_namecheck.html'
     context_object_name = 'person_new'

@@ -3,30 +3,36 @@
 {% block title %}Mail versenden{% endblock %}
 
 {% block content %}
-<h1>Mail an Veranstalter versenden</h1>
+    <h1>Mail an Veranstalter versenden</h1>
 
-<form method="post" action="">{% csrf_token %}
-<h2>Vorschau (Ersetzte Begriffe sind <span style="color: blue;">blau markiert</span>)</h2>
-<p>
-<em>Absender:</em> {{ from }}<br />
-<em>Empfänger:</em> {{ to }}
-{% if recipient == "cur_sem_all" %}(alle Veranstalter){% endif %} 
-{% if recipient == "cur_sem_missing_order" %}(alle Veranstalter von Veranstaltungen, für die noch keine Bögen bestellt wurden){% endif %}
-{% if recipient == "cur_sem_results" %}(alle Veranstalter von Veranstaltungen, für die Ergebnisse vorliegen){% endif %}
-aus dem {{ semester_selected }}
+    <form method="post" action="">
+        {% csrf_token %}
+        <h2>Vorschau (Ersetzte Begriffe sind <span style="color: blue;">blau markiert</span>)</h2>
+        <p>
+            <label><em>Absender:</em></label>
+            {{ from }}
 
-<pre>
-<em>Betreff:</em> {{ subject_rendered }}
+            <br>
 
-{{ body_rendered|wordwrap:100 }}
-</pre></p>
+            <label><em>Empfänger:</em></label>
+            {{ to }} aus dem {{ semester_selected }}
+            {% if tutoren == 'True' %}
+                {{ is_tutoren }}
+            {% endif %}
+        </p>
 
-<input type="hidden" name="semester" value="{{ semester_selected.semester }}" />
-<input type="hidden" name="recipient" value="{{ recipient }}" />
-<input type="hidden" name="subject" value="{{ subject }}" />
-<input type="hidden" name="body" value="{{ body }}" />
+        <pre>
+            <em>Betreff:</em> {{ subject_rendered }}
+            {{ body_rendered|wordwrap:100 }}
+        </pre>
 
-<input type="submit" name="aendern" value="Ändern" />
-<input type="submit" name="senden" value="Mails senden" />
-</form>
+        <input type="hidden" name="semester" value="{{ semester_selected.semester }}" />
+        <input type="hidden" name="status_values" value="{{ recipient }}" />
+        <input type="hidden" name="subject" value="{{ subject }}" />
+        <input type="hidden" name="body" value="{{ body }}" />
+        <input type="hidden" name="tutoren" value="{{ tutoren }}" />
+
+        <input type="submit" name="aendern" value="Ändern" />
+        <input type="submit" name="senden" value="Mails senden" />
+    </form>
 {% endblock %}

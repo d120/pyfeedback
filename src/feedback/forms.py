@@ -8,6 +8,7 @@ from django.core.exceptions import ValidationError
 
 
 class VeranstaltungEvaluationForm(forms.ModelForm):
+    """Definiert die Form für den 1. Schritt des Wizards"""
     required_css_class = 'required'
 
     class Meta:
@@ -23,6 +24,7 @@ class VeranstaltungEvaluationForm(forms.ModelForm):
 
 
 class VeranstaltungBasisdatenForm(forms.ModelForm):
+    """Definiert die Form für den 2. Schritt des Wizards."""
     required_css_class = 'required'
 
     def __init__(self, *args, **kwargs):
@@ -69,6 +71,7 @@ class VeranstaltungBasisdatenForm(forms.ModelForm):
 
 
 class VeranstaltungPrimaerDozentForm(forms.ModelForm):
+    """Definiert die Form für den 3. Schritt des Wizards."""
     required_css_class = 'required'
 
     def __init__(self, *args, **kwargs):
@@ -87,6 +90,7 @@ class VeranstaltungPrimaerDozentForm(forms.ModelForm):
 
 
 class VeranstaltungDozentDatenForm(forms.ModelForm):
+    """Definiert die Form für den 4. Schritt des Wizards."""
     required_css_class = 'required'
 
     def __init__(self, *args, **kwargs):
@@ -101,6 +105,7 @@ class VeranstaltungDozentDatenForm(forms.ModelForm):
 
 
 class VeranstaltungFreieFragen(forms.ModelForm):
+    """Definiert die Form für den 5. Schritt des Wizards."""
     required_css_class = 'required'
 
     class Meta:
@@ -109,6 +114,7 @@ class VeranstaltungFreieFragen(forms.ModelForm):
 
 
 class VeranstaltungTutorenForm(forms.Form):
+    """Definiert die Form für den 6. Schritt des Wizards."""
     required_css_class = 'required'
 
     csv_tutoren = forms.CharField(label='CSV', widget=forms.Textarea, required=False)
@@ -120,6 +126,7 @@ class VeranstaltungTutorenForm(forms.Form):
 
 
 class VeranstaltungVeroeffentlichung(forms.ModelForm):
+    """Definiert die Form für den 7. Schritt des Wizards."""
     required_css_class = 'required'
 
     class Meta:
@@ -128,10 +135,12 @@ class VeranstaltungVeroeffentlichung(forms.ModelForm):
 
 
 class UploadFileForm(forms.Form):
+    """Definiert die Form für den XML Import."""
     file = forms.FileField(label='Datei')
 
 
 class PersonForm(forms.ModelForm):
+    """Definiert die Form für die Bearbeitung von Personen."""
     class Meta:
         model = Person
         fields = ('geschlecht', 'email')
@@ -144,7 +153,15 @@ class PersonForm(forms.ModelForm):
             raise forms.ValidationError('Das Feld für die Anrede oder Email ist leer.')
 
 
+class PersonUpdateForm(forms.ModelForm):
+    """Definiert die Form für die Nachpflege von Personendaten"""
+    class Meta:
+        model = Person
+        fields = ('anschrift', 'fachgebiet')
+
+
 class KommentarModelForm(forms.ModelForm):
+    """Definiert die Form für Kommentare."""
     def __init__(self, *args, **kwargs):
         veranst = kwargs.pop('veranstaltung', None)
 
@@ -159,14 +176,19 @@ class KommentarModelForm(forms.ModelForm):
         exclude = ('veranstaltung',)
 
 
-class PersonUpdateForm(forms.ModelForm):
-    class Meta:
-        model = Person
-        fields = ('anschrift', 'fachgebiet')
+CLOSE_ORDER_CHOICES = (
+    ('ja', 'Ja'),
+    ('nein', 'Nein')
+)
+
+
+class CloseOrderForm(forms.Form):
+    """Definiert die Form für das Beenden der Bestellphase"""
+    auswahl = forms.ChoiceField(choices=CLOSE_ORDER_CHOICES)
 
 
 class CreateBarcodeScannEventForm(forms.ModelForm):
-    """Handelt die erste haelfte von Barcode scanns"""
+    """Definiert die Form für einen Barcodescan-Event"""
     scanner_token = forms.CharField()
 
     class Meta:
