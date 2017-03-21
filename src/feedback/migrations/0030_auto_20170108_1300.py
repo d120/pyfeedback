@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='barcodeallowedstate',
             name='allow_state',
-            field=models.IntegerField(choices=[(100, 'Angelegt'), (200, 'Bestellung ge\xf6ffnet'), (300, 'Keine Evaluation'), (500, 'Bestellung liegt vor'), (600, 'Gedruckt'), (700, 'Versandt'), (800, 'B\xf6gen eingegangen'), (900, 'B\xf6gen gescannt'), (1000, 'Ergebnisse versandt')], null=True, unique=True),
+            field=models.IntegerField(choices=[(100, 'Angelegt'), (200, 'Bestellung ge\xf6ffnet'), (300, 'Keine Evaluation'), (500, 'Bestellung liegt vor'), (600, 'Gedruckt'), (700, 'Versandt'), (800, 'B\xf6gen eingegangen'), (900, 'B\xf6gen gescannt'), (1000, 'Ergebnisse versandt')], null=True),
         ),
         migrations.AlterField(
             model_name='log',
