@@ -55,12 +55,7 @@
 
 {% block content %}
 
-    <h1>
-        <span class="header_veranst">{{ veranstaltung.name }} - </span>
-        Dashboard
-    </h1>
-
-    <a href="{% url 'veranstalter-logout' %}">Ausloggen</a>
+    <h1><span class="header_veranst">{{ veranstaltung.name }} - </span>Dashboard</h1>
 
     <p class="subHeaderDashboard">Status</p>
     <span class="borderLine">{{ veranstaltung.get_status_display }}</span>
@@ -82,9 +77,7 @@
     {% if bestellung %}
         <div class="orderHeadContainer">
             <span style="display: block; float: left" class="subHeaderDashboard">Aktuelle Bestellung</span>
-            {% if allow_order %}
-                <button class="orderButton" onclick="window.location='{% url 'veranstalter-bestellung' %}';">Bestellung ändern</button>
-            {% endif %}
+            <button class="orderButton" onclick="window.location='{% url 'veranstalter-bestellung' %}';">Bestellung ändern</button>
         </div>
         <div class="dashboardOrderContainer dashboardTableBordered">
 
@@ -123,9 +116,7 @@
             </table>
         </div>
     {% else %}
-        {% if allow_order %}
-            <button style="padding: 2px;" onclick="window.location='{% url 'veranstalter-bestellung' %}';">Bestellung durchführen</button>
-        {% endif %}
+        <button style="padding: 2px;" onclick="window.location='{% url 'veranstalter-bestellung' %}';">Bestellung durchführen</button>
     {% endif %}
 
 

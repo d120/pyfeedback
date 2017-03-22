@@ -3,7 +3,7 @@
 from django.template import TemplateSyntaxError, Template
 
 
-# ------------------------------ Durchschnittsberechnung für das Ranking ------------------------------ #
+### Durchschnittsberechnung für das Ranking ###################################
 
 def get_average(ergebnis, fb_list, attr):
     """Berechnet das gewichtete Mittel über das Attribut attr für die Fragebogenliste fb_list."""
@@ -47,11 +47,12 @@ def get_average(ergebnis, fb_list, attr):
     if fb_count > 0:
         average = weighted_sum / float(weighted_count)
         return average, fb_count
+
     else:
         return None, 0
 
 
-# ------------------------------ E-Mail-Handling ------------------------------ #
+### E-Mail-Handling ###########################################################
 
 def render_email(template, context):
     try:
@@ -63,14 +64,12 @@ def render_email(template, context):
 def ean_checksum_calc(number):
     """ Berechne die Checksumme eines EAN Barcodes"""
     offset = 0
-
     # convert a int to a list of ints
     x = [int(i) for i in str(number)]
     length = len(x)
     if length == 8 or length == 13:
         offset = 1
-
-    # nehme jedes 2 element beginned beim letzten element und gehe nach vorne zum ersten element,
+        # nehme jedes 2 element beginned beim letzten element und gehe nach vorne zum ersten element, 
     return (-(sum(x[-(1 + offset)::-2]) * 3 + sum(x[-(2 + offset)::-2]))) % 10
 
 

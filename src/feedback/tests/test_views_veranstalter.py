@@ -60,15 +60,7 @@ class VeranstalterIndexTest(TestCase):
     def test_unauth(self):
         response = self.client.get('/veranstalter/')
         self.assertEqual(response.templates[0].name, 'veranstalter/not_authenticated.html')
-
-    def test_invalid_state(self):
-        Einstellung.objects.create(name='bestellung_erlaubt', wert='0')
-        c = login_veranstalter(self.v)
-        self.v.status = Veranstaltung.STATUS_GEDRUCKT
-        self.v.save()
-        response = c.get('/veranstalter/bestellung')
-        self.assertEqual(302, response.status_code)
-
+    
     def test_nothing(self):
         Einstellung.objects.create(name='bestellung_erlaubt', wert='0')
         c = login_veranstalter(self.v)

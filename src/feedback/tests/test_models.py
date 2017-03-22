@@ -8,7 +8,7 @@ from django.utils.timezone import now
 from freezegun import freeze_time
 
 from feedback.models import get_model, Semester, Person, Veranstaltung, Einstellung, Mailvorlage
-from feedback.models.base import AlternativVorname, Log, BarcodeScanner, Fachgebiet, FachgebietEmail, BarcodeAllowedState
+from feedback.models.base import AlternativVorname, Log, BarcodeScanner, BarcodeAllowedState, Fachgebiet, FachgebietEmail
 from feedback.models import past_semester_orders
 from feedback.models import ImportPerson, ImportCategory, ImportVeranstaltung, Kommentar
 from feedback.models import Fragebogen2008, Fragebogen2009, Ergebnis2008, Ergebnis2009
@@ -292,7 +292,6 @@ class PersonTest(TestCase):
         self.assertEqual(self.fb_p1.fachgebiet, self.fachgebiet1)
 
 
-
 class BarcodeScanTest(TestCase):
     def setUp(self):
         self.barcode_scanner = BarcodeScanner.objects.create(token="LRh73Ds22", description="description1")
@@ -305,7 +304,6 @@ class BarcodeScanTest(TestCase):
                                                allow_state=Veranstaltung.STATUS_GEDRUCKT)
             BarcodeAllowedState.objects.create(barcode_scanner=self.barcode_scanner2,
                                                allow_state=Veranstaltung.STATUS_GEDRUCKT)
-
         except IntegrityError:
             self.fail()
 

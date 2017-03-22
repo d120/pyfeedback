@@ -11,7 +11,7 @@ from django.utils.encoding import smart_text
 from feedback.models.base import Veranstaltung
 
 
-# ------------------------------ Login mit Veranstalter-Rechten ------------------------------ #
+### Login mit Veranstalter-Rechten ############################################
 
 class VeranstalterBackend(ModelBackend):
     def authenticate(self, vid, token):
@@ -34,7 +34,7 @@ class TakeoverBackend(ModelBackend):
         return None
 
 
-# ------------------------------ Nutzung eines Fachschaftsaccounts ------------------------------ #
+### Nutzung eines Fachschaftsaccounts #########################################
 
 class FSAccountBackend(RemoteUserBackend):
     # Login wird automatisch über RemoteUserMiddleware bzw. RemoteUserBackend abgewickelt,
