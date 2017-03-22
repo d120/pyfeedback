@@ -11,6 +11,7 @@ from feedback.models.base import Log, Fachgebiet, FachgebietEmail
 
 
 class PersonAdmin(admin.ModelAdmin):
+    """Admin View für Personen"""
     list_display = ('__str__', 'email', 'fachgebiet')
     search_fields = ['vorname', 'nachname', 'email', ]
     list_filter = ('fachgebiet',)
@@ -121,6 +122,7 @@ class VeranstaltungAdmin(admin.ModelAdmin):
 
 
 class SemesterAdmin(admin.ModelAdmin):
+    """Admin View für Semester"""
     list_display = ('__str__', 'sichtbarkeit', 'fragebogen')
     list_filter = ('sichtbarkeit', 'fragebogen')
     ordering = ('-semester',)

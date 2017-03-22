@@ -24,6 +24,7 @@ from feedback.views import public
 from django.db.models import Q
 
 
+
 @user_passes_test(lambda u: u.is_superuser)
 @require_safe
 def index(request):
@@ -290,18 +291,21 @@ def sendmail(request):
             data['to'] = "Veranstalter von %d Veranstaltungen" % veranstaltungen.count()
             data['body_rendered'] = tools.render_email(data['body'], demo_context)
 
-            if data['recipient'] == 'cur_sem_missing_order':
-                if Einstellung.get('bestellung_erlaubt') == '0':
-                    messages.warning(request, 'Bestellungen sind aktuell nicht erlaubt! Bist du ' +
-                                     'sicher, dass du trotzdem die Dozenten anschreiben willst, ' +
-                                     'die noch nicht bestellt haben?')
-            elif data['recipient'] == 'cur_sem_results':
-                if semester.sichtbarkeit != 'VER':
-                    messages.warning(request, 'Die Sichtbarkeit der Ergebnisse des ausgewählten ' +
-                                     'Semesters ist aktuell nicht auf "Veranstalter" ' +
-                                     'eingestellt! Bist du sicher, dass du trotzdem die ' +
-                                     'Dozenten anschreiben willst, für deren Veranstaltungen '
-                                     'Ergebnisse vorliegen?')
+            for status in data['recipient']:
+                if status <= Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR:
+                    if Einstellung.get('bestellung_erlaubt') == '0':
+                        messages.warning(request,
+                                         'Bestellungen sind aktuell nicht erlaubt! Bist du ' +
+                                         'sicher, dass du trotzdem die Dozenten anschreiben willst, ' +
+                                         'die noch nicht bestellt haben?')
+                elif status == Veranstaltung.STATUS_ERGEBNISSE_VERSANDT:
+                    if semester.sichtbarkeit != 'VER':
+                        messages.warning(request,
+                                         'Die Sichtbarkeit der Ergebnisse des ausgewählten ' +
+                                         'Semesters ist aktuell nicht auf "Veranstalter" ' +
+                                         'eingestellt! Bist du sicher, dass du trotzdem die ' +
+                                         'Dozenten anschreiben willst, für deren Veranstaltungen '
+                                         'Ergebnisse vorliegen?')
 
             return render(request, 'intern/sendmail_preview.html', data)
 
@@ -329,8 +333,10 @@ def sendmail(request):
                                 recipients.append(fg_mail.email_sekretaerin)
 
                 if not recipients:
-                    messages.warning(request, ('An die Veranstalter von "%s" wurde keine Mail ' +
-                                     'verschickt, da keine Adressen hinterlegt waren.') % v.name)
+                    messages.warning(request,
+                                     ('An die Veranstalter von "%s" wurde keine Mail ' +
+                                      'verschickt, da keine Adressen hinterlegt waren.') % v.name)
+
                     continue
                 mails.append((subject, body, settings.DEFAULT_FROM_EMAIL, recipients))
 
@@ -420,3 +426,57 @@ def sync_ergebnisse(request):
 @user_passes_test(lambda u: u.is_superuser)
 def ergebnisse(request):
     return public.index(request)
+
+
+def is_no_evaluation_final(status):
+    return status == Veranstaltung.STATUS_KEINE_EVALUATION or status == Veranstaltung.STATUS_ANGELEGT or \
+           status == Veranstaltung.STATUS_BESTELLUNG_GEOEFFNET
+
+
+def update_veranstaltungen_status(veranstaltungen):
+    for v in veranstaltungen:
+        if is_no_evaluation_final(v.status):
+            v.status = Veranstaltung.STATUS_KEINE_EVALUATION_FINAL
+            v.save()
+        elif v.status == Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR:
+            v.status = Veranstaltung.STATUS_BESTELLUNG_WIRD_VERARBEITET
+            v.save()
+
+
+class CloseOrderFormView(UserPassesTestMixin, FormView):
+    """Definiert die View für das Beenden der Bestellphase."""
+    template_name = 'intern/status_final.html'
+    form_class = CloseOrderForm
+
+    def post(self, request, *args, **kwargs):
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        if form.is_valid:
+            choice = self.get_form_kwargs().get('data').get('auswahl')
+            if choice == 'ja':
+                return self.form_valid(form)
+            else:
+                return self.form_invalid(form)
+
+    def form_valid(self, form):
+        update_veranstaltungen_status(self.get_queryset())
+        messages.success(self.request, 'Alle Status wurden erfolgreich aktualisiert.')
+        return super(CloseOrderFormView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        return HttpResponseRedirect(reverse('intern-index'))
+
+    def get_queryset(self):
+        try:
+            veranstaltungen = Veranstaltung.objects.filter(semester=Semester.current())
+            return veranstaltungen
+        except (Veranstaltung.DoesNotExist, KeyError):
+            messages.warning(self.request, 'Keine passenden Veranstaltungen für das aktuelle Semester gefunden.')
+            return HttpResponseRedirect(reverse('intern-index'))
+
+    def get_success_url(self):
+        return reverse('intern-index')
+
+    def test_func(self):
+        return self.request.user.is_superuser
+

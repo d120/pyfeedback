@@ -30,6 +30,9 @@ def rechte_uebernehmen(request):
             request.session['vid'] = v
             request.session['veranstaltung'] = str(veranst)
 
+            return HttpResponseRedirect(reverse('veranstalter-index'))
+
+
             if veranst.status == Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR or \
                     veranst.status == Veranstaltung.STATUS_BESTELLUNG_GEOEFFNET:
                 return HttpResponseRedirect(reverse('veranstalter-index'))
