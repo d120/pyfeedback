@@ -10,10 +10,10 @@ class ImportPerson(models.Model):
     nachname = models.CharField(max_length=30)
 
     def full_name(self):
-        return u'%s %s' % (self.vorname, self.nachname)
+        return '%s %s' % (self.vorname, self.nachname)
 
-    def __unicode__(self):
-        return u'%s, %s' % (self.nachname, self.vorname)
+    def __str__(self):
+        return '%s, %s' % (self.nachname, self.vorname)
 
     class Meta:
         verbose_name = 'Importierte Person'
@@ -31,7 +31,7 @@ class ImportCategory(models.Model):
     # um eindeutige Suche nach Kategorie zu ermoeglichen
     parent = models.ForeignKey('self', null=True, blank=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     class Meta:
@@ -49,8 +49,8 @@ class ImportVeranstaltung(models.Model):
     category = models.ForeignKey(ImportCategory, related_name="ivs")
     is_attended_course = models.BooleanField(default=True)
 
-    def __unicode__(self):
-        return u'%s (%s)' % (self.name, self.lv_nr)
+    def __str__(self):
+        return '%s (%s)' % (self.name, self.lv_nr)
 
     class Meta:
         verbose_name = 'Importierte Veranstaltung'

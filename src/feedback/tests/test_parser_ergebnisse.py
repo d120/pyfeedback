@@ -10,7 +10,7 @@ from feedback.parser.ergebnisse.parser import Parser
 
 class ParserTest(TestCase):
     def _do_mapping_test(self, fun, mapping):
-        for key, value in mapping.items() + [('asdfjkl', '')]:
+        for key, value in list(mapping.items()) + [('asdfjkl', '')]:
             self.assertEqual(fun(key), value)
 
     def test_parse_fach(self):
@@ -51,10 +51,10 @@ class ParserTest(TestCase):
         with open(testdata, 'r') as f:
             warnings, errors, vcount, fbcount = parse_ergebnisse(s, f)
         self.assertEqual(len(warnings), 2)
-        self.assertIn(u'Die Veranstaltung "LV-Nr. existiert nicht" hat in der ' + \
+        self.assertIn('Die Veranstaltung "LV-Nr. existiert nicht" hat in der ' + \
                       'Datenbank die Lehrveranstaltungsnummer "4711", in der CSV-Datei aber ' + \
                       '"2342". Die Ergebnisse wurden trotzdem importiert.', warnings)
-        self.assertIn(u'Die Veranstaltung mit der Lehrveranstaltungsnummer ' + \
+        self.assertIn('Die Veranstaltung mit der Lehrveranstaltungsnummer ' + \
                       '"1234" hat in der Datenbank den Namen "Test II", in der ' + \
                       'CSV-Datei aber "V.-Name existiert nicht". Die ' + \
                       'Ergebnisse wurden trotzdem importiert.', warnings)
@@ -62,9 +62,9 @@ class ParserTest(TestCase):
         self.assertEqual(fbcount, 4)
 
         self.assertEqual(len(errors), 2)
-        self.assertIn(u'Die Veranstaltung "V. existiert nicht" (1337) ' + \
+        self.assertIn('Die Veranstaltung "V. existiert nicht" (1337) ' + \
                       'existiert im System nicht und wurde deshalb nicht importiert!', errors)
-        self.assertIn(u'In der Datenbank existieren bereits Fragebögen zur Veranstaltung ' + \
+        self.assertIn('In der Datenbank existieren bereits Fragebögen zur Veranstaltung ' + \
                       '"Ergebnis bereits importiert". Sie wurde deshalb nicht importiert!', errors)
 
     def test_parse_ergebnisse2008(self):

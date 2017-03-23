@@ -69,7 +69,7 @@ def import_vv_edit(request):
         # Liste der ausgewählten Veranstaltungen holen
         v_str = [ele[1] for ele in request.POST.lists() if ele[0] == 'v']
         if not len(v_str):
-            messages.warning(request, u'Es wurden keine Veranstaltungen für den Import ausgewählt!')
+            messages.warning(request, 'Es wurden keine Veranstaltungen für den Import ausgewählt!')
             return HttpResponseRedirect(reverse('import_vv_edit'))
 
         # IDs von unicode nach int konvertieren
@@ -138,16 +138,15 @@ class PersonFormUpdateView(UserPassesTestMixin, UpdateView):
         p.email = form.cleaned_data['email']
         p.fachgebiet = FachgebietEmail.get_fachgebiet_from_email(p.email)
         p.save()
-        messages.success(self.request, u'Benutzerdatensätze wurden erfolgreich gespeichert.')
+        messages.success(self.request, 'Benutzerdatensätze wurden erfolgreich gespeichert.')
 
         if p.fachgebiet is not None:
-            messages.success(self.request, u' '.join((p.full_name(), ' wurde dem Fachbereich ',
-                                                      str(p.fachgebiet), ' zugewiesen.')).encode('utf-8'))
+            messages.success(self.request, ' '.join((p.full_name(), ' wurde dem Fachbereich ', str(p.fachgebiet), ' zugewiesen.')).encode('utf-8'))
 
         return super(PersonFormUpdateView, self).form_valid(form)
 
     def form_invalid(self, form):
-        messages.error(self.request, u'Das Feld für die Anrede oder Email ist leer.')
+        messages.error(self.request, 'Das Feld für die Anrede oder Email ist leer.')
         return super(PersonFormUpdateView, self).form_invalid(form)
 
     def get_success_url(self):

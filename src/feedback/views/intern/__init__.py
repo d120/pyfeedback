@@ -3,6 +3,7 @@ import ast
 import os
 import subprocess
 
+from io import TextIOWrapper
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
@@ -24,6 +25,7 @@ from feedback.parser.ergebnisse import parse_ergebnisse
 from feedback.views import public
 from feedback.models import Veranstaltung, Semester, Einstellung, Mailvorlage, get_model, long_not_ordert, \
     FachgebietEmail, Tutor
+
 
 
 @user_passes_test(lambda u: u.is_superuser)
@@ -98,22 +100,22 @@ def export_veranstaltungen(request):
 
     if not veranst.count():
         if ubung_export:
-            messages.error(request, u'Für das ausgewählte Semester (%s) liegen keine Bestellungen '
-                                    u'für Vorlesungen mit Übung vor!' % semester)
+            messages.error(request, 'Für das ausgewählte Semester (%s) liegen keine Bestellungen '
+                                    'für Vorlesungen mit Übung vor!' % semester)
         else:
-            messages.error(request, u'Für das ausgewählte Semester (%s) liegen keine Bestellungen vor!' % semester)
+            messages.error(request, 'Für das ausgewählte Semester (%s) liegen keine Bestellungen vor!' % semester)
         return HttpResponseRedirect(reverse('export_veranstaltungen'))
 
     missing_verantwortlich = veranst.filter(verantwortlich=None)
     if missing_verantwortlich.count() > 0:
         txt = ', '.join([v.name for v in missing_verantwortlich])
-        messages.error(request, u'Für die folgenden Veranstaltungen ist kein Verantwortlicher eingetragen: %s' % txt)
+        messages.error(request, 'Für die folgenden Veranstaltungen ist kein Verantwortlicher eingetragen: %s' % txt)
         return HttpResponseRedirect(reverse('export_veranstaltungen'))
 
     missing_sprache = veranst.filter(sprache=None)
     if missing_sprache.count() > 0:
         txt = ', '.join([v.name for v in missing_sprache])
-        messages.error(request, u'Für die folgenden Veranstaltungen ist keine Sprache eingetragen: %s' % txt)
+        messages.error(request, 'Für die folgenden Veranstaltungen ist keine Sprache eingetragen: %s' % txt)
         return HttpResponseRedirect(reverse('export_veranstaltungen'))
 
     person_set = set()
@@ -153,8 +155,7 @@ def translate_to_latex(text):
         '~': '\~{}',
         '^': '\\textasciicircum',
     }
-
-    for i, j in dic.iteritems():
+    for i, j in dic.items():
             text = text.replace(i, j)
     return text
 
@@ -223,9 +224,9 @@ def generate_letters(request):
 
     lines = []
     for v in veranst:
-        eva_id = v.get_barcode_number()
-        empfaenger = unicode(v.verantwortlich.full_name())
-        line = u'\\adrentry{%s}{%s}{%s}{%s}{%s}{%s}{%s}{%s}{%s}\n' % (
+        eva_id=v.get_barcode_number()
+        empfaenger = str(v.verantwortlich.full_name())
+        line = '\\adrentry{%s}{%s}{%s}{%s}{%s}{%s}{%s}{%s}{%s}\n' % (
                         translate_to_latex(v.verantwortlich.full_name()), translate_to_latex(v.verantwortlich.anschrift), translate_to_latex(v.name), v.anzahl, v.sprache, v.get_typ_display(), eva_id, v.freiefrage1.strip(), v.freiefrage2.strip())
         lines.append(smart_str(line))
 
@@ -376,17 +377,17 @@ def sendmail(request):
                 if status <= Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR:
                     if Einstellung.get('bestellung_erlaubt') == '0':
                         messages.warning(request,
-                                         u'Bestellungen sind aktuell nicht erlaubt! Bist du ' +
-                                         u'sicher, dass du trotzdem die Dozenten anschreiben willst, ' +
-                                         u'die noch nicht bestellt haben?')
+                                         'Bestellungen sind aktuell nicht erlaubt! Bist du ' +
+                                         'sicher, dass du trotzdem die Dozenten anschreiben willst, ' +
+                                         'die noch nicht bestellt haben?')
                 elif status == Veranstaltung.STATUS_ERGEBNISSE_VERSANDT:
                     if semester.sichtbarkeit != 'VER':
                         messages.warning(request,
-                                         u'Die Sichtbarkeit der Ergebnisse des ausgewählten ' +
-                                         u'Semesters ist aktuell nicht auf "Veranstalter" ' +
-                                         u'eingestellt! Bist du sicher, dass du trotzdem die ' +
-                                         u'Dozenten anschreiben willst, für deren Veranstaltungen '
-                                         u'Ergebnisse vorliegen?')
+                                         'Die Sichtbarkeit der Ergebnisse des ausgewählten ' +
+                                         'Semesters ist aktuell nicht auf "Veranstalter" ' +
+                                         'eingestellt! Bist du sicher, dass du trotzdem die ' +
+                                         'Dozenten anschreiben willst, für deren Veranstaltungen '
+                                         'Ergebnisse vorliegen?')
 
             return render(request, 'intern/sendmail_preview.html', data)
 
@@ -412,8 +413,8 @@ def sendmail(request):
 
                 if not recipients:
                     messages.warning(request,
-                                     (u'An die Veranstalter von "%s" wurde keine Mail ' +
-                                      u'verschickt, da keine Adressen hinterlegt waren.') % v.name)
+                                     ('An die Veranstalter von "%s" wurde keine Mail ' +
+                                      'verschickt, da keine Adressen hinterlegt waren.') % v.name)
                     continue
 
                 mails.append((subject, body, settings.DEFAULT_FROM_EMAIL, recipients))
@@ -449,14 +450,14 @@ def import_ergebnisse(request):
 
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
-            warnings, errors, vcount, fbcount = parse_ergebnisse(semester, request.FILES['file'])
+            warnings, errors, vcount, fbcount = parse_ergebnisse(semester,
+                                                                 TextIOWrapper(request.FILES['file'].file, encoding='utf-8'))
             if fbcount:
-                messages.success(
-                    request,
-                    u'%u Veranstaltungen mit insgesamt %u Fragebögen wurden erfolgreich importiert.' % (vcount, fbcount)
-                )
+                messages.success(request,
+                    '%u Veranstaltungen mit insgesamt %u Fragebögen wurden erfolgreich importiert.' %
+                    (vcount, fbcount))
             else:
-                warnings.append(u'Es konnten keine Fragebögen importiert werden.')
+                warnings.append('Es konnten keine Fragebögen importiert werden.')
 
             for w in warnings:
                 messages.warning(request, w)
@@ -501,9 +502,9 @@ def sync_ergebnisse(request):
             ergebnis.objects.create(**data)
 
     if not found_something:
-        messages.warning(request, u'Für das %s liegen keine Ergebnisse vor.' % semester)
+        messages.warning(request, 'Für das %s liegen keine Ergebnisse vor.' % semester)
     else:
-        messages.success(request, u'Das Ranking für das %s wurde erfolgreich berechnet.' % semester)
+        messages.success(request, 'Das Ranking für das %s wurde erfolgreich berechnet.' % semester)
     return HttpResponseRedirect(reverse('sync_ergebnisse'))
 
 
@@ -544,7 +545,7 @@ class CloseOrderFormView(UserPassesTestMixin, FormView):
 
     def form_valid(self, form):
         update_veranstaltungen_status(self.get_queryset())
-        messages.success(self.request, u'Alle Status wurden erfolgreich aktualisiert.')
+        messages.success(self.request, 'Alle Status wurden erfolgreich aktualisiert.')
         return super(CloseOrderFormView, self).form_valid(form)
 
     def form_invalid(self, form):
@@ -555,7 +556,7 @@ class CloseOrderFormView(UserPassesTestMixin, FormView):
             veranstaltungen = Veranstaltung.objects.filter(semester=Semester.current())
             return veranstaltungen
         except (Veranstaltung.DoesNotExist, KeyError):
-            messages.warning(self.request, u'Keine passenden Veranstaltungen für das aktuelle Semester gefunden.')
+            messages.warning(self.request, 'Keine passenden Veranstaltungen für das aktuelle Semester gefunden.')
             return HttpResponseRedirect(reverse('intern-index'))
 
     def get_success_url(self):
