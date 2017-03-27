@@ -20,6 +20,7 @@ matrix:
     - env: $DENV="pip install --upgrade --pre Django"
 
 install:
+  - pip install -U pip wheel
   - pip install -r requirements.txt
   - $DENV
   - pip install coveralls
