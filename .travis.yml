@@ -26,7 +26,6 @@ install:
 script:
   - export PYTHONWARNINGS=all
   - python src/manage.py check
-  - python src/manage.py migrate
   - python src/manage.py test feedback
   - coverage run --omit="*/migrations*" --source="." src/manage.py test feedback
 
