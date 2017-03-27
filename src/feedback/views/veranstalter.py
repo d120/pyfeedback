@@ -5,7 +5,7 @@ from django.conf import settings
 from django.views.decorators.http import require_safe
 from django.contrib import auth
 from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.core.mail import send_mail

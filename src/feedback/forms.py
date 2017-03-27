@@ -1,7 +1,7 @@
 # coding=utf-8
 
 from django import forms
-from django.forms import extras
+from django.forms import widgets
 
 from feedback.models import Person, Veranstaltung, Kommentar, BarcodeScannEvent
 from django.core.exceptions import ValidationError
@@ -41,7 +41,7 @@ class VeranstaltungBasisdatenForm(forms.ModelForm):
 
         # Nutze ein Widget bei dem nur das jahr des letzten Auswertungstermins angegeben werden kann
         years_tuple = kwargs['instance'].semester.auswertungstermin_years()
-        self.fields['auswertungstermin'].widget = extras.SelectDateWidget(years=years_tuple)
+        self.fields['auswertungstermin'].widget = widgets.SelectDateWidget(years=years_tuple)
 
         # Auswertungstermin kann nur gewählt werden wenn es ein Seminar oder Praktikum ist
         if kwargs['instance'].typ not in ['se', 'pr']:

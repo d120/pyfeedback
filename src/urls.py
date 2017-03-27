@@ -31,7 +31,7 @@ else:
 urlpatterns = [
     # Muss in dieser Reihenfolge stehen bleiben, da sonst /doc nicht funktioniert!
     url(r'^intern/admin/doc/', include('django.contrib.admindocs.urls')),
-    url(r'^intern/admin/', include(admin.site.urls)),
+    url(r'^intern/admin/', admin.site.urls),
 ]
 
 # allgemeine Views
