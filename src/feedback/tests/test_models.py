@@ -204,12 +204,12 @@ class PersonTest(TestCase):
         self.p4 = Person.objects.create(vorname='Test Zweitname', nachname='Tester')
 
         self.s1, self.v1 = get_veranstaltung('v')
-        self.v1.veranstalter = [self.p1]
+        self.v1.veranstalter.add(self.p1)
 
         self.s2 = Semester.objects.get_or_create(semester=20115, fragebogen='2009', sichtbarkeit='ADM')[0]
         default_params = {'semester': self.s2, 'grundstudium': False, 'evaluieren': True, 'lv_nr': '321' + 'v'}
         self.v2 = Veranstaltung.objects.create(typ='v', name='CMS', **default_params)
-        self.v2.veranstalter = [self.p4]
+        self.v2.veranstalter.add(self.p4)
 
         self.fachgebiet1 = Fachgebiet.objects.create(name="Fachgebiet1", kuerzel="FB1")
         FachgebietEmail.objects.create(fachgebiet=self.fachgebiet1, email_suffix="fb1.tud.de")
