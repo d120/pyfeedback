@@ -95,7 +95,7 @@ class GenerateLettersTest(NonSuTestMixin, TestCase):
                                     {'semester': s.semester, 'erhebungswoche': '10. - 11. November 2011',
                                      'vorlage': 'Anschreiben'}, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.status_code, 200)
-        self.assertRegexpMatches(response['Content-Disposition'],
+        self.assertRegex(response['Content-Disposition'],
                                  r'^attachment; filename=[a-zA-Z0-9_-]+\.pdf$')
         self.assertEqual(ad, self._get_erhebungswoche())
         with open(settings.LATEX_PATH + 'veranstalter.adr', 'r') as f:
@@ -107,7 +107,7 @@ class GenerateLettersTest(NonSuTestMixin, TestCase):
                                     {'semester': s.semester, 'erhebungswoche': '10. - 11. November 2011',
                                      'vorlage': 'Aufkleber'}, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.status_code, 200)
-        self.assertRegexpMatches(response['Content-Disposition'],
+        self.assertRegex(response['Content-Disposition'],
                                  r'^attachment; filename=[a-zA-Z0-9_-]+\.pdf$')
         self.assertEqual(ad, self._get_erhebungswoche())
         with open(settings.LATEX_PATH + '../aufkleber/' + 'veranstalter.adr', 'r') as f:
@@ -131,7 +131,7 @@ class GenerateLettersTest(NonSuTestMixin, TestCase):
                                     {'semester': s.semester, 'erhebungswoche': '10. - 11. November 2011',
                                         'vorlage': 'Aufkleber', 'anzahlaufkleber': '85'}, **{'REMOTE_USER': 'super'})
         self.assertEqual(response.status_code, 200)
-        self.assertRegexpMatches(response['Content-Disposition'],
+        self.assertRegex(response['Content-Disposition'],
                                  r'^attachment; filename=[a-zA-Z0-9_-]+\.pdf$')
         self.assertEqual(ad, self._get_erhebungswoche())
         with open(settings.LATEX_PATH + '../aufkleber/' + 'veranstalter.adr', 'r') as f:

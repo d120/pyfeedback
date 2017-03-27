@@ -2,8 +2,21 @@
 
 from xml.etree import ElementTree
 from django.db import IntegrityError
+from django.core.files.uploadedfile import InMemoryUploadedFile
 
 from feedback.models import ImportCategory, ImportVeranstaltung, ImportPerson
+
+
+def replace_first_line(file, replacement):
+    # suppress a type error which was confusing
+    if type(file) is not InMemoryUploadedFile:
+        with open(file, 'r', encoding='iso-8859-1') as f:
+            data = f.readlines()
+
+        if "!DOCTYPE" not in data[0]:
+            data[0] = replacement
+            with open(file, 'w') as f:
+                f.writelines(data)
 
 
 def parse_vv_xml(xmlfile):
@@ -12,10 +25,16 @@ def parse_vv_xml(xmlfile):
     # Fix &nbsp; in XML File @see http://stackoverflow.com/a/7265260
     # @see http://effbot.org/elementtree/elementtree-xmlparser.htm#tag-ET.XMLParser.entity
     parser = ElementTree.XMLParser()
-    parser.parser.UseForeignDTD(True)
-    parser.entity['nbsp'] = unichr(160)
+    # TODO: UseForeignDTD is not compatible with Python 3
+    # parser.parser.UseForeignDTD(True)
 
+    parser.entity['nbsp'] = chr(0x160)
     etree = ElementTree.ElementTree()
+
+    # Workaround for the UseForeignDTD problem
+    # if missing, adds DOCTYPE tag to handle &nbsp; and changes encoding to utf-8
+    doctype = '''<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE CourseCatalogue [<!ENTITY nbsp "&#0160;">]>\n'''
+    replace_first_line(xmlfile, doctype)
 
     root = etree.parse(xmlfile, parser=parser).find('CourseCatalogueArea')
     root_cat = ImportCategory.objects.create(parent=None, name='root', rel_level=None)

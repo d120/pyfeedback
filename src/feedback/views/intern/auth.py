@@ -28,7 +28,7 @@ def rechte_uebernehmen(request):
             auth.login(request, user)
             request.session['orig_uid'] = orig_uid
             request.session['vid'] = v
-            request.session['veranstaltung'] = unicode(veranst)
+            request.session['veranstaltung'] = str(veranst)
 
             return HttpResponseRedirect(reverse('veranstalter-index'))
 
