@@ -51,7 +51,7 @@ class FSAccountBackend(RemoteUserBackend):
     # umgewandelt werden.
     def clean_username(self, username):
         if settings.DEBUG:
-            credentials = b64decode(username.split()[1])
+            credentials = str(b64decode(username.split()[1]))
             user = credentials.split(':')[0]
             return (smart_text(user))
         else:
