@@ -29,7 +29,7 @@ class ImportCategory(models.Model):
     rel_level = models.IntegerField(null=True, default=0)
 
     # um eindeutige Suche nach Kategorie zu ermoeglichen
-    parent = models.ForeignKey('self', null=True, blank=True)
+    parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -46,7 +46,7 @@ class ImportVeranstaltung(models.Model):
     name = models.CharField(max_length=150)
     lv_nr = models.CharField(max_length=15, blank=True)
     veranstalter = models.ManyToManyField(ImportPerson, blank=True)
-    category = models.ForeignKey(ImportCategory, related_name="ivs")
+    category = models.ForeignKey(ImportCategory, related_name="ivs", on_delete=models.CASCADE)
     is_attended_course = models.BooleanField(default=True)
 
     def __str__(self):

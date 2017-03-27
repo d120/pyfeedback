@@ -7,7 +7,7 @@ import random
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.db.utils import OperationalError
-from django.core.urlresolvers import reverse
+from django.urls  import reverse
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 
@@ -131,7 +131,7 @@ class Fachgebiet(models.Model):
 
 class FachgebietEmail(models.Model):
     """Repräsentiert die E-Mail Domänen für die jeweiligen Fachgebiete des FBs 20."""
-    fachgebiet = models.ForeignKey(Fachgebiet, related_name='fachgebiet')
+    fachgebiet = models.ForeignKey(Fachgebiet, related_name='fachgebiet', on_delete=models.CASCADE)
     email_suffix = models.CharField(max_length=150,
                                     help_text="Hier soll der Domainname einer Email-Adresse eines Fachgebiets stehen.",
                                     null=True)
@@ -178,7 +178,7 @@ class Person(models.Model):
     anschrift = models.CharField(_('anschrift'), max_length=80, blank=True,
                                  help_text='Tragen Sie bitte nur die Anschrift ohne Namen ein, '
                                            'da der Name automatisch hinzugefügt wird.')
-    fachgebiet = models.ForeignKey(Fachgebiet, null=True, blank=True)
+    fachgebiet = models.ForeignKey(Fachgebiet, null=True, blank=True, on_delete=models.CASCADE)
 
     def full_name(self):
         return '%s %s' % (self.vorname, self.nachname)
@@ -413,7 +413,7 @@ class Veranstaltung(models.Model):
 
     typ = models.CharField(max_length=2, choices=TYP_CHOICES, help_text=vlNoEx)
     name = models.CharField(max_length=150)
-    semester = models.ForeignKey(Semester)
+    semester = models.ForeignKey(Semester, on_delete=models.CASCADE)
     lv_nr = models.CharField(max_length=15, blank=True, verbose_name='LV-Nummer')
     status = models.IntegerField(choices=STATUS_CHOICES, default=STATUS_ANGELEGT)
     grundstudium = models.BooleanField()
@@ -423,13 +423,13 @@ class Veranstaltung(models.Model):
 
     sprache = models.CharField(max_length=2, choices=SPRACHE_CHOICES, null=True, blank=True)
     anzahl = models.IntegerField(null=True, blank=True)
-    verantwortlich = models.ForeignKey(Person, related_name='verantwortlich', null=True, blank=True,
+    verantwortlich = models.ForeignKey(Person, related_name='verantwortlich', null=True, blank=True, on_delete=models.CASCADE,
                                        help_text='Diese Person wird von uns bei Rückfragen kontaktiert und bekommt die Fragenbögen zugeschickt')
     ergebnis_empfaenger = models.ManyToManyField(Person, blank=True,
                                                  related_name='ergebnis_empfaenger',
                                                  verbose_name='Empfänger der Ergebnisse',
                                                  help_text='An diese Personen werden die Ergebnisse per E-Mail geschickt.')
-    primaerdozent = models.ForeignKey(Person, related_name='primaerdozent', null=True, blank=True,
+    primaerdozent = models.ForeignKey(Person, related_name='primaerdozent', null=True, blank=True, on_delete=models.CASCADE,
                                        help_text='Die Person, die im Anschreiben erwähnt wird')
     auswertungstermin = models.DateField(null=True, blank=True,
                                          verbose_name='Auswertungstermin',
@@ -673,7 +673,7 @@ class Tutor(models.Model):
     nachname = models.CharField(_('last name'), max_length=30)
     email = models.EmailField(_('e-mail address'))
     anmerkung = models.CharField(max_length=100)
-    veranstaltung = models.ForeignKey(Veranstaltung)
+    veranstaltung = models.ForeignKey(Veranstaltung, on_delete=models.CASCADE)
 
     def get_barcode_number(self):
         """Gibt die Barcodenummer anhand der Tutorennummer zurück."""
@@ -738,7 +738,7 @@ class BarcodeScanner(models.Model):
 
 class BarcodeAllowedState(models.Model):
     """Repräsentiert die erlaubten Zustände für einen Barcodescanner."""
-    barcode_scanner = models.ForeignKey(BarcodeScanner)
+    barcode_scanner = models.ForeignKey(BarcodeScanner, on_delete=models.CASCADE)
     allow_state = models.IntegerField(choices=Veranstaltung.STATUS_CHOICES, null=True)
 
     class Meta:
@@ -750,9 +750,9 @@ class BarcodeAllowedState(models.Model):
 
 class BarcodeScannEvent(models.Model):
     """Repräsentiert einen Scan-Event für einen Barcodescanner"""
-    veranstaltung = models.ForeignKey(Veranstaltung)
-    scanner = models.ForeignKey(BarcodeScanner)
-    tutorgroup = models.ForeignKey(Tutor, null=True, blank=True)
+    veranstaltung = models.ForeignKey(Veranstaltung, on_delete=models.CASCADE)
+    scanner = models.ForeignKey(BarcodeScanner, on_delete=models.CASCADE)
+    tutorgroup = models.ForeignKey(Tutor, null=True, blank=True, on_delete=models.CASCADE)
     barcode = models.PositiveIntegerField()
     timestamp = models.DateTimeField(auto_now_add=True)
 
@@ -787,9 +787,9 @@ class Log(models.Model):
         (ADMIN, 'Admin')
     )
 
-    veranstaltung = models.ForeignKey(Veranstaltung, null=True, related_name='veranstaltung')
-    user = models.ForeignKey(User, null=True, related_name='user')
-    scanner = models.ForeignKey(BarcodeScanner, null=True, related_name='scanner')
+    veranstaltung = models.ForeignKey(Veranstaltung, null=True, related_name='veranstaltung', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, null=True, related_name='user', on_delete=models.CASCADE)
+    scanner = models.ForeignKey(BarcodeScanner, null=True, related_name='scanner', on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
     status = models.IntegerField(choices=Veranstaltung.STATUS_CHOICES, default=Veranstaltung.STATUS_ANGELEGT)
     interface = models.CharField(max_length=2, choices=INTERFACE_CHOICES)

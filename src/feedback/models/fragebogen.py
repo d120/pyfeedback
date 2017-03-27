@@ -93,7 +93,7 @@ class Fragebogen(models.Model):
 
     )
 
-    veranstaltung = models.ForeignKey('feedback.Veranstaltung')
+    veranstaltung = models.ForeignKey('feedback.Veranstaltung', on_delete=models.CASCADE)
 
     def __str__(self):
         return 'Fragebogen zu "%s" (%s, %s)' % (self.veranstaltung.name,
@@ -107,7 +107,7 @@ class Fragebogen(models.Model):
 
 class Ergebnis(models.Model):
     # TODO: durch OneToOneField ersetzen
-    veranstaltung = models.OneToOneField('feedback.Veranstaltung')
+    veranstaltung = models.OneToOneField('feedback.Veranstaltung', on_delete=models.CASCADE)
     anzahl = models.PositiveIntegerField()
     parts = []
     hidden_parts = []
@@ -147,8 +147,8 @@ class Ergebnis(models.Model):
 
 
 class Kommentar(models.Model):
-    veranstaltung = models.OneToOneField('feedback.Veranstaltung')
-    autor = models.ForeignKey('feedback.Person')
+    veranstaltung = models.OneToOneField('feedback.Veranstaltung', on_delete=models.CASCADE)
+    autor = models.ForeignKey('feedback.Person', on_delete=models.CASCADE)
     text = models.TextField()
 
     class Meta:
