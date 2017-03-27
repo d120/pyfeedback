@@ -275,7 +275,7 @@ class PublicDropBarcode(TestCase):
         self.deleted_veranstaltung.delete()
 
     def assertJsonSuccess(self, response, success):
-        response_json = json.loads(response.content)
+        response_json = json.loads(str(response.content, response.charset))
         self.assertEqual(response_json['success'], success)
 
     def test_invalid_token(self):
