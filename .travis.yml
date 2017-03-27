@@ -15,6 +15,7 @@ env:
 
 # allow the Django pre version to fail without failing the entire build
 matrix:
+  fast_finish: true
   allow_failures:
     - env: $DENV="pip install --upgrade --pre Django"
 
