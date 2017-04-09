@@ -1,0 +1,37 @@
+{% extends "bestellung_base.html" %}{% load static %}
+
+{% block title %}Mail versenden{% endblock %}
+
+{% block extra_header %}
+    <script type="text/javascript" src="{% static 'jquery/jquery-1.4.2.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'jquery/jquery-ui-1.8.6.custom.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'jquery/chosen/chosen.min.css' %}" />
+    <script type="text/javascript" src="{% static 'jquery/chosen/chosen.jquery.min.js' %}"></script>
+{% endblock %}
+
+{% block javascript_block %}
+    <script>
+        $(".chosen-select").chosen();
+    </script>
+{% endblock %}
+
+{% block content %}
+<h1>Mail an Veranstalter versenden</h1>
+
+<form method="post" action="">{% csrf_token %}
+    <p>
+        {{ form.as_p }}
+
+    </p>
+        <input type="submit" name="load_template" value="Vorlage laden">
+        <input type="submit" name="submit">
+</form>
+
+<h2>Verfügbare Variablen</h2>
+<p>
+    <ul>
+        <li>&#123;&#123; veranstaltung &#125;&#125; - Name der Veranstaltung</li>
+        <li>&#123;&#123; link_veranstalter &#125;&#125; - Link zum Veranstalterbereich</li>
+    </ul>
+</p>
+{% endblock %}

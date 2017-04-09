@@ -16,6 +16,7 @@ import django.contrib.auth.views
 from django.urls import reverse_lazy
 from django.conf import settings
 from feedback.views.veranstalter import VeranstalterWizard
+import feedback.views.intern.intern_class_view
 
 
 # Admin-Seiten konfigurieren
@@ -73,6 +74,7 @@ urlpatterns += [
     url(r'^intern/fragebogensprache/$', feedback.views.intern.fragebogensprache, name='fragebogensprache'),
     url(r'^intern/lange_ohne_evaluation/$', feedback.views.intern.lange_ohne_evaluation, name='lange_ohne_evaluation'),
     url(r'^intern/ergebnisse/$', feedback.views.intern.ergebnisse, name='intern-ergebnisse'),
+    url(r'^intern/sendmail_nt/$', feedback.views.intern.intern_class_view.SendMailView.as_view(), name='sendmail_nt'),
 
 ]
 
