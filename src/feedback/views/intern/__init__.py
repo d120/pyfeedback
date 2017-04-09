@@ -352,6 +352,9 @@ def sendmail(request):
         except (Semester.DoesNotExist, KeyError):
             return HttpResponseRedirect(reverse('sendmail'))
 
+        if 'recipient' not in request.POST.keys():
+            return HttpResponseRedirect(reverse('sendmail'))
+
         data['semester_selected'] = semester
         data['subject_rendered'] = "Evaluation: %s" % data['subject']
 
