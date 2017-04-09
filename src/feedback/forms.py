@@ -7,9 +7,11 @@ from feedback.models import Person, Veranstaltung, Kommentar, BarcodeScannEvent
 from django.core.exceptions import ValidationError
 
 
-class VeranstaltungEvaluationForm(forms.ModelForm):
-    """Definiert die Form für den 1. Schritt des Wizards"""
+class BestellWizardForm(forms.ModelForm):
     required_css_class = 'required'
+
+class VeranstaltungEvaluationForm(BestellWizardForm):
+    """Definiert die Form für den 1. Schritt des Wizards"""
 
     class Meta:
         model = Veranstaltung
@@ -23,9 +25,8 @@ class VeranstaltungEvaluationForm(forms.ModelForm):
             field.required = True
 
 
-class VeranstaltungBasisdatenForm(forms.ModelForm):
+class VeranstaltungBasisdatenForm(BestellWizardForm):
     """Definiert die Form für den 2. Schritt des Wizards."""
-    required_css_class = 'required'
 
     def __init__(self, *args, **kwargs):
         veranstalter_queryset = kwargs.pop('all_veranstalter', None)
@@ -70,9 +71,8 @@ class VeranstaltungBasisdatenForm(forms.ModelForm):
                    'auswertungstermin': forms.SelectDateWidget}
 
 
-class VeranstaltungPrimaerDozentForm(forms.ModelForm):
+class VeranstaltungPrimaerDozentForm(BestellWizardForm):
     """Definiert die Form für den 3. Schritt des Wizards."""
-    required_css_class = 'required'
 
     def __init__(self, *args, **kwargs):
         if kwargs.pop("is_dynamic_form", False):
@@ -89,9 +89,8 @@ class VeranstaltungPrimaerDozentForm(forms.ModelForm):
         fields = ('primaerdozent',)
 
 
-class VeranstaltungDozentDatenForm(forms.ModelForm):
+class VeranstaltungDozentDatenForm(BestellWizardForm):
     """Definiert die Form für den 4. Schritt des Wizards."""
-    required_css_class = 'required'
 
     def __init__(self, *args, **kwargs):
         super(VeranstaltungDozentDatenForm, self).__init__(*args, **kwargs)
@@ -104,9 +103,8 @@ class VeranstaltungDozentDatenForm(forms.ModelForm):
         fields = ('anschrift', 'email')
 
 
-class VeranstaltungFreieFragen(forms.ModelForm):
+class VeranstaltungFreieFragen(BestellWizardForm):
     """Definiert die Form für den 5. Schritt des Wizards."""
-    required_css_class = 'required'
 
     class Meta:
         model = Veranstaltung
@@ -125,9 +123,8 @@ class VeranstaltungTutorenForm(forms.Form):
         self.fields["csv_tutoren"].initial = preset_csv
 
 
-class VeranstaltungVeroeffentlichung(forms.ModelForm):
+class VeranstaltungVeroeffentlichung(BestellWizardForm):
     """Definiert die Form für den 7. Schritt des Wizards."""
-    required_css_class = 'required'
 
     class Meta:
         model = Veranstaltung
