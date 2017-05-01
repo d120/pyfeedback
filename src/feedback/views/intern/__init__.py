@@ -246,7 +246,7 @@ def generate_letters(request):
             data['texlog'] = f.read()
         return render(request, 'intern/generate_letters.html', data)
 
-    with open(latexpath + templatename + '.pdf', 'r') as f:
+    with open(latexpath + templatename + '.pdf', 'rb') as f:
         response.write(f.read())
     return response
 
