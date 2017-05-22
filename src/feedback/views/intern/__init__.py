@@ -454,7 +454,7 @@ def import_ergebnisse(request):
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             warnings, errors, vcount, fbcount = parse_ergebnisse(semester,
-                                                                 TextIOWrapper(request.FILES['file'].file, encoding='utf-8'))
+                                                                 TextIOWrapper(request.FILES['file'].file, encoding='ISO-8859-1'))
             if fbcount:
                 messages.success(request,
                     '%u Veranstaltungen mit insgesamt %u Fragebögen wurden erfolgreich importiert.' %
