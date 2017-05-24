@@ -24,8 +24,14 @@ class VeranstaltungEvaluationForm(BestellWizardForm):
         super(VeranstaltungEvaluationForm, self).__init__(*args, **kwargs)
 
         for k, field in list(self.fields.items()):
-            field.required = not(Semester.current().vollerhebung)
+            if not(Semester.current().vollerhebung):
+                field.required = True
 
+    def clean(self):
+        cleaned_data = super().clean()
+        if Semester.current().vollerhebung:
+            cleaned_data['evaluieren'] = True
+        return cleaned_data
 
 class VeranstaltungBasisdatenForm(BestellWizardForm):
     """Definiert die Form für den 2. Schritt des Wizards."""
