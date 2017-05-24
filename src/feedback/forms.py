@@ -6,6 +6,8 @@ from django.forms import widgets
 from feedback.models import Person, Veranstaltung, Kommentar, BarcodeScannEvent
 from django.core.exceptions import ValidationError
 
+from feedback.models import Semester
+
 
 class BestellWizardForm(forms.ModelForm):
     required_css_class = 'required'
@@ -22,7 +24,7 @@ class VeranstaltungEvaluationForm(BestellWizardForm):
         super(VeranstaltungEvaluationForm, self).__init__(*args, **kwargs)
 
         for k, field in list(self.fields.items()):
-            field.required = True
+            field.required = not(Semester.current().vollerhebung)
 
 
 class VeranstaltungBasisdatenForm(BestellWizardForm):
