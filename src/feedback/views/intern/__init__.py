@@ -346,13 +346,11 @@ def sendmail(request):
 
             if 'recipient' in request.POST.keys():
                 data['recipient'] = process_status_post_data_from(request.POST.getlist('recipient'))
+                data['recipient_selected'] = data['recipient']
             elif 'status_values' in request.POST.keys():
                 data['recipient'] = ast.literal_eval(request.POST.get('status_values'))
 
         except (Semester.DoesNotExist, KeyError):
-            return HttpResponseRedirect(reverse('sendmail'))
-
-        if 'recipient' not in request.POST.keys():
             return HttpResponseRedirect(reverse('sendmail'))
 
         data['semester_selected'] = semester
