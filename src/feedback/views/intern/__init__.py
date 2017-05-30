@@ -338,6 +338,16 @@ def sendmail(request):
     data['tutoren_choices'] = tutoren_choices
 
     if request.method == 'POST':
+        if 'uebernehmen' in request.POST:
+            try:
+                vorlage = Mailvorlage.objects.get(id=int(request.POST['vorlage']))
+                data['subject'] = vorlage.subject
+                data['body'] = vorlage.body
+            except (Mailvorlage.DoesNotExist, KeyError, ValueError):
+                return HttpResponseRedirect(reverse('sendmail'))
+            return render(request, 'intern/sendmail.html', data)
+
+
         try:
             semester = Semester.objects.get(semester=request.POST['semester'])
             data['subject'] = request.POST['subject']
@@ -349,6 +359,8 @@ def sendmail(request):
                 data['recipient_selected'] = data['recipient']
             elif 'status_values' in request.POST.keys():
                 data['recipient'] = ast.literal_eval(request.POST.get('status_values'))
+            else:
+                return HttpResponseRedirect(reverse('sendmail'))
 
         except (Semester.DoesNotExist, KeyError):
             return HttpResponseRedirect(reverse('sendmail'))
@@ -359,15 +371,7 @@ def sendmail(request):
         veranstaltungen = get_relevant_veranstaltungen(data['recipient'], semester)
         demo_context, link_suffix_format, link_veranstalter = get_demo_context(request)
 
-        if 'uebernehmen' in request.POST:
-            try:
-                vorlage = Mailvorlage.objects.get(id=int(request.POST['vorlage']))
-                data['subject'] = vorlage.subject
-                data['body'] = vorlage.body
-            except (Mailvorlage.DoesNotExist, KeyError, ValueError):
-                return HttpResponseRedirect(reverse('sendmail'))
-
-        elif 'vorschau' in request.POST:
+        if 'vorschau' in request.POST:
             data['vorschau'] = True
             data['from'] = settings.DEFAULT_FROM_EMAIL
             data['to'] = "Veranstalter von %d Veranstaltungen" % len(veranstaltungen)
