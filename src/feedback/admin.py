@@ -133,7 +133,7 @@ class VeranstaltungAdmin(admin.ModelAdmin):
         """Beschreibt eine Admin-Action für die Option keine Evaluation."""
         form = None
         print(request.POST)
-        if 'apply' not in request.POST:     #Dieser Teil reicht bereits zum ändern aus. In diesem Fall können auch Zeile 146-149 gelöscht werden (Kein Bestätigungsfenster erscheint.
+        if 'apply' in request.POST:     #Dieser Teil reicht bereits zum ändern aus. In diesem Fall können auch Zeile 146-149 gelöscht werden (Kein Bestätigungsfenster erscheint.
             form = self.KeineEvaluationForm(request.POST)
             if form.is_valid():
                 queryset.update(status=Veranstaltung.STATUS_KEINE_EVALUATION_FINAL)
