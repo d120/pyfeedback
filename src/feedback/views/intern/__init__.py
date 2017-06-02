@@ -338,6 +338,7 @@ def sendmail(request):
     data['tutoren_choices'] = tutoren_choices
 
     if request.method == 'POST':
+        
         try:
             semester = Semester.objects.get(semester=request.POST['semester'])
             data['subject'] = request.POST['subject']
@@ -346,30 +347,33 @@ def sendmail(request):
 
             if 'recipient' in request.POST.keys():
                 data['recipient'] = process_status_post_data_from(request.POST.getlist('recipient'))
+                data['recipient_selected'] = data['recipient']
             elif 'status_values' in request.POST.keys():
                 data['recipient'] = ast.literal_eval(request.POST.get('status_values'))
+            elif 'uebernehmen' not in request.POST:
+                return HttpResponseRedirect(reverse('sendmail'))
 
         except (Semester.DoesNotExist, KeyError):
             return HttpResponseRedirect(reverse('sendmail'))
 
-        if 'recipient' not in request.POST.keys():
-            return HttpResponseRedirect(reverse('sendmail'))
-
         data['semester_selected'] = semester
         data['subject_rendered'] = "Evaluation: %s" % data['subject']
-
-        veranstaltungen = get_relevant_veranstaltungen(data['recipient'], semester)
-        demo_context, link_suffix_format, link_veranstalter = get_demo_context(request)
-
+        
         if 'uebernehmen' in request.POST:
             try:
                 vorlage = Mailvorlage.objects.get(id=int(request.POST['vorlage']))
                 data['subject'] = vorlage.subject
                 data['body'] = vorlage.body
+       
             except (Mailvorlage.DoesNotExist, KeyError, ValueError):
                 return HttpResponseRedirect(reverse('sendmail'))
+            return render(request, 'intern/sendmail.html', data)
 
-        elif 'vorschau' in request.POST:
+        veranstaltungen = get_relevant_veranstaltungen(data['recipient'], semester)
+        demo_context, link_suffix_format, link_veranstalter = get_demo_context(request)
+
+        
+        if 'vorschau' in request.POST:
             data['vorschau'] = True
             data['from'] = settings.DEFAULT_FROM_EMAIL
             data['to'] = "Veranstalter von %d Veranstaltungen" % len(veranstaltungen)
@@ -454,7 +458,7 @@ def import_ergebnisse(request):
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             warnings, errors, vcount, fbcount = parse_ergebnisse(semester,
-                                                                 TextIOWrapper(request.FILES['file'].file, encoding='utf-8'))
+                                                                 TextIOWrapper(request.FILES['file'].file, encoding='ISO-8859-1'))
             if fbcount:
                 messages.success(request,
                     '%u Veranstaltungen mit insgesamt %u Fragebögen wurden erfolgreich importiert.' %

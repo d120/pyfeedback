@@ -440,9 +440,7 @@ class SendmailTest(NonSuTestMixin, TestCase):
 
         response = self.client.post(self.path, post_data, **{'REMOTE_USER': 'super'})
 
-        self.assertEqual(response.status_code, 302)
-        self.assertTrue(response['Location'].endswith('/intern/sendmail/'))
-
+        self.assertEqual(response.status_code, 200)
 
         # ----- Vorlage übernehmen; Vorlage ist angegeben ----- #
         post_data['recipient'] = recipient

@@ -24,8 +24,9 @@
         <label for="selectRecipient" >
             Mail senden an Veranstalter der Veranstaltung mit Bestellstatus:
             <select multiple class="chosen-select" style="width: 175px;" data-placeholder="Wähle einen Status..." id="selectRecipient" name="recipient">
+		    {{recipient_selected}}
                 {% for choice in veranstaltung_status_choices %}
-                    <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                    <option {% if recipient_selected and choice.0 in recipient_selected %} selected {% endif %}value="{{ choice.0 }}">{{ choice.1 }}</option>
                 {% endfor %}
             </select>
         </label>
