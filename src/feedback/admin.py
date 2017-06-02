@@ -133,15 +133,16 @@ class VeranstaltungAdmin(admin.ModelAdmin):
         """Beschreibt eine Admin-Action für die Option keine Evaluation."""
         form = None
 
-        if 'apply' in request.POST:     #Dieser Teil reicht bereits zum ändern aus. In diesem Fall können auch Zeile 146-149 gelöscht werden (Kein Bestätigungsfenster erscheint.
+        if 'apply' in request.POST:
             queryset.update(status=Veranstaltung.STATUS_KEINE_EVALUATION_FINAL)
             queryset.update(evaluieren=False)
+
             for veranstaltung in queryset:
                 veranstaltung.log(request.user)
 
             self.message_user(request, "Keine Evaluation erfolgreich gesetzt.")
             return HttpResponseRedirect(request.get_full_path())
-            #nach dem return landet Python in status_aendern_action
+
         if not form:
             form = self.KeineEvaluationForm(initial={'_selected_action': request.POST.getlist(admin.ACTION_CHECKBOX_NAME)})
         return render(request, 'admin/keine_evaluation.html', {'veranstaltungen': queryset, 'status':form, })
