@@ -105,10 +105,8 @@ class VeranstaltungAdmin(admin.ModelAdmin):
     def status_aendern_action(self, request, queryset):
         """Beschreibt eine Admin-Action für die Statusänderung."""
         form = None
-
         if 'apply' in request.POST:
             form = self.StatusAendernForm(request.POST)
-
             if form.is_valid():
                 status = form.cleaned_data['status']
 
@@ -121,31 +119,32 @@ class VeranstaltungAdmin(admin.ModelAdmin):
 
         if not form:
             form = self.StatusAendernForm(initial={'_selected_action': request.POST.getlist(admin.ACTION_CHECKBOX_NAME)})
-
         return render(request, 'admin/status_aendern.html', {'veranstaltungen': queryset, 'status': form, })
 
     status_aendern_action.short_description = "Ändere den Status einer Veranstaltung"
 
     class KeineEvaluationForm(forms.Form):
-        _selected_action = forms.CharField(widget=forms.MultipleHiddenInput)
+        _selected_action = None
 
     def keine_evaluation_action(self, request, queryset):
         """Beschreibt eine Admin-Action für die Option keine Evaluation."""
         form = None
+        print(request.POST)
+        if 'apply' not in request.POST:     #Dieser Teil reicht bereits zum ändern aus. In diesem Fall können auch Zeile 146-149 gelöscht werden (Kein Bestätigungsfenster erscheint.
+            form = self.KeineEvaluationForm(request.POST)
+            if form.is_valid():
+                queryset.update(status=Veranstaltung.STATUS_KEINE_EVALUATION_FINAL)
+                queryset.update(evaluieren=False)
+                for veranstaltung in queryset:
+                    veranstaltung.log(request.user)
 
-        if 'apply' in request.POST:
-            queryset.update(status=Veranstaltung.STATUS_KEINE_EVALUATION_FINAL)
-            queryset.update(evaluieren=False)
-
-            for veranstaltung in queryset:
-                veranstaltung.log(request.user)
-
-            self.message_user(request, "Veranstaltung wurde auf \"Nicht evaluieren\" gesetzt")
-            return HttpResponseRedirect(request.get_full_path())
+                self.message_user(request, "Keine Evaluation erfolgreich gesetzt.")
+                return HttpResponseRedirect(request.get_full_path())
 
         if not form:
             form = self.KeineEvaluationForm(initial={'_selected_action': request.POST.getlist(admin.ACTION_CHECKBOX_NAME)})
-        return render(request, 'admin/keine_evaluation.html', {'veranstaltungen': queryset, 'status':form, })
+            #nach dem return landet Python in status_aendern_action
+        return render(request, 'admin/keine_evaluation.html', {'veranstaltungen': queryset, 'status': form, })
 
     keine_evaluation_action.short_description = "Keine Evaluation für diese Veranstaltung"
 

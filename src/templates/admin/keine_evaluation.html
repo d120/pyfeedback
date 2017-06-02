@@ -5,11 +5,11 @@
 <form action="" method="post">
     {% csrf_token %}
     {{ status }}
-    <p>Es wird für folgende Veranstaltunge der Status auf "Nicht evaluieren" geändert:</p>
+    <p>Es wird für folgende Veranstaltunge der Status auf keine Evaluation geändert:</p>
 
     <ul>{{ veranstaltungen|unordered_list }}</ul>
 
-    <input type="hidden" name="action" value="keine_evaluation_action" />
+    <input type="hidden" name="action" value="status_aendern_action" />
     <input type="submit" name="apply" value="Übernehmen" />
 </form>
 
