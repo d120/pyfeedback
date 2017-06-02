@@ -105,8 +105,10 @@ class VeranstaltungAdmin(admin.ModelAdmin):
     def status_aendern_action(self, request, queryset):
         """Beschreibt eine Admin-Action für die Statusänderung."""
         form = None
+
         if 'apply' in request.POST:
             form = self.StatusAendernForm(request.POST)
+
             if form.is_valid():
                 status = form.cleaned_data['status']
 
@@ -119,6 +121,7 @@ class VeranstaltungAdmin(admin.ModelAdmin):
 
         if not form:
             form = self.StatusAendernForm(initial={'_selected_action': request.POST.getlist(admin.ACTION_CHECKBOX_NAME)})
+
         return render(request, 'admin/status_aendern.html', {'veranstaltungen': queryset, 'status': form, })
 
     status_aendern_action.short_description = "Ändere den Status einer Veranstaltung"
