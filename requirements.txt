@@ -1,5 +1,5 @@
 coverage==4.4.1
-Django==1.11.1
+Django==1.11.2
 django-debug-toolbar==1.8
 docutils==0.13.1
 sqlparse==0.2.3
