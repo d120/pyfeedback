@@ -140,7 +140,7 @@ class VeranstaltungAdmin(admin.ModelAdmin):
             for veranstaltung in queryset:
                 veranstaltung.log(request.user)
 
-            self.message_user(request, "Keine Evaluation erfolgreich gesetzt.")
+            self.message_user(request, "Veranstaltung wurde auf \"Nicht evaluieren\" gesetzt")
             return HttpResponseRedirect(request.get_full_path())
 
         if not form:
