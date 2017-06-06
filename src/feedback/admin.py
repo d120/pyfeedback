@@ -125,7 +125,31 @@ class VeranstaltungAdmin(admin.ModelAdmin):
         return render(request, 'admin/status_aendern.html', {'veranstaltungen': queryset, 'status': form, })
 
     status_aendern_action.short_description = "Ändere den Status einer Veranstaltung"
-    actions = [status_aendern_action]
+
+    class KeineEvaluationForm(forms.Form):
+        _selected_action = forms.CharField(widget=forms.MultipleHiddenInput)
+
+    def keine_evaluation_action(self, request, queryset):
+        """Beschreibt eine Admin-Action für die Option keine Evaluation."""
+        form = None
+
+        if 'apply' in request.POST:
+            queryset.update(status=Veranstaltung.STATUS_KEINE_EVALUATION_FINAL)
+            queryset.update(evaluieren=False)
+
+            for veranstaltung in queryset:
+                veranstaltung.log(request.user)
+
+            self.message_user(request, "Veranstaltung wurde auf \"Nicht evaluieren\" gesetzt")
+            return HttpResponseRedirect(request.get_full_path())
+
+        if not form:
+            form = self.KeineEvaluationForm(initial={'_selected_action': request.POST.getlist(admin.ACTION_CHECKBOX_NAME)})
+        return render(request, 'admin/keine_evaluation.html', {'veranstaltungen': queryset, 'status':form, })
+
+    keine_evaluation_action.short_description = "Keine Evaluation für diese Veranstaltung"
+
+    actions = [status_aendern_action,keine_evaluation_action]
 
 
 class SemesterAdmin(admin.ModelAdmin):
