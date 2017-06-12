@@ -139,14 +139,14 @@ class VeranstaltungAdmin(admin.ModelAdmin):
             for veranstaltung in queryset:
                 veranstaltung.log(request.user)
 
-            self.message_user(request, "Keine Evaluation erfolgreich gesetzt.")
+            self.message_user(request, "Veranstaltungen wurden erfolgreich auf Keine Evaluation gesetzt.")
             return HttpResponseRedirect(request.get_full_path())
             #nach dem return landet Python in status_aendern_action
         if not form:
             form = self.KeineEvaluationForm(initial={'_selected_action': request.POST.getlist(admin.ACTION_CHECKBOX_NAME)})
         return render(request, 'admin/keine_evaluation.html', {'veranstaltungen': queryset, 'status':form, })
 
-    keine_evaluation_action.short_description = "Keine Evaluation für diese Veranstaltung"
+    keine_evaluation_action.short_description = "Keine Evaluation für diese Veranstaltung(en)"
 
     actions = [status_aendern_action,keine_evaluation_action]
 
