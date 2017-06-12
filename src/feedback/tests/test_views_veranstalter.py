@@ -29,7 +29,7 @@ class VeranstalterLoginTest(TestCase):
         
         response = self.client.get('/veranstalter/login/', {'vid': 123, 'token': self.v.access_token})
         self.assertEqual(response.templates[0].name, 'veranstalter/login_failed.html')
-    
+
     def test_ok(self):
         response = self.client.get('/veranstalter/login/', {'vid': self.v.id,
                                                             'token': self.v.access_token})
@@ -153,6 +153,13 @@ class VeranstalterIndexTest(TestCase):
         self.assertEqual(self.v.ergebnis_empfaenger.count(), 2)
         self.assertEqual(self.v.sprache, "de")
 
+    def test_missing_sessionid(self):
+        c = login_veranstalter(self.v)
+        del c.cookies['sessionid']
+        response = c.post('/veranstalter/bestellung', {'evaluation-evaluieren': True,
+                                                        "veranstalter_wizard-current_step": "evaluation"})
+        self.assertEqual(response.status_code, 404)
+    
     def test_post_keine_evaluation(self):
         Einstellung.objects.create(name='bestellung_erlaubt', wert='1')
         c = login_veranstalter(self.v)

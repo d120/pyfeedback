@@ -4,7 +4,7 @@ from django import forms
 from django.conf import settings
 from django.views.decorators.http import require_safe
 from django.contrib import auth
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse
 from django.shortcuts import render
 from django.shortcuts import render_to_response
@@ -183,6 +183,8 @@ class VeranstalterWizard(SessionWizardView):
 
     def get_instance(self):
         if self.cached_obj.get("veranstaltung_obj", None) is None:
+            if 'vid' not in self.request.session:
+                raise Http404('Ihre Session ist abgelaufen. Bitte loggen Sie sich erneut über den Link ein.')
             self.cached_obj["veranstaltung_obj"] = Veranstaltung.objects.\
                 select_related().filter(id=self.request.session['vid'])[0]
         return self.cached_obj["veranstaltung_obj"]
