@@ -7,8 +7,8 @@ if [ "$1" = "--prod" ]; then
     export DJANGO_SETTINGS_MODULE=pyophase.settings_production
 fi
 
-virtualenv -p python3 virtualenv
-source virtualenv/bin/activate
+virtualenv -p python3 ../virtualenv
+source ../virtualenv/bin/activate
 pip install -r requirements.txt
 
 if [ "$2" == "--pass" ]; then
