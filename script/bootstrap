@@ -4,7 +4,7 @@ set -e
 
 # set environment variable when we want to update a production instance
 if [ "$1" = "--prod" ]; then
-    export DJANGO_SETTINGS_MODULE=pyophase.settings_production
+    export DJANGO_SETTINGS_MODULE=settings_production
 fi
 
 virtualenv -p python3 ../virtualenv
