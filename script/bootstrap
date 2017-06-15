@@ -10,6 +10,7 @@ fi
 virtualenv -p python3 ../virtualenv
 source ../virtualenv/bin/activate
 pip install -r requirements.txt
+./src/manage.py migrate
 
 if [ "$2" == "--pass" ]; then
     ./src/manage.py shell -c "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', '"$3"')"
