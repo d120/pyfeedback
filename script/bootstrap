@@ -1,0 +1,24 @@
+#!/bin/bash
+
+set -e
+
+# set environment variable when we want to update a production instance
+if [ "$1" = "--prod" ]; then
+    export DJANGO_SETTINGS_MODULE=pyophase.settings_production
+fi
+
+virtualenv -p python3 virtualenv
+source virtualenv/bin/activate
+pip install -r requirements.txt
+
+if [ "$2" == "--pass" ]; then
+    ./src/manage.py shell -c "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', '"$3"')"
+else
+    echo "Creating super user, enter credentials:"
+    ./src/manage.py createsuperuser
+fi
+
+deactivate
+
+echo
+echo "environment successfully bootstrapped. Start a server with script/server"
