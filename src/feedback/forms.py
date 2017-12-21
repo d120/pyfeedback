@@ -18,10 +18,10 @@ class VeranstaltungEvaluationForm(BestellWizardForm):
     class Meta:
         model = Veranstaltung
         fields = ('evaluieren',)
-        widgets = {'evaluieren': forms.RadioSelect}
+        widgets = {'evaluieren': forms.RadioSelect()}
 
     def __init__(self, *args, **kwargs):
-        super(VeranstaltungEvaluationForm, self).__init__(*args, **kwargs)
+        super(VeranstaltungEvaluationForm, self).__init__(*args, **dict(kwargs, initial={'evaluieren': 'False'}))
 
         for k, field in list(self.fields.items()):
             if not(Semester.current().vollerhebung):

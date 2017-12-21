@@ -2,6 +2,19 @@
 
 {% block feedback_veranstalter_form %}
     <h3>Möchten Sie ihre Veranstaltung evaluieren?</h3>
+    <h2>Datenschutzrechtliche Einwilligungserklärung</h2>
+    <div style="border: 1px solid red; padding: 10px; border-radius: 5px;"> 
+	    <p style='font-size: 1.3em;'>Ich bin einverstanden, dass meine Daten im Zusammenhang mit der Lehrevaluation vom Fachbereich Informatik und der Fachschaft Informatik erhoben, verarbeitet und genutzt werden, und für
+folgende Zwecke verwendet werden: interne Evaluation des Fachbereichs und der Fachschaft, Rückmeldungen zur Evaluation (z.B. Vergabe von Lehrpreisen), sowie Veröffentlichung der
+numerischen Ergebnisse im Intranet der TU Darmstadt.
+<br>
+<br>
+Die Erhebung, Verarbeitung und Nutzung meiner Daten erfolgt auf freiwilliger Basis. Ich kann mein Einverständnis ohne für mich nachteilige Folgen verweigern bzw. jederzeit mit Wirkung für
+die Zukunft widerrufen. Meine Widerrufserklärung richte ich an das Studiendekanat des Fachbereichs Informatik. Im Fall des Widerrufs werden mit dem Zugang meiner Widerrufserklärung meine
+Daten bei den entsprechenden Stellen gelöscht.</p>
+    </div>
+
+
     {% if veranstaltung.semester.vollerhebung %}
         <h2>Information zur Vollerhebung</h2>
         <p style="text-align: justify">
