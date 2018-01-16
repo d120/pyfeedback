@@ -185,7 +185,7 @@ class ExportVeranstaltungenTest(NonSuTestMixin, TestCase):
                                 <external_id>lv-1</external_id>
                             </Lecture>
                             <Survey key="su-1">
-                                <survey_form>FB20Vv1e</survey_form>
+                                <survey_form>FB20Vv3e</survey_form>
                                 <survey_period>SS11</survey_period>
                                 <survey_type>coversheet</survey_type>
                                 <survey_verify>0</survey_verify>
@@ -203,7 +203,7 @@ class ExportVeranstaltungenTest(NonSuTestMixin, TestCase):
                                 <external_id>lv-2</external_id>
                             </Lecture>
                             <Survey key="su-2">
-                                <survey_form>FB20Vv1</survey_form>
+                                <survey_form>FB20Vv3</survey_form>
                                 <survey_period>SS11</survey_period>
                                 <survey_type>coversheet</survey_type>
                                 <survey_verify>0</survey_verify>
@@ -232,7 +232,7 @@ class ExportVeranstaltungenTest(NonSuTestMixin, TestCase):
                         <external_id>lv-2</external_id>
                         </Lecture>
                         <Survey key="su-2-u">
-                        <survey_form>FB20Üv1</survey_form>
+                        <survey_form>FB20Üv2</survey_form>
                         <survey_period>SS11</survey_period>
                         <survey_type>coversheet</survey_type>
                         <survey_verify>0</survey_verify>
@@ -276,7 +276,7 @@ class ExportVeranstaltungenTest(NonSuTestMixin, TestCase):
         <type>Vorlesung</type>\n\t\t<turnout>42</turnout>\n\t\t<p_o_study>Informatik</p_o_study>\n\t\t
         <survey>\n\t\t\t\n\t\t\t<EvaSysRef type="Survey" key="su-1" />\n\t\t\t\n\t\t</survey>\n\t\t
         <external_id>lv-1</external_id>\n\t</Lecture>\n\n\t\n\t<Survey key="su-1">\n\t\t
-        <survey_form>FB20Vv1e</survey_form>\n\t\t<survey_period>SS11</survey_period>\n\t\t
+        <survey_form>FB20Vv3e</survey_form>\n\t\t<survey_period>SS11</survey_period>\n\t\t
         <survey_type>coversheet</survey_type>\n\t\t<survey_verify>0</survey_verify>\n\t</Survey>\n\t\n\t\n\t
         <Person key="pe-1">\n\t\t<firstname>Je</firstname>\n\t\t<lastname>Mand</lastname>\n\t\t
         <email>je@ma.nd</email>\n\t\t<gender>f</gender>\n\t\t<external_id>pe-1</external_id>\n\t
