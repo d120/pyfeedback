@@ -70,11 +70,12 @@ class VeranstaltungBasisdatenForm(BestellWizardForm):
 
         # Wenn Evaluation oder Vollerhebung, dann sind alle anderen Felder notwendig
         for k, field in list(self.fields.items()):
-            field.required = True
+            if k != 'digitale_eval':
+                field.required = True
 
     class Meta:
         model = Veranstaltung
-        fields = ('typ', 'anzahl', 'sprache', 'verantwortlich', 'ergebnis_empfaenger', 'auswertungstermin')
+        fields = ('typ', 'anzahl', 'sprache', 'verantwortlich', 'digitale_eval','ergebnis_empfaenger', 'auswertungstermin')
         widgets = {'ergebnis_empfaenger': forms.CheckboxSelectMultiple,
                    'auswertungstermin': forms.SelectDateWidget}
 
