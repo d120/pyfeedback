@@ -77,13 +77,13 @@ class VeranstaltungAdmin(admin.ModelAdmin):
                             ['typ', 'name', 'semester', 'status', 'lv_nr', 'grundstudium', 'evaluieren',
                              'veranstalter', 'link_veranstalter',
                              ]}),
-        ('Bestellung', {'fields': ['sprache', 'anzahl', 'verantwortlich', 'ergebnis_empfaenger', 'primaerdozent',
+        ('Bestellung', {'fields': ['sprache', 'anzahl', 'digitale_eval', 'verantwortlich', 'ergebnis_empfaenger', 'primaerdozent',
                                    'auswertungstermin', 'freiefrage1', 'freiefrage2', 'kleingruppen', ]}),
     ]
     list_display = ('typ', 'name', 'semester', 'grundstudium', 'evaluieren', 'anzahl',
-                    'sprache', 'status', 'veranstalter_list')
+                    'sprache', 'status', 'veranstalter_list', 'digitale_eval')
     list_display_links = ['name']
-    list_filter = ('typ', 'semester', 'status', 'grundstudium', 'evaluieren', 'sprache')
+    list_filter = ('typ', 'semester', 'status', 'grundstudium', 'evaluieren', 'sprache', 'digitale_eval')
     search_fields = ['name']
     filter_horizontal = ('veranstalter', 'ergebnis_empfaenger')  # @see http://stackoverflow.com/a/5386871
     readonly_fields = ('link_veranstalter',)
