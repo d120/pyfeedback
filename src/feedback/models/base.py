@@ -114,28 +114,10 @@ class Semester(models.Model):
         except OperationalError:
             return None
 
-
 class Fachgebiet(models.Model):
     """Repräsentiert ein Fachgebiet für das FB20"""
     name = models.CharField(max_length=80)
     kuerzel = models.CharField(max_length=10)
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = 'Fachgebiet'
-        verbose_name_plural = 'Fachgebiete'
-        app_label = 'feedback'
-
-
-class FachgebietEmail(models.Model):
-    """Repräsentiert die E-Mail Domänen für die jeweiligen Fachgebiete des FBs 20."""
-    fachgebiet = models.ForeignKey(Fachgebiet, related_name='fachgebiet', on_delete=models.CASCADE)
-    email_suffix = models.CharField(max_length=150,
-                                    help_text="Hier soll der Domainname einer Email-Adresse eines Fachgebiets stehen.",
-                                    null=True)
-    email_sekretaerin = models.EmailField(blank=True)
 
     @staticmethod
     def get_fachgebiet_from_email(email):
@@ -146,15 +128,47 @@ class FachgebietEmail(models.Model):
         """
         try:
             suffix = email.split('@')[-1]
-            fg_id = FachgebietEmail.objects.get(email_suffix=suffix).fachgebiet_id
-            return Fachgebiet.objects.get(pk=fg_id)
+            return EmailEndung.objects.get(domain=suffix).fachgebiet
         except Exception:
             return None
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Fachgebiet'
+        verbose_name_plural = 'Fachgebiete'
+        app_label = 'feedback'
+
+
+class EmailEndung(models.Model):
+    """Repräsentiert alle Domains die für E-Mails von Veranstaltern verwendet werden"""
+    fachgebiet = models.ForeignKey(Fachgebiet,
+                                           blank=True,
+                                           help_text="Hier soll der Domainname einer Email-Adresse eines Fachgebiets stehen.",
+                                           on_delete=models.CASCADE)
+    domain = models.CharField(max_length=150,
+                                    null=True)
+
+    def __str__(self):
+        return self.domain
+
+    class Meta:
+        verbose_name = 'Fachgebiet Emailendung'
+        verbose_name_plural = 'Fachgebiet Emailendungen'
+        app_label = 'feedback'
+
+
+class FachgebietEmail(models.Model):
+    """Repräsentiert die E-Mail Domänen für die jeweiligen Fachgebiete des FBs 20."""
+    fachgebiet = models.ForeignKey(Fachgebiet, related_name='fachgebiet', on_delete=models.CASCADE)
+    email_sekretaerin = models.EmailField(blank=True)
 
     class Meta:
         verbose_name = 'Fachgebiet Email'
         verbose_name_plural = 'Fachgebiet Emails'
         app_label = 'feedback'
+
 
 
 class Person(models.Model):

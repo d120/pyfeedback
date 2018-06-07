@@ -8,7 +8,7 @@ from django.utils.timezone import now
 from freezegun import freeze_time
 
 from feedback.models import get_model, Semester, Person, Veranstaltung, Einstellung, Mailvorlage
-from feedback.models.base import AlternativVorname, Log, BarcodeScanner, Fachgebiet, FachgebietEmail, BarcodeAllowedState
+from feedback.models.base import AlternativVorname, Log, BarcodeScanner, Fachgebiet, FachgebietEmail, BarcodeAllowedState, EmailEndung
 from feedback.models import past_semester_orders
 from feedback.models import ImportPerson, ImportCategory, ImportVeranstaltung, Kommentar
 from feedback.models import Fragebogen2008, Fragebogen2009, Ergebnis2008, Ergebnis2009
@@ -150,7 +150,9 @@ class FachgebietEmailTest(TestCase):
         User.objects.create_superuser('supers', None, 'pw')
 
         self.fg = Fachgebiet.objects.create(name="Software Technology Group", kuerzel="STG")
-        self.fge = FachgebietEmail.objects.create(fachgebiet=self.fg, email_suffix="stg.tu-darmstadt.de",
+        self.fg.save()
+        self.suffix = EmailEndung.objects.create(fachgebiet=self.fg, domain="stg.tu-darmstadt.de")
+        self.fge = FachgebietEmail.objects.create(fachgebiet=self.fg,
                                                   email_sekretaerin="sek@stg.tu-darmstadt.de")
 
         self.fg1 = Fachgebiet.objects.create(name="FG1", kuerzel="FG1")
@@ -161,21 +163,21 @@ class FachgebietEmailTest(TestCase):
     def test_fachgebiet(self):
         self.assertEqual(self.fge.fachgebiet_id, self.fg.id)
 
-    def test_email_suffix(self):
-        self.assertEqual(self.fge.email_suffix, "stg.tu-darmstadt.de")
-
     def test_email_sekretaerin(self):
         self.assertEqual(self.fge.email_sekretaerin, "sek@stg.tu-darmstadt.de")
 
     def test_get_fachgebiet_from_email(self):
-        fg = FachgebietEmail.get_fachgebiet_from_email(self.p.email)
+        fg = Fachgebiet.get_fachgebiet_from_email(self.p.email)
         self.assertEqual(self.fg, fg)
-        self.assertRaises(Exception, FachgebietEmail.get_fachgebiet_from_email(''))
+        self.assertRaises(Exception, Fachgebiet.get_fachgebiet_from_email(''))
 
     def test_admin_assign_person(self):
         self.assertTrue(self.client.login(username='supers', password='pw'))
 
+
         update_url = reverse("admin:feedback_fachgebiet_change", args=(self.fg1.id,))
+        end = EmailEndung(fachgebiet=self.fg1, domain='fg1.de')
+        end.save()
         data = {
             'name': self.fg1.name,
             'kuerzel': self.fg1.kuerzel,
@@ -183,8 +185,14 @@ class FachgebietEmailTest(TestCase):
             'fachgebiet-INITIAL_FORMS': 0,
             'fachgebiet-MIN_NUM_FORMS': 0,
             'fachgebiet-MAX_NUM_FORMS': 1000,
+            'emailendung_set-0-domain': 'fg1.de',
+            'emailendung_set-0-id': 1,
+            'emailendung_set-0-fachgebiet': self.fg1.id,
             'fachgebiet-0-fachgebiet': self.fg1.id,
-            'fachgebiet-0-email_suffix': 'fg1.de',
+            'emailendung_set-TOTAL_FORMS': 1,
+            'emailendung_set-INITIAL_FORMS': 1,
+            'emailendung_set-MIN_NUM_FORMS': 0,
+            'emailendung_set-MAX_NUM_FORMS': 1000,
             '_save': 'Sichern'
         }
 
@@ -212,7 +220,7 @@ class PersonTest(TestCase):
         self.v2.veranstalter.add(self.p4)
 
         self.fachgebiet1 = Fachgebiet.objects.create(name="Fachgebiet1", kuerzel="FB1")
-        FachgebietEmail.objects.create(fachgebiet=self.fachgebiet1, email_suffix="fb1.tud.de")
+        FachgebietEmail.objects.create(fachgebiet=self.fachgebiet1)
 
         self.fb_p1 = Person.objects.create(vorname="Max1", nachname="Mustername",
                                            email="max1mustermann@fb1.tud.de")

@@ -6,7 +6,8 @@ from django.http.response import HttpResponseRedirect
 from django.shortcuts import render
 
 from feedback.models import Person, Veranstaltung, Semester, Einstellung, \
-    Mailvorlage, Kommentar, Tutor, BarcodeScanner, BarcodeScannEvent, BarcodeAllowedState
+    Mailvorlage, Kommentar, Tutor, BarcodeScanner, BarcodeScannEvent, BarcodeAllowedState, \
+    EmailEndung
 from feedback.models.base import Log, Fachgebiet, FachgebietEmail
 
 
@@ -26,7 +27,7 @@ class PersonAdmin(admin.ModelAdmin):
         suggestion_list = []
 
         for p in queryset:
-            proposed_fachgebiet = FachgebietEmail.get_fachgebiet_from_email(p.email)
+            proposed_fachgebiet = Fachgebiet.get_fachgebiet_from_email(p.email)
             suggestion_list.append((p, proposed_fachgebiet))
 
         if any(s in request.POST for s in ('apply', 'save')):
@@ -220,37 +221,35 @@ class FachgebietEmailAdminInline(admin.TabularInline):
     model = FachgebietEmail
     extra = 1
 
+class FachgebietDomainAdminInline(admin.TabularInline):
+    model = EmailEndung
+    extra = 1
 
 class FachgebietAdmin(admin.ModelAdmin):
     """Admin View für Fachgebiet"""
     list_display = ('name', 'kuerzel')
     list_display_links = ('name',)
-    inlines = (FachgebietEmailAdminInline,)
+    inlines = (FachgebietEmailAdminInline,FachgebietDomainAdminInline,)
+
 
     def save_related(self, request, form, formsets, change):
-        super(FachgebietAdmin, self).save_related(request, form, formsets, change)
-
+        super().save_related(request, form, formsets, change)
         if change:
             count_added = 0
-            for formset in formsets:
-                if formset.extra_forms:
-                    for new_forms in formset.extra_forms:
-                        if new_forms.instance:
-                            fachgebiet_email_instance = new_forms.instance
-                            fachgebiet_suffix = fachgebiet_email_instance.email_suffix
-                            if fachgebiet_suffix:
-                                persons = Person.objects.filter(fachgebiet=None)
-
-                                for person in persons:
-                                    proposed_fachgebiet = FachgebietEmail.get_fachgebiet_from_email(person.email)
-                                    if proposed_fachgebiet \
-                                            and proposed_fachgebiet.id == fachgebiet_email_instance.fachgebiet_id:
-                                        person.fachgebiet = proposed_fachgebiet
-                                        person.save()
-                                        count_added += 1
-
+            if EmailEndung.objects.filter(fachgebiet=form.instance).count() != 0:
+                persons = Person.objects.filter(fachgebiet=None)
+                for person in persons:
+                    if not person.email:
+                        continue
+                    proposed_fachgebiet = Fachgebiet.get_fachgebiet_from_email(person.email)
+                    if proposed_fachgebiet \
+                            and proposed_fachgebiet.id == form.instance.id:
+                        person.fachgebiet = proposed_fachgebiet
+                        person.save()
+                        count_added += 1
             if count_added > 0:
-                self.message_user(request, "Dieser Fachgebiet wurde {0} Personen zugeordnet".format(count_added))
+                self.message_user(request, "Dieses Fachgebiet wurde {0} Personen zugeordnet".format(count_added))
+
 
 admin.site.register(Person, PersonAdmin)
 admin.site.register(Veranstaltung, VeranstaltungAdmin)
@@ -262,3 +261,4 @@ admin.site.register(Tutor, TutorAdmin)
 admin.site.register(BarcodeScannEvent, BarcodeScannEventAdmin)
 admin.site.register(BarcodeScanner, BarcodeScannerAdmin)
 admin.site.register(Fachgebiet, FachgebietAdmin)
+admin.site.register(EmailEndung)

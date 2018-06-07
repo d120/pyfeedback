@@ -14,7 +14,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 
 from feedback.parser import vv as vv_parser
 from feedback.models import Veranstaltung, Person, Semester, ImportCategory, ImportVeranstaltung
-from feedback.models.base import FachgebietEmail
+from feedback.models.base import Fachgebiet
 from feedback.forms import PersonForm, UploadFileForm
 
 
@@ -136,7 +136,7 @@ class PersonFormUpdateView(UserPassesTestMixin, UpdateView):
         p = form.save(commit=False)
         p.geschlecht = form.cleaned_data['geschlecht']
         p.email = form.cleaned_data['email']
-        p.fachgebiet = FachgebietEmail.get_fachgebiet_from_email(p.email)
+        p.fachgebiet = Fachgebiet.get_fachgebiet_from_email(p.email)
         p.save()
         messages.success(self.request, 'Benutzerdatensätze wurden erfolgreich gespeichert.')
 

@@ -11,7 +11,7 @@ from django.urls import reverse
 
 from feedback.forms import UploadFileForm
 from feedback.models import Semester, Person, Veranstaltung, Fragebogen2009, Mailvorlage, Einstellung, \
-    Fachgebiet, FachgebietEmail, Tutor
+    Fachgebiet, FachgebietEmail, Tutor, EmailEndung
 from feedback.tests.tools import NonSuTestMixin, get_veranstaltung
 
 from feedback import tests
@@ -398,8 +398,10 @@ class SendmailTest(NonSuTestMixin, TestCase):
 
         fg1 = Fachgebiet.objects.create(name="Fachgebiet1", kuerzel="FB1")
         fg2 = Fachgebiet.objects.create(name="Fachgebiet2", kuerzel="FB2")
-        FachgebietEmail.objects.create(fachgebiet=fg1, email_suffix="fg1.com", email_sekretaerin="sek@fg1.com")
-        FachgebietEmail.objects.create(fachgebiet=fg2, email_suffix="fg2.com", email_sekretaerin="sek@fg2.com")
+        suf1 = EmailEndung.objects.create(fachgebiet=fg1, domain="fg1.com")
+        suf2 = EmailEndung.objects.create(fachgebiet=fg2, domain="fg2.com")
+        FachgebietEmail.objects.create(fachgebiet=fg1, email_sekretaerin="sek@fg1.com")
+        FachgebietEmail.objects.create(fachgebiet=fg2, email_sekretaerin="sek@fg2.com")
 
         p1 = Person.objects.create(vorname='Peter', nachname='Pan', email='peter@fg1.com', fachgebiet=fg1)
         p2 = Person.objects.create(vorname='Pan', nachname='Peter', email='pan@fg2.com', fachgebiet=fg2)
