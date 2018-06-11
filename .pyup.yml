@@ -1,0 +1,2 @@
+# Temporary fix until the upgrade to django 2.0 is possible
+update: insecure
