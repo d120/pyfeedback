@@ -529,6 +529,8 @@ class Veranstaltung(models.Model):
         result = 'coversheet'  # Deckblatt verfahren
         if self.typ in ('se', 'pr'):
             result = 'hardcopy'  # Selbstdruck verfahren
+        if self.digitale_eval:
+            result = 'online'
         return result
 
     def get_barcode_number(self, tutorgruppe=0):

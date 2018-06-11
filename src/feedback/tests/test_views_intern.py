@@ -241,6 +241,54 @@ class ExportVeranstaltungenTest(NonSuTestMixin, TestCase):
                         '''
         self.checkXMLEqual(test_xml, response.content.decode('utf-8'))
 
+        # check whether digital evaluation is correctly handled
+        v1.digitale_eval = True
+        v1.save()
+
+        response = self.client.post(path, {'semester': s.semester}, **{'REMOTE_USER': 'super'})
+        self.assertRegex(response['Content-Disposition'], r'^attachment; filename="[a-zA-Z0-9_-]+\.xml"$')
+        test_xml = '''<?xml version="1.0" encoding="UTF-8"?>
+                        <EvaSys xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://evaluation.tu-darmstadt.de/evasys/doc/xml-import.xsd">
+                            <Lecture key="lv-1">
+                                <dozs></dozs>
+                                <name>Stoning I</name>
+                                <orgroot>FB 20</orgroot>
+                                <short>123v-SS11</short>
+                                <period>SS11</period>
+                                <type>Vorlesung</type>
+                                <turnout>42</turnout>
+                                <p_o_study>Informatik</p_o_study>
+                                <survey><EvaSysRef type="Survey" key="su-1" /></survey>
+                                <external_id>lv-1</external_id>
+                            </Lecture>
+                            <Survey key="su-1">
+                                <survey_form>FB20Vv3e</survey_form>
+                                <survey_period>SS11</survey_period>
+                                <survey_type>online</survey_type>
+                                <survey_verify>0</survey_verify>
+                            </Survey>
+                            <Lecture key="lv-2">
+                                <dozs></dozs>
+                                <name>Stoning I</name>
+                                <orgroot>FB 20</orgroot>
+                                <short>123vu-SS11</short>
+                                <period>SS11</period>
+                                <type>Vorlesung + Übung</type>
+                                <turnout>23</turnout>
+                                <p_o_study>Informatik</p_o_study>
+                                <survey><EvaSysRef type="Survey" key="su-2" /></survey>
+                                <external_id>lv-2</external_id>
+                            </Lecture>
+                            <Survey key="su-2">
+                                <survey_form>FB20Vv3</survey_form>
+                                <survey_period>SS11</survey_period>
+                                <survey_type>coversheet</survey_type>
+                                <survey_verify>0</survey_verify>
+                            </Survey>
+                        </EvaSys>'''
+        self.checkXMLEqual(test_xml, response.content.decode('utf-8'))
+
+
     def test_export_veranstaltungen_post_primaerdozent(self):
         path = '/intern/export_veranstaltungen/'
         self.client.login(username='supers', password='pw')
