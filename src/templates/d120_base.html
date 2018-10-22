@@ -33,32 +33,12 @@
 
 <body>
 
-	{% include 'header.html' %}
+	{% include 'd120/header.html' %}
 	<div class="container">
 		<div id="main" class="row">
-
 			<div class="col-lg-3 col-md-4 col-sm-5">
-				<ul id="sidebar" class="nav sidebar-nav navbar-collapse collapse">
-					<li class="sidebar-active">
-						<a href="https://www.fachschaft.informatik.tu-darmstadt.de/feedback-new/" title="Gehe zur Seite &quot;Feedback&quot;">Feedback</a>
-						<ul id="menuIndent">
-							<li class="link">
-								<a href="https://www.fachschaft.informatik.tu-darmstadt.de/feedback-faq/" title="Zeige Seite FAQ">FAQ</a>
-							</li>
-							<li class="link">
-								<a href="https://www.fachschaft.informatik.tu-darmstadt.de/hall-of-fame/" title="Zeige Seite Hall of Fame">Hall of Fame</a>
-							</li>
-							<li class="{% block section_ergebnisse %}link{% endblock %}">
-								<a href="{% if request.user.is_superuser %}{% url 'intern-ergebnisse' %}{% else %}{% url 'public-results' %}{% endif %}" title="Zeige Seite Ergebnisse">Ergebnisse</a>
-							</li>
-							<li class="{% block section_veranstalter %}link{% endblock %}">
-								<a href="{% url 'veranstalter-index' %}" title="Zeige Seite Webinterface">Webinterface</a>
-							</li>
-						</ul>
-					</li>
-				</ul>
+				{% include 'd120/sidebar.html' %}
 			</div>
-
 			<div id="content" class="col-lg-9 col-md-8 col-xs-12 col-sm-7 pull-right typography">
 
 				{% if request.session.orig_uid %}
@@ -76,7 +56,7 @@
 			</div>
 		</div>
 	</div>
-		{% include 'footer.html' %}
+		{% include 'd120/footer.html' %}
     {% block javascript_block %}
 
     {% endblock %}
