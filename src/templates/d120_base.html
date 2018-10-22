@@ -6,97 +6,79 @@
 	<title>{% block title %}Leere Seite{% endblock %} - Evaluation der Lehre</title>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 
-	<link rel="stylesheet" type="text/css" href="https://www.fachschaft.informatik.tu-darmstadt.de/d120de/css/head.css" />
-	<link rel="stylesheet" type="text/css" href="https://www.fachschaft.informatik.tu-darmstadt.de/d120de/css/layout.css" />
-	<link rel="stylesheet" type="text/css" href="https://www.fachschaft.informatik.tu-darmstadt.de/d120de/css/typography.css" />
-	<link rel="stylesheet" type="text/css" media="print" href="https://www.fachschaft.informatik.tu-darmstadt.de/d120de/css/print.css" />
+	<!--<link rel="stylesheet" type="text/css" href="https://www.fachschaft.informatik.tu-darmstadt.de/d120de/css/head.css" />-->
+	<!--<link rel="stylesheet" type="text/css" href="https://www.fachschaft.informatik.tu-darmstadt.de/d120de/css/layout.css" />-->
+	<!--<link rel="stylesheet" type="text/css" href="https://www.fachschaft.informatik.tu-darmstadt.de/d120de/css/typography.css" />-->
+	<!--<link rel="stylesheet" type="text/css" media="print" href="https://www.fachschaft.informatik.tu-darmstadt.de/d120de/css/print.css" />-->
 	<!--<link rel="stylesheet" type="text/css" href="https://www.fachschaft.informatik.tu-darmstadt.de/d120de/css/form.css" />-->
+
+	<link rel="stylesheet" type="text/css" href="https://www.fachschaft.informatik.tu-darmstadt.de/static/vendor/bootstrap/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="https://www.fachschaft.informatik.tu-darmstadt.de/static/vendor/font-awesome/css/font-awesome.min.css" />
+  <link rel="stylesheet" type="text/css" href="https://www.fachschaft.informatik.tu-darmstadt.de/static/vendor/typeface-libre-franklin/index.css" />
+  <link rel="stylesheet" type="text/css" href="https://www.fachschaft.informatik.tu-darmstadt.de/static/d120/css/custom.css" />
+  <style>
+      a, footer a:hover, .sidebar-nav a, .sidebar-nav a:hover {
+          color:#009D81;
+      }
+      .navbar, .sidebar-active, .sidebar-active:hover, .sidebar-active:focus, .sidebar-active > a:hover, .sidebar-active > a:focus, #mainLogo {
+          background-color:#009D81!important;
+      }
+      .sidebar-active, .sidebar-active:hover {
+          border-left: 5px solid #009D81!important;
+      }
+  </style>
+
 	<link rel="stylesheet" type="text/css" href="{% static 'ranking.css' %}" /> {% block extra_header %}{% endblock %}
 </head>
 
 <body>
 
-	<div id="Header">
-		<a href="https://www.fachschaft.informatik.tu-darmstadt.de/das-wesen/"><img src="https://www.fachschaft.informatik.tu-darmstadt.de/d120de/images/das-wesen-der-informatik.png" id="wesen" title="Das Wesen der Informatik" alt="Das Wesen der Informatik" /></a>
-		<a href="https://www.tu-darmstadt.de/"><img src="https://www.fachschaft.informatik.tu-darmstadt.de/d120de/images/athene.png" alt="Athene der TU Darmstadt" title="Athene der TU Darmstadt" id="athene" /></a>
+	{% include 'header.html' %}
+	<div class="container">
+		<div id="main" class="row">
 
-		<h1>Fachschaft Informatik</h1>
-		<h2>Evaluation der Lehre / Feedback</h2>
-	</div>
-
-	<div id="Subheader">
-		<ul id="Menu1">
-			<li class="section"><a href="https://www.fachschaft.informatik.tu-darmstadt.de/startseite/">Startseite</a></li>
-			<li class="link"><a href="https://daswesentliche.d120.de/">das Wesentliche</a></li>
-			<li class="link"><a href="https://www.fachschaft.informatik.tu-darmstadt.de/forum/">Forum</a></li>
-		</ul>
-		<div id="MenuSpacerLeft"></div>
-		<div id="MenuSpacerRight"></div>
-
-		<ul id="Submenu">
-			<li class="link"><a href="https://www.fachschaft.informatik.tu-darmstadt.de/fachschaft/" title="Gehe zur Seite &quot;Fachschaft&quot;">Fachschaft</a></li>
-			<li class="section"><a href="https://www.fachschaft.informatik.tu-darmstadt.de/studenten/" title="Gehe zur Seite &quot;Studenten&quot;">Studenten</a></li>
-			<li class="link"><a href="https://www.fachschaft.informatik.tu-darmstadt.de/studienanfaenger/" title="Gehe zur Seite &quot;Studienanfänger&quot;">Studienanfänger</a></li>
-			<li class="link"><a href="https://www.fachschaft.informatik.tu-darmstadt.de/schueler/" title="Gehe zur Seite &quot;Schüler&quot;">Schüler</a></li>
-			<li class="link"><a href="https://www.fachschaft.informatik.tu-darmstadt.de/dozenten/" title="Gehe zur Seite &quot;Dozenten&quot;">Dozenten</a></li>
-			<li class="link"><a href="https://www.fachschaft.informatik.tu-darmstadt.de/firmen/" title="Gehe zur Seite &quot;Firmen&quot;">Firmen</a></li>
-			<li class="link"><a href="https://www.fachschaft.informatik.tu-darmstadt.de/buchaktion/" title="Gehe zur Seite &quot;Buchaktion&quot;">Buchaktion</a></li>
-			<li class="link"><a href="https://www.fachschaft.informatik.tu-darmstadt.de/verein/" title="Gehe zur Seite &quot;Verein&quot;">Verein</a></li>
-		</ul>
-	</div>
-
-	<div id="ContentContainer">
-
-		<div id="leftSidebar">
-			<ul class="leftSidebarBox" id="Menu2">
-				<li class="link">
-					<a href="https://www.fachschaft.informatik.tu-darmstadt.de/feedback-new/" title="Gehe zur Seite &quot;Feedback&quot;">Feedback</a>
-				</li>
-
-				<li>
-					<ul id="Menu3">
-						<li class="link">
-							<a href="https://www.fachschaft.informatik.tu-darmstadt.de/feedback-faq/" title="Zeige Seite FAQ">FAQ</a>
-						</li>
-						<li class="link">
-							<a href="https://www.fachschaft.informatik.tu-darmstadt.de/hall-of-fame/" title="Zeige Seite Hall of Fame">Hall of Fame</a>
-						</li>
-						<li class="{% block section_ergebnisse %}link{% endblock %}">
-							<a href="{% if request.user.is_superuser %}{% url 'intern-ergebnisse' %}{% else %}{% url 'public-results' %}{% endif %}" title="Zeige Seite Ergebnisse">Ergebnisse</a>
-						</li>
-						<li class="{% block section_veranstalter %}link{% endblock %}">
-							<a href="{% url 'veranstalter-index' %}" title="Zeige Seite Webinterface">Webinterface</a>
-						</li>
-					</ul>
-				</li>
-			</ul>
-		</div>
-
-		<div id="Content" class="typography">
-
-			{% if request.session.orig_uid %}
-			<div class="breadcrumbs">
-				Du nutzt momentan die Rechte der Veranstalter von {{veranstaltung}}. <a href="{% url 'rechte_zuruecknehmen' %}">Zu meinem Account zurückkehren.</a>
+			<div class="col-lg-3 col-md-4 col-sm-5">
+				<ul id="sidebar" class="nav sidebar-nav navbar-collapse collapse">
+					<li class="sidebar-active">
+						<a href="https://www.fachschaft.informatik.tu-darmstadt.de/feedback-new/" title="Gehe zur Seite &quot;Feedback&quot;">Feedback</a>
+						<ul id="menuIndent">
+							<li class="link">
+								<a href="https://www.fachschaft.informatik.tu-darmstadt.de/feedback-faq/" title="Zeige Seite FAQ">FAQ</a>
+							</li>
+							<li class="link">
+								<a href="https://www.fachschaft.informatik.tu-darmstadt.de/hall-of-fame/" title="Zeige Seite Hall of Fame">Hall of Fame</a>
+							</li>
+							<li class="{% block section_ergebnisse %}link{% endblock %}">
+								<a href="{% if request.user.is_superuser %}{% url 'intern-ergebnisse' %}{% else %}{% url 'public-results' %}{% endif %}" title="Zeige Seite Ergebnisse">Ergebnisse</a>
+							</li>
+							<li class="{% block section_veranstalter %}link{% endblock %}">
+								<a href="{% url 'veranstalter-index' %}" title="Zeige Seite Webinterface">Webinterface</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
 			</div>
-			{% endif %} {% if messages %}
-			<ul class="messagelist">
-				{% for message in messages %}
-				<li class="{{ message.tags }}">{{ message }}</li>
-				{% endfor %}
-			</ul>
-			{% endif %} {% block content %}{% endblock %}
-			<br /> {% block backlink %}{% endblock %}
+
+			<div id="content" class="col-lg-9 col-md-8 col-xs-12 col-sm-7 pull-right typography">
+
+				{% if request.session.orig_uid %}
+				<div class="breadcrumbs">
+					Du nutzt momentan die Rechte der Veranstalter von {{veranstaltung}}. <a href="{% url 'rechte_zuruecknehmen' %}">Zu meinem Account zurückkehren.</a>
+				</div>
+				{% endif %} {% if messages %}
+				<ul class="messagelist">
+					{% for message in messages %}
+					<li class="{{ message.tags }}">{{ message }}</li>
+					{% endfor %}
+				</ul>
+				{% endif %} {% block content %}{% endblock %}
+				<br /> {% block backlink %}{% endblock %}
+			</div>
 		</div>
 	</div>
-	<div id="Footer">
-		<div class="Footer_wesen"><img src="https://www.fachschaft.informatik.tu-darmstadt.de/d120de/images/das-wesen-der-informatik_unten.png" alt="Das Wesen der Informatik" /></div>
-		<p>Fachschaft Informatik der Technischen Universität Darmstadt
-			<br />
-			<a href="https://www.fachschaft.informatik.tu-darmstadt.de/kontakt">Kontakt</a> &bull;
-			<a href="https://www.fachschaft.informatik.tu-darmstadt.de/kontakt">Impressum</a></p>
-	</div>
+		{% include 'footer.html' %}
     {% block javascript_block %}
-    
+
     {% endblock %}
 </body>
 
