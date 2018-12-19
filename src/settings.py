@@ -7,7 +7,7 @@ import os
 DEBUG = True
 
 ADMINS = (
-    ('Feedback-Team', 'feedback@fachschaft.informatik.tu-darmstadt.de'),
+    ('Feedback-Team', 'feedback@lists.d120.de'),
 )
 
 MANAGERS = ADMINS
