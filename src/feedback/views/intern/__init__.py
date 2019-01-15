@@ -35,7 +35,7 @@ def index(request):
     all_veranst = Veranstaltung.objects.filter(semester=cur_semester)
 
     # Veranstaltung für die es Rückmeldungen gibt
-    ruck_veranst = all_veranst.filter(status__gte=Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR, semester=cur_semester)
+    ruck_veranst = all_veranst.filter(status__gt=Veranstaltung.STATUS_KEINE_EVALUATION, semester=cur_semester)
 
     num_all_veranst = all_veranst.count()
     num_ruck_veranst = ruck_veranst.count()
