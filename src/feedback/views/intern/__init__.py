@@ -66,7 +66,7 @@ def lange_ohne_evaluation(request):
 @require_safe
 def fragebogensprache(request):
     veranstaltungen = Veranstaltung.objects.filter(semester=Semester.current())
-    veranstaltungen = veranstaltungen.filter(anzahl__gt=0, evaluieren=True)
+    veranstaltungen = veranstaltungen.filter(anzahl__gt=0, evaluieren=True, status__gte=Veranstaltung.STATUS_BESTELLUNG_WIRD_VERARBEITET)
     veranstaltungen = veranstaltungen.order_by('sprache','typ','anzahl')
 
     data = {'veranstaltungen': veranstaltungen}
