@@ -213,9 +213,9 @@ def generate_letters(request):
     elif 'anzahlaufkleber' in request.POST and request.POST['anzahlaufkleber'].isdigit():
         anzahl = request.POST['anzahlaufkleber']
         anzahl = int(anzahl)
-        veranst = Veranstaltung.objects.filter(semester=semester, evaluieren=True, anzahl__gt=anzahl).order_by('sprache','anzahl')
+        veranst = Veranstaltung.objects.filter(semester=semester, evaluieren=True, anzahl__gt=anzahl).order_by('name')
     else:
-        veranst = Veranstaltung.objects.filter(semester=semester, evaluieren=True, anzahl__gt=0).order_by('sprache', 'anzahl')
+        veranst = Veranstaltung.objects.filter(semester=semester, evaluieren=True, anzahl__gt=0).order_by('name')
 
     if not veranst.count():
         messages.error(request, 'Für das ausgewählte Semester (%s) liegen '
