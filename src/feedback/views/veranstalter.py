@@ -329,6 +329,7 @@ def send_mail_to_verantwortliche(ergebnis_empfaenger, context, veranstaltung):
     if context.get('tutoren_csv', None) is not None:
         tutoren = Tutor.objects.filter(veranstaltung=veranstaltung)
         context.update({'tutoren': tutoren})
+    context.update({'veranstaltung': veranstaltung})
 
     msg_html = render_to_string('formtools/wizard/email_zusammenfassung.html', context)
 
