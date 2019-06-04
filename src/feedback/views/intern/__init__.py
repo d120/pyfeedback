@@ -213,7 +213,7 @@ def generate_letters(request):
     elif 'anzahlaufkleber' in request.POST and request.POST['anzahlaufkleber'].isdigit():
         anzahl = request.POST['anzahlaufkleber']
         anzahl = int(anzahl)
-        veranst = Veranstaltung.objects.filter(semester=semester, evaluieren=True, anzahl__gt=anzahl).order_by('name')
+        veranst = Veranstaltung.objects.filter(semester=semester, evaluieren=True, anzahl__gte=anzahl).order_by('name')
     else:
         veranst = Veranstaltung.objects.filter(semester=semester, evaluieren=True, anzahl__gt=0).order_by('name')
 
