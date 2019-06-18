@@ -24,7 +24,8 @@ from feedback.forms import UploadFileForm
 from feedback.parser.ergebnisse import parse_ergebnisse
 from feedback.views import public
 from feedback.models import Veranstaltung, Semester, Einstellung, Mailvorlage, get_model, long_not_ordert, \
-    FachgebietEmail, Tutor
+    FachgebietEmail, Tutor 
+from feedback.models.fragebogenUE2016 import FragebogenUE2016
 
 
 
@@ -457,8 +458,10 @@ def import_ergebnisse(request):
 
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
-            warnings, errors, vcount, fbcount = parse_ergebnisse(semester,
-                                                                 TextIOWrapper(request.FILES['file'].file, encoding='ISO-8859-1'))
+            if 'typ' in request.POST and request.POST['typ'] == 'uebung':
+                warnings, errors, vcount, fbcount = parse_ergebnisse(semester, TextIOWrapper(request.FILES['file'].file, encoding='ISO-8859-1'), 'UE2016')
+            else:
+                warnings, errors, vcount, fbcount = parse_ergebnisse(semester, TextIOWrapper(request.FILES['file'].file, encoding='ISO-8859-1'))
             if fbcount:
                 messages.success(request,
                     '%u Veranstaltungen mit insgesamt %u Fragebögen wurden erfolgreich importiert.' %
@@ -497,16 +500,34 @@ def sync_ergebnisse(request):
     ergebnis.objects.filter(veranstaltung__semester=semester).delete()
 
     found_something = False
-    for v in Veranstaltung.objects.filter(semester=semester):
-        fbs = fragebogen.objects.filter(veranstaltung=v)
-        if len(fbs):
-            found_something = True
-            data = {'veranstaltung': v, 'anzahl': len(fbs)}
-            for part in ergebnis.parts + ergebnis.hidden_parts:
-                result, count = tools.get_average(ergebnis, fbs, part[0])
-                data[part[0]] = result
-                data[part[0]+'_count'] = count
-            ergebnis.objects.create(**data)
+    if semester.fragebogen == '2016':
+        for v in Veranstaltung.objects.filter(semester=semester):
+            fbs = fragebogen.objects.filter(veranstaltung=v)
+            erg = FragebogenUE2016.objects.filter(veranstaltung=v)
+            if len(fbs):
+                found_something = True
+                data = {'veranstaltung': v, 'anzahl': len(fbs)}
+                for part in ergebnis.parts + ergebnis.hidden_parts:
+                    result, count = tools.get_average(ergebnis, fbs, part[0])
+                    data[part[0]] = result
+                    data[part[0]+'_count'] = count
+                for part in ergebnis.parts_ue:
+                    result, count = tools.get_average(ergebnis, erg, part[0])
+                    data[part[0]] = result
+                    data[part[0]+'_count'] = count
+                ergebnis.objects.create(**data)
+
+    else:
+        for v in Veranstaltung.objects.filter(semester=semester):
+            fbs = fragebogen.objects.filter(veranstaltung=v)
+            if len(fbs):
+                found_something = True
+                data = {'veranstaltung': v, 'anzahl': len(fbs)}
+                for part in ergebnis.parts + ergebnis.hidden_parts:
+                    result, count = tools.get_average(ergebnis, fbs, part[0])
+                    data[part[0]] = result
+                    data[part[0]+'_count'] = count
+                ergebnis.objects.create(**data)
 
     if not found_something:
         messages.warning(request, 'Für das %s liegen keine Ergebnisse vor.' % semester)

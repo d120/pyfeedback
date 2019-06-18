@@ -12,6 +12,16 @@ Hier können die von EvaSys gescannten und eingelesenen Fragebögen in Form eine
 <p>
 <form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
 {% include 'includes/semesterauswahl.html' %}<br />
+<br />
+<fieldset>
+<input type="radio" name="typ" id="standard" value="standard" checked/>
+<label for ="standard">Vorlesung (2009-2016)</label>
+<p>
+
+</p>
+<input type="radio" name="typ" id="uebung" value="uebung" />
+<label for ="uebung">Übung (2016)</label>
+</fieldset>
 {{ form }}
 <input type="submit" name="submit" value="Hochladen" /> 
 </form>

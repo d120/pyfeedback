@@ -9,6 +9,7 @@ from feedback.models.fragebogen2008 import Fragebogen2008, Ergebnis2008
 from feedback.models.fragebogen2009 import Fragebogen2009, Ergebnis2009
 from feedback.models.fragebogen2012 import Fragebogen2012, Ergebnis2012
 from feedback.models.fragebogen2016 import Fragebogen2016, Ergebnis2016
+from feedback.models.fragebogenUE2016 import FragebogenUE2016
 from django.core.exceptions import ObjectDoesNotExist
 
 from django.db.models import Q
@@ -20,6 +21,11 @@ def get_model(model, semester):
     module = __import__(mod, fromlist=(cls,))
     return getattr(module, cls)
 
+def get_model_string(model, semester):
+    mod = '%s.fragebogen%s' % (__name__, semester)
+    cls = '%s%s' % (model, semester)
+    module = __import__(mod, fromlist=(cls,))
+    return getattr(module, cls)
 
 def long_not_ordert():
     """Alle Veranstaltungen die schon länger nicht mehr evaluiert wurden"""

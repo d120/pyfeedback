@@ -51,6 +51,53 @@ def get_average(ergebnis, fb_list, attr):
         return None, 0
 
 
+### Durchschnittsberechnung für das Ranking ###################################
+
+def get_average_16(ergebnis, fb_list, erg_list, attr):
+    """Berechnet das gewichtete Mittel über das Attribut attr für die Fragebogenliste fb_list."""
+
+    # alle Ergebnisse, die in Mittelwert einfließen, zusammenstellen
+    try:
+        parts = getattr(ergebnis, attr + '_parts')
+    except AttributeError:
+        parts = [attr]
+
+    # Gewichte einlesen, falls Bestandteile nicht zu gleichen Teilen in den Mittelwert eingehen sollen
+    if attr in ergebnis.weight:
+        weights = ergebnis.weight[attr]
+    else:
+        weights = [1] * len(parts)
+
+    # Anzahl an Fragebögen, die ins Ergebnis eingehen
+    fb_count = 0
+
+    # gewichtete Zahl der Werte, die in das Ergebnis eingeht
+    weighted_count = 0
+
+    # gewichtete Werte, die in das Ergebnis eingehen
+    weighted_sum = 0
+
+    for fb in fb_list:
+        contains_valid_field = False
+
+        for part, weight in zip(parts, weights):
+            value = getattr(fb, part)
+            # Evasys gibt auch den Wert int(0) zurück
+            # siehe: https://www.fachschaft.informatik.tu-darmstadt.de/trac/fs/ticket/1192
+            if value is not None and value >= 1:
+                contains_valid_field = True
+                weighted_count += weight
+                weighted_sum += value * weight
+
+        if contains_valid_field:
+            fb_count += 1
+
+    if fb_count > 0:
+        average = weighted_sum / float(weighted_count)
+        return average, fb_count
+
+    else:
+        return None, 0
 # ------------------------------ E-Mail-Handling ------------------------------ #
 
 def render_email(template, context):
