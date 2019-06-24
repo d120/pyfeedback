@@ -1,5 +1,5 @@
 coverage==4.5.3
-Django==1.11.21 # pyup: <2.0
+Django==2.2.2 # pyup: <2.0
 django-debug-toolbar==2.0
 docutils==0.14
 freezegun==0.3.12
