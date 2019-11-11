@@ -48,6 +48,7 @@ class Semester(models.Model):
                                               ':</em> alle (beschränkt auf das Uninetz)<br />'
                                     )
     vollerhebung = models.BooleanField(default=False)
+    standard_ergebnisversand = models.DateField(null=True, blank=True, verbose_name='Ergebnisversand', help_text='Standarddatum für den Ergebnisversand')
 
     def _format_generic(self, ss, ws, space, modulus):
         sem = self.semester // 10

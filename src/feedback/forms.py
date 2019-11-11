@@ -53,9 +53,8 @@ class VeranstaltungBasisdatenForm(BestellWizardForm):
         self.fields["anzahl"] = forms.IntegerField(min_value=1)
 
         self.fields["auswertungstermin"] = forms.DateField(
-            required=False,
             help_text="Zu diesem Termin werden die Ergebnisse versandt. Nach diesem Datum können keine Evaluationsbögen mehr abgegeben werden und die digitale Evaluation geschlossen.",
-            widget=forms.DateInput(attrs={"type": "date"}),
+            widget=forms.DateInput(attrs={"type": "date", "value": Semester.current().standard_ergebnisversand}),
         )
 
         # Lösche die Auswahl ob es eine Übung gibt wenn es keine Vorlesung ist

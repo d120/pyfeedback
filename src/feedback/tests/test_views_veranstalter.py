@@ -7,7 +7,6 @@ from django.test import TestCase
 from feedback.models import Einstellung, Person, Veranstaltung, Tutor
 from feedback.tests.tools import get_veranstaltung, login_veranstalter
 
-
 class VeranstalterLoginTest(TestCase):
     def setUp(self):
         _, self.v = get_veranstaltung('vu')
@@ -95,6 +94,7 @@ class VeranstalterIndexTest(TestCase):
             "basisdaten-sprache": "de",
             "basisdaten-verantwortlich": self.p.id,
             "basisdaten-ergebnis_empfaenger": [self.p.id, self.p2.id],
+            "basisdaten-auswertungstermin": '2011-01-01',
             "save": "Speichern"
         })
 
@@ -222,6 +222,7 @@ class VeranstalterIndexTest(TestCase):
             "basisdaten-sprache": "de",
             "basisdaten-verantwortlich": self.p.id,
             "basisdaten-ergebnis_empfaenger": self.p2.id,
+            "basisdaten-auswertungstermin": '2011-01-01',
             "save": "Speichern"
         })
 
@@ -327,6 +328,7 @@ class VeranstalterIndexTest(TestCase):
             "basisdaten-sprache": "de",
             "basisdaten-verantwortlich": self.p.id,
             "basisdaten-ergebnis_empfaenger": [self.p.id, self.p2.id],
+            "basisdaten-auswertungstermin": '2011-01-01',
             "save": "Speichern"
         })
 
