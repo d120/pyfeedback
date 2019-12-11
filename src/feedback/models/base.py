@@ -358,19 +358,19 @@ class Veranstaltung(models.Model):
     # VE FB20Vv1e 2698
 
     EVASYS_BOGENKENNUNG_DE = {
-        'pr': 'FB20Pv2',
-        'se': 'FB20Sv3',
-        'u': 'FB20Üv2',
-        'v': 'FB20Vv3',
-        'vu': 'FB20Vv3',  # FIXME: Eigentlich zwei Umfragen
+        'pr': 'FB20P',
+        'se': 'FB20S',
+        'u': 'FB20Ü',
+        'v': 'FB20V',
+        'vu': 'FB20V',  # FIXME: Eigentlich zwei Umfragen
     }
 
     EVASYS_BOGENKENNUNG_EN = {
-        'pr': 'FB20Pv2e',
-        'se': 'FB20Sv3e',
-        'u': 'FB20Üv2e',
-        'v': 'FB20Vv3e',
-        'vu': 'FB20Vv3e',  # FIXME: Eigentlich zwei Umfragen
+        'pr': 'FB20Pe',
+        'se': 'FB20Se',
+        'u': 'FB20Üe',
+        'v': 'FB20Ve',
+        'vu': 'FB20Ve',  # FIXME: Eigentlich zwei Umfragen
     }
 
     BARCODE_BASE = 2 * 10 ** 11
