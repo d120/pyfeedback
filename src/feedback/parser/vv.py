@@ -113,7 +113,7 @@ def parse_vv_recurse(ele, cat):
                 continue
 
             if is_attended_course:
-                iv.veranstalter = veranst
+                iv.veranstalter.set(veranst)
 
     # Zurückgegeben wird die Rekursionstiefe der zuletzt erstellten Kategorie, oder wenn keine erstellt wurden 0
     return 0 if is_new_category else (last_category_depth - 1)

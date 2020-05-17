@@ -360,7 +360,10 @@ def save_to_db(request, instance, form_list):
                     instance.csv_to_tutor(val)
                     setattr(instance, "kleingruppen", val)
             elif isinstance(form.instance, Veranstaltung):
-                setattr(instance, key, val)
+                if key == 'ergebnis_empfaenger':
+                    getattr(instance, key).set(val)
+                else:
+                    setattr(instance, key, val)
             else:
                 setattr(form.instance, key, val)
 

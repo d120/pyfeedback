@@ -1,13 +1,13 @@
 import os
 from subprocess import call
 
-from django.test import TestCase
+from django.test import TestCase, tag
 from django.conf import settings
 
 from feedback.models import Semester, Person, Veranstaltung, Fragebogen2009, Mailvorlage, Einstellung
 from feedback.tests.tools import NonSuTestMixin, get_veranstaltung
 
-
+@tag('latex')
 class GenerateLettersTest(NonSuTestMixin, TestCase):
     def _get_erhebungswoche(self):
         with open(settings.LATEX_PATH + 'erhebungswoche.inc', 'r') as f:

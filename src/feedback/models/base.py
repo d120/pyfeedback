@@ -281,7 +281,7 @@ class Person(models.Model):
 
         # replace every lecture held by 'new' with 'old'
         for v in veranstaltungen:
-            v.veranstalter = [old]
+            v.veranstalter.set([old])
             v.save()
 
         # save the second name from 'new' as the alternative first name of 'old'

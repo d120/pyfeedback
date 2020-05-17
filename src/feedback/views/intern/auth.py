@@ -25,7 +25,7 @@ def rechte_uebernehmen(request):
             veranst = Veranstaltung.objects.get(id=v)
 
             user = auth.authenticate(user=u, current_user=request.user)
-            auth.login(request, user)
+            auth.login(request, user, backend='feedback.auth.TakeoverBackend')
             request.session['orig_uid'] = orig_uid
             request.session['vid'] = v
             request.session['veranstaltung'] = str(veranst)
@@ -47,7 +47,7 @@ def rechte_zuruecknehmen(request):
         uid = request.session['orig_uid']  # this line throws the exception
         u = User.objects.get(id=uid)
         user = auth.authenticate(reset=True, user=u)
-        auth.login(request, user)
+        auth.login(request, user, backend='feedback.auth.TakeoverBackend')
         return HttpResponseRedirect(reverse('intern-index'))
     # Redirect to intern.index view to get a clear session
     except KeyError:

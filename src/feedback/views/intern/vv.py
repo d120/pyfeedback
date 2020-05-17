@@ -10,6 +10,7 @@ from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 from django.views.generic.edit import UpdateView
 from django.views.generic import ListView, DetailView
+from django.contrib.auth.views import redirect_to_login
 from django.contrib.auth.mixins import UserPassesTestMixin
 
 from feedback.parser import vv as vv_parser
@@ -17,6 +18,10 @@ from feedback.models import Veranstaltung, Person, Semester, ImportCategory, Imp
 from feedback.models.base import Fachgebiet
 from feedback.forms import PersonForm, UploadFileForm
 
+
+class RedirectUserPassesTestMixin(UserPassesTestMixin):
+    def handle_no_permission(self):
+        return redirect_to_login(self.request.get_full_path(), self.get_login_url(), self.get_redirect_field_name())
 
 # TODO: durch FormView ersetzen
 @user_passes_test(lambda u: u.is_superuser)
@@ -101,7 +106,7 @@ def import_vv_edit(request):
         return HttpResponseRedirect(reverse('import_vv_edit_users'))
 
 
-class PersonFormView(UserPassesTestMixin, ListView):
+class PersonFormView(RedirectUserPassesTestMixin, ListView):
     """Definiert die View für die Anzeige aller zu bearbeitenden Personen."""
     model = Person
     template_name = 'intern/import_vv_edit_users.html'
@@ -114,7 +119,8 @@ class PersonFormView(UserPassesTestMixin, ListView):
         return self.request.user.is_superuser
 
 
-class PersonFormUpdateView(UserPassesTestMixin, UpdateView):
+
+class PersonFormUpdateView(RedirectUserPassesTestMixin, UpdateView):
     """Definiert die View für die Bearbeitung von der Personen."""
     model = Person
     form_class = PersonForm
@@ -171,7 +177,7 @@ class PersonFormUpdateView(UserPassesTestMixin, UpdateView):
                 return similar_persons.count() > 0
 
 
-class SimilarNamesView(UserPassesTestMixin, DetailView):
+class SimilarNamesView(RedirectUserPassesTestMixin, DetailView):
     """Definiert die View für die Anzeige von ähnlichen Namen von Personen."""
     model = Person
     template_name = 'intern/import_vv_edit_users_namecheck.html'
@@ -198,7 +204,7 @@ class SimilarNamesView(UserPassesTestMixin, DetailView):
         vorname = context['new_vorname'].split(' ')[0]
         nachname = context['new_nachname']
 
-        context['similar_person'] = Person.persons_with_similar_names(vorname, nachname)
+        context['similar_person'] = Person.persons_with_similar_names(vorname, nachname)[0]
         context['old_veranstaltungen'] = Person.veranstaltungen(context['similar_person'])
         context['new_veranstaltungen'] = Person.veranstaltungen(context['person_new'])
         return context

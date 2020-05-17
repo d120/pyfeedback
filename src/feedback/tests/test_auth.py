@@ -21,12 +21,12 @@ class VeranstalterBackendTest(TestCase):
     
     def test_authenticate(self):
         vid = self.v.id
-        self.assertFalse(self.b.authenticate(vid=vid, token=None))
-        self.assertFalse(self.b.authenticate(vid=None, token='0123456789abcdef'))
-        self.assertFalse(self.b.authenticate(vid=vid, token='000'))
-        self.assertEqual(self.b.authenticate(vid=vid, token='0123456789abcdef'), self.u)
+        self.assertFalse(self.b.authenticate(request=None, vid=vid, token=None))
+        self.assertFalse(self.b.authenticate(request=None, vid=None, token='0123456789abcdef'))
+        self.assertFalse(self.b.authenticate(request=None, vid=vid, token='000'))
+        self.assertEqual(self.b.authenticate(request=None, vid=vid, token='0123456789abcdef'), self.u)
         self.u.delete()
-        self.assertFalse(self.b.authenticate(vid=vid, token='0123456789abcdef'))
+        self.assertFalse(self.b.authenticate(request=None, vid=vid, token='0123456789abcdef'))
 
 
 class TakeoverBackendTest(TestCase):

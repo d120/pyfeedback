@@ -53,7 +53,7 @@ urlpatterns += [url(r'^deadlines/$', VeranstaltungsDeadlines.as_view(), name='De
 urlpatterns += [
     url(r'^veranstalter/login/$', feedback.views.veranstalter.login, name='veranstalter-login'),
     url(r'^veranstalter/logout/$',
-        django.contrib.auth.views.logout,
+        django.contrib.auth.views.LogoutView.as_view(),
         {'template_name': "veranstalter/logout.html"},
         name='veranstalter-logout'),
 
@@ -97,7 +97,7 @@ urlpatterns += [
 
 # Logout
 urlpatterns += [
-    url(r'^logout/$', django.contrib.auth.views.logout, {'next_page': reverse_lazy('public-results')}, name='logout'),
+    url(r'^logout/$', django.contrib.auth.views.LogoutView.as_view(), {'next_page': reverse_lazy('public-results')}, name='logout'),
 ]
 
 urlpatterns += staticfiles_urlpatterns()

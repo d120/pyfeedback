@@ -14,10 +14,9 @@ from feedback.models.base import Veranstaltung
 # ------------------------------ Login mit Veranstalter-Rechten ------------------------------ #
 
 class VeranstalterBackend(ModelBackend):
-    def authenticate(self, vid, token):
+    def authenticate(self, request, vid, token):
         if not (vid and token):
             return None
-
         if not Veranstaltung.objects.filter(id=vid, access_token=token).exists():
             return None
 
