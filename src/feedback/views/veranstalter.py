@@ -14,7 +14,7 @@ from django.template.loader import render_to_string
 from formtools.wizard.views import SessionWizardView
 from feedback.models import Veranstaltung, Tutor, past_semester_orders, Log
 from feedback.forms import VeranstaltungEvaluationForm, VeranstaltungBasisdatenForm, VeranstaltungPrimaerDozentForm, \
-    VeranstaltungDozentDatenForm, VeranstaltungFreieFragen, VeranstaltungTutorenForm, VeranstaltungVeroeffentlichung
+    VeranstaltungDozentDatenForm, VeranstaltungFreieFragen, VeranstaltungTutorenForm, VeranstaltungVeroeffentlichung, VeranstaltungDigitaleEvaluationForm
 
 
 @require_safe
@@ -83,6 +83,7 @@ def veranstalter_dashboard(request):
 VERANSTALTER_VIEW_TEMPLATES = {
     "evaluation": "formtools/wizard/evaluation.html",
     "basisdaten": "formtools/wizard/basisdaten.html",
+    "digitale_eval": "formtools/wizard/digitale_evaluation.html",
     "primaerdozent": "formtools/wizard/primaerdozent.html",
     "verantwortlicher_address": "formtools/wizard/address.html",
     "freie_fragen": "formtools/wizard/freiefragen.html",
@@ -95,6 +96,7 @@ VERANSTALTER_VIEW_TEMPLATES = {
 VERANSTALTER_WIZARD_STEPS = {
     "evaluation": "Evaluation",
     "basisdaten": "Basisdaten",
+    "digitale_eval": "Digitale Evaluation",
     "primaerdozent": "Primärdozent",
     "verantwortlicher_address": "Verantwortlicher",
     "freie_fragen": "Freie Fragen",
@@ -144,6 +146,15 @@ def show_tutor_form(wizard):
     return show_summary_form
 
 
+def show_digital_eval_form(wizard):
+    show_summary_form = perform_evalution(wizard)
+    if show_summary_form:
+        cleaned_data = wizard.get_cleaned_basisdaten()
+        digitale_eval = cleaned_data.get('digitale_eval', '')
+        return digitale_eval
+    return show_summary_form
+
+
 def swap(collection, i, j):
     """Einfache Swap-Funktion, die für die Darstellung von Daten in der Zusammenfassung gebraucht wird."""
     # swap elements of summary data and ignore IndexError of no evaluation
@@ -158,6 +169,7 @@ class VeranstalterWizard(SessionWizardView):
     form_list = [
         ('evaluation', VeranstaltungEvaluationForm),
         ('basisdaten', VeranstaltungBasisdatenForm),
+        ('digitale_eval', VeranstaltungDigitaleEvaluationForm),
         ('primaerdozent', VeranstaltungPrimaerDozentForm),
         ('verantwortlicher_address', VeranstaltungDozentDatenForm),
         ('freie_fragen', VeranstaltungFreieFragen),
@@ -168,6 +180,7 @@ class VeranstalterWizard(SessionWizardView):
 
     condition_dict = {
         'basisdaten': perform_evalution,
+        'digitale_eval': show_digital_eval_form,
         'primaerdozent': show_primaerdozent_form,
         'verantwortlicher_address': perform_evalution,
         'freie_fragen': perform_evalution,

@@ -420,6 +420,11 @@ class Veranstaltung(models.Model):
         STATUS_BOEGEN_GESCANNT: (STATUS_ERGEBNISSE_VERSANDT,)
     }
 
+    DIGITALE_EVAL = [
+        ('T', 'TANs'),
+        ('L', 'Losung'),
+    ]
+
     # Helfertext für Dozenten für den Veranstaltungstyp.
     vlNoEx = 'Wenn Ihre Vorlesung keine Übung hat wählen Sie bitte <i>%s</i> aus'
     for cur in TYP_CHOICES:
@@ -458,6 +463,14 @@ class Veranstaltung(models.Model):
     kleingruppen = models.TextField(verbose_name='Kleingruppen', blank=True)
     veroeffentlichen = models.BooleanField(default=True, choices=BOOL_CHOICES)
     digitale_eval = models.BooleanField(default=False, verbose_name='Digitale Evaluation', help_text='Die Evaluation soll digital durchgeführt werden. Sie erhalten entsprechend viele TAN-Nummern auf Thermopapier, welche Sie an die Studiernden verteilen können. Die Studierenden füllen die Evaluation dann online aus.', blank=True)
+    digitale_eval_type = models.CharField(
+        default='T',
+        choices=DIGITALE_EVAL,
+        max_length=1,
+        verbose_name='Digitaler Evaluationstyp',
+        help_text=
+        'Es werden generell zwei Typen von Verteilungsmethoden angeboten: Bei TANs erhalten Sie eine Excel Datei mit einer Liste aller TANs, welche Sie beispielsweise mithilfe von moodle verteilen können (eine Anleitung dazu wird bereitgestellt). Beim losungsbasierten Verfahren erhalten Sie einen einfachen, mehrfachbenutzbaren Link zum Onlinefragebogen.'
+    )
 
     def get_next_state(self):
         """
@@ -817,5 +830,4 @@ class Log(models.Model):
         verbose_name = 'Log'
         verbose_name_plural = 'Logs'
         app_label = 'feedback'
-
 

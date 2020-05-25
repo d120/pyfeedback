@@ -78,7 +78,7 @@ class VeranstaltungAdmin(admin.ModelAdmin):
                             ['typ', 'name', 'semester', 'status', 'lv_nr', 'grundstudium', 'evaluieren',
                              'veranstalter', 'link_veranstalter',
                              ]}),
-        ('Bestellung', {'fields': ['sprache', 'anzahl', 'digitale_eval', 'verantwortlich', 'ergebnis_empfaenger', 'primaerdozent',
+        ('Bestellung', {'fields': ['sprache', 'anzahl', 'digitale_eval', 'digitale_eval_type', 'verantwortlich', 'ergebnis_empfaenger', 'primaerdozent',
                                    'auswertungstermin', 'freiefrage1', 'freiefrage2', 'kleingruppen', ]}),
     ]
     list_display = ('typ', 'name', 'semester', 'grundstudium', 'evaluieren', 'anzahl',

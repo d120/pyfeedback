@@ -88,6 +88,12 @@ class VeranstaltungBasisdatenForm(BestellWizardForm):
         widgets = {"ergebnis_empfaenger": forms.CheckboxSelectMultiple}
 
 
+class VeranstaltungDigitaleEvaluationForm(BestellWizardForm):
+    class Meta:
+        model = Veranstaltung
+        fields = ("digitale_eval_type", )
+
+
 class VeranstaltungPrimaerDozentForm(BestellWizardForm):
     """Definiert die Form für den 3. Schritt des Wizards."""
 

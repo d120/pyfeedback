@@ -11,21 +11,21 @@ class VeranstalterLoginTest(TestCase):
     def setUp(self):
         _, self.v = get_veranstaltung('vu')
         User.objects.create_user(settings.USERNAME_VERANSTALTER)
-    
+
     def test_incomplete_params(self):
         response = self.client.get('/veranstalter/login/')
         self.assertEqual(response.templates[0].name, 'veranstalter/login_failed.html')
-    
+
         response = self.client.get('/veranstalter/login/', {'vid': self.v.id})
         self.assertEqual(response.templates[0].name, 'veranstalter/login_failed.html')
-        
+
         response = self.client.get('/veranstalter/login/', {'token': self.v.access_token})
         self.assertEqual(response.templates[0].name, 'veranstalter/login_failed.html')
-    
+
     def test_bad_params(self):
         response = self.client.get('/veranstalter/login/', {'vid': self.v.id, 'token': 'inkorrekt'})
         self.assertEqual(response.templates[0].name, 'veranstalter/login_failed.html')
-        
+
         response = self.client.get('/veranstalter/login/', {'vid': 123, 'token': self.v.access_token})
         self.assertEqual(response.templates[0].name, 'veranstalter/login_failed.html')
 
@@ -55,7 +55,7 @@ class VeranstalterIndexTest(TestCase):
 
         self.s2, self.v_wo_excercises = get_veranstaltung('v')
         self.v_wo_excercises.veranstalter.add(self.p3)
-    
+
     def test_unauth(self):
         response = self.client.get('/veranstalter/')
         self.assertEqual(response.templates[0].name, 'veranstalter/not_authenticated.html')
@@ -159,7 +159,7 @@ class VeranstalterIndexTest(TestCase):
         response = c.post('/veranstalter/bestellung', {'evaluation-evaluieren': True,
                                                         "veranstalter_wizard-current_step": "evaluation"})
         self.assertEqual(response.status_code, 404)
-    
+
     def test_post_keine_evaluation(self):
         Einstellung.objects.create(name='bestellung_erlaubt', wert='1')
         c = login_veranstalter(self.v)
@@ -173,7 +173,7 @@ class VeranstalterIndexTest(TestCase):
         self.assertFalse(self.v.evaluieren)
         self.assertEqual(self.v.status, Veranstaltung.STATUS_KEINE_EVALUATION)
         self.assertTemplateUsed(response_firststep, "formtools/wizard/zusammenfassung.html")
-    
+
     def test_post_bestellung_vollerhebung(self):
         self.s.vollerhebung = True
         self.s.save()
@@ -379,3 +379,62 @@ class VeranstalterIndexTest(TestCase):
         self.assertEqual(self.v.status, Veranstaltung.STATUS_KEINE_EVALUATION)
 
 
+    def test_post_bestellung_with_digital(self):
+        Einstellung.objects.create(name='bestellung_erlaubt', wert='1')
+        c = login_veranstalter(self.v_wo_excercises)
+        c.post(
+            '/veranstalter/bestellung', {
+                'evaluation-evaluieren': True,
+                "veranstalter_wizard-current_step": "evaluation"
+            })
+
+        response = c.post(
+            '/veranstalter/bestellung', {
+                "veranstalter_wizard-current_step": "basisdaten",
+                "basisdaten-typ": "v",
+                "basisdaten-anzahl": 11,
+                "basisdaten-sprache": "de",
+                "basisdaten-verantwortlich": self.p3.id,
+                "basisdaten-ergebnis_empfaenger": self.p3.id,
+                "basisdaten-digitale_eval": 'on',
+                "basisdaten-auswertungstermin": "2011-01-01",
+                "save": "Speichern"
+            })
+
+        self.assertTemplateUsed(response,
+                                "formtools/wizard/digitale_evaluation.html")
+
+        response = c.post(
+            '/veranstalter/bestellung', {
+                "veranstalter_wizard-current_step": "digitale_eval",
+                "digitale_eval-digitale_eval_type": "L",
+            })
+
+        self.assertTemplateUsed(response, "formtools/wizard/address.html")
+
+        c.post(
+            '/veranstalter/bestellung', {
+                "veranstalter_wizard-current_step":
+                "verantwortlicher_address",
+                "verantwortlicher_address-email":
+                "test@test.de",
+                "verantwortlicher_address-anschrift":
+                "Alexanderstrasse 8, 64287 Darmstadt"
+            })
+        c.post(
+            '/veranstalter/bestellung', {
+                "veranstalter_wizard-current_step": "freie_fragen",
+                "freie_fragen-freifrage1": "Ist das die erste Frage?",
+                "freie_fragen-freifrage2": "Ist das die zweite Frage?"
+            })
+        c.post(
+            '/veranstalter/bestellung', {
+                'veroeffentlichen-veroeffentlichen': True,
+                "veranstalter_wizard-current_step": "veroeffentlichen"
+            })
+
+        c.post('/veranstalter/bestellung',
+               {"veranstalter_wizard-current_step": "zusammenfassung"})
+
+        self.v_wo_excercises.refresh_from_db()
+        self.assertEqual(self.v_wo_excercises.digitale_eval_type, 'L')
