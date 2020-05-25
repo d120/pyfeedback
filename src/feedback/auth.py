@@ -27,7 +27,7 @@ class VeranstalterBackend(ModelBackend):
 
 
 class TakeoverBackend(ModelBackend):
-    def authenticate(self, user, current_user=None, reset=False):
+    def authenticate(self, request, user, current_user=None, reset=False):
         if reset or (current_user and current_user.is_superuser):
             return user
         return None

@@ -37,10 +37,10 @@ class TakeoverBackendTest(TestCase):
         self.uj.is_superuser = True
     
     def test_authenticate(self):
-        self.assertFalse(self.b.authenticate(user=self.ub))
-        self.assertFalse(self.b.authenticate(user=self.ub, current_user=self.ub))
-        self.assertEqual(self.b.authenticate(user=self.ub, current_user=self.uj), self.ub)
-        self.assertEqual(self.b.authenticate(user=self.ub, reset=True), self.ub)
+        self.assertFalse(self.b.authenticate(request=None, user=self.ub))
+        self.assertFalse(self.b.authenticate(request=None, user=self.ub, current_user=self.ub))
+        self.assertEqual(self.b.authenticate(request=None, user=self.ub, current_user=self.uj), self.ub)
+        self.assertEqual(self.b.authenticate(request=None, user=self.ub, reset=True), self.ub)
 
 
 class FSAccountBackendTest(TestCase):
