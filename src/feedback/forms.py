@@ -71,7 +71,7 @@ class VeranstaltungBasisdatenForm(BestellWizardForm):
 
         # Wenn Evaluation oder Vollerhebung, dann sind alle anderen Felder notwendig
         for k, field in list(self.fields.items()):
-            if k not in ["digitale_eval", "auswertungstermin"]:
+            if k not in ["auswertungstermin"]:
                 field.required = True
 
     class Meta:
