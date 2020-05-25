@@ -100,15 +100,15 @@
         {% block feedback_veranstalter_extra %}{% endblock %}
         <p style="color: #636363;">*Pflichtfeld</p>
         {% if wizard.steps.prev %}
-            <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">Zurück</button>&nbsp;
+            <button class="btn btn-secondary float-left" name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">Zurück</button>&nbsp;
         {% endif %}
 
         {% if wizard.steps.next %}
-            <input type="submit" name="next_step" value="Weiter"/>
+            <input class="btn btn-primary float-right" type="submit" name="next_step" value="Weiter"/>
         {% endif %}
 
         {% if wizard.steps.current == wizard.steps.last %}
-            <input type="submit" name="save" value="Speichern"/>
+            <input class="btn btn-primary float-right" type="submit" name="save" value="Speichern"/>
         {% endif %}
     </form>
 
