@@ -1,0 +1,63 @@
+{% extends "bestellung_base.html" %}{% load static %}
+
+{% block title %}TANs verarbeiten{% endblock %}
+{% block content %}
+<h1>TANs verarbeiten</h1>
+<h2>Vorschau</h2>
+<div class="jumbotron">
+    <h3>Losungsmail Preview</h3>
+    <hr>
+    <pre>
+    {{ losungspreview|wordwrap:100 }}
+    </pre>
+    <br>
+    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapselosungsrecipients"
+        aria-expanded="false" aria-controls="collapselosungsrecipients">
+        Empfänger <span class="badge badge-light">{{ losunglectures | length }}</span>
+    </button>
+    <div class="collapse" id="collapselosungsrecipients">
+        <div class="card card-body">
+            {{ losunglectures | unordered_list }}
+        </div>
+    </div>
+</div>
+
+
+<div class="jumbotron">
+    <h3>TANmail Preview</h3>
+    <hr>
+    <pre>
+    {{ tanpreview|wordwrap:100 }}
+    </pre>
+    <br>
+    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapsetanrecipients"
+        aria-expanded="false" aria-controls="collapsetanrecipients">
+        Empfänger <span class="badge badge-light">{{ tanlectures | length }}</span>
+    </button>
+    <div class="collapse" id="collapsetanrecipients">
+        <div class="card card-body">
+            {{ tanlectures | unordered_list }}
+        </div>
+    </div>
+</div>
+
+<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+    <table>
+        {{ wizard.management_form }}
+        {% if wizard.form.forms %}
+        {{ wizard.form.management_form }}
+        {% for form in wizard.form.forms %}
+        {{ form }}
+        {% endfor %}
+        {% else %}
+        {{ wizard.form }}
+        {% endif %}
+    </table>
+    <br>
+    {% if wizard.steps.prev %}
+    <button class="btn btn-secondary float-left" name="wizard_goto_step" type="submit"
+        value="{{ wizard.steps.prev }}">Zurück</button>
+    {% endif %}
+    <button class="btn btn-primary float-right" type="submit" value="Next">Absenden</button>
+</form>
+{% endblock %}

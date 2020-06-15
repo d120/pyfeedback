@@ -6,7 +6,7 @@ from django.forms import widgets
 from feedback.models import Person, Veranstaltung, Kommentar, BarcodeScannEvent
 from django.core.exceptions import ValidationError
 
-from feedback.models import Semester
+from feedback.models import Semester, Mailvorlage
 
 
 class BestellWizardForm(forms.ModelForm):
@@ -235,3 +235,14 @@ class CreateBarcodeScannEventForm(forms.ModelForm):
                 cd["tutorgroup"] = barcode_decoded["tutorgroup"]
 
         return cd
+
+
+class UploadTANCSV(forms.Form):
+    csv = forms.FileField(label='CSV Datei aus Evasys', help_text='Im Evasysseitenmenü unter dem Punkt "Teilnahmeübersicht" generierbar.')
+
+class SendOrPDF(forms.Form):
+    choice = forms.ChoiceField(choices=(('mail', 'Versende TANs per E-Mail',),), label='Verarbeitungsart')
+
+class EMailTemplates(forms.Form):
+    losungstemplate = forms.ModelChoiceField(Mailvorlage.objects.all(), help_text='Hier wird eine E-Mail an alle Veranstalter*innen ohne Anhang versendet. Es werden die selben Ersetzungen wie beim Standardmailsystem unterstützt und zusätzlich das Feld {{ losung }}.')
+    tantemplate = forms.ModelChoiceField(Mailvorlage.objects.all() ,help_text='Hier wird die gewählte Vorlage an alle Veranstalter*innen mit einer CSV Datei versendet. Es werden die selben Ersetzungen wie beim Standardmailsystem unterstützt.')

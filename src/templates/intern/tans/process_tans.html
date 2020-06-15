@@ -1,0 +1,25 @@
+{% extends "bestellung_base.html" %}{% load static %}
+
+{% block title %}TANs verarbeiten{% endblock %}
+{% block content %}
+<h1>TANs verarbeiten</h1>
+<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+    <table>
+        {{ wizard.management_form }}
+        {% if wizard.form.forms %}
+        {{ wizard.form.management_form }}
+        {% for form in wizard.form.forms %}
+        {{ form }}
+        {% endfor %}
+        {% else %}
+        {{ wizard.form }}
+        {% endif %}
+    </table>
+    <br>
+    {% if wizard.steps.prev %}
+    <button class="btn btn-secondary float-left" name="wizard_goto_step" type="submit"
+        value="{{ wizard.steps.prev }}">Zurück</button>
+    {% endif %}
+    <button class="btn btn-primary float-right" type="submit" value="Next">Weiter</button>
+</form>
+{% endblock %}

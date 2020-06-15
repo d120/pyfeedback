@@ -32,6 +32,7 @@
         <li><a href="{% url 'status_final' %}">Bestellphase abschließen</a> (nach Bestellphase)</li>
         <li><a href="{% url 'generate_letters' %}">Anschreiben für Veranstalter erzeugen</a> (nach Bestellphase)</li>
         <li><a href="{% url 'export_veranstaltungen' %}">Veranstaltungen für EvaSys exportieren</a> (vor dem Scannen)</li>
+        <li><a href="{% url 'process-tans' %}">TANs verarbeiten</a>  (nach der Bestellphase)</li>
         <li><a href="{% url 'import_ergebnisse' %}">Ergebnisse aus EvaSys importieren</a> (nach dem Scannen)</li>
         <li><a href="{% url 'sync_ergebnisse' %}">Rankings berechnen</a> (nach dem Ergebnis-Import)</li>
         {% if cur_semester %}

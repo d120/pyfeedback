@@ -7,7 +7,7 @@ from io import TextIOWrapper
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
-from django.core.mail import send_mass_mail
+from django.core.mail import send_mass_mail, EmailMessage
 from django.urls import reverse
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect
@@ -17,15 +17,21 @@ from django.utils.encoding import smart_str
 from django.views.decorators.http import require_safe, require_http_methods
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.views.generic import FormView
+from formtools.wizard.views import SessionWizardView
+from django.core.files.storage import default_storage
+from django import forms
+from django.core import mail
 
 from feedback import tools
 from feedback.forms import CloseOrderForm
 from feedback.forms import UploadFileForm
+from feedback.forms import UploadTANCSV, SendOrPDF, EMailTemplates
 from feedback.parser.ergebnisse import parse_ergebnisse
 from feedback.views import public
 from feedback.models import Veranstaltung, Semester, Einstellung, Mailvorlage, get_model, long_not_ordert, \
     FachgebietEmail, Tutor 
 from feedback.models.fragebogenUE2016 import FragebogenUE2016
+import feedback.parser.tan as tanparser
 
 
 
@@ -589,6 +595,70 @@ class CloseOrderFormView(UserPassesTestMixin, FormView):
 
     def get_success_url(self):
         return reverse('intern-index')
+
+    def test_func(self):
+        return self.request.user.is_superuser
+
+class ProcessTANs(UserPassesTestMixin, SessionWizardView):
+    template_name = 'intern/tans/process_tans.html'
+    form_list = [UploadTANCSV, SendOrPDF, EMailTemplates, forms.Form]
+    file_storage = default_storage
+
+    def done(self, form_list, **kwargs):
+        form_data = [form.cleaned_data for form in form_list]
+        # parse csv
+        tans = tanparser.parse(form_data[0]['csv'])
+        # send mass mail for losungs people
+        cur_semester = Semester.current()
+        lectures = Veranstaltung.objects.filter(semester=cur_semester,  digitale_eval=True,status__gte=Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR).prefetch_related('veranstalter')
+
+        mails = []
+        losungtemplate = form_data[2]['losungstemplate'].body
+        for lecture in lectures.filter(digitale_eval_type='L'):
+            subject = 'Losung für die Veranstaltung {}'.format(lecture.name)
+            context = RequestContext(self.request, {
+                    'veranstaltung': lecture.name,
+                    'losung': tans[lecture.name][0],
+            })
+            body = tools.render_email(losungtemplate, context)
+            recipients = [person.email for person in lecture.veranstalter.all() if person.email]
+            email = EmailMessage(subject, body, settings.DEFAULT_FROM_EMAIL, recipients)
+            mails.append(email)
+
+        # send massmail for tan people
+        losungtemplate = form_data[2]['tantemplate'].body
+        for lecture in lectures.filter(digitale_eval_type='T'):
+            subject = 'TANs für die Veranstaltung {}'.format(lecture.name)
+            context = RequestContext(self.request, {
+                    'veranstaltung': lecture.name,
+            })
+            body = tools.render_email(losungtemplate, context)
+            recipients = [person.email for person in lecture.veranstalter.all() if person.email]
+            email = EmailMessage(subject, body, settings.DEFAULT_FROM_EMAIL, recipients)
+            tancsv = 'TANS,\n' + '; \n'.join(tans[lecture.name])
+            email.attach('tans.csv', tancsv, 'text/csv')
+            mails.append(email)
+
+        mail_connection = mail.get_connection()
+        mail_connection.send_messages(mails)
+        return render(self.request, 'intern/tans/process_tans_preview.html', data)
+
+    def get_template_names(self):
+        return [self.template_name] if self.steps.step0 != 3 else ['intern/tans/process_tans_preview.html']
+
+    def get_context_data(self, form, **kwargs):
+        context = super().get_context_data(form=form, **kwargs)
+        if self.steps.step0 == 3:
+            form_data = self.get_all_cleaned_data()
+            demo_context, _, _ = get_demo_context(self.request)
+            context['tanpreview'] = tools.render_email(form_data['tantemplate'].    body, demo_context)
+            demo_context['losung'] = '<span style="color:blue">LOSUNGLOSUNG</span>'
+            context['losungspreview'] = tools.render_email(form_data   ['losungstemplate'].body, demo_context)
+            cur_semester = Semester.current()
+            lectures = Veranstaltung.objects.filter(semester=cur_semester,  digitale_eval=True)
+            context['tanlectures'] = list(lectures.filter(digitale_eval_type='T'). values_list('name', flat=True))
+            context['losunglectures'] = list(lectures.filter(digitale_eval_type='L').  values_list('name', flat=True))
+        return context  
 
     def test_func(self):
         return self.request.user.is_superuser
