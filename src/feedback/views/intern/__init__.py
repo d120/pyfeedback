@@ -641,7 +641,9 @@ class ProcessTANs(UserPassesTestMixin, SessionWizardView):
 
         mail_connection = mail.get_connection()
         mail_connection.send_messages(mails)
-        return render(self.request, 'intern/tans/process_tans_preview.html', data)
+        messages.success(self.request,
+                                 '{} Veranstaltungen wurden erfolgreich benachrichtigt.'.format(len(mails)))
+        return HttpResponseRedirect(reverse('intern-index'))
 
     def get_template_names(self):
         return [self.template_name] if self.steps.step0 != 3 else ['intern/tans/process_tans_preview.html']
