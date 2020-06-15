@@ -544,7 +544,10 @@ class Veranstaltung(models.Model):
         if self.typ in ('se', 'pr'):
             result = 'hardcopy'  # Selbstdruck verfahren
         if self.digitale_eval:
-            result = 'online'
+            if self.digitale_eval_type == 'L':
+                result = 'codeword'
+            else:
+                result = 'online'
         return result
 
     def get_barcode_number(self, tutorgruppe=0):
