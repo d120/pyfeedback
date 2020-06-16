@@ -674,7 +674,7 @@ class ProcessTANs(UserPassesTestMixin, SessionWizardView):
                     form_data['tantemplate'].body, demo_context)
             if form_data['losungstemplate']:
                 demo_context[
-                    'losung'] = '<span style="color:blue">LOSUNGLOSUNG</span>'
+                    'losungen'] = ['<span style="color:blue">LOSUNGLOSUNG</span>', '<span style="color:blue">LOSUNG2LOSUNG2</span>']
                 context['losungspreview'] = tools.render_email(
                     form_data['losungstemplate'].body, demo_context)
             cur_semester = Semester.current()
