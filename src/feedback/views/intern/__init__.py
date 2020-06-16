@@ -635,7 +635,7 @@ class ProcessTANs(UserPassesTestMixin, SessionWizardView):
             body = tools.render_email(losungtemplate, context)
             recipients = [person.email for person in lecture.veranstalter.all() if person.email]
             email = EmailMessage(subject, body, settings.DEFAULT_FROM_EMAIL, recipients)
-            tancsv = 'TANS,\n' + '; \n'.join(tans[lecture.name])
+            tancsv = 'TANS;\n' + '; \n'.join(tans[lecture.name])
             email.attach('tans.csv', tancsv, 'text/csv')
             mails.append(email)
 
