@@ -4,8 +4,10 @@
 {% block content %}
 <h1>TANs verarbeiten</h1>
 <h2>Vorschau</h2>
+
+{% if losungspreview %}
 <div class="jumbotron">
-    <h3>Losungsmail Preview</h3>
+    <h3>Losungsmail Vorschau</h3>
     <hr>
     <pre>
     {{ losungspreview|wordwrap:100 }}
@@ -21,10 +23,11 @@
         </div>
     </div>
 </div>
+{% endif %}
 
-
+{% if tanpreview %}
 <div class="jumbotron">
-    <h3>TANmail Preview</h3>
+    <h3>TANmail Vorschau</h3>
     <hr>
     <pre>
     {{ tanpreview|wordwrap:100 }}
@@ -40,6 +43,7 @@
         </div>
     </div>
 </div>
+{% endif %}
 
 <form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
     <table>

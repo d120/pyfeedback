@@ -244,5 +244,6 @@ class SendOrPDF(forms.Form):
     choice = forms.ChoiceField(choices=(('mail', 'Versende TANs per E-Mail',),), label='Verarbeitungsart')
 
 class EMailTemplates(forms.Form):
-    losungstemplate = forms.ModelChoiceField(Mailvorlage.objects.all(), help_text='Hier wird eine E-Mail an alle Veranstalter*innen ohne Anhang versendet. Es werden die selben Ersetzungen wie beim Standardmailsystem unterstützt und zusätzlich das Feld {{ losung }}.')
-    tantemplate = forms.ModelChoiceField(Mailvorlage.objects.all() ,help_text='Hier wird die gewählte Vorlage an alle Veranstalter*innen mit einer CSV Datei versendet. Es werden die selben Ersetzungen wie beim Standardmailsystem unterstützt.')
+    losungstemplate = forms.ModelChoiceField(Mailvorlage.objects.all(), 
+    required=False, help_text='Hier wird eine E-Mail an alle Veranstalter*innen ohne Anhang versendet. Es werden die selben Ersetzungen wie beim Standardmailsystem unterstützt und zusätzlich das Feld {{ losung }}.')
+    tantemplate = forms.ModelChoiceField(Mailvorlage.objects.all(), required=False, help_text='Hier wird die gewählte Vorlage an alle Veranstalter*innen mit einer CSV Datei versendet. Es werden die selben Ersetzungen wie beim Standardmailsystem unterstützt.')

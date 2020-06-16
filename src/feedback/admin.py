@@ -82,9 +82,9 @@ class VeranstaltungAdmin(admin.ModelAdmin):
                                    'auswertungstermin', 'freiefrage1', 'freiefrage2', 'kleingruppen', ]}),
     ]
     list_display = ('typ', 'name', 'semester', 'grundstudium', 'evaluieren', 'anzahl',
-                    'sprache', 'status', 'veranstalter_list', 'digitale_eval')
+                    'sprache', 'status', 'veranstalter_list', 'digitale_eval', 'auswertungstermin')
     list_display_links = ['name']
-    list_filter = ('typ', 'semester', 'status', 'grundstudium', 'evaluieren', 'sprache', 'digitale_eval')
+    list_filter = ('typ', 'semester', 'status', 'grundstudium', 'evaluieren', 'sprache', 'digitale_eval', 'digitale_eval_type')
     search_fields = ['name']
     filter_horizontal = ('veranstalter', 'ergebnis_empfaenger')  # @see http://stackoverflow.com/a/5386871
     readonly_fields = ('link_veranstalter',)

@@ -10,9 +10,17 @@ def parse(csv) -> Dict[str, List[str]]:
     for row in csvreader:
         if row == []:
             break
-        if row[0] not in data:
-            data[row[0]] = [row[2]]
+        tan = ''
+        # is this a TAN lecture?
+        if row[2] != '':
+            # short tan is in the third field
+            tan = row[2]
         else:
-            data[row[0]].append(row[2])
+            # codewords are saved in the second field
+            tan = row[1]
+        if row[0] not in data:
+            data[row[0]] = [tan]
+        else:
+            data[row[0]].append(tan)
 
     return data
