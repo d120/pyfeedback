@@ -1,4 +1,4 @@
-coverage==5.2.1
+coverage==5.3
 Django==2.2.16
 django-debug-toolbar==2.2
 docutils==0.16
