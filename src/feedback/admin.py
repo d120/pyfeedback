@@ -5,7 +5,7 @@ from django import forms
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render
 
-from feedback.models import Person, Veranstaltung, Semester, Einstellung, \
+from feedback.models import Person, Veranstaltung, Semester, \
     Mailvorlage, Kommentar, Tutor, BarcodeScanner, BarcodeScannEvent, BarcodeAllowedState, \
     EmailEndung
 from feedback.models.base import Log, Fachgebiet, FachgebietEmail
@@ -159,12 +159,6 @@ class SemesterAdmin(admin.ModelAdmin):
     ordering = ('-semester',)
 
 
-class EinstellungAdmin(admin.ModelAdmin):
-    """Admin View für Einstellung"""
-    list_display = ('name', 'wert')
-    list_editable = ('wert',)
-
-
 class MailvorlageAdmin(admin.ModelAdmin):
     """Admin View für Mailvorlage"""
     list_display = ('subject',)
@@ -254,7 +248,6 @@ class FachgebietAdmin(admin.ModelAdmin):
 admin.site.register(Person, PersonAdmin)
 admin.site.register(Veranstaltung, VeranstaltungAdmin)
 admin.site.register(Semester, SemesterAdmin)
-admin.site.register(Einstellung, EinstellungAdmin)
 admin.site.register(Mailvorlage, MailvorlageAdmin)
 admin.site.register(Kommentar, KommentarAdmin)
 admin.site.register(Tutor, TutorAdmin)

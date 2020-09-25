@@ -4,7 +4,7 @@ from subprocess import call
 from django.test import TestCase, tag
 from django.conf import settings
 
-from feedback.models import Semester, Person, Veranstaltung, Fragebogen2009, Mailvorlage, Einstellung
+from feedback.models import Semester, Person, Veranstaltung, Fragebogen2009, Mailvorlage
 from feedback.tests.tools import NonSuTestMixin, get_veranstaltung
 
 @tag('latex')

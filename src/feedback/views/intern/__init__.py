@@ -28,7 +28,7 @@ from feedback.forms import UploadFileForm
 from feedback.forms import UploadTANCSV, SendOrPDF, EMailTemplates
 from feedback.parser.ergebnisse import parse_ergebnisse
 from feedback.views import public
-from feedback.models import Veranstaltung, Semester, Einstellung, Mailvorlage, get_model, long_not_ordert, \
+from feedback.models import Veranstaltung, Semester, Mailvorlage, get_model, long_not_ordert, \
     FachgebietEmail, Tutor
 from feedback.models.fragebogenUE2016 import FragebogenUE2016
 import feedback.parser.tan as tanparser
@@ -388,13 +388,7 @@ def sendmail(request):
             data['body_rendered'] = tools.render_email(data['body'], demo_context)
 
             for status in data['recipient']:
-                if status <= Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR:
-                    if Einstellung.get('bestellung_erlaubt') == '0':
-                        messages.warning(request,
-                                         'Bestellungen sind aktuell nicht erlaubt! Bist du ' +
-                                         'sicher, dass du trotzdem die Dozenten anschreiben willst, ' +
-                                         'die noch nicht bestellt haben?')
-                elif status == Veranstaltung.STATUS_ERGEBNISSE_VERSANDT:
+                if status == Veranstaltung.STATUS_ERGEBNISSE_VERSANDT:
                     if semester.sichtbarkeit != 'VER':
                         messages.warning(request,
                                          'Die Sichtbarkeit der Ergebnisse des ausgewählten ' +

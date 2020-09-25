@@ -724,24 +724,6 @@ class Tutor(models.Model):
         app_label = 'feedback'
 
 
-class Einstellung(models.Model):
-    """Repräsentiert die Einstellungen für die Evaluation."""
-    name = models.CharField(max_length=100, unique=True)
-    wert = models.CharField(max_length=255, blank=True)
-
-    @staticmethod
-    def get(name):
-        return Einstellung.objects.get(name=name).wert
-
-    class Meta:
-        verbose_name = 'Einstellung'
-        verbose_name_plural = 'Einstellungen'
-        app_label = 'feedback'
-
-    def __str__(self):
-        return '%s = "%s"' % (self.name, self.wert)
-
-
 class Mailvorlage(models.Model):
     """Repräsentiert eine Mailvorlage"""
     subject = models.CharField(max_length=100, unique=True)

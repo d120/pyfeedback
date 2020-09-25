@@ -4,7 +4,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.test import TestCase
 
-from feedback.models import Einstellung, Person, Veranstaltung, Tutor
+from feedback.models import Person, Veranstaltung, Tutor
 from feedback.tests.tools import get_veranstaltung, login_veranstalter
 
 class VeranstalterLoginTest(TestCase):
@@ -61,7 +61,6 @@ class VeranstalterIndexTest(TestCase):
         self.assertEqual(response.templates[0].name, 'veranstalter/not_authenticated.html')
 
     def test_invalid_state(self):
-        Einstellung.objects.create(name='bestellung_erlaubt', wert='0')
         c = login_veranstalter(self.v)
         self.v.status = Veranstaltung.STATUS_GEDRUCKT
         self.v.save()
@@ -69,7 +68,6 @@ class VeranstalterIndexTest(TestCase):
         self.assertEqual(302, response.status_code)
 
     def test_nothing(self):
-        Einstellung.objects.create(name='bestellung_erlaubt', wert='0')
         c = login_veranstalter(self.v)
         response = c.get('/veranstalter/')
         ctx = response.context
@@ -80,7 +78,6 @@ class VeranstalterIndexTest(TestCase):
             ctx['comment_form']
 
     def test_post_bestellung(self):
-        Einstellung.objects.create(name='bestellung_erlaubt', wert='1')
         c = login_veranstalter(self.v)
         response_first_step = c.post('/veranstalter/bestellung', {'evaluation-evaluieren': True,
                                                         "veranstalter_wizard-current_step": "evaluation"})
@@ -169,7 +166,6 @@ class VeranstalterIndexTest(TestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_post_keine_evaluation(self):
-        Einstellung.objects.create(name='bestellung_erlaubt', wert='1')
         c = login_veranstalter(self.v)
         response_firststep = c.post('/veranstalter/bestellung', {"evaluation-evaluieren": False,
                                                         "veranstalter_wizard-current_step": "evaluation"})
@@ -185,7 +181,6 @@ class VeranstalterIndexTest(TestCase):
     def test_post_bestellung_vollerhebung(self):
         self.s.vollerhebung = True
         self.s.save()
-        Einstellung.objects.create(name='bestellung_erlaubt', wert='1')
         c = login_veranstalter(self.v)
 
         response_vollerhebung = c.get('/veranstalter/bestellung')
@@ -200,7 +195,6 @@ class VeranstalterIndexTest(TestCase):
         self.assertTemplateUsed(response_firststep, "formtools/wizard/basisdaten.html")
 
     def test_post_access_bestellung(self):
-        Einstellung.objects.create(name='bestellung_erlaubt', wert='1')
         self.v.status = Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR
         self.v.save()
 
@@ -216,7 +210,6 @@ class VeranstalterIndexTest(TestCase):
         self.assertTemplateUsed(response_firststep, "formtools/wizard/basisdaten.html")
 
     def test_post_bestellung_ein_ergebnis_empfaenger(self):
-        Einstellung.objects.create(name='bestellung_erlaubt', wert='1')
         c = login_veranstalter(self.v)
         response_firststep = c.post('/veranstalter/bestellung', {'evaluation-evaluieren': True,
                                                        "veranstalter_wizard-current_step": "evaluation"})
@@ -286,7 +279,6 @@ class VeranstalterIndexTest(TestCase):
         self.assertEqual(self.p.email, "test@test.de")
 
     def test_post_bestellung_without_excercises(self):
-        Einstellung.objects.create(name='bestellung_erlaubt', wert='1')
         c = login_veranstalter(self.v_wo_excercises)
         c.post('/veranstalter/bestellung', {'evaluation-evaluieren': True,
                                                        "veranstalter_wizard-current_step": "evaluation"})
@@ -321,7 +313,6 @@ class VeranstalterIndexTest(TestCase):
         self.assertEqual(Tutor.objects.count(), 0)
 
     def test_status_changes(self):
-        Einstellung.objects.create(name='bestellung_erlaubt', wert='1')
         c = login_veranstalter(self.v)
 
         c.post('/veranstalter/bestellung', {"evaluation-evaluieren": False,
@@ -402,7 +393,6 @@ class VeranstalterIndexTest(TestCase):
 
 
     def test_post_bestellung_with_digital(self):
-        Einstellung.objects.create(name='bestellung_erlaubt', wert='1')
         c = login_veranstalter(self.v_wo_excercises)
         c.post(
             '/veranstalter/bestellung', {

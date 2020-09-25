@@ -11,7 +11,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 from feedback.forms import UploadFileForm
-from feedback.models import Semester, Person, Veranstaltung, Fragebogen2009, Mailvorlage, Einstellung, \
+from feedback.models import Semester, Person, Veranstaltung, Fragebogen2009, Mailvorlage, \
     Fachgebiet, FachgebietEmail, Tutor, EmailEndung
 from feedback.tests.tools import NonSuTestMixin, get_veranstaltung
 
@@ -558,7 +558,6 @@ class SendmailTest(NonSuTestMixin, TestCase):
         v2.veranstalter.add(p2)
 
         mv = Mailvorlage.objects.create(subject='Testmail', body='Dies ist eine Testmail.')
-        Einstellung.objects.create(name='bestellung_erlaubt', wert='0')
         Tutor.objects.create(nummer=1, vorname='Max', nachname='Mux', email='max@fg1.com', anmerkung='',
                              veranstaltung=v1)
 

@@ -19,3 +19,4 @@ pyenv
 settings_secret.py
 static/*
 venv/
+.vscode/*

@@ -1,6 +1,6 @@
 # coding=utf-8
 
-from feedback.models.base import Einstellung, Mailvorlage, Person, Semester, Veranstaltung, \
+from feedback.models.base import Mailvorlage, Person, Semester, Veranstaltung, \
     Tutor, BarcodeScanner, BarcodeScannEvent, BarcodeAllowedState, Log, FachgebietEmail, Fachgebiet, \
     EmailEndung
 from feedback.models.imports import ImportPerson, ImportCategory, ImportVeranstaltung

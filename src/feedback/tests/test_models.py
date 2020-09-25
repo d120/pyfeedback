@@ -7,7 +7,7 @@ from django.test import TestCase, TransactionTestCase
 from django.utils.timezone import now
 from freezegun import freeze_time
 
-from feedback.models import get_model, Semester, Person, Veranstaltung, Einstellung, Mailvorlage
+from feedback.models import get_model, Semester, Person, Veranstaltung, Mailvorlage
 from feedback.models.base import AlternativVorname, Log, BarcodeScanner, Fachgebiet, FachgebietEmail, BarcodeAllowedState, EmailEndung
 from feedback.models import past_semester_orders
 from feedback.models import ImportPerson, ImportCategory, ImportVeranstaltung, Kommentar
@@ -474,24 +474,6 @@ class VeranstaltungTest(TransactionTestCase):
         # FIXME: Is the below assert necessary? Since Python3 strings are all Unicode
         # not_saved_v = Veranstaltung()
         # self.assertEqual(type(not_saved_v.link_veranstalter()), UnicodeType)
-
-
-class EinstellungTest(TestCase):
-    def setUp(self):
-        self.a = Einstellung.objects.create(name='spam', wert='bacon')
-        self.b = Einstellung.objects.create(name='sausage', wert='eggs')
-
-    def test_get(self):
-        self.assertEqual(Einstellung.get('spam'), self.a.wert)
-        self.assertEqual(Einstellung.get('sausage'), self.b.wert)
-
-    def test_unicode(self):
-        self.assertEqual(str(self.a), 'spam = "bacon"')
-        self.assertEqual(str(self.b), 'sausage = "eggs"')
-
-    def test_unique(self):
-        with self.assertRaises(IntegrityError):
-            Einstellung.objects.create(name='spam', wert='cheese')
 
 
 class MailvorlageTest(TestCase):
