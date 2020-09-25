@@ -87,7 +87,7 @@ class VeranstalterIndexTest(TestCase):
 
         self.assertTemplateUsed(response_first_step, "formtools/wizard/basisdaten.html")
 
-        response_second_step = c.post('/veranstalter/bestellung', {
+        response_second_temp_step = c.post('/veranstalter/bestellung', {
             "veranstalter_wizard-current_step": "basisdaten",
             "basisdaten-typ": "vu",
             "basisdaten-anzahl": 22,
@@ -95,9 +95,17 @@ class VeranstalterIndexTest(TestCase):
             "basisdaten-verantwortlich": self.p.id,
             "basisdaten-ergebnis_empfaenger": [self.p.id, self.p2.id],
             "basisdaten-auswertungstermin": '2011-01-01',
+            "basisdaten-digitale_eval": "on",
             "save": "Speichern"
         })
 
+        self.assertTemplateUsed(response_second_temp_step, "formtools/wizard/digitale_evaluation.html")
+
+        response_second_step = c.post('/veranstalter/bestellung', {
+            "veranstalter_wizard-current_step": "digitale_eval",
+            "digitale_eval-digitale_eval_type": "T",
+        })
+        
         self.assertTemplateUsed(response_second_step, "formtools/wizard/primaerdozent.html")
 
         response_third_step = c.post('/veranstalter/bestellung', {
@@ -215,7 +223,7 @@ class VeranstalterIndexTest(TestCase):
 
         self.assertTemplateUsed(response_firststep, "formtools/wizard/basisdaten.html")
 
-        response_secondstep = c.post('/veranstalter/bestellung', {
+        response_second_temp_step = c.post('/veranstalter/bestellung', {
             "veranstalter_wizard-current_step": "basisdaten",
             "basisdaten-typ": "vu",
             "basisdaten-anzahl": 22,
@@ -223,7 +231,15 @@ class VeranstalterIndexTest(TestCase):
             "basisdaten-verantwortlich": self.p.id,
             "basisdaten-ergebnis_empfaenger": self.p2.id,
             "basisdaten-auswertungstermin": '2011-01-01',
+            "basisdaten-digitale_eval": "on",
             "save": "Speichern"
+        })
+
+        self.assertTemplateUsed(response_second_temp_step, "formtools/wizard/digitale_evaluation.html")
+
+        response_secondstep = c.post('/veranstalter/bestellung', {
+            "veranstalter_wizard-current_step": "digitale_eval",
+            "digitale_eval-digitale_eval_type": "T",
         })
 
         self.assertTemplateUsed(response_secondstep, "formtools/wizard/address.html")
@@ -329,7 +345,13 @@ class VeranstalterIndexTest(TestCase):
             "basisdaten-verantwortlich": self.p.id,
             "basisdaten-ergebnis_empfaenger": [self.p.id, self.p2.id],
             "basisdaten-auswertungstermin": '2011-01-01',
+            "basisdaten-digitale_eval": "on",
             "save": "Speichern"
+        })
+
+        c.post('/veranstalter/bestellung', {
+            "veranstalter_wizard-current_step": "digitale_eval",
+            "digitale_eval-digitale_eval_type": "T",
         })
 
         c.post('/veranstalter/bestellung', {
