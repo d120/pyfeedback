@@ -207,6 +207,11 @@ class Person(models.Model):
     def __str__(self):
         return '%s, %s' % (self.nachname, self.vorname)
 
+    def printable(self) -> bool:
+        """ Check whether the user has all required fields for printing (e.g. for generating the stickers)
+        """
+        return self.vorname != "" and self.nachname != "" and self.email != "" and self.anschrift != ""
+
     class Meta:
         verbose_name = 'Person'
         verbose_name_plural = 'Personen'
@@ -815,4 +820,3 @@ class Log(models.Model):
         verbose_name = 'Log'
         verbose_name_plural = 'Logs'
         app_label = 'feedback'
-

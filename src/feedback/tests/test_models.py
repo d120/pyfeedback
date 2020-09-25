@@ -255,6 +255,15 @@ class PersonTest(TestCase):
         self.assertEqual(similar_persons.count(), 1)
         self.assertTrue(similar_persons.filter(vorname='Test').exists())
 
+    def test_person_completeness_check(self):
+        self.assertFalse(self.p1.printable())
+        
+        self.p1.email = "test@example.com"
+        self.assertFalse(self.p1.printable())
+
+        self.p1.anschrift = "Hochschulstraße 10"
+        self.assertTrue(self.p1.printable())
+
     def test_veranstaltungen(self):
         veranstaltungen = Person.veranstaltungen(self.p1)
         veranstalter_name = veranstaltungen.filter(veranstalter=self.p1)[0].veranstalter.get().full_name()

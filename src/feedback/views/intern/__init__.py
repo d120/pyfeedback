@@ -21,6 +21,7 @@ from formtools.wizard.views import SessionWizardView
 from django.core.files.storage import default_storage
 from django import forms
 from django.core import mail
+from django.utils.safestring import mark_safe
 
 from feedback import tools
 from feedback.forms import CloseOrderForm
@@ -231,6 +232,10 @@ def generate_letters(request):
 
     lines = []
     for v in veranst:
+        if not v.verantwortlich.printable():
+            messages.error(request,
+            mark_safe(f"Der Veranstalter {v.verantwortlich.full_name} ist nicht druckbar, da das Personenprofil nicht vollständig ist. Du kannst das unter <a href={reverse('admin:feedback_person_change', args=(v.verantwortlich.id,))}>hier</a> beheben."))
+            return HttpResponseRedirect(reverse('generate_letters'))
         eva_id=v.get_barcode_number()
         empfaenger = str(v.verantwortlich.full_name())
         line = '\\adrentry{%s}{%s}{%s}{%s}{%s}{%s}{%s}{%s}{%s}\n' % (
