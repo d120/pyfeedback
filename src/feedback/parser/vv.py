@@ -2,14 +2,14 @@
 
 from xml.etree import ElementTree
 from django.db import IntegrityError
-from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.core.files.uploadedfile import InMemoryUploadedFile, TemporaryUploadedFile
 
 from feedback.models import ImportCategory, ImportVeranstaltung, ImportPerson
 
 
 def replace_first_line(file, replacement):
     # suppress a type error which was confusing
-    if type(file) is not InMemoryUploadedFile:
+    if type(file) not in (InMemoryUploadedFile,TemporaryUploadedFile):
         with open(file, 'r', encoding='iso-8859-1') as f:
             data = f.readlines()
 
