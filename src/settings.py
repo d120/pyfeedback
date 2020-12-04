@@ -85,7 +85,7 @@ STATICFILES_FINDERS = (
 SECRET_KEY = 's=15!5%-sw+4w*hsw(=h%rzyn&jy*&l1w%x2z4$5d^4p&feiwb'
 
 # Testing Setting to unload the debug toolbar when testing, see https://github.com/jazzband/django-debug-toolbar/issues/1405
-TESTING = 'test' in sys.argv
+TESTING = 'test' or 'check' in sys.argv
 
 # List of callables that know how to import templates from various sources.
 # Filesystem muss vor app_directories stehen, damit unsere Templates für registration den Standard
