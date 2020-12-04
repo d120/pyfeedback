@@ -3,6 +3,7 @@
 
 # determine if this is a production system
 import os
+import sys
 
 DEBUG = True
 
@@ -83,11 +84,14 @@ STATICFILES_FINDERS = (
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 's=15!5%-sw+4w*hsw(=h%rzyn&jy*&l1w%x2z4$5d^4p&feiwb'
 
+# Testing Setting to unload the debug toolbar when testing, see https://github.com/jazzband/django-debug-toolbar/issues/1405
+TESTING = 'test' or 'check' in sys.argv
+
 # List of callables that know how to import templates from various sources.
 # Filesystem muss vor app_directories stehen, damit unsere Templates für registration den Standard
 # überschreiben!
 
-MIDDLEWARE = (
+MIDDLEWARE = [
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -95,8 +99,9 @@ MIDDLEWARE = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'feedback.auth.FSDebugRemoteUserMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
-)
+]
+if not TESTING:
+    MIDDLEWARE += 'debug_toolbar.middleware.DebugToolbarMiddleware'
 
 ROOT_URLCONF = 'urls'
 
@@ -118,7 +123,7 @@ TEMPLATES = [
 ]
 
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes', # wird von admin benötigt
     'django.contrib.sessions',
@@ -128,8 +133,10 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'formtools',
     'feedback',
-    'debug_toolbar',
-)
+]
+
+if not TESTING:
+    INSTALLED_APPS += 'django_debug'
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
