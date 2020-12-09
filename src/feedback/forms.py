@@ -25,10 +25,13 @@ class VeranstaltungEvaluationForm(BestellWizardForm):
         super(VeranstaltungEvaluationForm, self).__init__(
             *args, **dict(kwargs, initial={"evaluieren": "False"})
         )
-
-        for k, field in list(self.fields.items()):
-            if not (Semester.current().vollerhebung):
-                field.required = True
+        
+        eval_field = self.fields['evaluieren']
+        if not (Semester.current().vollerhebung):
+            eval_field.required = True
+        else:
+            self.initial['evaluieren'] = True
+            eval_field.disabled = True
 
     def clean(self):
         cleaned_data = super().clean()
