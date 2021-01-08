@@ -678,6 +678,7 @@ class ProcessTANs(UserPassesTestMixin, SessionWizardView):
                     form_data['losungstemplate'].body, demo_context)
             cur_semester = Semester.current()
             lectures = Veranstaltung.objects.filter(semester=cur_semester,
+                                                    status__range=(Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR, Veranstaltung.STATUS_BESTELLUNG_WIRD_VERARBEITET),
                                                     digitale_eval=True)
             context['tanlectures'] = list(
                 lectures.filter(digitale_eval_type='T').values_list('name',
