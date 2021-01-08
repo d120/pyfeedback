@@ -609,7 +609,7 @@ class ProcessTANs(UserPassesTestMixin, SessionWizardView):
         tans = tanparser.parse(form_data[0]['csv'])
         # send mass mail for losungs people
         cur_semester = Semester.current()
-        lectures = Veranstaltung.objects.filter(semester=cur_semester,  digitale_eval=True,status__gte=Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR).prefetch_related('veranstalter')
+        lectures = Veranstaltung.objects.filter(semester=cur_semester,  digitale_eval=True,status__range=(Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR, Veranstaltung.STATUS_BESTELLUNG_WIRD_VERARBEITET)).prefetch_related('veranstalter')
 
         mails = []
         if form_data[2]['losungstemplate']:
