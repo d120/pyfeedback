@@ -21,6 +21,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install coveralls
         pip install -r requirements.txt
+        echo "PASSWORD_HASHERS = ['django.contrib.auth.hashers.MD5PasswordHasher',]" >> settings.py
     - name: Test
       env:
         PYTHONWARNINGS: all
