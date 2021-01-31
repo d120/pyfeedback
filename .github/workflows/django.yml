@@ -31,14 +31,14 @@ jobs:
         pip install coveralls
         pip install -r requirements.txt
         echo "PASSWORD_HASHERS = ['django.contrib.auth.hashers.MD5PasswordHasher',]" >> src/settings.py
-    - name: Static Tests
+    - name: Static tests
       env:
         PYTHONWARNINGS: all
       run: |
         python src/manage.py check
         python src/manage.py makemigrations --dry-run --check
 
-    - name: Unit Tests
+    - name: Unit tests
       env:
         PYTHONWARNINGS: all
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
