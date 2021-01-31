@@ -40,6 +40,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         COVERALLS_SERVICE_NAME: github
       run: |
-        coverage run --omit="*/migrations*" --source="." src/manage.py test feedback
+        coverage run src/manage.py test feedback
         coveralls
 
