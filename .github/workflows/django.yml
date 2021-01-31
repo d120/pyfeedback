@@ -34,7 +34,7 @@ jobs:
         python src/manage.py check
         python src/manage.py makemigrations --dry-run --check
 
-    - name: Test
+    - name: Unit Tests
       env:
         PYTHONWARNINGS: all
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
