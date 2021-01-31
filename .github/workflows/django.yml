@@ -34,6 +34,7 @@ jobs:
         COVERALLS_SERVICE_NAME: github
       run: |
         python src/manage.py check
+        python src/manage.py makemigrations --dry-run --check
         coverage run --omit="*/migrations*" --source="." src/manage.py test feedback
         coveralls
 
