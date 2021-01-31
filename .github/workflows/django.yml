@@ -1,18 +1,13 @@
 name: Test
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+on: [push, pull_request]
 
 jobs:
-  build:
-
-    runs-on: ubuntu-latest
+  test:
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
-        python-version: [3.6, 3.7, 3.8]
+        python-version: [3.6, 3.7, 3.8, 3.9]
 
     steps:
     - uses: actions/checkout@v2
@@ -20,19 +15,37 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
+
+    - name: Cache pip
+      uses: actions/cache@v2
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ matrix.python-version }}-{{ hashFiles('requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-${{ matrix.python-version }}
+          ${{ runner.os }}-pip-
+          ${{ runner.os }}-
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install coveralls
         pip install -r requirements.txt
-    - name: Test
+        echo "PASSWORD_HASHERS = ['django.contrib.auth.hashers.MD5PasswordHasher',]" >> src/settings.py
+
+    - name: Static tests
+      env:
+        PYTHONWARNINGS: all
+      run: |
+        python src/manage.py check
+        python src/manage.py makemigrations --dry-run --check
+
+    - name: Unit tests
       env:
         PYTHONWARNINGS: all
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         COVERALLS_SERVICE_NAME: github
       run: |
-        python src/manage.py check
-        python src/manage.py test feedback
-        coverage run --omit="*/migrations*" --source="." src/manage.py test feedback
+        coverage run src/manage.py test feedback
         coveralls
 
