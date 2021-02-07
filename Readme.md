@@ -1,5 +1,5 @@
 # Feedback-Software
-[![Build Status](https://travis-ci.org/d120/pyfeedback.svg?branch=master)](https://travis-ci.org/d120/pyfeedback)
+![Build Status](https://github.com/d120/pyfeedback/workflows/Test/badge.svg?branch=master)
 [![Coverage Status](https://coveralls.io/repos/github/d120/pyfeedback/badge.svg?branch=master)](https://coveralls.io/github/d120/pyfeedback?branch=master)
 
 
