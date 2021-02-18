@@ -160,7 +160,7 @@ class VeranstalterIndexTest(TestCase):
 
     def test_missing_sessionid(self):
         c = login_veranstalter(self.v)
-        del c.cookies['sessionid']
+        del c.cookies[settings.SESSION_COOKIE_NAME]
         response = c.post('/veranstalter/bestellung', {'evaluation-evaluieren': True,
                                                         "veranstalter_wizard-current_step": "evaluation"})
         self.assertEqual(response.status_code, 404)
