@@ -216,3 +216,7 @@ COVERAGE_MODULE_EXCLUDES = ['tests$', 'settings$', 'locale$', 'django', 'migrati
 COVERAGE_CODE_EXCLUDES = ['from .* import .*', 'import .*']
 
 DEBUG_TOOLBAR_CONFIG = {'INTERCEPT_REDIRECTS': False}
+
+# application-specific-cookies
+CSRF_COOKIE_NAME = 'pyfeedback_csrftoken'
+SESSION_COOKIE_NAME = 'pyfeedback_sessionid'
