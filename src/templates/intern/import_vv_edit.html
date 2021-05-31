@@ -1,70 +1,44 @@
 {% extends "bestellung_base.html" %}{% load static %}{% load filter_range %}
 
 {% block extra_header %}
-<link rel="stylesheet" type="text/css" href="{% static 'jquery/jquery-ui-1.8.6.custom.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'jquery/jquery-ui.min.css' %}" />
+
 <style type="text/css">
-h2.ui-accordion-header, h3.ui-accordion-header, h4.ui-accordion-header,
-h5.ui-accordion-header h6.ui-accordion-header
-{ margin-bottom: 0 }
-
-.mark_unmark { margin-bottom: 0.9em; margin-top: -0.9em; font-size: 80% }
-
-.foo { border: 1px solid green; }
-.unattended_course {
-    background-color: #FFFF00;
-}
-</style>
-
-<script type="text/javascript" src="{% static 'jquery/jquery-1.4.2.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'jquery/jquery-ui-1.8.6.custom.min.js' %}"></script>
-<script type="text/javascript">
-<!--
-function check_checkboxes(event, checked) {
-	var parentElem = $(event.target).parent().parent();
-
-    var checkboxes;
-    if(checked) {
-        checkboxes = parentElem.find(".attended_course > input:checkbox");
-        var unattended_courses = parentElem.find(".unattended_course");
-        if(unattended_courses.length > 0) {
-            alert("Es gibt Veranstaltungen ohne validen Dozenten. Diese Veranstaltungen wurden nicht ausgewählt.");
-
-            var expandParent = function(childElem) {
-                var accordeon_div = childElem.parent().parent();
-                var accordeon_title = accordeon_div.prev();
-                if(accordeon_title.is("h3")) {
-                    if(!accordeon_div.is(":visible")) { // only expand if collapsed
-                        accordeon_title.click();
-                    }
-                    expandParent(accordeon_title);
-                }
-            }
-            expandParent(unattended_courses.eq(0))
-        }
-    } else {
-        checkboxes = parentElem.find("input:checkbox");
+    h2.ui-accordion-header,
+    h3.ui-accordion-header,
+    h4.ui-accordion-header,
+    h5.ui-accordion-header h6.ui-accordion-header {
+        margin-bottom: 0
     }
-    checkboxes.attr('checked', checked);
-	event.preventDefault();	
-}
 
-$(function() {
-	$(".accordion").accordion({ autoHeight: false, collapsible: true, active: false });
-	
-	$("a.markall").click(function(event) { check_checkboxes(event, true); });
-	$("a.unmarkall").click(function(event) { check_checkboxes(event, false); });
-});
-//-->
-</script>
+    .mark_unmark {
+        margin-bottom: 0.9em;
+        margin-top: -0.9em;
+        font-size: 80%
+    }
+
+    .foo {
+        border: 1px solid green;
+    }
+
+    .unattended_course {
+        background-color: #FFFF00;
+    }
+
+    .ui-accordion-content {
+        box-sizing: content-box;
+    }
+</style>
 {% endblock %}
-	
+
 {% block title %}Vorlesungsverzeichnis importieren{% endblock %}
 
 {% block content %}
 <h1>Vorlesungsverzeichnis importieren</h1>
 
 <noscript>
-	<p>Bitte JavaScript aktivieren, um bequemer durch das Verzeichnis navigieren und Veranstaltungen auswählen zu können!</p>
+    <p>Bitte JavaScript aktivieren, um bequemer durch das Verzeichnis navigieren und Veranstaltungen auswählen zu
+        können!</p>
 </noscript>
 
 <p>Im Folgenden können die zu importierenden Veranstaltungen ausgewählt werden.</p>
@@ -103,15 +77,62 @@ $(function() {
                 {% endfor %}
             </ul>
 
-    {% endfor %}
-    {% for i in 0|range:remaining_close_tags %}
-        </div></div>
-    {% endfor %}
+            {% endfor %}
+            {% for i in 0|range:remaining_close_tags %}
+        </div>
+        </div>
+        {% endfor %}
 
-    <div>
-        <input type="submit" name="submit" value="Weiter" />&nbsp;
-        <input type="reset" name="reset" value="Zurücksetzen" />
-    </div>
+        <div>
+            <input type="submit" name="submit" value="Weiter" />&nbsp;
+            <input type="reset" name="reset" value="Zurücksetzen" />
+        </div>
 </form>
 
+{% endblock %}
+
+{% block javascript_block %}
+<script src="{% static 'jquery/jquery.min.js' %}"></script>
+<script src="{% static 'jquery/jquery-ui.min.js' %}"></script>
+
+<script type="text/javascript">
+    function check_checkboxes(event, checked) {
+        var parentElem = $(event.target).parent().parent();
+
+        var checkboxes;
+        if (checked) {
+            checkboxes = parentElem.find(".attended_course > input:checkbox");
+            var unattended_courses = parentElem.find(".unattended_course");
+            if (unattended_courses.length > 0) {
+                alert("Es gibt Veranstaltungen ohne validen Dozenten. Diese Veranstaltungen wurden nicht ausgewählt.");
+
+                var expandParent = function (childElem) {
+                    var accordeon_div = childElem.parent().parent();
+                    var accordeon_title = accordeon_div.prev();
+                    if (accordeon_title.is("h3")) {
+                        if (!accordeon_div.is(":visible")) { // only expand if collapsed
+                            accordeon_title.click();
+                        }
+                        expandParent(accordeon_title);
+                    }
+                }
+                expandParent(unattended_courses.eq(0))
+            }
+        } else {
+            checkboxes = parentElem.find("input:checkbox");
+        }
+        checkboxes.prop('checked', checked);
+        event.preventDefault();
+    }
+
+    $(function () {
+        $(".accordion").accordion({ heightStyle: "content", collapsible: true, active: false });
+
+        $("a.markall").click(function (event) { check_checkboxes(event, true); });
+        $("a.unmarkall").click(function (event) { check_checkboxes(event, false); });
+    });
+</script>
+
+<script
+    src="https://www.fachschaft.informatik.tu-darmstadt.de/static/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
 {% endblock %}
