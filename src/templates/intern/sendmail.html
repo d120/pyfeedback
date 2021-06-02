@@ -3,16 +3,7 @@
 {% block title %}Mail versenden{% endblock %}
 
 {% block extra_header %}
-    <script type="text/javascript" src="{% static 'jquery/jquery-1.4.2.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'jquery/jquery-ui-1.8.6.custom.min.js' %}"></script>
-    <link rel="stylesheet" href="{% static 'jquery/chosen/chosen.min.css' %}" />
-    <script type="text/javascript" src="{% static 'jquery/chosen/chosen.jquery.min.js' %}"></script>
-{% endblock %}
-
-{% block javascript_block %}
-    <script>
-        $(".chosen-select").chosen();
-    </script>
+<link rel="stylesheet" type="text/css" href="{% static 'jquery/chosen/chosen.min.css' %}" />
 {% endblock %}
 
 {% block content %}
@@ -71,9 +62,20 @@
 
 <h2>Verfügbare Variablen</h2>
 <p>
-    <ul>
-        <li>&#123;&#123; veranstaltung &#125;&#125; - Name der Veranstaltung</li>
-        <li>&#123;&#123; link_veranstalter &#125;&#125; - Link zum Veranstalterbereich</li>
-    </ul>
+<ul>
+    <li>&#123;&#123; veranstaltung &#125;&#125; - Name der Veranstaltung</li>
+    <li>&#123;&#123; link_veranstalter &#125;&#125; - Link zum Veranstalterbereich</li>
+</ul>
 </p>
+{% endblock %}
+
+{% block javascript_block %}
+<script src="{% static 'jquery/jquery.min.js' %}"></script>
+<script src="{% static 'jquery/jquery-ui.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'jquery/chosen/chosen.jquery.min.js' %}"></script>
+<script>
+  $(".chosen-select").chosen();
+</script>
+<script
+    src="https://www.fachschaft.informatik.tu-darmstadt.de/static/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
 {% endblock %}

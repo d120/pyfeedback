@@ -363,7 +363,8 @@ def sendmail(request):
             elif 'status_values' in request.POST.keys():
                 data['recipient'] = ast.literal_eval(request.POST.get('status_values'))
             elif 'uebernehmen' not in request.POST:
-                return HttpResponseRedirect(reverse('sendmail'))
+                messages.error(request, "Kein Status gesetzt.")
+                return render(request, 'intern/sendmail.html', data)
 
         except (Semester.DoesNotExist, KeyError):
             return HttpResponseRedirect(reverse('sendmail'))
