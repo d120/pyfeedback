@@ -1,5 +1,5 @@
 coverage==5.5
-Django==2.2.24
+Django==2.2.23
 django-debug-toolbar==3.2.1
 docutils==0.17.1
 freezegun==1.1.0
