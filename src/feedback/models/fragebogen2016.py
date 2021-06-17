@@ -68,7 +68,7 @@ class Fragebogen2016(Fragebogen):
 class Ergebnis2016(Ergebnis):
     parts_vl = [
              ['v_6_5', 'Vorlesung: Gesamtnote',
-              ['Welche Gesamtnote würdest Du der Vorlesung (ohne Übungen) geben?']],
+              ['6.5 Welche Gesamtnote würdest Du der Vorlesung (ohne Übungen) geben?']],
              ['v_didaktik', 'Vorlesung: Didaktik',
               ['3.3 Die Lernziele der Veranstaltung sind mir klar geworden.',
                '3.4 Der Stoff wurde anhand von Beispielen verdeutlicht.',
