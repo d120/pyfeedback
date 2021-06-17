@@ -68,7 +68,7 @@ class Fragebogen2016(Fragebogen):
 class Ergebnis2016(Ergebnis):
     parts_vl = [
              ['v_6_5', 'Vorlesung: Gesamtnote',
-              ['Welche Gesamtnote würdest Du der Vorlesung (ohne Übungen) geben?']],
+              ['6.5 Welche Gesamtnote würdest Du der Vorlesung (ohne Übungen) geben?']],
              ['v_didaktik', 'Vorlesung: Didaktik',
               ['3.3 Die Lernziele der Veranstaltung sind mir klar geworden.',
                '3.4 Der Stoff wurde anhand von Beispielen verdeutlicht.',
@@ -93,9 +93,47 @@ class Ergebnis2016(Ergebnis):
                '3.8 Die Vorlesung motivierte dazu, sich außerhalb der Veranstaltung selbstständig mit den behandelten Themen auseinanderzusetzen.']],
             ]
 
-    parts_ue = [['ue_didaktik'], ['ue_organisation'], ['ue_arbeitsbedingungen'], ['ue_umgang'], ['ue_lernerfolg'], ['ue_feedbackpreis']]
+    parts_ue = [
+                ['ue_didaktik', 'Übung: Didaktik',
+                 ['4.1 Die Übung war inhaltlich gut strukturiert.',
+                  '4.2 Die Lernziele der Übung sind mir klar geworden.',
+                  '5.2 Der*Die Tutor*in hat gut und verständlich erklärt.',
+                  '5.3 Der*Die Tutor*in hat die Gruppe motiviert.',
+                  '5.4 Der*Die Tutor*in war fachlich kompetent.',
+                  '5.5 Der*Die Tutor*in zeigte sich gut vorbereitet.',
+                  '5.6 Der*Die Tutor*in hat die Übungstunde gut strukturiert.',
+                  '5.7 Der*Die Tutor*in war engagiert.',
+                  '5.8 Der*Die Tutor*in stellte wesentliche Punkte zur Bearbeitung der Aufgaben vor.',
+                  '5.9 Der*Die Tutor*in regte mich gezielt zum Mitdenken und zu eigener Mitarbeit an.',
+                  '5.10 Der*Die Tutor*in setzte verfügbare Medien (z. B. Tafel, Projektor, Beamer) sinnvoll ein.',
+                  '5.11 Der*Die Tutor*in hat elektronische Plattformen sinnvoll und hilfreich eingesetzt.',
+                  '5.15 Der*Die Tutor*in hat konstruktives bzw. gutes Feedback gegeben.']],
+                ['ue_organisation', 'Übung: Organisation',
+                 ['3.3 Die Aufgabenstellungen waren verständlich.',
+                  '3.4 Die Übungsaufgaben hatten inhaltlich eine klare Struktur.',
+                  '3.5 Die Übungsaufgaben waren motivierend.',
+                  '3.6 Es wurden ausreichend Lösungsvorschläge bereitgestellt bzw. präsentiert.',
+                  '3.7 Der Stoff der Vorlesung war gut auf die Übungen abgestimmt.',
+                  '3.8 Mein Vorwissen war ausreichend, um die Übungsaufgaben bearbeiten zu können.',
+                  '4.3 Die Organisation des Übungsbetriebs war gut.',
+                  '4.4 Es wurde genug Übungsmaterial (Aufgaben, etc.) zur Verfügung gestellt.',
+                  '4.5 Es stand genug Zeit für die Bearbeitung der Aufgaben zur Verfügung.',
+                  '4.6 Die Abgaben waren gut vereinbar mit anderen Veranstaltungen laut Regelstudienplan.']],
+                ['ue_arbeitsbedingungen', 'Übung: Arbeitsbedingungen',
+                 ['4.7 Die Auswahlmöglichkeiten der Termine waren angemessen bzw. der Übungszeitpunkt war passend.',
+                  '4.8 Die Gruppengröße war zufriedenstellend.',
+                  '4.9 Der Raum für die Übungen war zum Arbeiten und Lernen geeignet.']],
+                ['ue_umgang', 'Übung: Umgang',
+                 ['5.12 Der*Die Tutor*in erschien pünktlich.',
+                  '5.13 Der*Die Tutor*in behandelte alle Studierenden respektvoll.',
+                  '5.14 Der*Die Tutor*in teilte die Zeit zwischen den Studierenden angemessen auf.',
+                  '5.16 Der*Die Tutor*in hat nachvollziehbar bewertet bzw. benotet.']],
+                ['ue_lernerfolg', 'Übung: Lernerfolg',
+                 ['3.1 Durch die Aufgaben und den Übungsbetrieb habe ich viel gelernt.',
+                  '3.2 Die Übungen haben mir geholfen, den Stoff der Vorlesung besser zu verstehen.']],
+            ]
 
-    parts = parts_vl
+    parts = parts_vl + parts_ue
     hidden_parts = [
              ['v_feedbackpreis', 'Feedbackpreis: Beste Vorlesung',
               ['2.4 Die Vorlesung war inhaltlich gut strukturiert, ein roter Faden war erkennbar.',
@@ -111,7 +149,20 @@ class Ergebnis2016(Ergebnis):
                '2.14 Der Lehrende regte gezielt zur eigenen Mitarbeit / zum Mitdenken in der Veranstaltung an.',
                '3.8 Die Vorlesung motivierte dazu, sich außerhalb der Veranstaltungselbstständig mit den behandelten Themen auseinander zu setzen.',
                '3.7 Die Vorlesungsmaterialien (Folien, Skripte, Tafelanschrieb, Lehrbücher,e-Learning, etc.) haben das Lernen wirkungsvoll unterstützt.',
-               'Welche Gesamtnote würdest Du der Vorlesung (ohne Übungen) geben?']],
+               '6.5 Welche Gesamtnote würdest Du der Vorlesung (ohne Übungen) geben?']],
+             ['ue_feedbackpreis', 'Feedbackpreis: Beste Übung',
+              ['3.1 Durch die Aufgaben und den Übungsbetrieb habe ich viel gelernt.',
+               '3.2 Die Übungen haben mir geholfen, den Stoff der Vorlesung besser zu verstehen.',
+               '3.3 Die Aufgabenstellungen waren verständlich.',
+               '3.4 Die Übungsaufgaben hatten inhaltlich eine klare Struktur.',
+               '3.5 Die Übungsaufgaben waren motivierend.',
+               '3.7 Der Stoff der Vorlesung war gut auf die Übungen abgestimmt.',
+               '4.1 Die Übung war inhaltlich gut strukturiert.',
+               '4.2 Die Lernziele der Übung sind mir klar geworden.',
+               '4.3 Die Organisation des Übungsbetriebs war gut.',
+               '4.4 Es wurde genug Übungsmaterial (Aufgaben, etc.) zur Verfügung gestellt.',
+               '4.5 Es stand genug Zeit für die Bearbeitung der Aufgaben zur Verfügung.',
+               '6.3 Welche Gesamtnote gibst du der Übung?']],
             ]
     weight = {
               'v_feedbackpreis': [1] * 13 + [13],
