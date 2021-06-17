@@ -513,11 +513,11 @@ def sync_ergebnisse(request):
             if len(fbs):
                 found_something = True
                 data = {'veranstaltung': v, 'anzahl': len(fbs)}
-                for part in ergebnis.parts + ergebnis.hidden_parts:
+                for part in ergebnis.parts_vl + [ergebnis.hidden_parts[0]]:
                     result, count = tools.get_average(ergebnis, fbs, part[0])
                     data[part[0]] = result
                     data[part[0]+'_count'] = count
-                for part in ergebnis.parts_ue:
+                for part in ergebnis.parts_ue + [ergebnis.hidden_parts[1]]:
                     result, count = tools.get_average(ergebnis, erg, part[0])
                     data[part[0]] = result
                     data[part[0]+'_count'] = count
