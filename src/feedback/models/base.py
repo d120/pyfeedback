@@ -363,19 +363,19 @@ class Veranstaltung(models.Model):
     # VE FB20Vv1e 2698
 
     EVASYS_BOGENKENNUNG_DE = {
-        'pr': 'FB20Prd',
-        'se': 'FB20Sed',
-        'u': 'FB20Ud',
-        'v': 'FB20VLd',
-        'vu': 'FB20VLd',
+        'pr': 'FB20Prd1',
+        'se': 'FB20Sed1',
+        'u': 'FB20Ud1',
+        'v': 'FB20VLd2',
+        'vu': 'FB20VLd2',
     }
 
     EVASYS_BOGENKENNUNG_EN = {
-        'pr': 'FB20Pre',
-        'se': 'FB20See',
-        'u': 'FB20Ue1',
-        'v': 'FB20VLe',
-        'vu': 'FB20VLe',
+        'pr': 'FB20Prd1',
+        'se': 'FB20Sed1',
+        'u': 'FB20Ud1',
+        'v': 'FB20VLd2',
+        'vu': 'FB20VLd2',
     }
 
     BARCODE_BASE = 2 * 10 ** 11
