@@ -3,7 +3,7 @@ from typing import Dict, List
 
 def parse(csv: bytes) -> Dict[str, List[str]]:
     data: Dict[str, List[str]] = {}
-    csvfile = csv.read().decode('iso-8859-1')
+    csvfile = csv.read().decode('utf-8')
     dialect = Sniffer().sniff(csvfile[0:1024])
     csvreader = reader(csvfile.split("\n")[1:], dialect)
     data: Dict[str, List[str]] = {}
