@@ -1,6 +1,6 @@
 coverage==6.0.2
 Django==2.2.24
-django-debug-toolbar==3.2.2
+django-debug-toolbar==3.2.3
 docutils==0.18
 freezegun==1.1.0
 django-formtools==2.3
