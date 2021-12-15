@@ -56,7 +56,6 @@ class Fragebogen2020(Fragebogen):
     v_7_1 = models.CharField(max_length=1, choices=Fragebogen.STUNDEN_NACHBEARBEITUNG, blank=True)
 
     v_7_2 = models.CharField(max_length=3, blank=True)
-    v_7_3 = models.PositiveSmallIntegerField(blank=True, null=True)
     v_7_4 = models.PositiveSmallIntegerField(blank=True, null=True)
     v_7_5 = models.PositiveSmallIntegerField(blank=True, null=True)
 
@@ -159,7 +158,7 @@ class Ergebnis2020(Ergebnis):
           '2.14 Der Lehrende regte gezielt zur eigenen Mitarbeit / zum Mitdenken in der Veranstaltung an.',
           '3.8 Die Vorlesung motivierte dazu, sich außerhalb der Veranstaltungselbstständig mit den behandelten Themen auseinander zu setzen.',
           '3.7 Die Vorlesungsmaterialien (Folien, Skripte, Tafelanschrieb, Lehrbücher,e-Learning, etc.) haben das Lernen wirkungsvoll unterstützt.',
-          '6.5 Welche Gesamtnote würdest Du der Vorlesung (ohne Übungen) geben?']],
+          '7.5 Welche Gesamtnote würdest Du der Vorlesung (ohne Übungen) geben?']],
         ['ue_feedbackpreis', 'Feedbackpreis: Beste Übung',
          ['3.1 Durch die Aufgaben und den Übungsbetrieb habe ich viel gelernt.',
           '3.2 Die Übungen haben mir geholfen, den Stoff der Vorlesung besser zu verstehen.',
@@ -172,7 +171,7 @@ class Ergebnis2020(Ergebnis):
           '4.3 Die Organisation des Übungsbetriebs war gut.',
           '4.4 Es wurde genug Übungsmaterial (Aufgaben, etc.) zur Verfügung gestellt.',
           '4.5 Es stand genug Zeit für die Bearbeitung der Aufgaben zur Verfügung.',
-          '6.3 Welche Gesamtnote gibst du der Übung?']],
+          '7.3 Welche Gesamtnote gibst du der Übung?']],
     ]
     weight = {
         'v_feedbackpreis': [1] * 13 + [13],
@@ -198,7 +197,7 @@ class Ergebnis2020(Ergebnis):
     v_feedbackpreis = models.FloatField(blank=True, null=True)
     v_feedbackpreis_count = models.PositiveIntegerField(default=0)
     v_feedbackpreis_parts = ['v_3_1', 'v_3_2', 'v_3_3', 'v_3_4', 'v_3_5', 'v_3_6', 'v_3_7', 'v_3_8', 'v_3_9', 'v_4_1', 'v_4_2', 'v_4_3', 'v_4_4',
-                             'v_4_5', 'v_4_6', 'v_4_9', 'v_6_2', 'v_6_5', 'v_gesamt']
+                             'v_4_5', 'v_4_6', 'v_4_9', 'v_7_2', 'v_7_5', 'v_gesamt']
 
     ue_didaktik = models.FloatField(blank=True, null=True)
     ue_didaktik_count = models.PositiveIntegerField(default=0)
@@ -220,7 +219,7 @@ class Ergebnis2020(Ergebnis):
     ue_digitale_lehre_parts = ['ue_6_1', 'ue_6_2']
     ue_feedbackpreis = models.FloatField(blank=True, null=True)
     ue_feedbackpreis_count = models.PositiveIntegerField(default=0)
-    ue_feedbackpreis_parts = ['ue_3_1', 'ue_3_2', 'ue_3_3', 'ue_3_4', 'ue_3_5', 'ue_3_7', 'ue_4_1', 'ue_4_2', 'ue_4_3', 'ue_4_4', 'ue_4_5', 'ue_6_3']
+    ue_feedbackpreis_parts = ['ue_3_1', 'ue_3_2', 'ue_3_3', 'ue_3_4', 'ue_3_5', 'ue_3_7', 'ue_4_1', 'ue_4_2', 'ue_4_3', 'ue_4_4', 'ue_4_5', 'ue_7_3']
 
     gesamt = models.FloatField(blank=True, null=True)
     gesamt_count = models.PositiveIntegerField(default=0)

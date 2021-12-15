@@ -7,6 +7,9 @@ from feedback.parser.ergebnisse.parser import Parser
 class Parser2020(Parser):
     @classmethod
     def create_fragebogen(cls, veranst, frageb):
+        if len(frageb) == 58:
+            # fix double occurrence
+            del frageb[46]
         Fragebogen2020.objects.create(
             veranstaltung=veranst,
             fach=cls.parse_fach_16(frageb[1]),

@@ -7,7 +7,7 @@ from django.shortcuts import render
 
 from feedback.models import Person, Veranstaltung, Semester, \
     Mailvorlage, Kommentar, Tutor, BarcodeScanner, BarcodeScannEvent, BarcodeAllowedState, \
-    EmailEndung
+    EmailEndung, Fragebogen2020, FragebogenUE2020, Ergebnis2020, Fragebogen2016, FragebogenUE2016, Ergebnis2016
 from feedback.models.base import Log, Fachgebiet, FachgebietEmail
 
 
@@ -75,9 +75,9 @@ class VeranstaltungAdmin(admin.ModelAdmin):
     """Admin View für Veranstaltung"""
     fieldsets = [
         ('Stammdaten', {'fields':
-                            ['typ', 'name', 'semester', 'status', 'lv_nr', 'grundstudium', 'evaluieren',
-                             'veranstalter', 'link_veranstalter',
-                             ]}),
+                        ['typ', 'name', 'semester', 'status', 'lv_nr', 'grundstudium', 'evaluieren',
+                         'veranstalter', 'link_veranstalter',
+                         ]}),
         ('Bestellung', {'fields': ['sprache', 'anzahl', 'digitale_eval', 'digitale_eval_type', 'verantwortlich', 'ergebnis_empfaenger', 'primaerdozent',
                                    'auswertungstermin', 'freiefrage1', 'freiefrage2', 'kleingruppen', ]}),
     ]
@@ -134,7 +134,8 @@ class VeranstaltungAdmin(admin.ModelAdmin):
         """Beschreibt eine Admin-Action für die Option keine Evaluation."""
         form = None
 
-        if 'apply' in request.POST:     #Dieser Teil reicht bereits zum ändern aus. In diesem Fall können auch Zeile 146-149 gelöscht werden (Kein Bestätigungsfenster erscheint.
+        # Dieser Teil reicht bereits zum ändern aus. In diesem Fall können auch Zeile 146-149 gelöscht werden (Kein Bestätigungsfenster erscheint.
+        if 'apply' in request.POST:
             queryset.update(status=Veranstaltung.STATUS_KEINE_EVALUATION_FINAL)
             queryset.update(evaluieren=False)
             for veranstaltung in queryset:
@@ -142,14 +143,14 @@ class VeranstaltungAdmin(admin.ModelAdmin):
 
             self.message_user(request, "Veranstaltungen wurden erfolgreich auf Keine Evaluation gesetzt.")
             return HttpResponseRedirect(request.get_full_path())
-            #nach dem return landet Python in status_aendern_action
+            # nach dem return landet Python in status_aendern_action
         if not form:
             form = self.KeineEvaluationForm(initial={'_selected_action': request.POST.getlist(admin.ACTION_CHECKBOX_NAME)})
-        return render(request, 'admin/keine_evaluation.html', {'veranstaltungen': queryset, 'status':form, })
+        return render(request, 'admin/keine_evaluation.html', {'veranstaltungen': queryset, 'status': form, })
 
     keine_evaluation_action.short_description = "Keine Evaluation für diese Veranstaltung(en)"
 
-    actions = [status_aendern_action,keine_evaluation_action]
+    actions = [status_aendern_action, keine_evaluation_action]
 
 
 class SemesterAdmin(admin.ModelAdmin):
@@ -174,11 +175,11 @@ class TutorAdmin(admin.ModelAdmin):
     """Admin View für Tutor"""
     fieldsets = [
         ('Stammdaten', {'fields':
-                            ['vorname', 'nachname', 'email',
-                             ]}),
+                        ['vorname', 'nachname', 'email',
+                         ]}),
         ('Lehrveranstaltung', {'fields':
-                                   ['veranstaltung', 'nummer', 'anmerkung'
-                                    ]}),
+                               ['veranstaltung', 'nummer', 'anmerkung'
+                                ]}),
     ]
     list_display = ('vorname', 'nachname', 'nummer', 'veranstaltung')
     search_fields = ('vorname', 'nachname')
@@ -215,16 +216,17 @@ class FachgebietEmailAdminInline(admin.TabularInline):
     model = FachgebietEmail
     extra = 1
 
+
 class FachgebietDomainAdminInline(admin.TabularInline):
     model = EmailEndung
     extra = 1
+
 
 class FachgebietAdmin(admin.ModelAdmin):
     """Admin View für Fachgebiet"""
     list_display = ('name', 'kuerzel')
     list_display_links = ('name',)
-    inlines = (FachgebietEmailAdminInline,FachgebietDomainAdminInline,)
-
+    inlines = (FachgebietEmailAdminInline, FachgebietDomainAdminInline,)
 
     def save_related(self, request, form, formsets, change):
         super().save_related(request, form, formsets, change)
@@ -245,9 +247,21 @@ class FachgebietAdmin(admin.ModelAdmin):
                 self.message_user(request, "Dieses Fachgebiet wurde {0} Personen zugeordnet".format(count_added))
 
 
+class FragebogenAdmin(admin.ModelAdmin):
+    """Admin View für Ergebnis2020"""
+    list_display = ('veranstaltung',)
+    list_per_page = 500
+
+
 admin.site.register(Person, PersonAdmin)
 admin.site.register(Veranstaltung, VeranstaltungAdmin)
 admin.site.register(Semester, SemesterAdmin)
+admin.site.register(Fragebogen2020, FragebogenAdmin)
+admin.site.register(FragebogenUE2020, FragebogenAdmin)
+admin.site.register(Ergebnis2020, FragebogenAdmin)
+admin.site.register(Fragebogen2016, FragebogenAdmin)
+admin.site.register(FragebogenUE2016, FragebogenAdmin)
+admin.site.register(Ergebnis2016, FragebogenAdmin)
 admin.site.register(Mailvorlage, MailvorlageAdmin)
 admin.site.register(Kommentar, KommentarAdmin)
 admin.site.register(Tutor, TutorAdmin)
