@@ -4,7 +4,7 @@ from django.db import models
 from feedback.models import Fragebogen, Ergebnis
 
 
-class Fragebogen2016(Fragebogen):
+class Fragebogen2020(Fragebogen):
     fach = models.CharField(max_length=5, choices=Fragebogen.FACH_CHOICES, blank=True)
     abschluss = models.CharField(max_length=5, choices=Fragebogen.ABSCHLUSS_CHOICES, blank=True)
     semester = models.CharField(max_length=4, choices=Fragebogen.SEMESTER_CHOICES16, blank=True)
@@ -50,26 +50,29 @@ class Fragebogen2016(Fragebogen):
     v_5_1 = models.PositiveSmallIntegerField(blank=True, null=True)
     v_5_2 = models.PositiveSmallIntegerField(blank=True, null=True)
 
-    v_6_1 = models.CharField(max_length=1, choices=Fragebogen.STUNDEN_NACHBEARBEITUNG, blank=True)
+    v_6_1 = models.PositiveSmallIntegerField(blank=True, null=True)
+    v_6_2 = models.PositiveSmallIntegerField(blank=True, null=True)
 
-    v_6_2 = models.CharField(max_length=3, blank=True)
-    v_6_3 = models.PositiveSmallIntegerField(blank=True, null=True)
-    v_6_4 = models.PositiveSmallIntegerField(blank=True, null=True)
-    v_6_5 = models.PositiveSmallIntegerField(blank=True, null=True)
+    v_7_1 = models.CharField(max_length=1, choices=Fragebogen.STUNDEN_NACHBEARBEITUNG, blank=True)
 
-    v_6_8 = models.CharField(max_length=1, choices=Fragebogen.BOOLEAN_CHOICES, blank=True)
+    v_7_2 = models.CharField(max_length=3, blank=True)
+    v_7_3 = models.PositiveSmallIntegerField(blank=True, null=True)
+    v_7_4 = models.PositiveSmallIntegerField(blank=True, null=True)
+    v_7_5 = models.PositiveSmallIntegerField(blank=True, null=True)
+
+    v_7_8 = models.CharField(max_length=1, choices=Fragebogen.BOOLEAN_CHOICES, blank=True)
 
     class Meta:
-        verbose_name = 'Fragebogen 2016'
-        verbose_name_plural = 'Fragebögen 2016'
+        verbose_name = 'Fragebogen 2020'
+        verbose_name_plural = 'Fragebögen 2020'
         ordering = ['semester', 'veranstaltung']
         app_label = 'feedback'
 
 
-class Ergebnis2016(Ergebnis):
+class Ergebnis2020(Ergebnis):
     parts_vl = [
-        ['v_6_5', 'Vorlesung: Gesamtnote',
-         ['6.5 Welche Gesamtnote würdest Du der Vorlesung (ohne Übungen) geben?']],
+        ['v_7_5', 'Vorlesung: Gesamtnote',
+         ['7.5 Welche Gesamtnote würdest Du der Vorlesung (ohne Übungen) geben?']],
         ['v_didaktik', 'Vorlesung: Didaktik',
          ['3.3 Die Lernziele der Veranstaltung sind mir klar geworden.',
           '3.4 Der Stoff wurde anhand von Beispielen verdeutlicht.',
@@ -92,6 +95,9 @@ class Ergebnis2016(Ergebnis):
         ['v_praxisbezug_motivation', 'Vorlesung: Praxisbezug und Motivation',
          ['3.5 Der Bezug zwischen Theorie und praktischem Arbeiten / praktischen Anwendungen wurde hergestellt.',
           '3.8 Die Vorlesung motivierte dazu, sich außerhalb der Veranstaltung selbstständig mit den behandelten Themen auseinanderzusetzen.']],
+        ['v_digitale_lehre', 'Vorlesung: Digitale Lehre',
+         ['5.1. Ich habe ausreichend Informationen zur Nutzung des digitalen Lehr-/Lernangebots von dem/der Lehrenden erhalten.',
+          '5.2. Mir ist es technisch möglich, in vollem Umfang an der Veranstaltung teilzunehmen.']],
     ]
 
     parts_ue = [
@@ -132,6 +138,9 @@ class Ergebnis2016(Ergebnis):
         ['ue_lernerfolg', 'Übung: Lernerfolg',
          ['3.1 Durch die Aufgaben und den Übungsbetrieb habe ich viel gelernt.',
           '3.2 Die Übungen haben mir geholfen, den Stoff der Vorlesung besser zu verstehen.']],
+        ['ue_digitale_lehre', 'Übung: Digitale Lehre',
+         ['6.1. Ich habe ausreichend Informationen zur Nutzung des digitalen Lehr-/Lernangebots von dem/der Lehrenden erhalten.',
+          '6.2. Mir ist es technisch möglich, in vollem Umfang an der Veranstaltung teilzunehmen.']],
     ]
 
     parts = parts_vl + parts_ue
@@ -180,8 +189,11 @@ class Ergebnis2016(Ergebnis):
     v_praxisbezug_motivation = models.FloatField(blank=True, null=True)
     v_praxisbezug_motivation_count = models.PositiveIntegerField(default=0)
     v_praxisbezug_motivation_parts = ['v_3_5', 'v_4_8']
-    v_6_5 = models.FloatField(blank=True, null=True)
-    v_6_5_count = models.PositiveIntegerField(default=0)
+    v_digitale_lehre = models.FloatField(blank=True, null=True)
+    v_digitale_lehre_count = models.PositiveIntegerField(default=0)
+    v_digitale_lehre_parts = ['v_5_1', 'v_5_2']
+    v_7_5 = models.FloatField(blank=True, null=True)
+    v_7_5_count = models.PositiveIntegerField(default=0)
 
     v_feedbackpreis = models.FloatField(blank=True, null=True)
     v_feedbackpreis_count = models.PositiveIntegerField(default=0)
@@ -203,7 +215,9 @@ class Ergebnis2016(Ergebnis):
     ue_lernerfolg = models.FloatField(blank=True, null=True)
     ue_lernerfolg_count = models.PositiveIntegerField(default=0)
     ue_lernerfolg_parts = ['ue_3_1', 'ue_3_2']
-
+    ue_digitale_lehre = models.FloatField(blank=True, null=True)
+    ue_digitale_lehre_count = models.PositiveIntegerField(default=0)
+    ue_digitale_lehre_parts = ['ue_6_1', 'ue_6_2']
     ue_feedbackpreis = models.FloatField(blank=True, null=True)
     ue_feedbackpreis_count = models.PositiveIntegerField(default=0)
     ue_feedbackpreis_parts = ['ue_3_1', 'ue_3_2', 'ue_3_3', 'ue_3_4', 'ue_3_5', 'ue_3_7', 'ue_4_1', 'ue_4_2', 'ue_4_3', 'ue_4_4', 'ue_4_5', 'ue_6_3']
@@ -212,7 +226,7 @@ class Ergebnis2016(Ergebnis):
     gesamt_count = models.PositiveIntegerField(default=0)
 
     class Meta:
-        verbose_name = 'Ergebnis 2016'
-        verbose_name_plural = 'Ergebnisse 2016'
+        verbose_name = 'Ergebnis 2020'
+        verbose_name_plural = 'Ergebnisse 2020'
         ordering = ['veranstaltung']
         app_label = 'feedback'

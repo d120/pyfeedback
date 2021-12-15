@@ -32,8 +32,8 @@ from feedback.views import public
 from feedback.models import Veranstaltung, Semester, Mailvorlage, get_model, long_not_ordert, \
     FachgebietEmail, Tutor
 from feedback.models.fragebogenUE2016 import FragebogenUE2016
+from feedback.models.fragebogenUE2020 import FragebogenUE2020
 import feedback.parser.tan as tanparser
-
 
 
 @user_passes_test(lambda u: u.is_superuser)
@@ -51,17 +51,17 @@ def index(request):
     relativ_result = 0
 
     if num_all_veranst >= 1:
-        relativ_result = (100/float(num_all_veranst)) * num_ruck_veranst
+        relativ_result = (100 / float(num_all_veranst)) * num_ruck_veranst
 
     width_progressbar = 500
-    width_progressbar_success = int(float(width_progressbar)/100 * relativ_result)
+    width_progressbar_success = int(float(width_progressbar) / 100 * relativ_result)
 
     return render(request, 'intern/index.html', {'cur_semester': cur_semester,
                                                  'all_veranst': num_all_veranst,
                                                  'ruck_veranst': num_ruck_veranst,
                                                  'relativ_result': relativ_result,
                                                  'width_progressbar': width_progressbar,
-                                                 'width_progressbar_success': width_progressbar_success,})
+                                                 'width_progressbar_success': width_progressbar_success, })
 
 
 @user_passes_test(lambda u: u.is_superuser)
@@ -75,7 +75,7 @@ def lange_ohne_evaluation(request):
 def fragebogensprache(request):
     veranstaltungen = Veranstaltung.objects.filter(semester=Semester.current())
     veranstaltungen = veranstaltungen.filter(anzahl__gt=0, evaluieren=True, status__gte=Veranstaltung.STATUS_BESTELLUNG_WIRD_VERARBEITET)
-    veranstaltungen = veranstaltungen.order_by('sprache','typ','anzahl')
+    veranstaltungen = veranstaltungen.order_by('sprache', 'typ', 'anzahl')
 
     data = {'veranstaltungen': veranstaltungen}
     return render(request, 'intern/fragebogensprache.html', data)
@@ -201,7 +201,7 @@ def generate_letters(request):
         latexpath = settings.LATEX_PATH
         templatename = 'anschreiben'
     elif vorlage == 'Aufkleber':
-        latexpath = settings.LATEX_PATH+'../aufkleber/'
+        latexpath = settings.LATEX_PATH + '../aufkleber/'
         templatename = 'aufkleber'
 
     # aus Sicherheitsgründen TeX-Befehle in Abgabedatum-String deaktivieren
@@ -217,7 +217,7 @@ def generate_letters(request):
     response['Content-Disposition'] = 'attachment; filename=%s.pdf' % (templatename)
 
     if vorlage != 'Aufkleber':
-        veranst = Veranstaltung.objects.filter(semester=semester, evaluieren=True, anzahl__gt=0).order_by('sprache','anzahl')
+        veranst = Veranstaltung.objects.filter(semester=semester, evaluieren=True, anzahl__gt=0).order_by('sprache', 'anzahl')
     elif 'anzahlaufkleber' in request.POST and request.POST['anzahlaufkleber'].isdigit():
         anzahl = request.POST['anzahlaufkleber']
         anzahl = int(anzahl)
@@ -234,12 +234,12 @@ def generate_letters(request):
     for v in veranst:
         if not v.verantwortlich.printable():
             messages.error(request,
-            mark_safe(f"Der Veranstalter {v.verantwortlich.full_name} ist nicht druckbar, da das Personenprofil nicht vollständig ist. Du kannst das unter <a href={reverse('admin:feedback_person_change', args=(v.verantwortlich.id,))}>hier</a> beheben."))
+                           mark_safe(f"Der Veranstalter {v.verantwortlich.full_name} ist nicht druckbar, da das Personenprofil nicht vollständig ist. Du kannst das unter <a href={reverse('admin:feedback_person_change', args=(v.verantwortlich.id,))}>hier</a> beheben."))
             return HttpResponseRedirect(reverse('generate_letters'))
-        eva_id=v.get_barcode_number()
+        eva_id = v.get_barcode_number()
         empfaenger = str(v.verantwortlich.full_name())
         line = '\\adrentry{%s}{%s}{%s}{%s}{%s}{%s}{%s}{%s}{%s}\n' % (
-                        translate_to_latex(v.verantwortlich.full_name()), translate_to_latex(v.verantwortlich.anschrift), translate_to_latex(v.name), v.anzahl, v.sprache, v.get_typ_display(), eva_id, v.freiefrage1.strip(), v.freiefrage2.strip())
+            translate_to_latex(v.verantwortlich.full_name()), translate_to_latex(v.verantwortlich.anschrift), translate_to_latex(v.name), v.anzahl, v.sprache, v.get_typ_display(), eva_id, v.freiefrage1.strip(), v.freiefrage2.strip())
         lines.append(smart_str(line))
 
     # TODO: prüfen, ob nötige Dateien schreibbar sind (abgabedatum.inc, anschreiben.{log,aux,pdf}, veranstalter.adr)
@@ -251,7 +251,7 @@ def generate_letters(request):
     with open(os.devnull, 'w') as devnull:
         # PDF via LaTeX erzeugen
         ret = subprocess.call(['/usr/bin/pdflatex', '-interaction', 'batchmode', '-halt-on-error',
-                               templatename+'.tex'], cwd=latexpath, stdout=devnull, stderr=devnull)
+                               templatename + '.tex'], cwd=latexpath, stdout=devnull, stderr=devnull)
 
     if ret or hasattr(settings, 'TEST_LATEX_ERROR'):
         with open(latexpath + templatename + '.log', 'r') as f:
@@ -385,7 +385,6 @@ def sendmail(request):
         veranstaltungen = get_relevant_veranstaltungen(data['recipient'], semester)
         demo_context, link_suffix_format, link_veranstalter = get_demo_context(request)
 
-
         if 'vorschau' in request.POST:
             data['vorschau'] = True
             data['from'] = settings.DEFAULT_FROM_EMAIL
@@ -443,7 +442,7 @@ def sendmail(request):
 
             if data['tutoren'] == 'True':
                 messages.success(request,
-                                 '%d Veranstaltungen wurden erfolgreich, samt Tutoren, benachrichtigt.' % (len(mails)-1))
+                                 '%d Veranstaltungen wurden erfolgreich, samt Tutoren, benachrichtigt.' % (len(mails) - 1))
             else:
                 messages.success(request, '%d Veranstaltungen wurden erfolgreich benachrichtigt.' % (len(mails) - 1))
             return HttpResponseRedirect(reverse('intern-index'))
@@ -465,13 +464,15 @@ def import_ergebnisse(request):
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             if 'typ' in request.POST and request.POST['typ'] == 'uebung':
-                warnings, errors, vcount, fbcount = parse_ergebnisse(semester, TextIOWrapper(request.FILES['file'].file, encoding='ISO-8859-1'), 'UE2016')
+                warnings, errors, vcount, fbcount = parse_ergebnisse(semester,
+                                                                     TextIOWrapper(request.FILES['file'].file, encoding='ISO-8859-1'),
+                                                                     f'UE{str(semester)[-4:]}')
             else:
                 warnings, errors, vcount, fbcount = parse_ergebnisse(semester, TextIOWrapper(request.FILES['file'].file, encoding='ISO-8859-1'))
             if fbcount:
                 messages.success(request,
-                    '%u Veranstaltungen mit insgesamt %u Fragebögen wurden erfolgreich importiert.' %
-                    (vcount, fbcount))
+                                 '%u Veranstaltungen mit insgesamt %u Fragebögen wurden erfolgreich importiert.' %
+                                 (vcount, fbcount))
             else:
                 warnings.append('Es konnten keine Fragebögen importiert werden.')
 
@@ -506,23 +507,25 @@ def sync_ergebnisse(request):
     ergebnis.objects.filter(veranstaltung__semester=semester).delete()
 
     found_something = False
-    if semester.fragebogen == '2016':
+    if semester.fragebogen == '2016' or semester.fragebogen == '2020':
         for v in Veranstaltung.objects.filter(semester=semester):
             fbs = fragebogen.objects.filter(veranstaltung=v)
-            erg = FragebogenUE2016.objects.filter(veranstaltung=v)
+            if semester.fragebogen == '2016':
+                erg = FragebogenUE2016.objects.filter(veranstaltung=v)
+            else:
+                erg = FragebogenUE2020.objects.filter(veranstaltung=v)
             if len(fbs):
                 found_something = True
                 data = {'veranstaltung': v, 'anzahl': len(fbs)}
                 for part in ergebnis.parts_vl + [ergebnis.hidden_parts[0]]:
                     result, count = tools.get_average(ergebnis, fbs, part[0])
                     data[part[0]] = result
-                    data[part[0]+'_count'] = count
+                    data[part[0] + '_count'] = count
                 for part in ergebnis.parts_ue + [ergebnis.hidden_parts[1]]:
                     result, count = tools.get_average(ergebnis, erg, part[0])
                     data[part[0]] = result
-                    data[part[0]+'_count'] = count
+                    data[part[0] + '_count'] = count
                 ergebnis.objects.create(**data)
-
     else:
         for v in Veranstaltung.objects.filter(semester=semester):
             fbs = fragebogen.objects.filter(veranstaltung=v)
@@ -532,7 +535,7 @@ def sync_ergebnisse(request):
                 for part in ergebnis.parts + ergebnis.hidden_parts:
                     result, count = tools.get_average(ergebnis, fbs, part[0])
                     data[part[0]] = result
-                    data[part[0]+'_count'] = count
+                    data[part[0] + '_count'] = count
                 ergebnis.objects.create(**data)
 
     if not found_something:
@@ -549,7 +552,7 @@ def ergebnisse(request):
 
 def is_no_evaluation_final(status):
     return status == Veranstaltung.STATUS_KEINE_EVALUATION or status == Veranstaltung.STATUS_ANGELEGT or \
-           status == Veranstaltung.STATUS_BESTELLUNG_GEOEFFNET
+        status == Veranstaltung.STATUS_BESTELLUNG_GEOEFFNET
 
 
 def update_veranstaltungen_status(veranstaltungen):
@@ -599,6 +602,7 @@ class CloseOrderFormView(UserPassesTestMixin, FormView):
     def test_func(self):
         return self.request.user.is_superuser
 
+
 class ProcessTANs(UserPassesTestMixin, SessionWizardView):
     template_name = 'intern/tans/process_tans.html'
     form_list = [UploadTANCSV, SendOrPDF, EMailTemplates, forms.Form]
@@ -610,7 +614,8 @@ class ProcessTANs(UserPassesTestMixin, SessionWizardView):
         tans = tanparser.parse(form_data[0]['csv'])
         # send mass mail for losungs people
         cur_semester = Semester.current()
-        lectures = Veranstaltung.objects.filter(semester=cur_semester,  digitale_eval=True,status__range=(Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR, Veranstaltung.STATUS_BESTELLUNG_WIRD_VERARBEITET)).prefetch_related('veranstalter')
+        lectures = Veranstaltung.objects.filter(semester=cur_semester, digitale_eval=True, status__range=(
+            Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR, Veranstaltung.STATUS_BESTELLUNG_WIRD_VERARBEITET)).prefetch_related('veranstalter')
 
         mails = []
         if form_data[2]['losungstemplate']:

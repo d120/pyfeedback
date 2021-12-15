@@ -1,13 +1,13 @@
 # coding = utf-8
 
-from feedback.models import FragebogenUE2016
+from feedback.models import FragebogenUE2020
 from feedback.parser.ergebnisse.parser import Parser
 
 
-class ParserUE2016(Parser):
+class ParserUE2020(Parser):
     @classmethod
     def create_fragebogen(cls, veranst, frageb):
-        FragebogenUE2016.objects.create(
+        FragebogenUE2020.objects.create(
             veranstaltung=veranst,
             fach=cls.parse_fach_16(frageb[1]),
             abschluss=cls.parse_abschluss_16(frageb[3]),
@@ -57,7 +57,9 @@ class ParserUE2016(Parser):
             ue_5_14=cls.parse_int(frageb[48]),
             ue_5_15=cls.parse_int(frageb[49]),
             ue_5_16=cls.parse_int(frageb[50]),
-            ue_6_1=cls.parse_extrazeit(frageb[51]),
+            ue_6_1=cls.parse_int(frageb[51]),
             ue_6_2=cls.parse_int(frageb[52]),
-            ue_6_3=cls.parse_int(frageb[53]),
+            ue_7_1=cls.parse_extrazeit(frageb[54]),
+            ue_7_2=cls.parse_int(frageb[55]),
+            ue_7_3=cls.parse_int(frageb[56]),
         )

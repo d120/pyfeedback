@@ -1,8 +1,8 @@
 from django.db import models
-from feedback.models import Fragebogen, Ergebnis
+from feedback.models import Fragebogen
 
 
-class FragebogenUE2016(Fragebogen):
+class FragebogenUE2020(Fragebogen):
     fach = models.CharField(max_length=5, choices=Fragebogen.FACH_CHOICES, blank=True)
     abschluss = models.CharField(max_length=5, choices=Fragebogen.ABSCHLUSS_CHOICES, blank=True)
     semester = models.CharField(max_length=4, choices=Fragebogen.SEMESTER_CHOICES16, blank=True)
@@ -58,12 +58,15 @@ class FragebogenUE2016(Fragebogen):
     ue_5_15 = models.PositiveSmallIntegerField(blank=True, null=True)
     ue_5_16 = models.PositiveSmallIntegerField(blank=True, null=True)
 
-    ue_6_1 = models.CharField(max_length=1, choices=Fragebogen.STUNDEN_NACHBEARBEITUNG, blank=True)
+    ue_6_1 = models.PositiveSmallIntegerField(blank=True, null=True)
     ue_6_2 = models.PositiveSmallIntegerField(blank=True, null=True)
-    ue_6_3 = models.PositiveSmallIntegerField(blank=True, null=True)
+
+    ue_7_1 = models.CharField(max_length=1, choices=Fragebogen.STUNDEN_NACHBEARBEITUNG, blank=True)
+    ue_7_2 = models.PositiveSmallIntegerField(blank=True, null=True)
+    ue_7_3 = models.PositiveSmallIntegerField(blank=True, null=True)
 
     class Meta:
-        verbose_name = 'Übungsfragebogen 2016'
-        verbose_name_plural = 'Übungfragebögen 2016'
+        verbose_name = 'Übungsfragebogen 2020'
+        verbose_name_plural = 'Übungsfragebögen 2020'
         ordering = ['semester', 'veranstaltung']
         app_label = 'feedback'

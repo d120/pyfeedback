@@ -1,13 +1,12 @@
 # coding=utf-8
 
 
-
 import random
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.db.utils import OperationalError
-from django.urls  import reverse
+from django.urls import reverse
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 
@@ -26,6 +25,7 @@ class Semester(models.Model):
         ('2009', 'Fragebogen 2009'),
         ('2012', 'Fragebogen 2012'),
         ('2016', 'Fragebogen 2016'),
+        ('2020', 'Fragebogen 2020'),
 
     )
     SICHTBARKEIT_CHOICES = (
@@ -75,7 +75,7 @@ class Semester(models.Model):
     def last_Auswertungstermin(self):
         """Letzter Tag der als Auswertungstermin angegeben werden kann"""
         year = 0
-        moth = 0
+        month = 0
         day = 15
         # Sommersemester
         if self.semester % 10 == 0:
@@ -115,6 +115,7 @@ class Semester(models.Model):
         except OperationalError:
             return None
 
+
 class Fachgebiet(models.Model):
     """Repräsentiert ein Fachgebiet für das FB20"""
     name = models.CharField(max_length=80)
@@ -145,11 +146,11 @@ class Fachgebiet(models.Model):
 class EmailEndung(models.Model):
     """Repräsentiert alle Domains die für E-Mails von Veranstaltern verwendet werden"""
     fachgebiet = models.ForeignKey(Fachgebiet,
-                                           blank=True,
-                                           help_text="Hier soll der Domainname einer Email-Adresse eines Fachgebiets stehen.",
-                                           on_delete=models.CASCADE)
+                                   blank=True,
+                                   help_text="Hier soll der Domainname einer Email-Adresse eines Fachgebiets stehen.",
+                                   on_delete=models.CASCADE)
     domain = models.CharField(max_length=150,
-                                    null=True)
+                              null=True)
 
     def __str__(self):
         return self.domain
@@ -169,7 +170,6 @@ class FachgebietEmail(models.Model):
         verbose_name = 'Fachgebiet Email'
         verbose_name_plural = 'Fachgebiet Emails'
         app_label = 'feedback'
-
 
 
 class Person(models.Model):
@@ -350,13 +350,13 @@ class Veranstaltung(models.Model):
 
     # Bögen 2015
 
-    ## Deutsch
+    # Deutsch
     # PD FB20Pv1 2677
     # SD FB20Sv2 2681
     # ÜD FB20Üv1 2675
     # VD FB20Vv1 2679
 
-    ## Englisch
+    # Englisch
     # PE FB20Pv1e 2704
     # SE FB20Sv1e 2702
     # ÜE FB20Üv1e 2700
@@ -408,8 +408,8 @@ class Veranstaltung(models.Model):
     )
 
     BOOL_CHOICES = (
-    (True, 'Ja'),
-    (False, 'Nein'),
+        (True, 'Ja'),
+        (False, 'Nein'),
     )
 
     # TODO: not the final version of status transition
@@ -456,7 +456,7 @@ class Veranstaltung(models.Model):
                                                  verbose_name='Empfänger der Ergebnisse',
                                                  help_text='An diese Personen werden die Ergebnisse per E-Mail geschickt.')
     primaerdozent = models.ForeignKey(Person, related_name='primaerdozent', null=True, blank=True, on_delete=models.CASCADE,
-                                       help_text='Die Person, die im Anschreiben erwähnt wird')
+                                      help_text='Die Person, die im Anschreiben erwähnt wird')
     auswertungstermin = models.DateField(null=True, blank=True,
                                          verbose_name='Auswertungstermin',
                                          help_text='An welchem Tag sollen Fragebögen für diese Veranstaltung ausgewerter werden? ' +
@@ -467,14 +467,14 @@ class Veranstaltung(models.Model):
     freiefrage2 = models.TextField(verbose_name='2. Freie Frage', blank=True)
     kleingruppen = models.TextField(verbose_name='Kleingruppen', blank=True)
     veroeffentlichen = models.BooleanField(default=True, choices=BOOL_CHOICES)
-    digitale_eval = models.BooleanField(default=False, verbose_name='Digitale Evaluation', help_text='Die Evaluation soll digital durchgeführt werden. Sie erhalten entsprechend viele TAN-Nummern auf Thermopapier, welche Sie an die Studiernden verteilen können. Die Studierenden füllen die Evaluation dann online aus.', blank=True)
+    digitale_eval = models.BooleanField(default=False, verbose_name='Digitale Evaluation',
+                                        help_text='Die Evaluation soll digital durchgeführt werden. Sie erhalten entsprechend viele TAN-Nummern auf Thermopapier, welche Sie an die Studiernden verteilen können. Die Studierenden füllen die Evaluation dann online aus.', blank=True)
     digitale_eval_type = models.CharField(
         default='T',
         choices=DIGITALE_EVAL,
         max_length=1,
         verbose_name='Digitaler Evaluationstyp',
-        help_text=
-        'Es werden generell zwei Typen von Verteilungsmethoden angeboten: Bei TANs erhalten Sie eine Excel Datei mit einer Liste aller TANs, welche Sie beispielsweise mithilfe von moodle verteilen können (eine Anleitung dazu wird bereitgestellt). Beim losungsbasierten Verfahren erhalten Sie einen einfachen, mehrfachbenutzbaren Link zum Onlinefragebogen.'
+        help_text='Es werden generell zwei Typen von Verteilungsmethoden angeboten: Bei TANs erhalten Sie eine Excel Datei mit einer Liste aller TANs, welche Sie beispielsweise mithilfe von moodle verteilen können (eine Anleitung dazu wird bereitgestellt). Beim losungsbasierten Verfahren erhalten Sie einen einfachen, mehrfachbenutzbaren Link zum Onlinefragebogen.'
     )
 
     def get_next_state(self):
@@ -666,8 +666,8 @@ class Veranstaltung(models.Model):
     def allow_order(self):
         """Überprüft anhand des Status' der Veranstaltung, ob bestellt werden darf."""
         return self.status == Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR or \
-                self.status == Veranstaltung.STATUS_BESTELLUNG_GEOEFFNET or \
-                self.status == Veranstaltung.STATUS_KEINE_EVALUATION
+            self.status == Veranstaltung.STATUS_BESTELLUNG_GEOEFFNET or \
+            self.status == Veranstaltung.STATUS_KEINE_EVALUATION
 
     def csv_to_tutor(self, csv_content):
         """Erzeuge Tutoren Objekte aus der CSV Eingabe der Veranstalter"""
