@@ -466,7 +466,7 @@ def import_ergebnisse(request):
             if 'typ' in request.POST and request.POST['typ'] == 'uebung':
                 warnings, errors, vcount, fbcount = parse_ergebnisse(semester,
                                                                      TextIOWrapper(request.FILES['file'].file, encoding='ISO-8859-1'),
-                                                                     f'UE{str(semester)[-4:]}')
+                                                                     f'UE{semester.fragebogen}')
             else:
                 warnings, errors, vcount, fbcount = parse_ergebnisse(semester, TextIOWrapper(request.FILES['file'].file, encoding='ISO-8859-1'))
             if fbcount:
