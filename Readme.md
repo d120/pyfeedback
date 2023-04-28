@@ -17,7 +17,7 @@ To use pyfeedback the following tools have to be installed:
 ## Preparing development environment
 * Create a virtualenv with virtualenv $name
 * Activate the virtualenv with `source $name/bin/activate`
-* Install all requirements with `pip install -r requierements.txt`
+* Install all requirements with `pip install -r requirements.txt`
 * Create the test database with `python src/manage.py migrate`
 * Start the development server with `python src/manage.py runserver`
 
@@ -27,4 +27,3 @@ pyfeedback is using a test driven development and tries to get to 100% coverage.
 python src/manage.py test feedback
 ```
 Do not implement new functionality without providing a test for it.
-
