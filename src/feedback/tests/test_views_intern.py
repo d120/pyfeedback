@@ -168,7 +168,7 @@ class ExportVeranstaltungenTest(NonSuTestMixin, TestCase):
 
         # alles OK
         v2.sprache = 'de'
-        v2.auswertungstermin = date(2011, 1, 1) 
+        v2.auswertungstermin = date(2011, 1, 1)
         v2.save()
 
         response = self.client.post(path, {'semester': s.semester}, **{'REMOTE_USER': 'super'})
@@ -187,7 +187,7 @@ class ExportVeranstaltungenTest(NonSuTestMixin, TestCase):
                                 <survey><EvaSysRef type="Survey" key="su-1" /></survey>
                                 <external_id>lv-1</external_id>
                             </Lecture>
-                            <Task key="close-su-1">                                                                                                                              
+                            <Task key="close-su-1">
                                 <type>close_survey</type>
                                 <datetime>2011-01-01 08:00</datetime>
                                 <dispatch_report>1</dispatch_report>
@@ -195,7 +195,7 @@ class ExportVeranstaltungenTest(NonSuTestMixin, TestCase):
                             <Survey key="su-1">
                                 <survey_form>FB20VLd2</survey_form>
                                 <survey_period>SS11</survey_period>
-                                <survey_type>coversheet</survey_type>
+                                <survey_type>online</survey_type>
                                 <survey_verify>0</survey_verify>
                                 <survey_tasks>
                                     <survey_task>
@@ -223,7 +223,7 @@ class ExportVeranstaltungenTest(NonSuTestMixin, TestCase):
                             <Survey key="su-2">
                                 <survey_form>FB20VLd2</survey_form>
                                 <survey_period>SS11</survey_period>
-                                <survey_type>coversheet</survey_type>
+                                <survey_type>online</survey_type>
                                 <survey_verify>0</survey_verify>
                                 <survey_tasks>
                                     <survey_task>
@@ -262,7 +262,7 @@ class ExportVeranstaltungenTest(NonSuTestMixin, TestCase):
                         <Survey key="su-2-u">
                         <survey_form>FB20Ud1</survey_form>
                         <survey_period>SS11</survey_period>
-                        <survey_type>coversheet</survey_type>
+                        <survey_type>online</survey_type>
                         <survey_verify>0</survey_verify>
                         <survey_tasks>
                                     <survey_task>
@@ -330,7 +330,7 @@ class ExportVeranstaltungenTest(NonSuTestMixin, TestCase):
                             <Survey key="su-2">
                                 <survey_form>FB20VLd2</survey_form>
                                 <survey_period>SS11</survey_period>
-                                <survey_type>coversheet</survey_type>
+                                <survey_type>online</survey_type>
                                 <survey_verify>0</survey_verify>
                                 <survey_tasks>
                                             <survey_task>
@@ -403,7 +403,7 @@ class ExportVeranstaltungenTest(NonSuTestMixin, TestCase):
         <Survey key="su-1">
             <survey_form>FB20VLd2</survey_form>
 	    <survey_period>SS11</survey_period>
-            <survey_type>coversheet</survey_type>
+            <survey_type>online</survey_type>
 	    <survey_verify>0</survey_verify>
 	    <survey_tasks>
 	        <survey_task>
@@ -420,7 +420,7 @@ class ExportVeranstaltungenTest(NonSuTestMixin, TestCase):
         </Person>
         <Person key="pe-2">
 	    <firstname>Prim</firstname>
-            <lastname>Ardozent</lastname>	
+            <lastname>Ardozent</lastname>
             <email>prim@ardoz.ent</email>
 	    <gender>m</gender>
 	    <external_id>pe-2</external_id>
@@ -582,7 +582,7 @@ class SendmailTest(NonSuTestMixin, TestCase):
 
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response['Location'].endswith('/intern/sendmail/'))
-        
+
         # ----- Vorlage übernehmen; Vorlage ist angegeben, Empfanger nicht angegeben ----- #
         post_data['vorlage'] = mv.id
         recipient = post_data.pop('recipient', None)
