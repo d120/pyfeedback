@@ -467,8 +467,8 @@ class Veranstaltung(models.Model):
     freiefrage2 = models.TextField(verbose_name='2. Freie Frage', blank=True)
     kleingruppen = models.TextField(verbose_name='Kleingruppen', blank=True)
     veroeffentlichen = models.BooleanField(default=True, choices=BOOL_CHOICES)
-    digitale_eval = models.BooleanField(default=False, verbose_name='Digitale Evaluation',
-                                        help_text='Die Evaluation soll digital durchgeführt werden. Sie erhalten entsprechend viele TAN-Nummern auf Thermopapier, welche Sie an die Studiernden verteilen können. Die Studierenden füllen die Evaluation dann online aus.', blank=True)
+    digitale_eval = models.BooleanField(default=True, verbose_name='Digitale Evaluation',
+                                        help_text='Die Evaluation soll digital durchgeführt werden. Die Studierenden füllen die Evaluation online aus.', blank=True)
     digitale_eval_type = models.CharField(
         default='T',
         choices=DIGITALE_EVAL,
