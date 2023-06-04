@@ -465,10 +465,10 @@ def import_ergebnisse(request):
         if form.is_valid():
             if 'typ' in request.POST and request.POST['typ'] == 'uebung':
                 warnings, errors, vcount, fbcount = parse_ergebnisse(semester,
-                                                                     TextIOWrapper(request.FILES['file'].file, encoding='ISO-8859-1'),
+                                                                     TextIOWrapper(request.FILES['file'].file, encoding='UTF-8'),
                                                                      f'UE{semester.fragebogen}')
             else:
-                warnings, errors, vcount, fbcount = parse_ergebnisse(semester, TextIOWrapper(request.FILES['file'].file, encoding='ISO-8859-1'))
+                warnings, errors, vcount, fbcount = parse_ergebnisse(semester, TextIOWrapper(request.FILES['file'].file, encoding='UTF-8'))
             if fbcount:
                 messages.success(request,
                                  '%u Veranstaltungen mit insgesamt %u Fragebögen wurden erfolgreich importiert.' %
