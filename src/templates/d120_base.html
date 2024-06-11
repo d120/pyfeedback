@@ -6,21 +6,22 @@
 	<title>{% block title %}Leere Seite{% endblock %} - Evaluation der Lehre</title>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 
-	<link rel="stylesheet" type="text/css" href="https://www.fachschaft.informatik.tu-darmstadt.de/static/vendor/bootstrap/dist/css/bootstrap.min.css" />
-  <link rel="stylesheet" type="text/css" href="https://www.fachschaft.informatik.tu-darmstadt.de/static/vendor/font-awesome/css/font-awesome.min.css" />
-  <link rel="stylesheet" type="text/css" href="https://www.fachschaft.informatik.tu-darmstadt.de/static/vendor/%40fontsource/libre-franklin/index.css" />
-  <link rel="stylesheet" type="text/css" href="https://www.fachschaft.informatik.tu-darmstadt.de/static/d120/css/custom.css" />
-  <style>
-      a, footer a:hover, .sidebar-nav a, .sidebar-nav a:hover {
-          color:#009D81;
-      }
-      .header-navbar, .sidebar-active, .sidebar-active:hover, .sidebar-active:focus > a:hover, .sidebar-active > a:focus, #mainLogo {
-          background-color:#009D81!important;
-      }
-      .sidebar-active, .sidebar-active:hover {
-          border-left: 5px solid #009D81!important;
-      }
-  </style>
+	<link rel="stylesheet" type="text/css" href="{% static 'bootstrap.min.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'font-awesome.min.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'libre-franklin-index.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'custom.css' %}" />
+
+	<style>
+		a, footer a:hover, .sidebar-nav a, .sidebar-nav a:hover {
+			color:#009D81;
+		}
+		.header-navbar, .sidebar-active, .sidebar-active:hover, .sidebar-active:focus > a:hover, .sidebar-active > a:focus, #mainLogo {
+			background-color:#009D81!important;
+		}
+		.sidebar-active, .sidebar-active:hover {
+			border-left: 5px solid #009D81!important;
+		}
+	</style>
 
 	<link rel="stylesheet" type="text/css" href="{% static 'ranking.css' %}" /> {% block extra_header %}{% endblock %}
 </head>
@@ -50,10 +51,10 @@
 			</div>
 		</div>
 	</div>
-		{% include 'd120/footer.html' %}
-    {% block javascript_block %}
-	<script src="https://www.fachschaft.informatik.tu-darmstadt.de/static/vendor/jquery/dist/jquery.min.js"></script>
-	<script src="https://www.fachschaft.informatik.tu-darmstadt.de/static/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+	{% include 'd120/footer.html' %}
+	{% block javascript_block %}
+	<script src="{% static 'jquery/jquery.min.js' %}"></script>
+	<script src="{% static 'bootstrap/bootstrap.min.js' %}"></script>
     {% endblock %}
 </body>
 
