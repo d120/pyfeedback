@@ -10,15 +10,16 @@ It is written in Python 3 and utilizes the newest version of the django web fram
 ## Requirements
 
 To use pyfeedback the following tools have to be installed:
-* pip and virtualenv for python 3
-* texlive + texlive-lang-german (to generate letters)
-* [latex tuddesign](http://exp1.fkp.physik.tu-darmstadt.de/tuddesign/)
+* Python 3.11 (including pip and venv)
+* nodejs
 
 ## Preparing development environment
-* Create a virtualenv with virtualenv $name
-* Activate the virtualenv with `source $name/bin/activate`
+
+* Create a virtualenv with `python -m venv venv`
+* Activate the virtualenv with `source venv/bin/activate`
 * Install all requirements with `pip install -r requirements.txt`
 * Create the test database with `python src/manage.py migrate`
+* Install frontend dependencies with `npm i`
 * Start the development server with `python src/manage.py runserver`
 
 ## Tests
