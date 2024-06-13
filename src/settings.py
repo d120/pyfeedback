@@ -71,6 +71,7 @@ STATICFILES_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     BASE_PATH + 'media/',
+    BASE_PATH + 'node_modules/',
 )
 
 # List of finder classes that know how to find static files in

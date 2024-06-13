@@ -21,3 +21,5 @@ static/*
 venv/
 .vscode/*
 .python-version
+
+node_modules/
