@@ -646,7 +646,7 @@ class Veranstaltung(models.Model):
     
     
     def anzahl_too_few_msg(self) :
-        return f'Anzahl der Bestellungen muss mindestens {self.MIN_BESTELLUNG_ANZAHL} sein'
+        return f'Anzahl der Bestellungen muss mindestens {self.MIN_BESTELLUNG_ANZAHL} sein. Bei weniger als {self.MIN_BESTELLUNG_ANZAHL} Teilnehmenden ist eine Evaluation leider nicht möglich'
 
 
     def clean(self, *args, **kwargs):
