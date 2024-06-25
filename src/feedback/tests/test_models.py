@@ -3,6 +3,7 @@
 # from types import UnicodeType
 
 from django.db import IntegrityError
+from django.forms import ValidationError
 from django.test import TestCase, TransactionTestCase
 from django.utils.timezone import now
 from freezegun import freeze_time
@@ -432,6 +433,29 @@ class VeranstaltungTest(TransactionTestCase):
     def test_has_uebung(self):
         self.assertTrue(self.v[1].has_uebung())
         self.assertFalse(self.v[0].has_uebung())
+
+    def test_anzahl_less_than_min_value(self) :
+        """
+        must raise a ValidationError if anzahl less than MIN_BESTELLUNG_ANZAHL when clean() is called
+        """
+        for anzahl_val in range(-10, Veranstaltung.MIN_BESTELLUNG_ANZAHL) :
+            with self.subTest(anzahl = anzahl_val) :
+                with self.assertRaises(ValidationError) :
+                    self.v[0].anzahl = anzahl_val
+                    self.v[0].clean()
+
+    def test_anzahl_more_than_or_equal_min_value(self) :
+        """
+        must not raise ValidationError if anzahl more than or equal to MIN_BESTELLUNG_ANZAHL when clean() is called
+        """
+        for anzahl_val in range(Veranstaltung.MIN_BESTELLUNG_ANZAHL, Veranstaltung.MIN_BESTELLUNG_ANZAHL + 11) :
+            with self.subTest(anzahl = anzahl_val) :
+                try :
+                    self.v[0].anzahl = anzahl_val
+                    self.v[0].clean()
+                except ValidationError :
+                    self.fail(f"clean() raised ValidationError unexpectedly for anzahl = {anzahl_val}")
+
 
     def test_unicode(self):
         self.assertEqual(str(self.v[0]), 'Stoning I [v] (SS 2011)')

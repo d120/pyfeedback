@@ -430,6 +430,8 @@ class Veranstaltung(models.Model):
         ('L', 'Losung'),
     ]
 
+    MIN_BESTELLUNG_ANZAHL = 5
+
     # Helfertext für Dozenten für den Veranstaltungstyp.
     vlNoEx = 'Wenn Ihre Vorlesung keine Übung hat wählen Sie bitte <i>%s</i> aus'
     for cur in TYP_CHOICES:
@@ -641,12 +643,21 @@ class Veranstaltung(models.Model):
         """Eine Liste aller Veranstalter dieser Veranstaltung"""
         list = [x.full_name() for x in self.veranstalter.all()]
         return ', '.join(list)
+    
+    
+    def anzahl_too_few_msg(self) :
+        return f'Anzahl der Bestellungen muss mindestens {self.MIN_BESTELLUNG_ANZAHL} sein. Bei weniger als {self.MIN_BESTELLUNG_ANZAHL} Teilnehmenden ist eine Evaluation leider nicht möglich'
+
 
     def clean(self, *args, **kwargs):
         super(Veranstaltung, self).clean(*args, **kwargs)
 
         if self.auswertungstermin is not None and self.id is not None and self.auswertungstermin > self.semester.last_Auswertungstermin().date():
             raise ValidationError(self.auwertungstermin_to_late_msg())
+        
+        if self.anzahl is not None and self.anzahl < self.MIN_BESTELLUNG_ANZAHL :
+            raise ValidationError(self.anzahl_too_few_msg())
+
 
     def save(self, *args, **kwargs):
         # beim Speichern Zugangsschlüssel erzeugen, falls noch keiner existiert
