@@ -1,5 +1,6 @@
 # coding=utf-8
 
+from typing import Any
 from django import forms
 from django.forms import widgets
 
@@ -84,11 +85,16 @@ class VeranstaltungBasisdatenForm(BestellWizardForm):
             "anzahl",
             "sprache",
             "verantwortlich",
-            "digitale_eval",
             "ergebnis_empfaenger",
             "auswertungstermin",
         )
         widgets = {"ergebnis_empfaenger": forms.CheckboxSelectMultiple}
+    
+    def clean(self) -> dict[str, Any]:
+        cleaned_data = super().clean()
+        
+        # "digitale_eval" removed from user interface
+        cleaned_data["digitale_eval"] = True
 
 
 class VeranstaltungDigitaleEvaluationForm(BestellWizardForm):
