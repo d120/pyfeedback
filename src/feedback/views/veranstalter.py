@@ -85,7 +85,6 @@ VERANSTALTER_VIEW_TEMPLATES = {
     "basisdaten": "formtools/wizard/basisdaten.html",
     "digitale_eval": "formtools/wizard/digitale_evaluation.html",
     "primaerdozent": "formtools/wizard/primaerdozent.html",
-    "verantwortlicher_address": "formtools/wizard/address.html",
     "freie_fragen": "formtools/wizard/freiefragen.html",
     "veroeffentlichen": "formtools/wizard/veroeffentlichen.html",
     "zusammenfassung": "formtools/wizard/zusammenfassung.html"
@@ -97,7 +96,6 @@ VERANSTALTER_WIZARD_STEPS = {
     "basisdaten": "Basisdaten",
     "digitale_eval": "Digitale Evaluation",
     "primaerdozent": "Primärdozent",
-    "verantwortlicher_address": "Verantwortlicher",
     "freie_fragen": "Freie Fragen",
     "veroeffentlichen": "Veroeffentlichen",
     "zusammenfassung": "Zusammenfassung"
@@ -169,7 +167,6 @@ class VeranstalterWizard(SessionWizardView):
         ('basisdaten', VeranstaltungBasisdatenForm),
         ('digitale_eval', VeranstaltungDigitaleEvaluationForm),
         ('primaerdozent', VeranstaltungPrimaerDozentForm),
-        ('verantwortlicher_address', VeranstaltungDozentDatenForm),
         ('freie_fragen', VeranstaltungFreieFragen),
         ('veroeffentlichen', VeranstaltungVeroeffentlichung),
         ('zusammenfassung', forms.Form)
@@ -179,7 +176,6 @@ class VeranstalterWizard(SessionWizardView):
         'basisdaten': perform_evalution,
         'digitale_eval': show_digital_eval_form,
         'primaerdozent': show_primaerdozent_form,
-        'verantwortlicher_address': perform_evalution,
         'freie_fragen': perform_evalution,
         'veroeffentlichen': perform_evalution,
     }

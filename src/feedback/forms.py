@@ -50,7 +50,6 @@ class VeranstaltungBasisdatenForm(BestellWizardForm):
         super(VeranstaltungBasisdatenForm, self).__init__(*args, **kwargs)
 
         # Schränke QuerySet nur auf den Veranstalter ein
-        self.fields["verantwortlich"].queryset = veranstalter_queryset
         self.fields["ergebnis_empfaenger"].queryset = veranstalter_queryset
 
         # Keine negative Anzahl möglich
@@ -84,7 +83,6 @@ class VeranstaltungBasisdatenForm(BestellWizardForm):
             "typ",
             "anzahl",
             "sprache",
-            "verantwortlich",
             "ergebnis_empfaenger",
             "auswertungstermin",
         )
@@ -93,8 +91,9 @@ class VeranstaltungBasisdatenForm(BestellWizardForm):
     def clean(self) -> dict[str, Any]:
         cleaned_data = super().clean()
         
-        # "digitale_eval" removed from user interface
+        # "digitale_eval" and "verantwortlich" removed from user interface
         cleaned_data["digitale_eval"] = True
+        cleaned_data["verantwortlich"] = cleaned_data["ergebnis_empfaenger"][0]
 
 
 class VeranstaltungDigitaleEvaluationForm(BestellWizardForm):

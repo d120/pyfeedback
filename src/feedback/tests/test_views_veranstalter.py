@@ -110,15 +110,9 @@ class VeranstalterIndexTest(TestCase):
             "primaerdozent-primaerdozent": self.p.id
         })
 
-        self.assertTemplateUsed(response_third_step, "formtools/wizard/address.html")
+        # "verantwortlicher_address" is removed
 
-        response_fourth_step = c.post('/veranstalter/bestellung', {
-            "veranstalter_wizard-current_step": "verantwortlicher_address",
-            "verantwortlicher_address-email": "test@test.de",
-            "verantwortlicher_address-anschrift": "Alexanderstrasse 8, 64287 Darmstadt"
-        })
-
-        self.assertTemplateUsed(response_fourth_step, "formtools/wizard/freiefragen.html")
+        self.assertTemplateUsed(response_third_step, "formtools/wizard/freiefragen.html")
 
         response_fifth_step = c.post('/veranstalter/bestellung', {
             "veranstalter_wizard-current_step": "freie_fragen",
@@ -149,7 +143,7 @@ class VeranstalterIndexTest(TestCase):
         self.assertTrue(self.v.evaluieren)
         self.assertEqual(self.v.primaerdozent, self.p)
         self.assertEqual(Tutor.objects.count(), 0) # step "tutoren" removed
-        self.assertEqual(self.p.email, "test@test.de")
+        self.assertEqual(self.p.email, "v1n1@fb.de") # step "verantwortlicher_address" removed
         self.assertEqual(self.v.anzahl, 22)
         self.assertEqual(self.v.ergebnis_empfaenger.count(), 2)
         self.assertEqual(self.v.sprache, "de")
@@ -231,15 +225,9 @@ class VeranstalterIndexTest(TestCase):
             "digitale_eval-digitale_eval_type": "T",
         })
 
-        self.assertTemplateUsed(response_secondstep, "formtools/wizard/address.html")
+        # "verantwortlicher_address" is removed
 
-        response_fourth_step = c.post('/veranstalter/bestellung', {
-            "veranstalter_wizard-current_step": "verantwortlicher_address",
-            "verantwortlicher_address-email": "test@test.de",
-            "verantwortlicher_address-anschrift": "Alexanderstrasse 8, 64287 Darmstadt"
-        })
-
-        self.assertTemplateUsed(response_fourth_step, "formtools/wizard/freiefragen.html")
+        self.assertTemplateUsed(response_secondstep, "formtools/wizard/freiefragen.html")
 
         response_fifth_step = c.post('/veranstalter/bestellung', {
             "veranstalter_wizard-current_step": "freie_fragen",
@@ -269,7 +257,7 @@ class VeranstalterIndexTest(TestCase):
         self.assertTrue(self.v.evaluieren)
         self.assertEqual(self.v.primaerdozent, self.p2)
         self.assertEqual(Tutor.objects.count(), 0) # step "tutoren" removed
-        self.assertEqual(self.p.email, "test@test.de")
+        self.assertEqual(self.p.email, "v1n1@fb.de") # step "verantwortlicher_address" removed
 
     def test_post_bestellung_without_excercises(self):
         c = login_veranstalter(self.v_wo_excercises)
@@ -285,11 +273,9 @@ class VeranstalterIndexTest(TestCase):
             "basisdaten-ergebnis_empfaenger": self.p3.id,
             "save": "Speichern"
         })
-        c.post('/veranstalter/bestellung', {
-            "veranstalter_wizard-current_step": "verantwortlicher_address",
-            "verantwortlicher_address-email": "test@test.de",
-            "verantwortlicher_address-anschrift": "Alexanderstrasse 8, 64287 Darmstadt"
-        })
+
+        # "verantwortlicher_address" is removed
+
         c.post('/veranstalter/bestellung', {
             "veranstalter_wizard-current_step": "freie_fragen",
             "freie_fragen-freifrage1": "Ist das die erste Frage?",
@@ -343,11 +329,7 @@ class VeranstalterIndexTest(TestCase):
             "primaerdozent-primaerdozent": self.p.id
         })
 
-        c.post('/veranstalter/bestellung', {
-            "veranstalter_wizard-current_step": "verantwortlicher_address",
-            "verantwortlicher_address-email": "test@test.de",
-            "verantwortlicher_address-anschrift": "Alexanderstrasse 8, 64287 Darmstadt"
-        })
+        # "verantwortlicher_address" is removed
 
         c.post('/veranstalter/bestellung', {
             "veranstalter_wizard-current_step": "freie_fragen",
@@ -412,17 +394,10 @@ class VeranstalterIndexTest(TestCase):
                 "digitale_eval-digitale_eval_type": "L",
             })
 
-        self.assertTemplateUsed(response, "formtools/wizard/address.html")
+        self.assertTemplateUsed(response, "formtools/wizard/freiefragen.html")
 
-        c.post(
-            '/veranstalter/bestellung', {
-                "veranstalter_wizard-current_step":
-                "verantwortlicher_address",
-                "verantwortlicher_address-email":
-                "test@test.de",
-                "verantwortlicher_address-anschrift":
-                "Alexanderstrasse 8, 64287 Darmstadt"
-            })
+        # step "verantwortlicher_address" removed 
+
         c.post(
             '/veranstalter/bestellung', {
                 "veranstalter_wizard-current_step": "freie_fragen",
