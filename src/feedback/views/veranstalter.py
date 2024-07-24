@@ -87,7 +87,6 @@ VERANSTALTER_VIEW_TEMPLATES = {
     "primaerdozent": "formtools/wizard/primaerdozent.html",
     "verantwortlicher_address": "formtools/wizard/address.html",
     "freie_fragen": "formtools/wizard/freiefragen.html",
-    "tutoren": "formtools/wizard/tutoren.html",
     "veroeffentlichen": "formtools/wizard/veroeffentlichen.html",
     "zusammenfassung": "formtools/wizard/zusammenfassung.html"
 }
@@ -100,7 +99,6 @@ VERANSTALTER_WIZARD_STEPS = {
     "primaerdozent": "Primärdozent",
     "verantwortlicher_address": "Verantwortlicher",
     "freie_fragen": "Freie Fragen",
-    "tutoren": "Tutoren",
     "veroeffentlichen": "Veroeffentlichen",
     "zusammenfassung": "Zusammenfassung"
 }
@@ -173,7 +171,6 @@ class VeranstalterWizard(SessionWizardView):
         ('primaerdozent', VeranstaltungPrimaerDozentForm),
         ('verantwortlicher_address', VeranstaltungDozentDatenForm),
         ('freie_fragen', VeranstaltungFreieFragen),
-        ('tutoren', VeranstaltungTutorenForm),
         ('veroeffentlichen', VeranstaltungVeroeffentlichung),
         ('zusammenfassung', forms.Form)
     ]
@@ -184,7 +181,6 @@ class VeranstalterWizard(SessionWizardView):
         'primaerdozent': show_primaerdozent_form,
         'verantwortlicher_address': perform_evalution,
         'freie_fragen': perform_evalution,
-        'tutoren': show_tutor_form,
         'veroeffentlichen': perform_evalution,
     }
 
