@@ -103,16 +103,11 @@ class VeranstalterIndexTest(TestCase):
             "digitale_eval-digitale_eval_type": "T",
         })
         
-        self.assertTemplateUsed(response_second_step, "formtools/wizard/primaerdozent.html")
-
-        response_third_step = c.post('/veranstalter/bestellung', {
-            "veranstalter_wizard-current_step": "primaerdozent",
-            "primaerdozent-primaerdozent": self.p.id
-        })
+        # "primaerdozent" is removed
 
         # "verantwortlicher_address" is removed
 
-        self.assertTemplateUsed(response_third_step, "formtools/wizard/freiefragen.html")
+        self.assertTemplateUsed(response_second_step, "formtools/wizard/freiefragen.html")
 
         response_fifth_step = c.post('/veranstalter/bestellung', {
             "veranstalter_wizard-current_step": "freie_fragen",
@@ -141,7 +136,7 @@ class VeranstalterIndexTest(TestCase):
         self.assertTemplateUsed(response_eight_step, "formtools/wizard/bestellung_done.html")
 
         self.assertTrue(self.v.evaluieren)
-        self.assertEqual(self.v.primaerdozent, self.p)
+        # step "primaerdozent" removed
         self.assertEqual(Tutor.objects.count(), 0) # step "tutoren" removed
         self.assertEqual(self.p.email, "v1n1@fb.de") # step "verantwortlicher_address" removed
         self.assertEqual(self.v.anzahl, 22)
@@ -255,7 +250,7 @@ class VeranstalterIndexTest(TestCase):
 
         self.assertTemplateUsed(response_eight_step, "formtools/wizard/bestellung_done.html")
         self.assertTrue(self.v.evaluieren)
-        self.assertEqual(self.v.primaerdozent, self.p2)
+        # step "primaerdozent" removed
         self.assertEqual(Tutor.objects.count(), 0) # step "tutoren" removed
         self.assertEqual(self.p.email, "v1n1@fb.de") # step "verantwortlicher_address" removed
 
@@ -324,10 +319,7 @@ class VeranstalterIndexTest(TestCase):
             "digitale_eval-digitale_eval_type": "T",
         })
 
-        c.post('/veranstalter/bestellung', {
-            "veranstalter_wizard-current_step": "primaerdozent",
-            "primaerdozent-primaerdozent": self.p.id
-        })
+        # "primaerdozent" is removed
 
         # "verantwortlicher_address" is removed
 

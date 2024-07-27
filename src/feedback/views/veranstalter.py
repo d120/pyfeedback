@@ -84,7 +84,6 @@ VERANSTALTER_VIEW_TEMPLATES = {
     "evaluation": "formtools/wizard/evaluation.html",
     "basisdaten": "formtools/wizard/basisdaten.html",
     "digitale_eval": "formtools/wizard/digitale_evaluation.html",
-    "primaerdozent": "formtools/wizard/primaerdozent.html",
     "freie_fragen": "formtools/wizard/freiefragen.html",
     "veroeffentlichen": "formtools/wizard/veroeffentlichen.html",
     "zusammenfassung": "formtools/wizard/zusammenfassung.html"
@@ -95,7 +94,6 @@ VERANSTALTER_WIZARD_STEPS = {
     "evaluation": "Evaluation",
     "basisdaten": "Basisdaten",
     "digitale_eval": "Digitale Evaluation",
-    "primaerdozent": "Primärdozent",
     "freie_fragen": "Freie Fragen",
     "veroeffentlichen": "Veroeffentlichen",
     "zusammenfassung": "Zusammenfassung"
@@ -166,7 +164,6 @@ class VeranstalterWizard(SessionWizardView):
         ('evaluation', VeranstaltungEvaluationForm),
         ('basisdaten', VeranstaltungBasisdatenForm),
         ('digitale_eval', VeranstaltungDigitaleEvaluationForm),
-        ('primaerdozent', VeranstaltungPrimaerDozentForm),
         ('freie_fragen', VeranstaltungFreieFragen),
         ('veroeffentlichen', VeranstaltungVeroeffentlichung),
         ('zusammenfassung', forms.Form)
@@ -175,7 +172,6 @@ class VeranstalterWizard(SessionWizardView):
     condition_dict = {
         'basisdaten': perform_evalution,
         'digitale_eval': show_digital_eval_form,
-        'primaerdozent': show_primaerdozent_form,
         'freie_fragen': perform_evalution,
         'veroeffentlichen': perform_evalution,
     }
@@ -304,16 +300,6 @@ class VeranstalterWizard(SessionWizardView):
     def done(self, form_list, **kwargs):
         cleaned_data = self.get_cleaned_basisdaten()
         ergebnis_empfaenger = cleaned_data.get('ergebnis_empfaenger', None)
-        if not any(isinstance(x, VeranstaltungPrimaerDozentForm) for x in form_list):
-            # preselect Primärdozent
-            if ergebnis_empfaenger is not None:
-                form_primar = VeranstaltungPrimaerDozentForm(is_dynamic_form=True,
-                                                             data={'primaerdozent': ergebnis_empfaenger[0].id},
-                                                             instance=self.get_instance())
-                form_primar.is_valid()
-                # TODO: Python3 does not allow append() on dict() anymore
-                # form_list.append(form_primar)
-                list(form_list).append(form_primar)
 
         instance = self.get_instance()
 
