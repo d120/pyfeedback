@@ -14,7 +14,7 @@ from django.template.loader import render_to_string
 from formtools.wizard.views import SessionWizardView
 from feedback.models import Veranstaltung, Tutor, past_semester_orders, Log
 from feedback.forms import VeranstaltungEvaluationForm, VeranstaltungBasisdatenForm, \
-    VeranstaltungDozentDatenForm, VeranstaltungFreieFragen, VeranstaltungVeroeffentlichung, VeranstaltungDigitaleEvaluationForm
+    VeranstaltungFreieFragen, VeranstaltungVeroeffentlichung, VeranstaltungDigitaleEvaluationForm
 
 
 @require_safe
@@ -203,10 +203,8 @@ class VeranstalterWizard(SessionWizardView):
         if self.steps.current == "basisdaten":
             past_sem_data = past_semester_orders(self.get_instance())
             context.update({'past_semester_data': past_sem_data})
-        if self.steps.current == "verantwortlicher_address":
-            context.update({'basisdaten': self.get_cleaned_basisdaten()})
 
-        elif self.steps.current == "zusammenfassung":
+        if self.steps.current == "zusammenfassung":
             all_form_data = []
             for step_form in self.form_list:
                 form_obj = self.get_form(
@@ -244,10 +242,6 @@ class VeranstalterWizard(SessionWizardView):
         return context
 
     def get_form_instance(self, step):
-        if step == "verantwortlicher_address":
-            basisdaten = self.get_cleaned_basisdaten()
-            if basisdaten:
-                return basisdaten["verantwortlich"]
         return self.get_instance()
 
     def get_form_kwargs(self, step=None):

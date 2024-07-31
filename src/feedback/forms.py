@@ -101,20 +101,6 @@ class VeranstaltungDigitaleEvaluationForm(BestellWizardForm):
         model = Veranstaltung
         fields = ("digitale_eval_type", )
 
-class VeranstaltungDozentDatenForm(BestellWizardForm):
-    """Definiert die Form für den 4. Schritt des Wizards."""
-
-    def __init__(self, *args, **kwargs):
-        super(VeranstaltungDozentDatenForm, self).__init__(*args, **kwargs)
-
-        for k, field in list(self.fields.items()):
-            field.required = True
-
-    class Meta:
-        model = Person
-        fields = ("anschrift", "email")
-
-
 class VeranstaltungFreieFragen(BestellWizardForm):
     """Definiert die Form für den 5. Schritt des Wizards."""
 
