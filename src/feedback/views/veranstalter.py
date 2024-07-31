@@ -14,7 +14,7 @@ from django.template.loader import render_to_string
 from formtools.wizard.views import SessionWizardView
 from feedback.models import Veranstaltung, Tutor, past_semester_orders, Log
 from feedback.forms import VeranstaltungEvaluationForm, VeranstaltungBasisdatenForm, VeranstaltungPrimaerDozentForm, \
-    VeranstaltungDozentDatenForm, VeranstaltungFreieFragen, VeranstaltungTutorenForm, VeranstaltungVeroeffentlichung, VeranstaltungDigitaleEvaluationForm
+    VeranstaltungDozentDatenForm, VeranstaltungFreieFragen, VeranstaltungVeroeffentlichung, VeranstaltungDigitaleEvaluationForm
 
 
 @require_safe
@@ -69,8 +69,6 @@ def veranstalter_dashboard(request):
             bestellung.append(("Freie Frage 1", veranst.freiefrage1))
             bestellung.append(("Freie Frage 2", veranst.freiefrage2))
             bestellung.append(("Veröffentlichen", veranst.get_veroeffentlichen_display))
-
-            data["tutoren"] = Tutor.objects.filter(veranstaltung=veranst)
 
         data["bestellung"] = bestellung
 
@@ -128,17 +126,6 @@ def show_primaerdozent_form(wizard):
                 return False
 
     return show_summary_form
-
-
-def show_tutor_form(wizard):
-    """Bestimmt, ob man die Form für die Tutoren anzeigt."""
-    show_summary_form = perform_evalution(wizard)
-    if show_summary_form:
-        cleaned_data = wizard.get_cleaned_basisdaten()
-        v_typ = cleaned_data.get('typ', '')
-        return v_typ == "vu"
-    return show_summary_form
-
 
 def show_digital_eval_form(wizard):
     show_summary_form = perform_evalution(wizard)
@@ -259,13 +246,10 @@ class VeranstalterWizard(SessionWizardView):
                         if field_label is None:
                             field_label = field_key
 
-                        if isinstance(form_obj, VeranstaltungTutorenForm) and field_key == "csv_tutoren":
-                            context.update({"tutoren_csv": field_value})
-                        else:
-                            all_form_data.append({
-                                'label': field_label,
-                                'value': field_value
-                            })
+                        all_form_data.append({
+                            'label': field_label,
+                            'value': field_value
+                        })
 
             swap(all_form_data, 5, 6)
             swap(all_form_data, 6, 7)
@@ -288,10 +272,6 @@ class VeranstalterWizard(SessionWizardView):
             basisdaten = self.get_cleaned_basisdaten()
             if basisdaten is not None:
                 kwargs.update({'basisdaten': basisdaten})
-        elif step == 'tutoren':
-            veranstaltung = self.get_form_instance(step)
-            if veranstaltung is not None:
-                kwargs.update({'preset_csv': veranstaltung.kleingruppen})
         return kwargs
 
     def get_template_names(self):
@@ -317,9 +297,6 @@ def send_mail_to_verantwortliche(ergebnis_empfaenger, context, veranstaltung):
     :param context: E-Mail Inhalt
     :param veranstaltung: Veranstaltung
     """
-    if context.get('tutoren_csv', None) is not None:
-        tutoren = Tutor.objects.filter(veranstaltung=veranstaltung)
-        context.update({'tutoren': tutoren})
     context.update({'veranstaltung': veranstaltung})
 
     msg_html = render_to_string('formtools/wizard/email_zusammenfassung.html', context)
@@ -346,11 +323,7 @@ def save_to_db(request, instance, form_list):
     """
     for form in form_list:
         for key, val in form.cleaned_data.items():
-            if isinstance(form, VeranstaltungTutorenForm):
-                if key == "csv_tutoren":
-                    instance.csv_to_tutor(val)
-                    setattr(instance, "kleingruppen", val)
-            elif isinstance(form.instance, Veranstaltung):
+            if isinstance(form.instance, Veranstaltung):
                 if key == 'ergebnis_empfaenger':
                     getattr(instance, key).set(val)
                 else:
@@ -358,8 +331,7 @@ def save_to_db(request, instance, form_list):
             else:
                 setattr(form.instance, key, val)
 
-        if not isinstance(form, VeranstaltungTutorenForm) \
-                and hasattr(form, 'instance') and not isinstance(form.instance, Veranstaltung):
+        if hasattr(form, 'instance') and not isinstance(form.instance, Veranstaltung):
             form.instance.save()
 
     instance.set_next_state()

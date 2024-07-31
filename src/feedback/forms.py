@@ -143,19 +143,6 @@ class VeranstaltungFreieFragen(BestellWizardForm):
         model = Veranstaltung
         fields = ("freiefrage1", "freiefrage2")
 
-
-class VeranstaltungTutorenForm(forms.Form):
-    """Definiert die Form für den 6. Schritt des Wizards."""
-    required_css_class = "required"
-
-    csv_tutoren = forms.CharField(label="CSV", widget=forms.Textarea, required=False)
-
-    def __init__(self, *args, **kwargs):
-        preset_csv = kwargs.pop("preset_csv", None)
-        super(VeranstaltungTutorenForm, self).__init__(*args, **kwargs)
-        self.fields["csv_tutoren"].initial = preset_csv
-
-
 class VeranstaltungVeroeffentlichung(BestellWizardForm):
     """Definiert die Form für den 7. Schritt des Wizards."""
 
