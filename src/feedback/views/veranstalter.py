@@ -13,7 +13,7 @@ from django.template.loader import render_to_string
 
 from formtools.wizard.views import SessionWizardView
 from feedback.models import Veranstaltung, Tutor, past_semester_orders, Log
-from feedback.forms import VeranstaltungEvaluationForm, VeranstaltungBasisdatenForm, VeranstaltungPrimaerDozentForm, \
+from feedback.forms import VeranstaltungEvaluationForm, VeranstaltungBasisdatenForm, \
     VeranstaltungDozentDatenForm, VeranstaltungFreieFragen, VeranstaltungVeroeffentlichung, VeranstaltungDigitaleEvaluationForm
 
 
@@ -113,19 +113,6 @@ def perform_evalution(wizard):
         return True
 
     return cleaned_data.get('evaluieren', True)
-
-
-def show_primaerdozent_form(wizard):
-    """Bestimmt, ob man die Form für den Primärdozenten anzeigt."""
-    show_summary_form = perform_evalution(wizard)
-    if show_summary_form:
-        cleaned_data = wizard.get_cleaned_basisdaten()
-        ergebnis_empfaenger = cleaned_data.get('ergebnis_empfaenger', None)
-        if ergebnis_empfaenger is not None:
-            if ergebnis_empfaenger.count() == 1:
-                return False
-
-    return show_summary_form
 
 def show_digital_eval_form(wizard):
     show_summary_form = perform_evalution(wizard)
@@ -268,10 +255,7 @@ class VeranstalterWizard(SessionWizardView):
 
         if step == "basisdaten":
             kwargs.update({'all_veranstalter': self.get_all_veranstalter()})
-        elif step == 'primaerdozent':
-            basisdaten = self.get_cleaned_basisdaten()
-            if basisdaten is not None:
-                kwargs.update({'basisdaten': basisdaten})
+            
         return kwargs
 
     def get_template_names(self):

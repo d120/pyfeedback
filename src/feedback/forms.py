@@ -101,27 +101,6 @@ class VeranstaltungDigitaleEvaluationForm(BestellWizardForm):
         model = Veranstaltung
         fields = ("digitale_eval_type", )
 
-
-class VeranstaltungPrimaerDozentForm(BestellWizardForm):
-    """Definiert die Form für den 3. Schritt des Wizards."""
-
-    def __init__(self, *args, **kwargs):
-        if kwargs.pop("is_dynamic_form", False):
-            super(VeranstaltungPrimaerDozentForm, self).__init__(*args, **kwargs)
-        else:
-            previous_step_data = kwargs.pop("basisdaten", None)
-            super(VeranstaltungPrimaerDozentForm, self).__init__(*args, **kwargs)
-            if previous_step_data is not None:
-                self.fields["primaerdozent"].queryset = previous_step_data.get(
-                    "ergebnis_empfaenger", None
-                )
-                self.fields["primaerdozent"].required = True
-
-    class Meta:
-        model = Veranstaltung
-        fields = ("primaerdozent",)
-
-
 class VeranstaltungDozentDatenForm(BestellWizardForm):
     """Definiert die Form für den 4. Schritt des Wizards."""
 
