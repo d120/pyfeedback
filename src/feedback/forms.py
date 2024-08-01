@@ -1,5 +1,6 @@
 # coding=utf-8
 
+from typing import Any
 from django import forms
 from django.forms import widgets
 
@@ -49,7 +50,6 @@ class VeranstaltungBasisdatenForm(BestellWizardForm):
         super(VeranstaltungBasisdatenForm, self).__init__(*args, **kwargs)
 
         # Schränke QuerySet nur auf den Veranstalter ein
-        self.fields["verantwortlich"].queryset = veranstalter_queryset
         self.fields["ergebnis_empfaenger"].queryset = veranstalter_queryset
 
         # Keine negative Anzahl möglich
@@ -83,12 +83,17 @@ class VeranstaltungBasisdatenForm(BestellWizardForm):
             "typ",
             "anzahl",
             "sprache",
-            "verantwortlich",
-            "digitale_eval",
             "ergebnis_empfaenger",
             "auswertungstermin",
         )
         widgets = {"ergebnis_empfaenger": forms.CheckboxSelectMultiple}
+    
+    def clean(self) -> dict[str, Any]:
+        cleaned_data = super().clean()
+        
+        # "digitale_eval" and "verantwortlich" removed from user interface
+        cleaned_data["digitale_eval"] = True
+        cleaned_data["verantwortlich"] = cleaned_data["ergebnis_empfaenger"][0]
 
 
 class VeranstaltungDigitaleEvaluationForm(BestellWizardForm):
@@ -96,60 +101,12 @@ class VeranstaltungDigitaleEvaluationForm(BestellWizardForm):
         model = Veranstaltung
         fields = ("digitale_eval_type", )
 
-
-class VeranstaltungPrimaerDozentForm(BestellWizardForm):
-    """Definiert die Form für den 3. Schritt des Wizards."""
-
-    def __init__(self, *args, **kwargs):
-        if kwargs.pop("is_dynamic_form", False):
-            super(VeranstaltungPrimaerDozentForm, self).__init__(*args, **kwargs)
-        else:
-            previous_step_data = kwargs.pop("basisdaten", None)
-            super(VeranstaltungPrimaerDozentForm, self).__init__(*args, **kwargs)
-            if previous_step_data is not None:
-                self.fields["primaerdozent"].queryset = previous_step_data.get(
-                    "ergebnis_empfaenger", None
-                )
-                self.fields["primaerdozent"].required = True
-
-    class Meta:
-        model = Veranstaltung
-        fields = ("primaerdozent",)
-
-
-class VeranstaltungDozentDatenForm(BestellWizardForm):
-    """Definiert die Form für den 4. Schritt des Wizards."""
-
-    def __init__(self, *args, **kwargs):
-        super(VeranstaltungDozentDatenForm, self).__init__(*args, **kwargs)
-
-        for k, field in list(self.fields.items()):
-            field.required = True
-
-    class Meta:
-        model = Person
-        fields = ("anschrift", "email")
-
-
 class VeranstaltungFreieFragen(BestellWizardForm):
     """Definiert die Form für den 5. Schritt des Wizards."""
 
     class Meta:
         model = Veranstaltung
         fields = ("freiefrage1", "freiefrage2")
-
-
-class VeranstaltungTutorenForm(forms.Form):
-    """Definiert die Form für den 6. Schritt des Wizards."""
-    required_css_class = "required"
-
-    csv_tutoren = forms.CharField(label="CSV", widget=forms.Textarea, required=False)
-
-    def __init__(self, *args, **kwargs):
-        preset_csv = kwargs.pop("preset_csv", None)
-        super(VeranstaltungTutorenForm, self).__init__(*args, **kwargs)
-        self.fields["csv_tutoren"].initial = preset_csv
-
 
 class VeranstaltungVeroeffentlichung(BestellWizardForm):
     """Definiert die Form für den 7. Schritt des Wizards."""
