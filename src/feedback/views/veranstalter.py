@@ -7,7 +7,6 @@ from django.contrib import auth
 from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse
 from django.shortcuts import render
-from django.shortcuts import render_to_response
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
@@ -265,7 +264,8 @@ class VeranstalterWizard(SessionWizardView):
         context = self.get_context_data('zusammenfassung')
         send_mail_to_verantwortliche(ergebnis_empfaenger, context, instance)
 
-        return render_to_response('formtools/wizard/bestellung_done.html', )
+        return render(request=None, template_name='formtools/wizard/bestellung_done.html', )
+
 
 
 def send_mail_to_verantwortliche(ergebnis_empfaenger, context, veranstaltung):
