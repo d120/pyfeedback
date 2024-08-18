@@ -49,6 +49,6 @@ class FSAccountBackendTest(TestCase):
         self.u = User.objects.create_user('brian')
     
     def test_configure_user(self):
-        self.assertTrue(self.b.configure_user(self.u).is_superuser)
+        self.assertTrue(self.b.configure_user(None, self.u).is_superuser)
         u_db = User.objects.get(username='brian')
         self.assertTrue(u_db.is_superuser)
