@@ -6,7 +6,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.auth.backends import RemoteUserBackend, ModelBackend
 from django.contrib.auth.middleware import RemoteUserMiddleware
-from django.utils.encoding import smart_text
+from django.utils.encoding import smart_str
 
 from feedback.models.base import Veranstaltung
 
@@ -52,7 +52,7 @@ class FSAccountBackend(RemoteUserBackend):
         if settings.DEBUG:
             credentials = str(b64decode(username.split()[1]))
             user = credentials.split(':')[0]
-            return (smart_text(user))
+            return (smart_str(user))
         else:
             return username
 
