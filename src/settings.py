@@ -203,6 +203,8 @@ THRESH_VALID = 20
 DEFAULT_FROM_EMAIL = "Feedback-Team <feedback@fachschaft.informatik.tu-darmstadt.de>"
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
 USERNAME_VERANSTALTER = 'veranstalter'
 
 # for debug toolbar
