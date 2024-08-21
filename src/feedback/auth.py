@@ -38,7 +38,7 @@ class TakeoverBackend(ModelBackend):
 class FSAccountBackend(RemoteUserBackend):
     # Login wird automatisch über RemoteUserMiddleware bzw. RemoteUserBackend abgewickelt,
     # hier muss nur noch der neue User konfiguriert werden.
-    def configure_user(self, request, user):
+    def configure_user(self, request, user, created=True):
         user.email = user.username + '@d120.de'
         user.is_staff = True
         user.is_superuser = True
