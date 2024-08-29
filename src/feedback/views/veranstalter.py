@@ -188,7 +188,7 @@ class VeranstalterWizard(SessionWizardView):
 
         progressbar = []
         step_active = True
-        for step_key in self.form_list:
+        for step_key in self.get_form_list():
             progressbar.append({
                 'step_value': VERANSTALTER_WIZARD_STEPS[step_key],
                 'step_active': step_active,
@@ -205,7 +205,7 @@ class VeranstalterWizard(SessionWizardView):
 
         if self.steps.current == "zusammenfassung":
             all_form_data = []
-            for step_form in self.form_list:
+            for step_form in self.get_form_list():
                 form_obj = self.get_form(
                     step=step_form,
                     data=self.storage.get_step_data(step_form),
@@ -255,7 +255,9 @@ class VeranstalterWizard(SessionWizardView):
         return [VERANSTALTER_VIEW_TEMPLATES[self.steps.current]]
 
     def done(self, form_list, **kwargs):
-        cleaned_data = self.get_cleaned_basisdaten()
+        cleaned_data = {}
+        if perform_evalution(self) :
+            cleaned_data = self.get_cleaned_basisdaten()
         ergebnis_empfaenger = cleaned_data.get('ergebnis_empfaenger', None)
 
         instance = self.get_instance()
