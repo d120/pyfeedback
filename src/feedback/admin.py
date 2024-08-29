@@ -52,7 +52,7 @@ class PersonAdmin(admin.ModelAdmin):
 
         if not form:
             form = self.FachgebietZuweisenForm(initial={
-                '_selected_action':  queryset.values_list('id', flat=True)
+                '_selected_action': queryset.values_list('id', flat=True)
             })
 
         return render(request, 'admin/fachgebiet.html', {'data': suggestion_list, 'fachgebiet': form, })
@@ -145,7 +145,7 @@ class VeranstaltungAdmin(admin.ModelAdmin):
             return HttpResponseRedirect(request.get_full_path())
             # nach dem return landet Python in status_aendern_action
         if not form:
-            form = self.KeineEvaluationForm(initial={'_selected_action':  queryset.values_list('id', flat=True)})
+            form = self.KeineEvaluationForm(initial={'_selected_action': queryset.values_list('id', flat=True)})
         return render(request, 'admin/keine_evaluation.html', {'veranstaltungen': queryset, 'status': form, })
 
     keine_evaluation_action.short_description = "Keine Evaluation für diese Veranstaltung(en)"
