@@ -257,6 +257,8 @@ class VeranstalterWizard(SessionWizardView):
     def done(self, form_list, **kwargs):
         cleaned_data = {}
         if perform_evalution(self) :
+            # django-formtools uses get_form_list to get steps, which are added when their method in condition_dict is True
+            # get_cleaned_basisdaten uses step 'basisdaten', which is not added to steps if perform_evalution is False
             cleaned_data = self.get_cleaned_basisdaten()
         ergebnis_empfaenger = cleaned_data.get('ergebnis_empfaenger', None)
 
