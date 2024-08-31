@@ -42,7 +42,7 @@ class ImportCategory(models.Model):
 
 
 class ImportVeranstaltung(models.Model):
-    typ = models.CharField(max_length=1, choices=Veranstaltung.TYP_CHOICES)
+    typ = models.CharField(max_length=2, choices=Veranstaltung.TYP_CHOICES)
     name = models.CharField(max_length=150)
     lv_nr = models.CharField(max_length=15, blank=True)
     veranstalter = models.ManyToManyField(ImportPerson, blank=True)

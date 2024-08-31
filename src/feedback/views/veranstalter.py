@@ -7,7 +7,6 @@ from django.contrib import auth
 from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse
 from django.shortcuts import render
-from django.shortcuts import render_to_response
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
@@ -189,7 +188,7 @@ class VeranstalterWizard(SessionWizardView):
 
         progressbar = []
         step_active = True
-        for step_key in self.form_list:
+        for step_key in self.get_form_list():
             progressbar.append({
                 'step_value': VERANSTALTER_WIZARD_STEPS[step_key],
                 'step_active': step_active,
@@ -206,7 +205,7 @@ class VeranstalterWizard(SessionWizardView):
 
         if self.steps.current == "zusammenfassung":
             all_form_data = []
-            for step_form in self.form_list:
+            for step_form in self.get_form_list():
                 form_obj = self.get_form(
                     step=step_form,
                     data=self.storage.get_step_data(step_form),
@@ -256,7 +255,11 @@ class VeranstalterWizard(SessionWizardView):
         return [VERANSTALTER_VIEW_TEMPLATES[self.steps.current]]
 
     def done(self, form_list, **kwargs):
-        cleaned_data = self.get_cleaned_basisdaten()
+        cleaned_data = {}
+        if perform_evalution(self) :
+            # django-formtools uses get_form_list to get steps, which are added when their method in condition_dict is True
+            # get_cleaned_basisdaten uses step 'basisdaten', which is not added to steps if perform_evalution is False
+            cleaned_data = self.get_cleaned_basisdaten()
         ergebnis_empfaenger = cleaned_data.get('ergebnis_empfaenger', None)
 
         instance = self.get_instance()
@@ -265,7 +268,8 @@ class VeranstalterWizard(SessionWizardView):
         context = self.get_context_data('zusammenfassung')
         send_mail_to_verantwortliche(ergebnis_empfaenger, context, instance)
 
-        return render_to_response('formtools/wizard/bestellung_done.html', )
+        return render(request=None, template_name='formtools/wizard/bestellung_done.html', )
+
 
 
 def send_mail_to_verantwortliche(ergebnis_empfaenger, context, veranstaltung):
