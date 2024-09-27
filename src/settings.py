@@ -4,6 +4,7 @@
 # determine if this is a production system
 import os
 import sys
+from django.utils.translation import pgettext_lazy as _
 
 DEBUG = True
 
@@ -39,6 +40,11 @@ USE_TZ = False # before django 5.0 USE_TZ was default False
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'de-DE'
+
+LANGUAGES = [
+    ("de", _("German")),
+    ("en", _("English")),
+]
 
 SITE_ID = 1
 
@@ -95,10 +101,10 @@ TESTING = 'test' or 'check' in sys.argv
 # überschreiben!
 
 MIDDLEWARE = [
-    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'feedback.auth.FSDebugRemoteUserMiddleware',
