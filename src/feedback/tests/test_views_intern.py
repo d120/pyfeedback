@@ -14,6 +14,7 @@ from feedback.forms import UploadFileForm
 from feedback.models import Semester, Person, Veranstaltung, Fragebogen2009, Mailvorlage, \
     Fachgebiet, FachgebietEmail, Tutor, EmailEndung
 from feedback.tests.tools import NonSuTestMixin, get_veranstaltung
+from django.utils.translation import get_language
 
 from feedback import tests
 
@@ -24,7 +25,7 @@ class CloseOrderTest(NonSuTestMixin, TestCase):
         self.s, self.v = get_veranstaltung('vu')
 
     def test_close_order_bestellung_liegt_vor_post(self):
-        path = '/intern/status_final/'
+        path = f'/{get_language()}/intern/status_final/'
         self.v.status = Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR
         self.v.save()
 
@@ -35,7 +36,7 @@ class CloseOrderTest(NonSuTestMixin, TestCase):
         self.assertEqual(self.v.status, Veranstaltung.STATUS_BESTELLUNG_WIRD_VERARBEITET)
 
     def test_close_order_keine_evaluation_post(self):
-        path = '/intern/status_final/'
+        path = f'/{get_language()}/intern/status_final/'
         self.v.status = Veranstaltung.STATUS_KEINE_EVALUATION
         self.v.save()
 
@@ -46,7 +47,7 @@ class CloseOrderTest(NonSuTestMixin, TestCase):
         self.assertEqual(self.v.status, Veranstaltung.STATUS_KEINE_EVALUATION_FINAL)
 
     def test_close_order_status_angelegt_post(self):
-        path = '/intern/status_final/'
+        path = f'/{get_language()}/intern/status_final/'
         self.v.status = Veranstaltung.STATUS_ANGELEGT
         self.v.save()
 
@@ -57,7 +58,7 @@ class CloseOrderTest(NonSuTestMixin, TestCase):
         self.assertEqual(self.v.status, Veranstaltung.STATUS_KEINE_EVALUATION_FINAL)
 
     def test_close_order_bestellung_geoeffnet_post(self):
-        path = '/intern/status_final/'
+        path = f'/{get_language()}/intern/status_final/'
         self.v.status = Veranstaltung.STATUS_BESTELLUNG_GEOEFFNET
         self.v.save()
 
@@ -68,7 +69,7 @@ class CloseOrderTest(NonSuTestMixin, TestCase):
         self.assertEqual(self.v.status, Veranstaltung.STATUS_KEINE_EVALUATION_FINAL)
 
     def test_close_order_refuse(self):
-        path = '/intern/status_final/'
+        path = f'/{get_language()}/intern/status_final/'
         self.v.status = Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR
         self.v.save()
 
@@ -92,7 +93,7 @@ class InternMiscTest(NonSuTestMixin, TestCase):
         self.assertEqual(response.context['cur_semester'], s)
 
     def test_fragebogensprache(self):
-        path = '/intern/fragebogensprache/'
+        path = f'/{get_language()}/intern/fragebogensprache/'
         self.do_non_su_test(path)
         self.client.login(username='supers', password='pw')
 
@@ -102,7 +103,7 @@ class InternMiscTest(NonSuTestMixin, TestCase):
         self.assertEqual(response.templates[0].name, 'intern/fragebogensprache.html')
 
     def test_export_veranstaltungen_get(self):
-        path = '/intern/export_veranstaltungen/'
+        path = f'/{get_language()}/intern/export_veranstaltungen/'
         self.do_non_su_test(path)
         self.client.login(username='supers', password='pw')
 
@@ -118,7 +119,7 @@ class ExportVeranstaltungenTest(NonSuTestMixin, TestCase):
         self.assertEqual(xml1, xml2)
 
     def test_export_veranstaltungen_post(self):
-        path = '/intern/export_veranstaltungen/'
+        path = f'/{get_language()}/intern/export_veranstaltungen/'
         self.client.login(username='supers', password='pw')
         self.client.login(username='supers', password='pw')
 
@@ -343,7 +344,7 @@ class ExportVeranstaltungenTest(NonSuTestMixin, TestCase):
 
 
     def test_export_veranstaltungen_post_primaerdozent(self):
-        path = '/intern/export_veranstaltungen/'
+        path = f'/{get_language()}/intern/export_veranstaltungen/'
         self.client.login(username='supers', password='pw')
 
         s, v = get_veranstaltung('v')
@@ -441,7 +442,7 @@ class ExportVeranstaltungenTest(NonSuTestMixin, TestCase):
 class ImportErgebnisseTest(NonSuTestMixin, TestCase):
     def setUp(self):
         super(ImportErgebnisseTest, self).setUp()
-        self.path = '/intern/import_ergebnisse/'
+        self.path = f'/{get_language()}/intern/import_ergebnisse/'
         self.s = Semester.objects.create(semester=20110, fragebogen='2009', sichtbarkeit='ADM')
 
     def test_get(self):
@@ -485,7 +486,7 @@ class ImportErgebnisseTest(NonSuTestMixin, TestCase):
 class SyncErgebnisseTest(NonSuTestMixin, TestCase):
     def setUp(self):
         super(SyncErgebnisseTest, self).setUp()
-        self.path = '/intern/sync_ergebnisse/'
+        self.path = f'/{get_language()}/intern/sync_ergebnisse/'
         self.s, self.v = get_veranstaltung('v')
 
     def test_get(self):
@@ -520,7 +521,7 @@ class SyncErgebnisseTest(NonSuTestMixin, TestCase):
 
 
 class SendmailTest(NonSuTestMixin, TestCase):
-    path = '/intern/sendmail/'
+    path = f'/{get_language()}/intern/sendmail/'
 
     def test_get(self):
         self.do_non_su_test(self.path)
