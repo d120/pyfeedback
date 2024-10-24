@@ -4,7 +4,7 @@
 # determine if this is a production system
 import os
 import sys
-from django.utils.translation import pgettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 DEBUG = True
 
