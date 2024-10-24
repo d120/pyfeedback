@@ -6,6 +6,7 @@ from django.test import TestCase
 
 from feedback.models import Person, Veranstaltung, Tutor
 from feedback.tests.tools import get_veranstaltung, login_veranstalter
+from django.utils.translation import get_language
 
 class VeranstalterLoginTest(TestCase):
     def setUp(self):
@@ -13,24 +14,24 @@ class VeranstalterLoginTest(TestCase):
         User.objects.create_user(settings.USERNAME_VERANSTALTER)
 
     def test_incomplete_params(self):
-        response = self.client.get('/veranstalter/login/')
+        response = self.client.get(f'/{get_language()}/veranstalter/login/')
         self.assertEqual(response.templates[0].name, 'veranstalter/login_failed.html')
 
-        response = self.client.get('/veranstalter/login/', {'vid': self.v.id})
+        response = self.client.get(f'/{get_language()}/veranstalter/login/', {'vid': self.v.id})
         self.assertEqual(response.templates[0].name, 'veranstalter/login_failed.html')
 
-        response = self.client.get('/veranstalter/login/', {'token': self.v.access_token})
+        response = self.client.get(f'/{get_language()}/veranstalter/login/', {'token': self.v.access_token})
         self.assertEqual(response.templates[0].name, 'veranstalter/login_failed.html')
 
     def test_bad_params(self):
-        response = self.client.get('/veranstalter/login/', {'vid': self.v.id, 'token': 'inkorrekt'})
+        response = self.client.get(f'/{get_language()}/veranstalter/login/', {'vid': self.v.id, 'token': 'inkorrekt'})
         self.assertEqual(response.templates[0].name, 'veranstalter/login_failed.html')
 
-        response = self.client.get('/veranstalter/login/', {'vid': 123, 'token': self.v.access_token})
+        response = self.client.get(f'/{get_language()}/veranstalter/login/', {'vid': 123, 'token': self.v.access_token})
         self.assertEqual(response.templates[0].name, 'veranstalter/login_failed.html')
 
     def test_ok(self):
-        response = self.client.get('/veranstalter/login/', {'vid': self.v.id,
+        response = self.client.get(f'/{get_language()}/veranstalter/login/', {'vid': self.v.id,
                                                             'token': self.v.access_token})
         self.assertEqual(response.status_code, 302)
 
@@ -57,19 +58,19 @@ class VeranstalterIndexTest(TestCase):
         self.v_wo_excercises.veranstalter.add(self.p3)
 
     def test_unauth(self):
-        response = self.client.get('/veranstalter/')
+        response = self.client.get(f'/{get_language()}/veranstalter/')
         self.assertEqual(response.templates[0].name, 'veranstalter/not_authenticated.html')
 
     def test_invalid_state(self):
         c = login_veranstalter(self.v)
         self.v.status = Veranstaltung.STATUS_GEDRUCKT
         self.v.save()
-        response = c.get('/veranstalter/bestellung')
+        response = c.get(f'/{get_language()}/veranstalter/bestellung')
         self.assertEqual(302, response.status_code)
 
     def test_nothing(self):
         c = login_veranstalter(self.v)
-        response = c.get('/veranstalter/')
+        response = c.get(f'/{get_language()}/veranstalter/')
         ctx = response.context
         self.assertEqual(ctx['veranstaltung'], self.v)
         with self.assertRaises(KeyError):
@@ -79,12 +80,12 @@ class VeranstalterIndexTest(TestCase):
 
     def test_post_bestellung(self):
         c = login_veranstalter(self.v)
-        response_first_step = c.post('/veranstalter/bestellung', {'evaluation-evaluieren': True,
+        response_first_step = c.post(f'/{get_language()}/veranstalter/bestellung', {'evaluation-evaluieren': True,
                                                         "veranstalter_wizard-current_step": "evaluation"})
 
         self.assertTemplateUsed(response_first_step, "formtools/wizard/basisdaten.html")
 
-        response_second_temp_step = c.post('/veranstalter/bestellung', {
+        response_second_temp_step = c.post(f'/{get_language()}/veranstalter/bestellung', {
             "veranstalter_wizard-current_step": "basisdaten",
             "basisdaten-typ": "vu",
             "basisdaten-anzahl": 22,
@@ -98,7 +99,7 @@ class VeranstalterIndexTest(TestCase):
 
         self.assertTemplateUsed(response_second_temp_step, "formtools/wizard/digitale_evaluation.html")
 
-        response_second_step = c.post('/veranstalter/bestellung', {
+        response_second_step = c.post(f'/{get_language()}/veranstalter/bestellung', {
             "veranstalter_wizard-current_step": "digitale_eval",
             "digitale_eval-digitale_eval_type": "T",
         })
@@ -109,7 +110,7 @@ class VeranstalterIndexTest(TestCase):
 
         self.assertTemplateUsed(response_second_step, "formtools/wizard/freiefragen.html")
 
-        response_fifth_step = c.post('/veranstalter/bestellung', {
+        response_fifth_step = c.post(f'/{get_language()}/veranstalter/bestellung', {
             "veranstalter_wizard-current_step": "freie_fragen",
             "freie_fragen-freifrage1": "Ist das die erste Frage?",
             "freie_fragen-freifrage2": "Ist das die zweite Frage?"
@@ -121,12 +122,12 @@ class VeranstalterIndexTest(TestCase):
 
         self.assertTemplateUsed(response_fifth_step, "formtools/wizard/veroeffentlichen.html")
 
-        response_seventh_step = c.post('/veranstalter/bestellung', {'veroeffentlichen-veroeffentlichen': True,
+        response_seventh_step = c.post(f'/{get_language()}/veranstalter/bestellung', {'veroeffentlichen-veroeffentlichen': True,
                                     "veranstalter_wizard-current_step": "veroeffentlichen"})
 
         self.assertTemplateUsed(response_seventh_step, "formtools/wizard/zusammenfassung.html")
 
-        response_eight_step = c.post('/veranstalter/bestellung', {
+        response_eight_step = c.post(f'/{get_language()}/veranstalter/bestellung', {
             "veranstalter_wizard-current_step": "zusammenfassung"
         })
 
@@ -146,16 +147,16 @@ class VeranstalterIndexTest(TestCase):
     def test_missing_sessionid(self):
         c = login_veranstalter(self.v)
         del c.cookies[settings.SESSION_COOKIE_NAME]
-        response = c.post('/veranstalter/bestellung', {'evaluation-evaluieren': True,
+        response = c.post(f'/{get_language()}/veranstalter/bestellung', {'evaluation-evaluieren': True,
                                                         "veranstalter_wizard-current_step": "evaluation"})
         self.assertEqual(response.status_code, 404)
 
     def test_post_keine_evaluation(self):
         c = login_veranstalter(self.v)
-        response_firststep = c.post('/veranstalter/bestellung', {"evaluation-evaluieren": False,
+        response_firststep = c.post(f'/{get_language()}/veranstalter/bestellung', {"evaluation-evaluieren": False,
                                                         "veranstalter_wizard-current_step": "evaluation"})
         self.assertTemplateUsed(response_firststep, "formtools/wizard/zusammenfassung.html")
-        response_second = c.post('/veranstalter/bestellung', {"veranstalter_wizard-current_step": "zusammenfassung"})
+        response_second = c.post(f'/{get_language()}/veranstalter/bestellung', {"veranstalter_wizard-current_step": "zusammenfassung"})
 
         self.v.refresh_from_db()
         self.assertTemplateUsed(response_second, "formtools/wizard/bestellung_done.html")
@@ -168,11 +169,11 @@ class VeranstalterIndexTest(TestCase):
         self.s.save()
         c = login_veranstalter(self.v)
 
-        response_vollerhebung = c.get('/veranstalter/bestellung')
+        response_vollerhebung = c.get(f'/{get_language()}/veranstalter/bestellung')
 
         self.assertContains(response_vollerhebung, "<h2>Information zur Vollerhebung</h2>")
 
-        response_firststep = c.post('/veranstalter/bestellung', {"evaluation-evaluieren": True,
+        response_firststep = c.post(f'/{get_language()}/veranstalter/bestellung', {"evaluation-evaluieren": True,
                                                        "veranstalter_wizard-current_step": "evaluation"})
 
         self.v.refresh_from_db()
@@ -185,7 +186,7 @@ class VeranstalterIndexTest(TestCase):
 
         c = login_veranstalter(self.v)
 
-        response_firststep = c.post('/veranstalter/bestellung', {
+        response_firststep = c.post(f'/{get_language()}/veranstalter/bestellung', {
             'evaluation-evaluieren': True,
             "veranstalter_wizard-current_step": "evaluation"
         })
@@ -196,12 +197,12 @@ class VeranstalterIndexTest(TestCase):
 
     def test_post_bestellung_ein_ergebnis_empfaenger(self):
         c = login_veranstalter(self.v)
-        response_firststep = c.post('/veranstalter/bestellung', {'evaluation-evaluieren': True,
+        response_firststep = c.post(f'/{get_language()}/veranstalter/bestellung', {'evaluation-evaluieren': True,
                                                        "veranstalter_wizard-current_step": "evaluation"})
 
         self.assertTemplateUsed(response_firststep, "formtools/wizard/basisdaten.html")
 
-        response_second_temp_step = c.post('/veranstalter/bestellung', {
+        response_second_temp_step = c.post(f'/{get_language()}/veranstalter/bestellung', {
             "veranstalter_wizard-current_step": "basisdaten",
             "basisdaten-typ": "vu",
             "basisdaten-anzahl": 22,
@@ -215,7 +216,7 @@ class VeranstalterIndexTest(TestCase):
 
         self.assertTemplateUsed(response_second_temp_step, "formtools/wizard/digitale_evaluation.html")
 
-        response_secondstep = c.post('/veranstalter/bestellung', {
+        response_secondstep = c.post(f'/{get_language()}/veranstalter/bestellung', {
             "veranstalter_wizard-current_step": "digitale_eval",
             "digitale_eval-digitale_eval_type": "T",
         })
@@ -224,7 +225,7 @@ class VeranstalterIndexTest(TestCase):
 
         self.assertTemplateUsed(response_secondstep, "formtools/wizard/freiefragen.html")
 
-        response_fifth_step = c.post('/veranstalter/bestellung', {
+        response_fifth_step = c.post(f'/{get_language()}/veranstalter/bestellung', {
             "veranstalter_wizard-current_step": "freie_fragen",
             "freie_fragen-freifrage1": "Ist das die erste Frage?",
             "freie_fragen-freifrage2": "Ist das die zweite Frage?"
@@ -236,12 +237,12 @@ class VeranstalterIndexTest(TestCase):
 
         self.assertTemplateUsed(response_fifth_step, "formtools/wizard/veroeffentlichen.html")
 
-        response_seventh_step = c.post('/veranstalter/bestellung', {'veroeffentlichen-veroeffentlichen': True,
+        response_seventh_step = c.post(f'/{get_language()}/veranstalter/bestellung', {'veroeffentlichen-veroeffentlichen': True,
                                     "veranstalter_wizard-current_step": "veroeffentlichen"})
 
         self.assertTemplateUsed(response_seventh_step, "formtools/wizard/zusammenfassung.html")
 
-        response_eight_step = c.post('/veranstalter/bestellung', {
+        response_eight_step = c.post(f'/{get_language()}/veranstalter/bestellung', {
             "veranstalter_wizard-current_step": "zusammenfassung"
         })
 
@@ -256,10 +257,10 @@ class VeranstalterIndexTest(TestCase):
 
     def test_post_bestellung_without_excercises(self):
         c = login_veranstalter(self.v_wo_excercises)
-        c.post('/veranstalter/bestellung', {'evaluation-evaluieren': True,
+        c.post(f'/{get_language()}/veranstalter/bestellung', {'evaluation-evaluieren': True,
                                                        "veranstalter_wizard-current_step": "evaluation"})
 
-        c.post('/veranstalter/bestellung', {
+        c.post(f'/{get_language()}/veranstalter/bestellung', {
             "veranstalter_wizard-current_step": "basisdaten",
             "basisdaten-typ": "v",
             "basisdaten-anzahl": 11,
@@ -271,12 +272,12 @@ class VeranstalterIndexTest(TestCase):
 
         # "verantwortlicher_address" is removed
 
-        c.post('/veranstalter/bestellung', {
+        c.post(f'/{get_language()}/veranstalter/bestellung', {
             "veranstalter_wizard-current_step": "freie_fragen",
             "freie_fragen-freifrage1": "Ist das die erste Frage?",
             "freie_fragen-freifrage2": "Ist das die zweite Frage?"
         })
-        response_fourth_step = c.post('/veranstalter/bestellung', {'veroeffentlichen-veroeffentlichen': True,
+        response_fourth_step = c.post(f'/{get_language()}/veranstalter/bestellung', {'veroeffentlichen-veroeffentlichen': True,
                                   "veranstalter_wizard-current_step": "veroeffentlichen"})
         self.assertEqual(Tutor.objects.count(), 0)
 
@@ -289,20 +290,20 @@ class VeranstalterIndexTest(TestCase):
     def test_status_changes(self):
         c = login_veranstalter(self.v)
 
-        c.post('/veranstalter/bestellung', {"evaluation-evaluieren": False,
+        c.post(f'/{get_language()}/veranstalter/bestellung', {"evaluation-evaluieren": False,
                                                                  "veranstalter_wizard-current_step": "evaluation"})
 
-        c.post('/veranstalter/bestellung', {"veranstalter_wizard-current_step": "zusammenfassung"})
+        c.post(f'/{get_language()}/veranstalter/bestellung', {"veranstalter_wizard-current_step": "zusammenfassung"})
 
         self.v.refresh_from_db()
         self.assertFalse(self.v.evaluieren)
         self.assertEqual(self.v.status, Veranstaltung.STATUS_KEINE_EVALUATION)
 
-        c.post('/veranstalter/bestellung', {
+        c.post(f'/{get_language()}/veranstalter/bestellung', {
             'evaluation-evaluieren': True,
             "veranstalter_wizard-current_step": "evaluation"})
 
-        c.post('/veranstalter/bestellung', {
+        c.post(f'/{get_language()}/veranstalter/bestellung', {
             "veranstalter_wizard-current_step": "basisdaten",
             "basisdaten-typ": "vu",
             "basisdaten-anzahl": 22,
@@ -314,7 +315,7 @@ class VeranstalterIndexTest(TestCase):
             "save": "Speichern"
         })
 
-        c.post('/veranstalter/bestellung', {
+        c.post(f'/{get_language()}/veranstalter/bestellung', {
             "veranstalter_wizard-current_step": "digitale_eval",
             "digitale_eval-digitale_eval_type": "T",
         })
@@ -323,7 +324,7 @@ class VeranstalterIndexTest(TestCase):
 
         # "verantwortlicher_address" is removed
 
-        c.post('/veranstalter/bestellung', {
+        c.post(f'/{get_language()}/veranstalter/bestellung', {
             "veranstalter_wizard-current_step": "freie_fragen",
             "freie_fragen-freifrage1": "Ist das die erste Frage?",
             "freie_fragen-freifrage2": "Ist das die zweite Frage?"
@@ -331,12 +332,12 @@ class VeranstalterIndexTest(TestCase):
 
         # step "tutoren" removed
 
-        c.post('/veranstalter/bestellung', {
+        c.post(f'/{get_language()}/veranstalter/bestellung', {
             'veroeffentlichen-veroeffentlichen': True,
             "veranstalter_wizard-current_step": "veroeffentlichen"})
 
 
-        c.post('/veranstalter/bestellung', {
+        c.post(f'/{get_language()}/veranstalter/bestellung', {
             "veranstalter_wizard-current_step": "zusammenfassung"
         })
 
@@ -346,10 +347,10 @@ class VeranstalterIndexTest(TestCase):
         self.assertTrue(self.v.evaluieren)
         self.assertEqual(self.v.status, Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR)
 
-        c.post('/veranstalter/bestellung', {"evaluation-evaluieren": False,
+        c.post(f'/{get_language()}/veranstalter/bestellung', {"evaluation-evaluieren": False,
                                             "veranstalter_wizard-current_step": "evaluation"})
 
-        c.post('/veranstalter/bestellung', {"veranstalter_wizard-current_step": "zusammenfassung"})
+        c.post(f'/{get_language()}/veranstalter/bestellung', {"veranstalter_wizard-current_step": "zusammenfassung"})
 
         self.v.refresh_from_db()
         self.assertFalse(self.v.evaluieren)
@@ -359,13 +360,13 @@ class VeranstalterIndexTest(TestCase):
     def test_post_bestellung_with_digital(self):
         c = login_veranstalter(self.v_wo_excercises)
         c.post(
-            '/veranstalter/bestellung', {
+            f'/{get_language()}/veranstalter/bestellung', {
                 'evaluation-evaluieren': True,
                 "veranstalter_wizard-current_step": "evaluation"
             })
 
         response = c.post(
-            '/veranstalter/bestellung', {
+            f'/{get_language()}/veranstalter/bestellung', {
                 "veranstalter_wizard-current_step": "basisdaten",
                 "basisdaten-typ": "v",
                 "basisdaten-anzahl": 11,
@@ -381,7 +382,7 @@ class VeranstalterIndexTest(TestCase):
                                 "formtools/wizard/digitale_evaluation.html")
 
         response = c.post(
-            '/veranstalter/bestellung', {
+            f'/{get_language()}/veranstalter/bestellung', {
                 "veranstalter_wizard-current_step": "digitale_eval",
                 "digitale_eval-digitale_eval_type": "L",
             })
@@ -391,18 +392,18 @@ class VeranstalterIndexTest(TestCase):
         # step "verantwortlicher_address" removed 
 
         c.post(
-            '/veranstalter/bestellung', {
+            f'/{get_language()}/veranstalter/bestellung', {
                 "veranstalter_wizard-current_step": "freie_fragen",
                 "freie_fragen-freifrage1": "Ist das die erste Frage?",
                 "freie_fragen-freifrage2": "Ist das die zweite Frage?"
             })
         c.post(
-            '/veranstalter/bestellung', {
+            f'/{get_language()}/veranstalter/bestellung', {
                 'veroeffentlichen-veroeffentlichen': True,
                 "veranstalter_wizard-current_step": "veroeffentlichen"
             })
 
-        c.post('/veranstalter/bestellung',
+        c.post(f'/{get_language()}/veranstalter/bestellung',
                {"veranstalter_wizard-current_step": "zusammenfassung"})
 
         self.v_wo_excercises.refresh_from_db()

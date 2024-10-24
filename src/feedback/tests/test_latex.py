@@ -6,6 +6,7 @@ from django.conf import settings
 
 from feedback.models import Semester, Person, Veranstaltung, Fragebogen2009, Mailvorlage
 from feedback.tests.tools import NonSuTestMixin, get_veranstaltung
+from django.utils.translation import get_language
 
 @tag('latex')
 class GenerateLettersTest(NonSuTestMixin, TestCase):
@@ -29,7 +30,7 @@ class GenerateLettersTest(NonSuTestMixin, TestCase):
         except OSError:
             return self.skipTest("OSError while looking for pdflatex")
 
-        self.path = '/intern/generate_letters/'
+        self.path = f'/{get_language()}/intern/generate_letters/'
         try:
             self.orig_contents = self._get_erhebungswoche()
         except IOError:
