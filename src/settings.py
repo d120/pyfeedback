@@ -39,11 +39,11 @@ USE_TZ = False # before django 5.0 USE_TZ was default False
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'de-de'
+LANGUAGE_CODE = 'de'
 
 LANGUAGES = [
-    ("de-de", _("German")),
-    ("en-us", _("English")),
+    ("de", _("German")),
+    ("en", _("English")),
 ]
 
 LOCALE_PATHS = (

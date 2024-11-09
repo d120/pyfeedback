@@ -4,7 +4,7 @@ from django import forms
 from django.conf import settings
 from django.views.decorators.http import require_safe
 from django.contrib import auth
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpRequest, HttpResponseRedirect, Http404
 from django.urls import reverse
 from django.shortcuts import render
 from django.core.mail import send_mail
@@ -268,7 +268,8 @@ class VeranstalterWizard(SessionWizardView):
         context = self.get_context_data('zusammenfassung')
         send_mail_to_verantwortliche(ergebnis_empfaenger, context, instance)
 
-        return render(request=None, template_name='formtools/wizard/bestellung_done.html', )
+        ## there is no need for HttpRequest() other than for translating with translate_url templatetag which needs request
+        return render(request=HttpRequest(), template_name='formtools/wizard/bestellung_done.html', )
 
 
 
