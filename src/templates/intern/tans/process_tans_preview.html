@@ -1,13 +1,13 @@
-{% extends "bestellung_base.html" %}{% load static %}
+{% extends "bestellung_base.html" %}{% load static %}{% load i18n %}
 
-{% block title %}TANs verarbeiten{% endblock %}
+{% block title %}{% translate "TANs verarbeiten" %}{% endblock %}
 {% block content %}
-<h1>TANs verarbeiten</h1>
-<h2>Vorschau</h2>
+<h1>{% translate "TANs verarbeiten" %}</h1>
+<h2>{% translate "Vorschau" %}</h2>
 
 {% if losungspreview %}
 <div class="jumbotron">
-    <h3>Losungsmail Vorschau</h3>
+    <h3>{% translate "Losungsmail Vorschau" %}</h3>
     <hr>
     <pre>
     {{ losungspreview|wordwrap:100 }}
@@ -15,7 +15,7 @@
     <br>
     <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapselosungsrecipients"
         aria-expanded="false" aria-controls="collapselosungsrecipients">
-        Empfänger <span class="badge badge-light">{{ losunglectures | length }}</span>
+        {% translate "Empfänger" %} <span class="badge badge-light">{{ losunglectures | length }}</span>
     </button>
     <div class="collapse" id="collapselosungsrecipients">
         <div class="card card-body">
@@ -27,7 +27,7 @@
 
 {% if tanpreview %}
 <div class="jumbotron">
-    <h3>TANmail Vorschau</h3>
+    <h3>{% translate "TANmail Vorschau" %}</h3>
     <hr>
     <pre>
     {{ tanpreview|wordwrap:100 }}
@@ -35,7 +35,7 @@
     <br>
     <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapsetanrecipients"
         aria-expanded="false" aria-controls="collapsetanrecipients">
-        Empfänger <span class="badge badge-light">{{ tanlectures | length }}</span>
+        {% translate "Empfänger" %} <span class="badge badge-light">{{ tanlectures | length }}</span>
     </button>
     <div class="collapse" id="collapsetanrecipients">
         <div class="card card-body">
@@ -60,8 +60,8 @@
     <br>
     {% if wizard.steps.prev %}
     <button class="btn btn-secondary float-left" name="wizard_goto_step" type="submit"
-        value="{{ wizard.steps.prev }}">Zurück</button>
+        value="{{ wizard.steps.prev }}">{% translate "Zurück" %}</button>
     {% endif %}
-    <button class="btn btn-primary float-right" type="submit" value="Next">Absenden</button>
+    <button class="btn btn-primary float-right" type="submit" value="Next">{% translate "Absenden" %}</button>
 </form>
 {% endblock %}

@@ -1,28 +1,29 @@
 {% extends "bestellung_base.html" %}
+{% load i18n %}
 
-{% block title %}Mail versenden{% endblock %}
+{% block title %}{% translate "Mail versenden" %}{% endblock %}
 
 {% block content %}
-    <h1>Mail an Veranstalter versenden</h1>
+    <h1>{% translate "Mail an Veranstalter versenden" %}</h1>
 
     <form method="post" action="">
         {% csrf_token %}
-        <h2>Vorschau (Ersetzte Begriffe sind <span style="color: blue;">blau markiert</span>)</h2>
+        <h2>{% blocktranslate %}Vorschau (Ersetzte Begriffe sind <span style="color: blue;">blau markiert</span>){% endblocktranslate %}</h2>
         <p>
-            <label><em>Absender:</em></label>
+            <label><em>{% translate "Absender:" %}</em></label>
             {{ from }}
 
             <br>
 
-            <label><em>Empfänger:</em></label>
-            {{ to }} aus dem {{ semester_selected }}
+            <label>{% blocktranslate %}<em>Empfänger:</em></label>
+            {{ to }} aus dem {{ semester_selected }}{% endblocktranslate %}
             {% if tutoren == 'True' %}
                 {{ is_tutoren }}
             {% endif %}
         </p>
 
         <pre>
-            <em>Betreff:</em> {{ subject_rendered }}
+            <em>{% translate "Betreff:" %}</em> {{ subject_rendered }}
             {{ body_rendered|wordwrap:100 }}
         </pre>
 
@@ -32,7 +33,7 @@
         <input type="hidden" name="body" value="{{ body }}" />
         <input type="hidden" name="tutoren" value="{{ tutoren }}" />
 
-        <input type="submit" name="aendern" value="Ändern" />
-        <input type="submit" name="senden" value="Mails senden" />
+        <input type="submit" name="aendern" value="{% translate "Ändern" %}" />
+        <input type="submit" name="senden" value="{% translate "Mails senden" %}" />
     </form>
 {% endblock %}

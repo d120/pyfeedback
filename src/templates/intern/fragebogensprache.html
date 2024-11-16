@@ -1,18 +1,19 @@
 {% extends "bestellung_base.html" %}
+{% load i18n %}
 
-{% block title %}Zuordnung Veranstaltungen zu Sprache des Fragebogens{% endblock %}
+{% block title %}{% translate "Zuordnung Veranstaltungen zu Sprache des Fragebogens" %}{% endblock %}
 
 {% block content %}
-<h1>Zuordnung Veranstaltungen zu Sprache des Fragebogens</h1>
+<h1>{% translate "Zuordnung Veranstaltungen zu Sprache des Fragebogens" %}</h1>
 
 <table class="border">
 	<tr>
-		<th>Veranstaltung</th>
-		<th>Sprache</th>
-		<th>Anzahl</th>
-		<th>Typ</th>
-		<th>gedruckt</th>
-		<th>zurück</th>
+		<th>{% translate "Veranstaltung" %}</th>
+		<th>{% translate "Sprache" %}</th>
+		<th>{% translate "Anzahl" %}</th>
+		<th>{% translate "Typ" %}</th>
+		<th>{% translate "gedruckt" %}</th>
+		<th>{% translate "zurück" %}</th>
 	</tr>
 {% for v in veranstaltungen %}
 	<tr class="cycle {% cycle 'row1' 'row2' %}">

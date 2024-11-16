@@ -1,14 +1,16 @@
 {% extends "bestellung_base.html" %}
+{% load i18n %}
 
-{% block title %}Login fehlgeschlagen{% endblock %}
+{% block title %}{% translate "Login fehlgeschlagen" %}{% endblock %}
 
 {% block content %}
-<h1>Login fehlgeschlagen</h1>
+<h1>{% translate "Login fehlgeschlagen" %}</h1>
 
-<p>
+<p>{% blocktranslate %}
 Bitte überprüfen Sie, ob der Login-Link aus der E-Mail vollständig in die Adresszeile Ihres
 Browsers übertragen wurde. Falls dies der Fall ist und der Login trotzdem fehlschlägt, melden Sie
 sich bitte beim <a href="mailto:feedback@fachschaft.informatik.tu-darmstadt.de">Feedback-Team</a>.
 Wir bitten für die Unannehmlichkeiten um Entschuldigung.
+{% endblocktranslate %}
 </p>
 {% endblock %}

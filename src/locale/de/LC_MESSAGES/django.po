@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-09 18:09+0100\n"
+"POT-Creation-Date: 2024-11-16 21:06+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
 #: feedback/models/base.py:190 feedback/models/base.py:308
 #: feedback/models/base.py:723
 msgid "first name"
@@ -46,6 +47,155 @@ msgstr ""
 msgid "English"
 msgstr ""
 
+#: templates/404.html:4 templates/404.html:7
+msgid "Seite nicht gefunden"
+msgstr ""
+
+#: templates/404.html:8
+msgid ""
+"Es sieht so aus, als ob Du auf eine Seite zugreifen möchtest, die nicht "
+"existiert."
+msgstr ""
+
+#: templates/404.html:9
+msgid "Bitte überprüfe die Schreibweise der URL und versuche es erneut."
+msgstr ""
+
+#: templates/404.html:10
+#, python-format
+msgid " Fehler: %(exception)s"
+msgstr ""
+
+#: templates/500.html:4 templates/500.html:7
+msgid "Serverfehler"
+msgstr ""
+
+#: templates/500.html:8
+msgid "HTTP 500 - Internal Server Error"
+msgstr ""
+
+#: templates/500.html:9
+msgid "Der Administrator wurde benachrichtigt."
+msgstr ""
+
+#: templates/admin/fachgebiet.html:8
+msgid "Folgende Personen werden einem Fachgebiet zugewiesen:"
+msgstr ""
+
+#: templates/admin/fachgebiet.html:13
+msgid "Name"
+msgstr ""
+
+#: templates/admin/fachgebiet.html:14
+msgid "Vorschlag für Fachgebiet"
+msgstr ""
+
+#: templates/admin/fachgebiet.html:28
+msgid "Unbekannt"
+msgstr ""
+
+#: templates/admin/fachgebiet.html:37 templates/admin/fachgebiet.html:39
+msgid "Sichern und weiter bearbeiten"
+msgstr ""
+
+#: templates/admin/fachgebiet.html:41
+msgid "Sichern"
+msgstr ""
+
+#: templates/admin/keine_evaluation.html:8
+msgid ""
+"Es wird für folgende Veranstaltungen der Status auf keine Evaluation "
+"geändert:"
+msgstr ""
+
+#: templates/admin/keine_evaluation.html:13
+#: templates/admin/status_aendern.html:13
+#: templates/intern/rechte_uebernehmen.html:18
+msgid "Übernehmen"
+msgstr ""
+
+#: templates/admin/status_aendern.html:8
+msgid "Es wird der Status für folgende Veranstaltungen geändert:"
+msgstr ""
+
+#: templates/bestellung_base.html:10
+msgid "zurück zum internen Bereich"
+msgstr ""
+
+#: templates/bestellung_base.html:12
+msgid "zurück zum Veranstalterbereich"
+msgstr ""
+
+#: templates/d120/footer.html:7
+msgid "Startseite"
+msgstr ""
+
+#: templates/d120/footer.html:8
+msgid "Kontakt"
+msgstr ""
+
+#: templates/d120/footer.html:9
+msgid "Impressum"
+msgstr ""
+
+#: templates/d120/footer.html:10
+msgid "Datenschutzerklärung"
+msgstr ""
+
+#: templates/d120/header.html:15
+msgid "Webseite"
+msgstr ""
+
+#: templates/d120/header.html:20
+msgid "dasWESENtliche"
+msgstr ""
+
+#: templates/d120/header.html:25
+msgid "Fachbereich"
+msgstr ""
+
+#: templates/d120/sidebar.html:6
+msgid "Feedback"
+msgstr ""
+
+#: templates/d120/sidebar.html:9
+msgid "FAQ"
+msgstr ""
+
+#: templates/d120/sidebar.html:12
+msgid "Hall of Fame"
+msgstr ""
+
+#: templates/d120/sidebar.html:15 templates/public/index.html:3
+#: templates/public/keine_ergebnisse.html:4 templates/public/unauth.html:4
+msgid "Ergebnisse"
+msgstr ""
+
+#: templates/d120/sidebar.html:18
+msgid "Webinterface"
+msgstr ""
+
+#: templates/d120_base.html:6
+msgid "Leere Seite"
+msgstr ""
+
+#: templates/d120_base.html:6
+msgid " - Evaluation der Lehre"
+msgstr ""
+
+#: templates/d120_base.html:40
+#, python-format
+msgid "Du nutzt momentan die Rechte der Veranstalter von %(veranstaltung)s."
+msgstr ""
+
+#: templates/d120_base.html:40
+msgid "Zu meinem Account zurückkehren."
+msgstr ""
+
+#: templates/feedback/CreateBarcodeScannEvent.html:4
+msgid "Create"
+msgstr ""
+
 #: templates/feedback/VeranstaltungsDeadlines.html:2
 #: templates/feedback/VeranstaltungsDeadlines.html:4
 msgid "Auswertungstermine für das aktuelle Semester"
@@ -55,4 +205,1090 @@ msgstr ""
 msgid ""
 "Dein ausgefüllter Fragebogen muss bis zu diesem Tag in der Fachschaft "
 "eingegangen sein, damit er erfasst wird."
+msgstr ""
+
+#: templates/feedback/person_form.html:4
+#: templates/veranstalter/dashboard.html:5 templates/veranstalter/index.html:4
+msgid "Veranstalterbereich"
+msgstr ""
+
+#: templates/feedback/person_form.html:9
+msgid "eingeloggt für "
+msgstr ""
+
+#: templates/feedback/person_form.html:9
+#, python-format
+msgid "%(veranstaltung.name)s (%(veranstaltung.semester.short)s)"
+msgstr ""
+
+#: templates/feedback/person_form.html:10
+#: templates/formtools/wizard/base.html:74 templates/veranstalter/index.html:13
+msgid "ausloggen"
+msgstr ""
+
+#: templates/feedback/person_form.html:13
+msgid "Fragebogenbestellung Schritt 2 von 5"
+msgstr ""
+
+#: templates/feedback/person_form.html:14 templates/intern/index.html:25
+#: templates/veranstalter/index.html:30
+msgid "Ablauf"
+msgstr ""
+
+#: templates/feedback/person_form.html:16 templates/veranstalter/index.html:33
+#: templates/veranstalter/index.html:40
+msgid "Basisdaten"
+msgstr ""
+
+#: templates/feedback/person_form.html:17
+#: templates/feedback/person_form.html:22 templates/veranstalter/index.html:34
+msgid "Datenüberprüfung"
+msgstr ""
+
+#: templates/feedback/person_form.html:18 templates/veranstalter/index.html:35
+msgid "Freie Fragen"
+msgstr ""
+
+#: templates/feedback/person_form.html:19 templates/veranstalter/index.html:36
+msgid "Details zur Übung"
+msgstr ""
+
+#: templates/feedback/person_form.html:20 templates/veranstalter/index.html:37
+msgid "Zusammenfassung"
+msgstr ""
+
+#: templates/feedback/person_form.html:24
+msgid "Bitte überprüfen Sie jetzt die Daten des Verantwortlichen "
+msgstr ""
+
+#: templates/feedback/person_form.html:24
+#, python-format
+msgid "%(veranstaltung.verantwortlich)s"
+msgstr ""
+
+#: templates/feedback/person_form.html:27
+msgid "weiter"
+msgstr ""
+
+#: templates/formtools/wizard/address.html:9
+msgid "Erfassung der Daten des Verantwortlichen: "
+msgstr ""
+
+#: templates/formtools/wizard/base.html:69
+msgid "Bestellprozess "
+msgstr ""
+
+#: templates/formtools/wizard/base.html:75
+msgid "Bestellung für "
+msgstr ""
+
+#: templates/formtools/wizard/basisdaten.html:5
+msgid "Erfassung der Basisdaten"
+msgstr ""
+
+#: templates/formtools/wizard/basisdaten.html:9
+#: templates/intern/fragebogensprache.html:11
+msgid "Veranstaltung"
+msgstr ""
+
+#: templates/formtools/wizard/basisdaten.html:10
+#: templates/intern/lange_ohne_evaluation.html:26
+#: templates/veranstalter/index.html:52
+msgid "Bestellte Bögen"
+msgstr ""
+
+#: templates/formtools/wizard/basisdaten.html:11
+msgid "Rückläufe"
+msgstr ""
+
+#: templates/formtools/wizard/bestellung_done.html:5
+msgid "Die Bestellung wurde entgegengenommen"
+msgstr ""
+
+#: templates/formtools/wizard/bestellung_done.html:7
+#: templates/intern/index.html:16 templates/veranstalter/dashboard.html:64
+msgid "Ausloggen"
+msgstr ""
+
+#: templates/formtools/wizard/digitale_evaluation.html:5
+msgid "Digitale Evaluation"
+msgstr ""
+
+#: templates/formtools/wizard/email_zusammenfassung.html:6
+msgid "Zusammenfassung der Bestelldaten"
+msgstr ""
+
+#: templates/formtools/wizard/email_zusammenfassung.html:45
+#, python-format
+msgid "Zusammenfassung der Fragebogenbestellung für %(veranstaltung)s"
+msgstr ""
+
+#: templates/formtools/wizard/email_zusammenfassung.html:66
+#: templates/formtools/wizard/zusammenfassung.html:61
+#: templates/veranstalter/dashboard.html:101
+msgid "Tutoren"
+msgstr ""
+
+#: templates/formtools/wizard/email_zusammenfassung.html:70
+#: templates/veranstalter/dashboard.html:105
+msgid "Num"
+msgstr ""
+
+#: templates/formtools/wizard/email_zusammenfassung.html:71
+#: templates/veranstalter/dashboard.html:106
+msgid "Vorname"
+msgstr ""
+
+#: templates/formtools/wizard/email_zusammenfassung.html:72
+#: templates/veranstalter/dashboard.html:107
+msgid "Nachname"
+msgstr ""
+
+#: templates/formtools/wizard/email_zusammenfassung.html:73
+#: templates/veranstalter/dashboard.html:108
+msgid "Email"
+msgstr ""
+
+#: templates/formtools/wizard/email_zusammenfassung.html:74
+#: templates/veranstalter/dashboard.html:109
+msgid "Anmerkung"
+msgstr ""
+
+#: templates/formtools/wizard/evaluation.html:5
+msgid "Möchten Sie ihre Veranstaltung evaluieren?"
+msgstr ""
+
+#: templates/formtools/wizard/evaluation.html:6
+msgid "Datenschutzrechtliche Einwilligungserklärung"
+msgstr ""
+
+#: templates/formtools/wizard/evaluation.html:8
+msgid ""
+"Ich bin einverstanden, dass meine Daten im Zusammenhang mit der "
+"Lehrevaluation vom Fachbereich Informatik und der Fachschaft Informatik "
+"erhoben, verarbeitet und genutzt werden, und für\n"
+"folgende Zwecke verwendet werden: interne Evaluation des Fachbereichs und "
+"der Fachschaft, Rückmeldungen zur Evaluation (z.B. Vergabe von Lehrpreisen), "
+"sowie Veröffentlichung der\n"
+"numerischen Ergebnisse im Intranet der TU Darmstadt.\n"
+"<br>\n"
+"<br>\n"
+"Die Erhebung, Verarbeitung und Nutzung meiner Daten erfolgt auf freiwilliger "
+"Basis. Ich kann mein Einverständnis ohne für mich nachteilige Folgen "
+"verweigern bzw. jederzeit mit Wirkung für\n"
+"die Zukunft widerrufen. Meine Widerrufserklärung richte ich an das "
+"Studiendekanat des Fachbereichs Informatik. Im Fall des Widerrufs werden mit "
+"dem Zugang meiner Widerrufserklärung meine\n"
+"Daten bei den entsprechenden Stellen gelöscht."
+msgstr ""
+
+#: templates/formtools/wizard/evaluation.html:20
+#: templates/veranstalter/index.html:17
+msgid "Information zur Vollerhebung"
+msgstr ""
+
+#: templates/formtools/wizard/evaluation.html:21
+msgid ""
+"\n"
+"            In diesem Semester findet eine Vollerhebung aller "
+"Lehrveranstaltungen am Fachbereich Informatik statt.\n"
+"            Die Teilnahme an der Evaluation der Lehre ist somit laut §4 Abs. "
+"9 Richtlinien für den Bereich der\n"
+"            Lehrveranstaltungsevaluation der Technischen Universität "
+"Darmstadt veröffentlicht in der\n"
+"            <a href=\"https://www.intern.tu-darmstadt.de/media/dezernat_ii/"
+"satzungsbeilagen/sb_14_III.pdf\">Satzungsbeilage 2014-III</a>\n"
+"            <strong>verpflichtend</strong> für alle Lehrveranstaltungen. "
+"Falls Ihre Veranstaltung eine Service-Veranstaltung\n"
+"            ist und die Evaluation durch einen anderen Fachbereich "
+"durchgeführt wird setzen Sie sich bitte mit uns in Verbindung:\n"
+"            <br>\n"
+"            <a href=\"mailto:feedback@fachschaft.informatik.tu-darmstadt."
+"de\">feedback@fachschaft.informatik.tu-darmstadt.de</a>"
+msgstr ""
+
+#: templates/formtools/wizard/freiefragen.html:4
+msgid "Erfassung der Freien Fragen"
+msgstr ""
+
+#: templates/formtools/wizard/freiefragen.html:5
+msgid "Freie Fragen Feld"
+msgstr ""
+
+#: templates/formtools/wizard/freiefragen.html:6
+msgid ""
+"\n"
+"        Auf dem Fragebogen zu Ihrer Veranstaltung können Sie bis zu\n"
+"        zwei selbst formulierte Fragen an die Studierenden stellen.\n"
+"        Die Studierenden können jede der Fragen mit einem von fünf Werten "
+"zwischen\n"
+"        &bdquo;<i>trifft zu</i>&ldquo; und &bdquo;<i>trifft nicht zu</"
+"i>&ldquo; beantworten.\n"
+"        "
+msgstr ""
+
+#: templates/formtools/wizard/primaerdozent.html:5
+msgid "Erfassung des Primärdozenten"
+msgstr ""
+
+#: templates/formtools/wizard/tutoren.html:5
+msgid "Erfassung der Tutoren"
+msgstr ""
+
+#: templates/formtools/wizard/tutoren.html:16
+msgid ""
+"\n"
+"        Bitte geben Sie die Daten kommasepartiert in der Reihenfolge <br />\n"
+"        <strong>Nachname, Vorname, E-Mail Adresse, Termin und Raum bzw. "
+"Anmerkung</strong><br />\n"
+"        an und nutzen Sie für jede Übungsgruppe eine <strong>neue Zeile</"
+"strong>.\n"
+"        Anschließend ordnen wir jeder Zeile eine Kennziffer zwischen 1 und "
+"60 zu.\n"
+"        "
+msgstr ""
+
+#: templates/formtools/wizard/tutoren.html:24
+msgid "Beispiel"
+msgstr ""
+
+#: templates/formtools/wizard/tutoren.html:26
+msgid ""
+"\n"
+"        Wulf,Jan,JanWulf@einrot.com,Montag 08:00Uhr S103/109<br />\n"
+"        Mayer,Jörg,JorgMayer@einrot.com,Mittwoch 11:40Uhr S103/126<br />\n"
+"        Baader,Sabine,SabineBaader@superrito.com,Montag 9:50Uhr S115/020<br /"
+">\n"
+"        Beich,Matthias,MatthiasBeich@dayrep.com,Mittwoch 11:40Uhr "
+"S215/204K<br />\n"
+"        Achen,Tobias,TobiasAchen@jourrapide.com,Dienstag 16:10Uhr S202/C120\n"
+"        "
+msgstr ""
+
+#: templates/formtools/wizard/tutoren.html:40
+msgid "Prüfen"
+msgstr ""
+
+#: templates/formtools/wizard/veroeffentlichen.html:5
+msgid "Einverständniserklärung zur Veröffentlichung der Evaluationsergebnisse"
+msgstr ""
+
+#: templates/formtools/wizard/zusammenfassung.html:41
+msgid "Zusammenfassung der Fragebogenbestellung"
+msgstr ""
+
+#: templates/includes/semesterauswahl.html:2 templates/public/index.html:8
+msgid "Semester:"
+msgstr ""
+
+#: templates/intern/export_veranstaltungen.html:4
+#: templates/intern/export_veranstaltungen.html:7
+msgid "Veranstaltungen exportieren"
+msgstr ""
+
+#: templates/intern/export_veranstaltungen.html:9
+msgid ""
+"Hier kann eine alle evaluierten Veranstaltungen des gewählten Semesters "
+"enthaltende XML-Datei erzeugt werden, die in EvaSys importiert werden kann."
+msgstr ""
+
+#: templates/intern/export_veranstaltungen.html:13
+msgid "XML für Veranstaltungen erzeugen"
+msgstr ""
+
+#: templates/intern/export_veranstaltungen.html:14
+msgid "XML für Übungen erzeugen"
+msgstr ""
+
+#: templates/intern/fragebogensprache.html:4
+#: templates/intern/fragebogensprache.html:7
+msgid "Zuordnung Veranstaltungen zu Sprache des Fragebogens"
+msgstr ""
+
+#: templates/intern/fragebogensprache.html:12
+msgid "Sprache"
+msgstr ""
+
+#: templates/intern/fragebogensprache.html:13
+msgid "Anzahl"
+msgstr ""
+
+#: templates/intern/fragebogensprache.html:14
+msgid "Typ"
+msgstr ""
+
+#: templates/intern/fragebogensprache.html:15
+msgid "gedruckt"
+msgstr ""
+
+#: templates/intern/fragebogensprache.html:16
+msgid "zurück"
+msgstr ""
+
+#: templates/intern/generate_letters.html:4
+#: templates/intern/generate_letters.html:7
+msgid "Anschreiben erzeugen"
+msgstr ""
+
+#: templates/intern/generate_letters.html:9
+msgid ""
+"Das Anschreiben ist ein Brief an die Veranstalter, der den Fragebögen "
+"beigefügt wird."
+msgstr ""
+
+#: templates/intern/generate_letters.html:13
+msgid "Erhebungswoche:"
+msgstr ""
+
+#: templates/intern/generate_letters.html:15
+msgid "Zu erzeugende Datei:"
+msgstr ""
+
+#: templates/intern/generate_letters.html:17
+msgid "Anschreiben"
+msgstr ""
+
+#: templates/intern/generate_letters.html:18
+msgid "Aufkleber"
+msgstr ""
+
+#: templates/intern/generate_letters.html:19
+msgid "Mindestteilnehmerzahl"
+msgstr ""
+
+#: templates/intern/generate_letters.html:22
+msgid "PDF erzeugen"
+msgstr ""
+
+#: templates/intern/generate_letters.html:27
+msgid "Fehler bei der Ausführung von pdflatex"
+msgstr ""
+
+#: templates/intern/import_ergebnisse.html:4
+#: templates/intern/import_ergebnisse.html:7 templates/intern/index.html:37
+msgid "Ergebnisse aus EvaSys importieren"
+msgstr ""
+
+#: templates/intern/import_ergebnisse.html:10
+msgid ""
+"Hier können die von EvaSys gescannten und eingelesenen Fragebögen in Form "
+"einer CSV-Datei (kann in EvaSys erstellt werden) hochgeladen werden."
+msgstr ""
+
+#: templates/intern/import_ergebnisse.html:19
+msgid "Vorlesung (2009-2020)"
+msgstr ""
+
+#: templates/intern/import_ergebnisse.html:24
+msgid "Übung (2016-2020)"
+msgstr ""
+
+#: templates/intern/import_ergebnisse.html:27
+#: templates/intern/import_vv.html:14
+msgid "Hochladen"
+msgstr ""
+
+#: templates/intern/import_vv.html:4 templates/intern/import_vv.html:7
+#: templates/intern/import_vv_edit.html:34
+#: templates/intern/import_vv_edit.html:37
+msgid "Vorlesungsverzeichnis importieren"
+msgstr ""
+
+#: templates/intern/import_vv.html:9
+msgid ""
+"Das System erwartet eine XML-Datei, die aus TUCaN exportiert wurde und alle "
+"Veranstaltungen des Semesters enthält."
+msgstr ""
+
+#: templates/intern/import_vv.html:10
+msgid ""
+"Achtung: Upload und serverseitige Verarbeitung der Datei können aufgrund der "
+"großen Datenmenge etwas dauern."
+msgstr ""
+
+#: templates/intern/import_vv.html:17
+msgid ""
+"<b>Hinweis</b> von Wolfgang Heenes, wie man mit Zugriff auf TUCaN (z.B. als "
+"Mitarbeiter des Studienbüros) diese Daten im passenden Format erhält, falls "
+"er mal nicht mehr dafür zuständig ist:<br />\n"
+"<i>\"Die Daten kommen aus dem Backend (Semesterangebot -> "
+"Vorlesungsverzeichnis erstellen). Es gibt auf dem Sharepoint KEINEN Report, "
+"der das KOMPLETTE Vorlesungsverzeichnis enthält.\"</i>"
+msgstr ""
+
+#: templates/intern/import_vv_edit.html:44
+msgid ""
+"Im Folgenden können die zu importierenden Veranstaltungen ausgewählt werden."
+msgstr ""
+
+#: templates/intern/import_vv_edit.html:49
+msgid ""
+"Falls das Semester, für das Veranstaltungen importiert werden sollen, nicht "
+"in der Auswahlliste steht, muss es zunächst über die Datenbank-"
+"Administration hinzugefügt werden."
+msgstr ""
+
+#: templates/intern/import_vv_edit.html:70
+msgid "Alle markieren"
+msgstr ""
+
+#: templates/intern/import_vv_edit.html:70
+msgid "Markierungen aufheben"
+msgstr ""
+
+#: templates/intern/import_vv_edit.html:87
+#: templates/intern/tans/process_tans.html:23
+#: templates/veranstalter/index.html:72
+msgid "Weiter"
+msgstr ""
+
+#: templates/intern/import_vv_edit.html:88 templates/veranstalter/index.html:73
+#: templates/veranstalter/index.html:100
+msgid "Zurücksetzen"
+msgstr ""
+
+#: templates/intern/import_vv_edit_users.html:3
+#: templates/intern/import_vv_edit_users.html:6
+#: templates/intern/import_vv_edit_users_namecheck.html:3
+#: templates/intern/import_vv_edit_users_namecheck.html:5
+#: templates/intern/import_vv_edit_users_update.html:4
+#: templates/intern/import_vv_edit_users_update.html:7
+msgid "Personendaten vervollständigen"
+msgstr ""
+
+#: templates/intern/import_vv_edit_users.html:11
+#, python-format
+msgid "Es sind noch %(persons.count)s Personendaten zu bearbeiten."
+msgstr ""
+
+#: templates/intern/import_vv_edit_users.html:23
+msgid ""
+"Alle Veranstalter des aktuellen Semesters haben vollständige Personendaten."
+msgstr ""
+
+#: templates/intern/import_vv_edit_users_namecheck.html:11
+msgid "Die ähnliche Person"
+msgstr ""
+
+#: templates/intern/import_vv_edit_users_namecheck.html:12
+#: templates/intern/import_vv_edit_users_namecheck.html:23
+msgid "Name: "
+msgstr ""
+
+#: templates/intern/import_vv_edit_users_namecheck.html:13
+#: templates/intern/import_vv_edit_users_namecheck.html:24
+msgid "E-Mail: "
+msgstr ""
+
+#: templates/intern/import_vv_edit_users_namecheck.html:15
+#: templates/intern/import_vv_edit_users_namecheck.html:26
+msgid "Lehrveranstaltungen"
+msgstr ""
+
+#: templates/intern/import_vv_edit_users_namecheck.html:22
+msgid "Die neue Person"
+msgstr ""
+
+#: templates/intern/import_vv_edit_users_namecheck.html:39
+msgid "Zusammenführen"
+msgstr ""
+
+#: templates/intern/import_vv_edit_users_namecheck.html:42
+msgid "Ignorieren"
+msgstr ""
+
+#: templates/intern/import_vv_edit_users_namecheck.html:46
+#: templates/intern/import_vv_edit_users_update.html:42
+msgid "zurück zu Personendaten"
+msgstr ""
+
+#: templates/intern/import_vv_edit_users_update.html:11
+#, python-format
+msgid ""
+"Es sind noch %(person.persons_to_edit.count)s Personendaten zu bearbeiten."
+msgstr ""
+
+#: templates/intern/import_vv_edit_users_update.html:14
+msgid "Auf Google suchen."
+msgstr ""
+
+#: templates/intern/import_vv_edit_users_update.html:18
+msgid "Es existiert eine Person, die ähnlich zu dieser ist."
+msgstr ""
+
+#: templates/intern/import_vv_edit_users_update.html:26
+#: templates/intern/import_vv_edit_users_update.html:29
+#: templates/intern/tans/process_tans.html:21
+#: templates/intern/tans/process_tans_preview.html:63
+msgid "Zurück"
+msgstr ""
+
+#: templates/intern/import_vv_edit_users_update.html:33
+#: templates/intern/import_vv_edit_users_update.html:36
+msgid "Überspringen"
+msgstr ""
+
+#: templates/intern/import_vv_edit_users_update.html:38
+msgid "Speichern & Weiter"
+msgstr ""
+
+#: templates/intern/index.html:5 templates/intern/index.html:9
+#: templates/intern/status_final.html:5
+msgid "Interner Bereich"
+msgstr ""
+
+#: templates/intern/index.html:11
+msgid "Verwaltung der Daten"
+msgstr ""
+
+#: templates/intern/index.html:12
+msgid "zu Veranstalter-Account wechseln"
+msgstr ""
+
+#: templates/intern/index.html:13
+msgid "Mail an Veranstalter verschicken"
+msgstr ""
+
+#: templates/intern/index.html:14
+msgid "Veranstaltungen zu Fragebogensprache"
+msgstr ""
+
+#: templates/intern/index.html:15
+msgid "Veranstaltungen die lange nicht mehr evaluiert wurden"
+msgstr ""
+
+#: templates/intern/index.html:18
+msgid "Status der Rückmeldungen durch die Veranstalter"
+msgstr ""
+
+#: templates/intern/index.html:19
+#, python-format
+msgid ""
+"Aktuell haben wir %(ruck_veranst)s Rückmeldungen von %(all_veranst)s "
+"Veranstaltungen."
+msgstr ""
+
+#: templates/intern/index.html:26
+#, python-format
+msgid ""
+"Dies sind nicht alle nötigen Schritte; siehe <a href=\"https://www.d120.de/"
+"bookstack/books/feedback/page/feedback-ablauf%%C3%%BCbersicht\" "
+"target=\"_blank\">Ablauf im bookstack</a>."
+msgstr ""
+
+#: templates/intern/index.html:29
+msgid "neues Semester anlegen"
+msgstr ""
+
+#: templates/intern/index.html:29
+msgid "aktuell"
+msgstr ""
+
+#: templates/intern/index.html:30
+msgid "nicht Vorhanden"
+msgstr ""
+
+#: templates/intern/index.html:31
+msgid "Veranstaltungen aus VV importieren"
+msgstr ""
+
+#: templates/intern/index.html:31 templates/intern/index.html:32
+msgid "vor Bestellphase"
+msgstr ""
+
+#: templates/intern/index.html:32
+msgid "Fehlende Personendaten nachtragen"
+msgstr ""
+
+#: templates/intern/index.html:33 templates/intern/status_final.html:9
+msgid "Bestellphase abschließen"
+msgstr ""
+
+#: templates/intern/index.html:33 templates/intern/index.html:34
+msgid "nach Bestellphase"
+msgstr ""
+
+#: templates/intern/index.html:34
+msgid "Anschreiben für Veranstalter erzeugen"
+msgstr ""
+
+#: templates/intern/index.html:35
+msgid "Veranstaltungen für EvaSys exportieren"
+msgstr ""
+
+#: templates/intern/index.html:36 templates/intern/tans/process_tans.html:3
+#: templates/intern/tans/process_tans.html:5
+#: templates/intern/tans/process_tans_preview.html:3
+#: templates/intern/tans/process_tans_preview.html:5
+msgid "TANs verarbeiten"
+msgstr ""
+
+#: templates/intern/index.html:36
+msgid "nach der Bestellphase"
+msgstr ""
+
+#: templates/intern/index.html:38
+msgid "Rankings berechnen"
+msgstr ""
+
+#: templates/intern/index.html:38
+msgid "nach dem Ergebnis-Import"
+msgstr ""
+
+#: templates/intern/index.html:40
+msgid "Ergebnisse veröffentlichen"
+msgstr ""
+
+#: templates/intern/index.html:40
+#, python-format
+msgid " (aktuell: sichtbar für %(cur_semester.get_sichtbarkeit_display)s)"
+msgstr ""
+
+#: templates/intern/lange_ohne_evaluation.html:4
+msgid "Lange nicht evaluierte Veranstaltungen"
+msgstr ""
+
+#: templates/intern/lange_ohne_evaluation.html:7
+msgid "Lange nicht evaluierte Lehrveranstaltungen"
+msgstr ""
+
+#: templates/intern/lange_ohne_evaluation.html:13
+msgid "Liste"
+msgstr ""
+
+#: templates/intern/lange_ohne_evaluation.html:16
+msgid "letzte Ergebnisse:"
+msgstr ""
+
+#: templates/intern/lange_ohne_evaluation.html:20
+msgid "Ausführliche Liste mit allen Bestellungen"
+msgstr ""
+
+#: templates/intern/lange_ohne_evaluation.html:25
+#: templates/veranstalter/index.html:51
+msgid "Semester"
+msgstr ""
+
+#: templates/intern/lange_ohne_evaluation.html:27
+#: templates/veranstalter/index.html:53
+msgid "Ausgefüllte Bögen"
+msgstr ""
+
+#: templates/intern/rechte_uebernehmen.html:4
+#: templates/intern/rechte_uebernehmen.html:7
+msgid "Veranstalter-Account übernehmen"
+msgstr ""
+
+#: templates/intern/rechte_uebernehmen.html:9
+msgid ""
+"Mit einem Klick auf 'Übernehmen' loggst du dich als Veranstalter der "
+"ausgewählten Veranstaltung ein. Auf diese Weise kannst du z.B. berichtete "
+"Probleme einfacher nachvollziehen."
+msgstr ""
+
+#: templates/intern/rechte_uebernehmen.html:10
+msgid ""
+"Das System bietet dir nach der Rechteübernahme auf jeder Seite die Rückkehr "
+"zu deinem Account an."
+msgstr ""
+
+#: templates/intern/sendmail.html:3 templates/intern/sendmail_preview.html:4
+msgid "Mail versenden"
+msgstr ""
+
+#: templates/intern/sendmail.html:10 templates/intern/sendmail_preview.html:7
+msgid "Mail an Veranstalter versenden"
+msgstr ""
+
+#: templates/intern/sendmail.html:16
+msgid "Mail senden an Veranstalter der Veranstaltung mit Bestellstatus:"
+msgstr ""
+
+#: templates/intern/sendmail.html:28
+msgid "Mail auch an die Tutoren der jeweiligen Veranstaltungen schicken?"
+msgstr ""
+
+#: templates/intern/sendmail.html:38
+msgid "Vorlage:"
+msgstr ""
+
+#: templates/intern/sendmail.html:45
+msgid "Vorlage übernehmen"
+msgstr ""
+
+#: templates/intern/sendmail.html:49 templates/intern/sendmail_preview.html:26
+msgid "Betreff:"
+msgstr ""
+
+#: templates/intern/sendmail.html:54
+msgid "Mailtext:"
+msgstr ""
+
+#: templates/intern/sendmail.html:59
+#: templates/intern/tans/process_tans_preview.html:6
+msgid "Vorschau"
+msgstr ""
+
+#: templates/intern/sendmail.html:63
+msgid "Verfügbare Variablen"
+msgstr ""
+
+#: templates/intern/sendmail.html:66
+msgid "Name der Veranstaltung"
+msgstr ""
+
+#: templates/intern/sendmail.html:67
+msgid "Link zum Veranstalterbereich"
+msgstr ""
+
+#: templates/intern/sendmail_preview.html:11
+msgid ""
+"Vorschau (Ersetzte Begriffe sind <span style=\"color: blue;\">blau markiert</"
+"span>)"
+msgstr ""
+
+#: templates/intern/sendmail_preview.html:13
+msgid "Absender:"
+msgstr ""
+
+#: templates/intern/sendmail_preview.html:18
+#, python-format
+msgid ""
+"<em>Empfänger:</em></label>\n"
+"            %(to)s aus dem %(semester_selected)s"
+msgstr ""
+
+#: templates/intern/sendmail_preview.html:36
+msgid "Ändern"
+msgstr ""
+
+#: templates/intern/sendmail_preview.html:37
+msgid "Mails senden"
+msgstr ""
+
+#: templates/intern/status_final.html:10
+msgid ""
+"Sie sind dabei die Bestellphase zu beenden. Möchten Sie das wirklich tun?"
+msgstr ""
+
+#: templates/intern/status_final.html:14
+msgid "Bestätigen"
+msgstr ""
+
+#: templates/intern/sync_ergebnisse.html:4
+#: templates/intern/sync_ergebnisse.html:7
+#: templates/intern/sync_ergebnisse.html:13
+msgid "Ranking berechnen"
+msgstr ""
+
+#: templates/intern/sync_ergebnisse.html:9
+msgid ""
+"Nachdem die Ergebnisse in Form von Rohdaten importiert wurden, kann über "
+"diesen Punkt das Ranking berechnet werden."
+msgstr ""
+
+#: templates/intern/tans/process_tans_preview.html:10
+msgid "Losungsmail Vorschau"
+msgstr ""
+
+#: templates/intern/tans/process_tans_preview.html:18
+#: templates/intern/tans/process_tans_preview.html:38
+msgid "Empfänger"
+msgstr ""
+
+#: templates/intern/tans/process_tans_preview.html:30
+msgid "TANmail Vorschau"
+msgstr ""
+
+#: templates/intern/tans/process_tans_preview.html:65
+msgid "Absenden"
+msgstr ""
+
+#: templates/public/index.html:4
+#, python-format
+msgid "Feedback-Ergebnisse (%(semester)s)"
+msgstr ""
+
+#: templates/public/index.html:20 templates/public/veranstaltung.html:10
+msgid ""
+"Hinweis: Diese Ergebnisse sind momentan noch nicht öffentlich verfügbar."
+msgstr ""
+
+#: templates/public/index.html:22
+msgid ""
+"Hinweis: Die Spalten zum Feedbackpreis sind nur für Administratoren sichtbar."
+msgstr ""
+
+#: templates/public/index.html:27
+msgid "alphabetisch"
+msgstr ""
+
+#: templates/public/index.html:76
+msgid "Darstellung der Noten"
+msgstr ""
+
+#: templates/public/index.html:78
+#, python-format
+msgid ""
+"Durchschnittsnoten werden entsprechend <span "
+"class=\"invalid\">gekennzeichnet</span>, falls weniger als %(thresh_valid)s "
+"Antworten einflossen."
+msgstr ""
+
+#: templates/public/index.html:79
+#, python-format
+msgid ""
+"Bei weniger als %(thresh_show)s Antworten wird die zugehörige Note gar nicht "
+"angezeigt."
+msgstr ""
+
+#: templates/public/index.html:82
+msgid "Aufschlüsselung der Kategorien"
+msgstr ""
+
+#: templates/public/index.html:83
+msgid ""
+"Hier sind die Fragen aufgelistet, die in die einzelnen Noten einfließen."
+msgstr ""
+
+#: templates/public/keine_ergebnisse.html:7
+msgid "Keine Ergebnisse verfügbar"
+msgstr ""
+
+#: templates/public/keine_ergebnisse.html:9
+msgid "Im Moment liegen (noch?) keine Ergebnisse vor."
+msgstr ""
+
+#: templates/public/unauth.html:7
+msgid "Zugriff eingeschränkt"
+msgstr ""
+
+#: templates/public/unauth.html:9
+msgid ""
+"Diese Webseite steht von außerhalb des Uninetzes nicht zur Verfügung. Alle "
+"Mitglieder der Universität können sich allerdings per <a href=\"https://www."
+"hrz.tu-darmstadt.de/vpn\">VPN</a> einwählen."
+msgstr ""
+
+#: templates/public/veranstaltung.html:7
+msgid "zurück zur Übersicht"
+msgstr ""
+
+#: templates/public/veranstaltung.html:13
+msgid "Details"
+msgstr ""
+
+#: templates/public/veranstaltung.html:17
+msgid "Note"
+msgstr ""
+
+#: templates/public/veranstaltung.html:18
+msgid "Antworten"
+msgstr ""
+
+#: templates/public/veranstaltung.html:34
+#, python-format
+msgid "Insgesamt abgegebene Fragebögen: %(ergebnis.anzahl)s"
+msgstr ""
+
+#: templates/public/veranstaltung.html:35
+#, python-format
+msgid ""
+"Die ausführlichen Ergebnisse zu dieser Veranstaltung hat "
+"<em>%(v.verantwortlich.full_name)s</em> per E-Mail erhalten."
+msgstr ""
+
+#: templates/public/veranstaltung.html:37
+msgid "Legende"
+msgstr ""
+
+#: templates/public/veranstaltung.html:39
+msgid ""
+"<strong>Note:</strong> Durchschnittsnote, gemittelt über alle abgegebenen "
+"Antworten"
+msgstr ""
+
+#: templates/public/veranstaltung.html:40
+msgid "<strong>Antworten:</strong> Anzahl der abgegebenen Antworten"
+msgstr ""
+
+#: templates/public/veranstaltung.html:42
+msgid ""
+"Die Fragen, die in die einzelnen Noten einfließen, werden nach einem Klick "
+"auf die jeweilige Kategorie angezeigt."
+msgstr ""
+
+#: templates/public/veranstaltung.html:44
+msgid "Kommentar der Veranstalter zum Ergebnis"
+msgstr ""
+
+#: templates/public/veranstaltung.html:48
+msgid "Es wurde kein Kommentar hinterlegt."
+msgstr ""
+
+#: templates/registration/logged_out.html:1
+msgid "Ausgeloggt"
+msgstr ""
+
+#: templates/registration/logged_out.html:2
+msgid "Auf Wiedersehen!"
+msgstr ""
+
+#: templates/registration/logged_out.html:4
+msgid "weiter zu den Ergebnissen"
+msgstr ""
+
+#: templates/veranstalter/dashboard.html:61
+msgid "Dashboard"
+msgstr ""
+
+#: templates/veranstalter/dashboard.html:66
+#: templates/veranstalter/dashboard.html:73
+msgid "Status"
+msgstr ""
+
+#: templates/veranstalter/dashboard.html:69
+msgid "Log"
+msgstr ""
+
+#: templates/veranstalter/dashboard.html:72
+msgid "Datum"
+msgstr ""
+
+#: templates/veranstalter/dashboard.html:85
+msgid "Aktuelle Bestellung"
+msgstr ""
+
+#: templates/veranstalter/dashboard.html:87
+msgid "Bestellung ändern"
+msgstr ""
+
+#: templates/veranstalter/dashboard.html:128
+msgid "Bestellung durchführen"
+msgstr ""
+
+#: templates/veranstalter/index.html:8
+msgid "Herzlich willkommen!"
+msgstr ""
+
+#: templates/veranstalter/index.html:11
+#, python-format
+msgid ""
+"eingeloggt für <strong>%(veranstaltung.name)s "
+"(%(veranstaltung.semester.short)s)</strong>"
+msgstr ""
+
+#: templates/veranstalter/index.html:18
+msgid ""
+"\n"
+"        In diesem Semester findet eine Vollerhebung aller "
+"Lehrveranstaltungen am Fachbereich Informatik statt.\n"
+"        Die Teilnahme an der Evaluation der Lehre ist somit laut §4 Abs. 9 "
+"Richtlinien für den Bereich der\n"
+"        Lehrveranstaltungsevaluation der Technischen Universität Darmstadt "
+"veröffentlicht in der\n"
+"        <a href=\"https://www.intern.tu-darmstadt.de/media/dezernat_ii/"
+"satzungsbeilagen/sb_14_III.pdf\">Satzungsbeilage 2014-III</a>\n"
+"        <strong>verpflichtend</strong> für alle Lehrveranstaltungen. Falls "
+"Ihre Veranstaltung eine Service-Veranstaltung\n"
+"        ist und die Evaluation durch einen anderen Fachbereich durchgeführt "
+"wird setzen Sie sich bitte mit uns in Verbindung:\n"
+"        <a href=\"mailto:feedback@fachschaft.informatik.tu-darmstadt."
+"de\">feedback@fachschaft.informatik.tu-darmstadt.de</a>\n"
+"        "
+msgstr ""
+
+#: templates/veranstalter/index.html:29
+msgid "Fragebogenbestellung Schritt 1 von 5"
+msgstr ""
+
+#: templates/veranstalter/index.html:43
+msgid ""
+"Im Moment können keine Fragebögen bestellt werden. Sie erhalten eine E-Mail, "
+"sobald dies wieder möglich ist."
+msgstr ""
+
+#: templates/veranstalter/index.html:46
+msgid ""
+"Bitte geben Sie an, wie viele Fragebögen Sie in welcher Sprache benötigen."
+msgstr ""
+
+#: templates/veranstalter/index.html:48
+msgid ""
+"Zur Orientierung finden Sie hier die Anzahl bestellter und ausgefüllter "
+"Bögen vergangener Semester:"
+msgstr ""
+
+#: templates/veranstalter/index.html:79
+msgid "Kommentar"
+msgstr ""
+
+#: templates/veranstalter/index.html:86
+#, python-format
+msgid ""
+" %%}\n"
+"            Sie können hier einen Kommentar zum\n"
+"            <a href=\"%(ergebnis_url)s\">Evaluationsergebnis</a> verfassen.\n"
+"            Dieser Kommentar wird auf der zugehörigen Ergebnis-Seite "
+"hochschul-öffentlich angezeigt werden.\n"
+"            "
+msgstr ""
+
+#: templates/veranstalter/index.html:93
+msgid ""
+"Um einen Kommentar wieder zu entfernen, löschen Sie bitte den vorhandenen "
+"Kommentartext."
+msgstr ""
+
+#: templates/veranstalter/index.html:99
+msgid "Speichern"
+msgstr ""
+
+#: templates/veranstalter/login_failed.html:4
+#: templates/veranstalter/login_failed.html:7
+msgid "Login fehlgeschlagen"
+msgstr ""
+
+#: templates/veranstalter/login_failed.html:9
+msgid ""
+"\n"
+"Bitte überprüfen Sie, ob der Login-Link aus der E-Mail vollständig in die "
+"Adresszeile Ihres\n"
+"Browsers übertragen wurde. Falls dies der Fall ist und der Login trotzdem "
+"fehlschlägt, melden Sie\n"
+"sich bitte beim <a href=\"mailto:feedback@fachschaft.informatik.tu-darmstadt."
+"de\">Feedback-Team</a>.\n"
+"Wir bitten für die Unannehmlichkeiten um Entschuldigung.\n"
+msgstr ""
+
+#: templates/veranstalter/logout.html:4
+msgid "Logout"
+msgstr ""
+
+#: templates/veranstalter/logout.html:8
+msgid "Sie sind ausgeloggt"
+msgstr ""
+
+#: templates/veranstalter/not_authenticated.html:4
+#: templates/veranstalter/not_authenticated.html:8
+msgid "Login benötigt"
+msgstr ""
+
+#: templates/veranstalter/not_authenticated.html:10
+msgid ""
+"\n"
+"        Diese Seite können Sie nur aufrufen, wenn Sie sie über den Login-"
+"Link aus einer E-Mail,\n"
+"        die wir Ihnen in Ihrer Eigenschaft als Veranstalter gesendet haben, "
+"aufrufen.\n"
+"        Wenn Sie diese E-Mail nicht (mehr) besitzen, melden Sie sich bitte "
+"beim\n"
+"        <a href=\"mailto:feedback@fachschaft.informatik.tu-darmstadt."
+"de\">Feedback-Team</a>.\n"
+"        Wir bitten für die Unannehmlichkeiten um Entschuldigung.\n"
+"        "
+msgstr ""
+
+#: templates/veranstalter/not_authenticated.html:19
+msgid "zum Admin-Login"
 msgstr ""

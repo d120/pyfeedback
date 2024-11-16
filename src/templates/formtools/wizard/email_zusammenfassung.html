@@ -1,8 +1,9 @@
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Zusammenfassung der Bestelldaten</title>
+    <title>{% translate "Zusammenfassung der Bestelldaten" %}</title>
 
     <style>
         * {
@@ -41,7 +42,7 @@
     </style>
 </head>
 <body>
-	<h2>Zusammenfassung der Fragebogenbestellung für {{ veranstaltung }}</h2>
+	<h2>{% blocktranslate %}Zusammenfassung der Fragebogenbestellung für {{ veranstaltung }}{% endblocktranslate %}</h2>
 
     <table class="summary_table">
 
@@ -62,15 +63,15 @@
 
     </table>
     {% if tutoren %}
-        <p class="tutoren_title">Tutoren</p>
+        <p class="tutoren_title">{% translate "Tutoren" %}</p>
         <div id="table_tutoren_csvview">
             <table>
                 <tr>
-                    <th>Num</th>
-                    <th>Vorname</th>
-                    <th>Nachname</th>
-                    <th>Email</th>
-                    <th>Anmerkung</th>
+                    <th>{% translate "Num" %}</th>
+                    <th>{% translate "Vorname" %}</th>
+                    <th>{% translate "Nachname" %}</th>
+                    <th>{% translate "Email" %}</th>
+                    <th>{% translate "Anmerkung" %}</th>
                 </tr>
                 {% for tutor in tutoren %}
                     <tr>

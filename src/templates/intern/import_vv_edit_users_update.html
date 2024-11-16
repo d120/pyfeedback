@@ -1,20 +1,21 @@
 {% extends "bestellung_base.html" %}
+{% load i18n %}
 
-{% block title %}Personendaten vervollständigen{% endblock %}
+{% block title %}{% translate "Personendaten vervollständigen" %}{% endblock %}
 
 {% block content %}
-    <h1>Personendaten vervollständigen</h1>
+    <h1>{% translate "Personendaten vervollständigen" %}</h1>
     <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ formset.management_form }}
-        <h2>Es sind noch {{ person.persons_to_edit.count }} Personendaten zu bearbeiten.</h2>
+        <h2>{% blocktranslate %}Es sind noch {{ person.persons_to_edit.count }} Personendaten zu bearbeiten.{% endblocktranslate %}</h2>
         <h2>{{ person.full_name }}</h2>
         <h2><a href="http://www.google.com/search?q={{person.full_name}}+tu+darmstadt" target="_blank>">
-            Auf Google suchen.</a></h2>
+            {% translate "Auf Google suchen." %}</a></h2>
 
         {% if view.has_similar_name %}
             <p><a style="color: red" href="{% url 'import_vv_edit_users_update_namecheck' pk=person.id %}">
-                Es existiert eine Person, die ähnlich zu dieser ist.</a></p>
+                {% translate "Es existiert eine Person, die ähnlich zu dieser ist." %}</a></p>
         {% else %}
             <p></p>
         {% endif %}
@@ -22,21 +23,21 @@
         {{ form.as_p }}
         <div>
             {% if view.get_id.1 %}
-                <input type="button" name="back" value="Zurück"
+                <input type="button" name="back" value="{% translate "Zurück" %}"
                        onclick="location.href='{% url 'import_vv_edit_users_update' pk=view.get_id.1 %}'"/>&nbsp;
             {% else %}
-                <input type="button" name="back" value="Zurück" disabled="disabled" />&nbsp;
+                <input type="button" name="back" value="{% translate "Zurück" %}" disabled="disabled" />&nbsp;
             {% endif %}
 
             {% if view.get_id.0 %}
-                <input type="button" name="jump" value="Überspringen"
+                <input type="button" name="jump" value="{% translate "Überspringen" %}"
                        onclick="location.href='{% url 'import_vv_edit_users_update' pk=view.get_id.0 %}'"/>&nbsp;
             {% else %}
-                <input type="button" name="jump" value="Überspringen" disabled="disabled" />&nbsp;
+                <input type="button" name="jump" value="{% translate "Überspringen" %}" disabled="disabled" />&nbsp;
             {% endif %}
-            <input type="submit" name="submit" value="Speichern & Weiter" />
+            <input type="submit" name="submit" value="{% translate "Speichern & Weiter" %}" />
         </div>
     </form>
     <br>
-    <p><a href="{% url 'import_vv_edit_users' %}">zurück zu Personendaten</a></p>
+    <p><a href="{% url 'import_vv_edit_users' %}">{% translate "zurück zu Personendaten" %}</a></p>
 {% endblock %}
