@@ -1,9 +1,11 @@
-{% extends "ergebnisse_base.html" %} {% block title %}Ergebnisse ({{ semester }}){% endblock %} {% block content %}
-<h1>Feedback-Ergebnisse ({{ semester }})</h1>
+{% extends "ergebnisse_base.html" %}
+{% load i18n %}
+{% block title %}{% translate "Ergebnisse" %} ({{ semester }}){% endblock %} {% block content %}
+<h1>{% blocktranslate %}Feedback-Ergebnisse ({{ semester }}){% endblocktranslate %}</h1>
 
 <form id="sem_form" action="" method="get" accept-charset="utf-8">
     <fieldset>
-        <label for="semester">Semester:</label><br />
+        <label for="semester">{% translate "Semester:" %}</label><br />
         <input type="hidden" name="order" value="{{ order }}" />
         <select size="1" id="semester" name="semester" onchange="document.forms.sem_form.submit()">
 {% for sem in semester_list %}
@@ -15,14 +17,14 @@
 </form>
 
 {% if semester.sichtbarkeit != 'ALL' %}
-<p>Hinweis: Diese Ergebnisse sind momentan noch nicht öffentlich verfügbar.</p>
+<p>{% translate "Hinweis: Diese Ergebnisse sind momentan noch nicht öffentlich verfügbar." %}</p>
 {% endif %} {% if include_hidden %}
-<p>Hinweis: Die Spalten zum Feedbackpreis sind nur für Administratoren sichtbar.</p>
+<p>{% translate "Hinweis: Die Spalten zum Feedbackpreis sind nur für Administratoren sichtbar." %}</p>
 {% endif %}
 
 <div class="ranking_header">
     <div class="label row1{% if not order_num %} selected{% endif %}">
-        <a href="?order=alpha&amp;semester={{ semester.semester }}">alphabetisch</a>
+        <a href="?order=alpha&amp;semester={{ semester.semester }}">{% translate "alphabetisch" %}</a>
     </div>
     {% for p in parts %}
     <div class="spacer horizontal row1"></div>
@@ -71,14 +73,14 @@
     </tbody>
 </table>
 
-<h2>Darstellung der Noten</h2>
+<h2>{% translate "Darstellung der Noten" %}</h2>
 <ul>
-    <li>Durchschnittsnoten werden entsprechend <span class="invalid">gekennzeichnet</span>, falls weniger als {{ thresh_valid }} Antworten einflossen.</li>
-    <li>Bei weniger als {{ thresh_show }} Antworten wird die zugehörige Note gar nicht angezeigt.</li>
+    <li>{% blocktranslate %}Durchschnittsnoten werden entsprechend <span class="invalid">gekennzeichnet</span>, falls weniger als {{ thresh_valid }} Antworten einflossen.{% endblocktranslate %}</li>
+    <li>{% blocktranslate %}Bei weniger als {{ thresh_show }} Antworten wird die zugehörige Note gar nicht angezeigt.{% endblocktranslate %}</li>
 </ul>
 
-<h2>Aufschlüsselung der Kategorien</h2>
-<p>Hier sind die Fragen aufgelistet, die in die einzelnen Noten einfließen.</p>
+<h2>{% translate "Aufschlüsselung der Kategorien" %}</h2>
+<p>{% translate "Hier sind die Fragen aufgelistet, die in die einzelnen Noten einfließen." %}</p>
 {% for p, p_pretty, questions in parts %}
 <h3>{{ p_pretty }}</h3>
 <ul>

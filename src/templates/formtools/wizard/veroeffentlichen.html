@@ -1,8 +1,9 @@
 {% extends "formtools/wizard/base.html" %}
+{% load i18n %}
 
 {% block feedback_veranstalter_form %}
-    <h3>Einverständniserklärung zur Veröffentlichung der Evaluationsergebnisse</h3>
-    <p>Die Ergebnisse der Veranstaltungsevaluation werden auf der
+    <h3>{% translate "Einverständniserklärung zur Veröffentlichung der Evaluationsergebnisse" %}</h3>
+    <p>{% translate "Die Ergebnisse der Veranstaltungsevaluation werden auf der
 Fachschaftswebsite innerhalb des Universitätsnetzwerkes als
 Durchschnittswerte über mehrere Fragen einer Kategorie veröffentlicht.
 Die Freitextfelder werden jedoch nicht veröffentlicht.
@@ -10,6 +11,6 @@ Als Veranstalter haben Sie die Möglichkeit die Ergebnisse vor der
 Veröffentlichung zu kommentieren.
 Um den Preis der Fachschaft für die beste Lehre und die beste Betreuung
 erhalten zu können, ist die Veröffentlichung der Ergebnisse notwendig.
-Sind Sie mit der Veröffentlichung einverstanden?</p>
+Sind Sie mit der Veröffentlichung einverstanden?" %}</p>
     {{ wizard.form }}
 {% endblock %}

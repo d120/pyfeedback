@@ -1,28 +1,29 @@
 {% extends "bestellung_base.html" %}
-{% block title %}Personendaten vervollständigen{% endblock %}
+{% load i18n %}
+{% block title %}{% translate "Personendaten vervollständigen" %}{% endblock %}
 {% block content %}
-    <h1>Personendaten vervollständigen</h1>
+    <h1>{% translate "Personendaten vervollständigen" %}</h1>
     {% with similar_person.0 as old %}
     {% with person_new as new %}
          <div style="width: 100%; display: table;">
             <div style="display: table-row">
                 <div style="width: 50%; display: table-cell;">
-                    <h2>Die ähnliche Person</h2>
-                    <p><b>Name: </b>{{ old.full_name }}</p>
-                    <p><b>E-Mail: </b>{{ old.email }}</p>
+                    <h2>{% translate "Die ähnliche Person" %}</h2>
+                    <p><b>{% translate "Name: " %}</b>{{ old.full_name }}</p>
+                    <p><b>{% translate "E-Mail: " %}</b>{{ old.email }}</p>
                     <br>
-                    <h2>Lehrveranstaltungen</h2>
+                    <h2>{% translate "Lehrveranstaltungen" %}</h2>
                     {% for v in old_veranstaltungen %}
                         <p>{{ v.name }} &nbsp; {{ v.semester }}</p>
                     {% endfor %}
                 </div>
 
                 <div style="display: table-cell;">
-                    <h2>Die neue Person</h2>
-                    <p><b>Name: </b>{{ new.full_name }}</p>
-                    <p><b>E-Mail: </b>{{ new.email }}</p>
+                    <h2>{% translate "Die neue Person" %}</h2>
+                    <p><b>{% translate "Name: " %}</b>{{ new.full_name }}</p>
+                    <p><b>{% translate "E-Mail: " %}</b>{{ new.email }}</p>
                     <br>
-                    <h2>Lehrveranstaltungen</h2>
+                    <h2>{% translate "Lehrveranstaltungen" %}</h2>
                     {% for v in new_veranstaltungen %}
                         <p>{{ v.name }} &nbsp; {{ v.semester }}</p>
                     {% endfor %}
@@ -35,14 +36,14 @@
             {% csrf_token %}
             <input type="hidden" name="id_old" value="{{ old.id }}" />
             <input type="hidden" name="id_new" value="{{ new.id }}" />
-            <input type="submit" name="similar" value="Zusammenführen" />
+            <input type="submit" name="similar" value="{% translate "Zusammenführen" %}" />
         </form>
         <br>
-        <input type="button" name="not_similar" value="Ignorieren"
+        <input type="button" name="not_similar" value="{% translate "Ignorieren" %}"
             onclick="location.href='{% url 'import_vv_edit_users_update' pk=new.id %}'"/>
 
         <br><br>
-        <p><a href="{% url 'import_vv_edit_users' %}">zurück zu Personendaten</a></p>
+        <p><a href="{% url 'import_vv_edit_users' %}">{% translate "zurück zu Personendaten" %}</a></p>
     {% endwith %}
     {% endwith %}
 {% endblock %}

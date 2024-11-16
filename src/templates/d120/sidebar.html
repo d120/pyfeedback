@@ -1,20 +1,21 @@
+{% load i18n %}
 <nav class="navbar navbar-light">
 <div id="sidebar" class="collapse navbar-collapse d-sm-inline">
 <ul class="nav sidebar-nav flex-column">
   <li class="nav-item sidebar-active">
-    <a href="https://www.fachschaft.informatik.tu-darmstadt.de/feedback-new/" title="Gehe zur Seite &quot;Feedback&quot;">Feedback</a>
+    <a href="https://www.fachschaft.informatik.tu-darmstadt.de/feedback-new/" title="Gehe zur Seite &quot;Feedback&quot;">{% translate "Feedback" %}</a>
     <ul id="menuIndent">
       <li class="nva-item link">
-        <a href="https://www.fachschaft.informatik.tu-darmstadt.de/feedback-faq/" title="Zeige Seite FAQ">FAQ</a>
+        <a href="https://www.fachschaft.informatik.tu-darmstadt.de/feedback-faq/" title="Zeige Seite FAQ">{% translate "FAQ" %}</a>
       </li>
       <li class="nav-item link">
-        <a href="https://www.fachschaft.informatik.tu-darmstadt.de/hall-of-fame/" title="Zeige Seite Hall of Fame">Hall of Fame</a>
+        <a href="https://www.fachschaft.informatik.tu-darmstadt.de/hall-of-fame/" title="Zeige Seite Hall of Fame">{% translate "Hall of Fame" %}</a>
       </li>
       <li class="nav-item {% block section_ergebnisse %}link{% endblock %}">
-        <a href="{% if request.user.is_superuser %}{% url 'intern-ergebnisse' %}{% else %}{% url 'public-results' %}{% endif %}" title="Zeige Seite Ergebnisse">Ergebnisse</a>
+        <a href="{% if request.user.is_superuser %}{% url 'intern-ergebnisse' %}{% else %}{% url 'public-results' %}{% endif %}" title="Zeige Seite Ergebnisse">{% translate "Ergebnisse" %}</a>
       </li>
       <li class="nav-item {% block section_veranstalter %}link{% endblock %}">
-        <a href="{% url 'veranstalter-index' %}" title="Zeige Seite Webinterface">Webinterface</a>
+        <a href="{% url 'veranstalter-index' %}" title="Zeige Seite Webinterface">{% translate "Webinterface" %}</a>
       </li>
     </ul>
   </li>

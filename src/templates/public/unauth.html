@@ -1,10 +1,11 @@
 {% extends "ergebnisse_base.html" %}
+{% load i18n %}
 
-{% block title %}Ergebnisse{% endblock %}
+{% block title %}{% translate "Ergebnisse" %}{% endblock %}
 
 {% block content %}
-<h1>Zugriff eingeschränkt</h1>
+<h1>{% translate "Zugriff eingeschränkt" %}</h1>
 
-<p>Diese Webseite steht von außerhalb des Uninetzes nicht zur Verfügung. Alle Mitglieder der Universität können sich allerdings per <a href="https://www.hrz.tu-darmstadt.de/vpn">VPN</a> einwählen.</p>
+<p>{% blocktranslate %}Diese Webseite steht von außerhalb des Uninetzes nicht zur Verfügung. Alle Mitglieder der Universität können sich allerdings per <a href="https://www.hrz.tu-darmstadt.de/vpn">VPN</a> einwählen.{% endblocktranslate %}</p>
 
 {% endblock %}

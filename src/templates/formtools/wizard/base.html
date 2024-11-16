@@ -1,4 +1,5 @@
 {% extends "bestellung_base.html" %}
+{% load i18n %}
 
 {% block extra_header %}
     <style>
@@ -65,13 +66,13 @@
     {{ wizard.form.media }}
 {% endblock %}
 
-{% block title %}Bestellprozess {{ veranstaltung.name}}{% endblock %}
+{% block title %}{% translate "Bestellprozess " %}{{ veranstaltung.name}}{% endblock %}
 
 {% block content %}
     <form action="" method="post">
         {% csrf_token %}
-        <a style="float: right" href="{% url 'logout' %}">ausloggen</a>
-        <p style="font-size: 14px">Bestellung für <b>{{ veranstaltung.name }}</b>  {{ veranstaltung.semester }}</p>
+        <a style="float: right" href="{% url 'logout' %}">{% translate "ausloggen" %}</a>
+        <p style="font-size: 14px">{% translate "Bestellung für " %}<b>{{ veranstaltung.name }}</b>  {{ veranstaltung.semester }}</p>
 
         <div class="container progressbar_container">
             {% for step in progressbar %}

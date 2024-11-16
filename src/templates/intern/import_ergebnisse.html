@@ -1,12 +1,13 @@
 {% extends "bestellung_base.html" %}
+{% load i18n %}
 
-{% block title %}Ergebnisse aus EvaSys importieren{% endblock %}
+{% block title %}{% translate "Ergebnisse aus EvaSys importieren" %}{% endblock %}
 
 {% block content %}
-<h1>Ergebnisse aus EvaSys importieren</h1>
+<h1>{% translate "Ergebnisse aus EvaSys importieren" %}</h1>
 
 <p>
-Hier können die von EvaSys gescannten und eingelesenen Fragebögen in Form einer CSV-Datei (kann in EvaSys erstellt werden) hochgeladen werden.
+{% translate "Hier können die von EvaSys gescannten und eingelesenen Fragebögen in Form einer CSV-Datei (kann in EvaSys erstellt werden) hochgeladen werden." %}
 </p>
 
 <p>
@@ -15,15 +16,15 @@ Hier können die von EvaSys gescannten und eingelesenen Fragebögen in Form eine
 <br />
 <fieldset>
 <input type="radio" name="typ" id="standard" value="standard" checked/>
-<label for ="standard">Vorlesung (2009-2020)</label>
+<label for ="standard">{% translate "Vorlesung (2009-2020)" %}</label>
 <p>
 
 </p>
 <input type="radio" name="typ" id="uebung" value="uebung" />
-<label for ="uebung">Übung (2016-2020)</label>
+<label for ="uebung">{% translate "Übung (2016-2020)" %}</label>
 </fieldset>
 {{ form }}
-<input type="submit" name="submit" value="Hochladen" /> 
+<input type="submit" name="submit" value="{% translate "Hochladen" %}" /> 
 </form>
 </p>
 {% endblock %}

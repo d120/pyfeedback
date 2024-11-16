@@ -1,29 +1,30 @@
 {% extends "bestellung_base.html" %}
+{% load i18n %}
 
-{% block title %}Veranstalterbereich{% endblock %}
+{% block title %}{% translate "Veranstalterbereich" %}{% endblock %}
 
 {% block content %}
 
 <p>
-	eingeloggt für <strong>{{veranstaltung.name}} ({{veranstaltung.semester.short}})</strong><br />
-	<a href="{% url 'logout' %}">ausloggen</a>
+	{% translate "eingeloggt für " %}<strong>{% blocktranslate %}{{veranstaltung.name}} ({{veranstaltung.semester.short}}){% endblocktranslate %}</strong><br />
+	<a href="{% url 'logout' %}">{% translate "ausloggen" %}</a>
 </p>
 
-<h2>Fragebogenbestellung Schritt 2 von 5</h2>
-<h3>Ablauf</h3>
+<h2>{% translate "Fragebogenbestellung Schritt 2 von 5" %}</h2>
+<h3>{% translate "Ablauf" %}</h3>
 <ol>
-<li>Basisdaten</li>
-<li><strong>Datenüberprüfung</strong></li>
-<li>Freie Fragen</li>
-<li>Details zur Übung</li>
-<li>Zusammenfassung</li>
+<li>{% translate "Basisdaten" %}</li>
+<li><strong>{% translate "Datenüberprüfung" %}</strong></li>
+<li>{% translate "Freie Fragen" %}</li>
+<li>{% translate "Details zur Übung" %}</li>
+<li>{% translate "Zusammenfassung" %}</li>
 </ol>
-<h3>Datenüberprüfung</h3>
+<h3>{% translate "Datenüberprüfung" %}</h3>
 
-<p>Bitte überprüfen Sie jetzt die Daten des Verantwortlichen <strong>{{ veranstaltung.verantwortlich }}</strong> 
+<p>{% translate "Bitte überprüfen Sie jetzt die Daten des Verantwortlichen " %}<strong>{% blocktranslate %}{{ veranstaltung.verantwortlich }}{% endblocktranslate %}</strong> 
 <form action="" method="post">{% csrf_token %}
     {{ form.as_p }}
-    <input type="submit" value="weiter" />
+    <input type="submit" value="{% translate "weiter" %}" />
 </form>
 {% endblock %}
 

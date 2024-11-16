@@ -1,19 +1,21 @@
-{% extends "ergebnisse_base.html" %} {% block title %}{{ v.name }} ({{ v.semester.short }}){% endblock %} {% block extra_header %}{% load static %}
+{% extends "ergebnisse_base.html" %} 
+{% load i18n %}
+{% block title %}{{ v.name }} ({{ v.semester.short }}){% endblock %} {% block extra_header %}{% load static %}
 <script type="text/javascript" src="{% static 'ranking.js' %}"></script>
 {% endblock %} {% block content %}
 <h1>{{ v.name }} ({{ v.semester.short }})</h1>
-<p><a href="{% url 'public-results' %}?semester={{ v.semester.semester }}">zurück zur Übersicht</a></p>
+<p><a href="{% url 'public-results' %}?semester={{ v.semester.semester }}">{% translate "zurück zur Übersicht" %}</a></p>
 
 {% if restricted %}
-<p>Hinweis: Diese Ergebnisse sind momentan noch nicht öffentlich verfügbar.</p>
+<p>{% translate "Hinweis: Diese Ergebnisse sind momentan noch nicht öffentlich verfügbar." %}</p>
 {% endif %}
 
-<h2>Details</h2>
+<h2>{% translate "Details" %}</h2>
 <table id="ranking_details">
     <tr>
         <th></th>
-        <th>Note</th>
-        <th>Antworten</th>
+        <th>{% translate "Note" %}</th>
+        <th>{% translate "Antworten" %}</th>
     </tr>
     {% for part, ergebnis in parts %}
     <tr>
@@ -29,19 +31,19 @@
     </tr>
     {% endfor %}
 </table>
-<p>Insgesamt abgegebene Fragebögen: {{ ergebnis.anzahl }}</p>
-<p>Die ausführlichen Ergebnisse zu dieser Veranstaltung hat <em>{{ v.verantwortlich.full_name }}</em> per E-Mail erhalten.</p>
+<p>{% blocktranslate %}Insgesamt abgegebene Fragebögen: {{ ergebnis.anzahl }}{% endblocktranslate %}</p>
+<p>{% blocktranslate %}Die ausführlichen Ergebnisse zu dieser Veranstaltung hat <em>{{ v.verantwortlich.full_name }}</em> per E-Mail erhalten.{% endblocktranslate %}</p>
 
-<h2>Legende</h2>
+<h2>{% translate "Legende" %}</h2>
 <ul>
-    <li><strong>Note:</strong> Durchschnittsnote, gemittelt über alle abgegebenen Antworten</li>
-    <li><strong>Antworten:</strong> Anzahl der abgegebenen Antworten</li>
+    <li>{% blocktranslate %}<strong>Note:</strong> Durchschnittsnote, gemittelt über alle abgegebenen Antworten{% endblocktranslate %}</li>
+    <li>{% blocktranslate %}<strong>Antworten:</strong> Anzahl der abgegebenen Antworten{% endblocktranslate %}</li>
 </ul>
-Die Fragen, die in die einzelnen Noten einfließen, werden nach einem Klick auf die jeweilige Kategorie angezeigt.
+{% translate "Die Fragen, die in die einzelnen Noten einfließen, werden nach einem Klick auf die jeweilige Kategorie angezeigt." %}
 
-<h2>Kommentar der Veranstalter zum Ergebnis</h2> {% if kommentar %}
+<h2>{% translate "Kommentar der Veranstalter zum Ergebnis" %}</h2> {% if kommentar %}
 <p><em>von {{ kommentar.autor }}</em></p>
 <p>{{ kommentar.text|linebreaksbr }}</p>
 {% else %}
-<p>Es wurde kein Kommentar hinterlegt.</p>
+<p>{% translate "Es wurde kein Kommentar hinterlegt." %}</p>
 {% endif %} {% endblock %}

@@ -1,7 +1,8 @@
 {% extends "bestellung_base.html" %}
+{% load i18n %}
 
 {% block content %}
-    <h3>Die Bestellung wurde entgegengenommen</h3>
+    <h3>{% translate "Die Bestellung wurde entgegengenommen" %}</h3>
 
-     <a href="{% url 'veranstalter-logout' %}">Ausloggen</a>
+     <a href="{% url 'veranstalter-logout' %}">{% translate "Ausloggen" %}</a>
 {% endblock %}

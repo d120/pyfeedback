@@ -1,32 +1,35 @@
 {% extends "formtools/wizard/base.html" %}{% load static %}
-
+{% load i18n %}
 
 {% block feedback_veranstalter_form %}
-    <h3>Erfassung der Tutoren</h3>
+    <h3>{% translate "Erfassung der Tutoren" %}</h3>
     <p>
-        Der Fragebögen zur Übung enthält tutorenspezifische Fragen.
+        {% translate "Der Fragebögen zur Übung enthält tutorenspezifische Fragen.
         Die Antworten können für jeden Tutor bzw. Übungsgruppe individuell ausgewertet werden.
         Hierfür benötigen wir Vor- und Nachname des Tutors, die E-Mail Adresse des Tutors,
-        sowie Termin und Raum der Übungsgruppe.
+        sowie Termin und Raum der Übungsgruppe." %}
     </p>
     <p>
-        Vor- und Nachname des Tutors sowie Termin und Raum der Übungsgruppe werden für die eindeutige Zuordnung
-        einer Kennziffer benötigt. Die E-Mail Adresse wird für den Versand der Ergebnisse an den Tutor benötigt.
+        {% translate "Vor- und Nachname des Tutors sowie Termin und Raum der Übungsgruppe werden für die eindeutige Zuordnung
+        einer Kennziffer benötigt. Die E-Mail Adresse wird für den Versand der Ergebnisse an den Tutor benötigt." %}
     </p>
-    <p>
+    <p>{% blocktranslate %}
         Bitte geben Sie die Daten kommasepartiert in der Reihenfolge <br />
         <strong>Nachname, Vorname, E-Mail Adresse, Termin und Raum bzw. Anmerkung</strong><br />
         an und nutzen Sie für jede Übungsgruppe eine <strong>neue Zeile</strong>.
         Anschließend ordnen wir jeder Zeile eine Kennziffer zwischen 1 und 60 zu.
+        {% endblocktranslate %}
     </p>
 
-    <h4>Beispiel</h4>
+    <h4>{% translate "Beispiel" %}</h4>
     <p style="font-size:10pt;font-family:Monospace;text-align: justify;">
+        {% blocktranslate %}
         Wulf,Jan,JanWulf@einrot.com,Montag 08:00Uhr S103/109<br />
         Mayer,Jörg,JorgMayer@einrot.com,Mittwoch 11:40Uhr S103/126<br />
         Baader,Sabine,SabineBaader@superrito.com,Montag 9:50Uhr S115/020<br />
         Beich,Matthias,MatthiasBeich@dayrep.com,Mittwoch 11:40Uhr S215/204K<br />
         Achen,Tobias,TobiasAchen@jourrapide.com,Dienstag 16:10Uhr S202/C120
+        {% endblocktranslate %}
     </p>
     {{ wizard.form }}
 {% endblock %}
@@ -34,7 +37,7 @@
 {% block feedback_veranstalter_extra %}
     <div style="overflow: hidden">
         <div style="float: left">
-            <button id="confirm_csv">Prüfen</button>
+            <button id="confirm_csv">{% translate "Prüfen" %}</button>
         </div>
     </div>
     <div class="clear_div">
