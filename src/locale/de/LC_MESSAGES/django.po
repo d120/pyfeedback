@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-16 21:06+0100\n"
+"POT-Creation-Date: 2024-11-19 18:41+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,66 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: feedback/models/base.py:32
+msgid "Administratoren"
+msgstr ""
+
+#: feedback/models/base.py:33
+msgid "Veranstalter"
+msgstr ""
+
+#: feedback/models/base.py:34
+msgid "alle (öffentlich)"
+msgstr ""
+
+#: feedback/models/base.py:40
+msgid "Verwendete Version des Fragebogens."
+msgstr ""
+
+#: feedback/models/base.py:51
+msgid "Ergebnisversand"
+msgstr ""
+
+#: feedback/models/base.py:51
+msgid "Standarddatum für den Ergebnisversand"
+msgstr ""
+
+#: feedback/models/base.py:141
+msgid "Fachgebiet"
+msgstr ""
+
+#: feedback/models/base.py:142
+msgid "Fachgebiete"
+msgstr ""
+
+#: feedback/models/base.py:150
+msgid "Hier soll der Domainname einer Email-Adresse eines Fachgebiets stehen."
+msgstr ""
+
+#: feedback/models/base.py:159
+msgid "Fachgebiet Emailendung"
+msgstr ""
+
+#: feedback/models/base.py:160
+msgid "Fachgebiet Emailendungen"
+msgstr ""
+
+#: feedback/models/base.py:170
+msgid "Fachgebiet Email"
+msgstr ""
+
+#: feedback/models/base.py:171
+msgid "Fachgebiet Emails"
+msgstr ""
+
+#: feedback/models/base.py:179
+msgid "Herr"
+msgstr ""
+
+#: feedback/models/base.py:180
+msgid "Frau"
+msgstr ""
 
 #: feedback/models/base.py:190 feedback/models/base.py:308
 #: feedback/models/base.py:723
@@ -35,8 +95,328 @@ msgstr ""
 msgid "anschrift"
 msgstr ""
 
+#: feedback/models/base.py:194
+msgid ""
+"Tragen Sie bitte nur die Anschrift ohne Namen ein, da der Name automatisch "
+"hinzugefügt wird."
+msgstr ""
+
+#: feedback/models/base.py:216
+msgid "Person"
+msgstr ""
+
+#: feedback/models/base.py:217
+msgid "Personen"
+msgstr ""
+
+#: feedback/models/base.py:218
+msgid "nachname"
+msgstr ""
+
+#: feedback/models/base.py:218
+msgid "vorname"
+msgstr ""
+
+#: feedback/models/base.py:315
+msgid "Vorlesung"
+msgstr ""
+
+#: feedback/models/base.py:316
+msgid "Vorlesung mit Übung"
+msgstr ""
+
+#: feedback/models/base.py:317
+msgid "Praktikum"
+msgstr ""
+
+#: feedback/models/base.py:318
+msgid "Seminar"
+msgstr ""
+
+#: feedback/models/base.py:322
+msgid "Deutsch"
+msgstr ""
+
+#: feedback/models/base.py:323
+msgid "Englisch"
+msgstr ""
+
+#: feedback/models/base.py:397
+msgid "Angelegt"
+msgstr ""
+
+#: feedback/models/base.py:398
+msgid "Bestellung geöffnet"
+msgstr ""
+
+#: feedback/models/base.py:399
+msgid "Keine Evaluation"
+msgstr ""
+
+#: feedback/models/base.py:400
+msgid "Keine Evaluation final"
+msgstr ""
+
+#: feedback/models/base.py:401
+msgid "Bestellung liegt vor"
+msgstr ""
+
+#: feedback/models/base.py:402
+msgid "Bestellung wird verarbeitet"
+msgstr ""
+
+#: feedback/models/base.py:403
+msgid "Gedruckt"
+msgstr ""
+
+#: feedback/models/base.py:404
+msgid "Versandt"
+msgstr ""
+
+#: feedback/models/base.py:405
+msgid "Bögen eingegangen"
+msgstr ""
+
+#: feedback/models/base.py:406
+msgid "Bögen gescannt"
+msgstr ""
+
+#: feedback/models/base.py:407
+msgid "Ergebnisse versandt"
+msgstr ""
+
+#: feedback/models/base.py:411
+msgid "Ja"
+msgstr ""
+
+#: feedback/models/base.py:412
+msgid "Nein"
+msgstr ""
+
+#: feedback/models/base.py:436
+#, python-format
+msgid "Wenn Ihre Vorlesung keine Übung hat wählen Sie bitte <i>%s</i> aus"
+msgstr ""
+
+#: feedback/models/base.py:445
+msgid "LV-Nummer"
+msgstr ""
+
+#: feedback/models/base.py:450
+msgid ""
+"Alle Personen, die mit der Veranstaltung befasst sind und z.B. Fragebögen "
+"bestellen können sollen."
+msgstr ""
+
+#: feedback/models/base.py:455
+msgid ""
+"Diese Person wird von uns bei Rückfragen kontaktiert und bekommt die "
+"Fragenbögen zugeschickt"
+msgstr ""
+
+#: feedback/models/base.py:458
+msgid "Empfänger der Ergebnisse"
+msgstr ""
+
+#: feedback/models/base.py:459
+msgid "An diese Personen werden die Ergebnisse per E-Mail geschickt."
+msgstr ""
+
+#: feedback/models/base.py:461
+msgid "Die Person, die im Anschreiben erwähnt wird"
+msgstr ""
+
+#: feedback/models/base.py:463 feedback/views/veranstalter.py:66
+msgid "Auswertungstermin"
+msgstr ""
+
+#: feedback/models/base.py:464
+msgid ""
+"An welchem Tag sollen Fragebögen für diese Veranstaltung ausgewerter werden? "
+msgstr ""
+
+#: feedback/models/base.py:465
+msgid "Fragebögen die danach eintreffen werden nicht mehr ausgewertet."
+msgstr ""
+
+#: feedback/models/base.py:468
+msgid "1. Freie Frage"
+msgstr ""
+
+#: feedback/models/base.py:469
+msgid "2. Freie Frage"
+msgstr ""
+
+#: feedback/models/base.py:470
+msgid "Kleingruppen"
+msgstr ""
+
+#: feedback/models/base.py:472 feedback/views/veranstalter.py:94
+#: templates/formtools/wizard/digitale_evaluation.html:5
+msgid "Digitale Evaluation"
+msgstr ""
+
+#: feedback/models/base.py:473
+msgid ""
+"Die Evaluation soll digital durchgeführt werden. Die Studierenden füllen die "
+"Evaluation online aus."
+msgstr ""
+
+#: feedback/models/base.py:478
+msgid "Digitaler Evaluationstyp"
+msgstr ""
+
+#: feedback/models/base.py:479
+msgid ""
+"Es werden generell zwei Typen von Verteilungsmethoden angeboten: Bei TANs "
+"erhalten Sie eine Excel Datei mit einer Liste aller TANs, welche Sie "
+"beispielsweise mithilfe von moodle verteilen können (eine Anleitung dazu "
+"wird bereitgestellt). Beim losungsbasierten Verfahren erhalten Sie einen "
+"einfachen, mehrfachbenutzbaren Link zum Onlinefragebogen."
+msgstr ""
+
+#: feedback/models/base.py:563
+msgid "Tutorgruppe muss kleiner 100 sein"
+msgstr ""
+
+#: feedback/models/base.py:566
+msgid "Tutorgruppe muss eine ganze Zahl sein"
+msgstr ""
+
+#: feedback/models/base.py:589
+msgid "Der Barcode ist nicht valide"
+msgstr ""
+
+#: feedback/models/base.py:633
+#, python-brace-format
+msgid "Der Auswertungstermin muss vor dem {toLateDate} liegen."
+msgstr ""
+
+#: feedback/models/base.py:649
+#, python-brace-format
+msgid ""
+"Anzahl der Bestellungen muss mindestens {self.MIN_BESTELLUNG_ANZAHL} sein. "
+"Bei weniger als {self.MIN_BESTELLUNG_ANZAHL} Teilnehmenden ist eine "
+"Evaluation leider nicht möglich"
+msgstr ""
+
+#: feedback/models/base.py:675
+msgid "Der Veranstalter Link wird erst nach dem Anlegen angezeigt"
+msgstr ""
+
+#: feedback/models/base.py:713 templates/formtools/wizard/basisdaten.html:9
+#: templates/intern/fragebogensprache.html:11
+msgid "Veranstaltung"
+msgstr ""
+
+#: feedback/models/base.py:714
+msgid "Veranstaltungen"
+msgstr ""
+
 #: feedback/models/base.py:725
 msgid "e-mail address"
+msgstr ""
+
+#: feedback/models/base.py:737
+msgid "Tutor"
+msgstr ""
+
+#: feedback/models/base.py:738
+#: templates/formtools/wizard/email_zusammenfassung.html:66
+#: templates/formtools/wizard/zusammenfassung.html:61
+#: templates/veranstalter/dashboard.html:101
+msgid "Tutoren"
+msgstr ""
+
+#: feedback/models/base.py:752
+msgid "Mailvorlage"
+msgstr ""
+
+#: feedback/models/base.py:778
+msgid "Erlaubter Zustand"
+msgstr ""
+
+#: feedback/models/base.py:779
+msgid "Erlaubte Zustände"
+msgstr ""
+
+#: feedback/views/veranstalter.py:51
+msgid "Evaluieren"
+msgstr ""
+
+#: feedback/views/veranstalter.py:53 templates/intern/fragebogensprache.html:14
+msgid "Typ"
+msgstr ""
+
+#: feedback/views/veranstalter.py:54
+msgid "Anazhl"
+msgstr ""
+
+#: feedback/views/veranstalter.py:55 templates/intern/fragebogensprache.html:12
+msgid "Sprache"
+msgstr ""
+
+#: feedback/views/veranstalter.py:56
+msgid "Verantwortlich"
+msgstr ""
+
+#: feedback/views/veranstalter.py:63
+msgid "Ergebnis Empfänger"
+msgstr ""
+
+#: feedback/views/veranstalter.py:68
+msgid "Primärdozent"
+msgstr ""
+
+#: feedback/views/veranstalter.py:69
+msgid "Freie Frage 1"
+msgstr ""
+
+#: feedback/views/veranstalter.py:70
+msgid "Freie Frage 2"
+msgstr ""
+
+#: feedback/views/veranstalter.py:71
+msgid "Veröffentlichen"
+msgstr ""
+
+#: feedback/views/veranstalter.py:92
+msgid "Evaluation"
+msgstr ""
+
+#: feedback/views/veranstalter.py:93 templates/feedback/person_form.html:16
+#: templates/veranstalter/index.html:33 templates/veranstalter/index.html:40
+msgid "Basisdaten"
+msgstr ""
+
+#: feedback/views/veranstalter.py:95 templates/feedback/person_form.html:18
+#: templates/veranstalter/index.html:35
+msgid "Freie Fragen"
+msgstr ""
+
+#: feedback/views/veranstalter.py:96
+msgid "Veroeffentlichen"
+msgstr ""
+
+#: feedback/views/veranstalter.py:97 templates/feedback/person_form.html:20
+#: templates/veranstalter/index.html:37
+msgid "Zusammenfassung"
+msgstr ""
+
+#: feedback/views/veranstalter.py:162
+msgid ""
+"Ihre Session ist abgelaufen. Bitte loggen Sie sich erneut über den Link ein."
+msgstr ""
+
+#: feedback/views/veranstalter.py:291
+#, python-brace-format
+msgid ""
+"Evaluation der Lehrveranstaltungen - Zusammenfassung der Daten für "
+"{veranstaltung.name}"
+msgstr ""
+
+#: feedback/views/veranstalter.py:292
+msgid "Nachfolgend finder Sie Informationen zu Ihrer Bestellung"
 msgstr ""
 
 #: settings.py:45
@@ -142,15 +522,11 @@ msgstr ""
 msgid "Datenschutzerklärung"
 msgstr ""
 
-#: templates/d120/header.html:15
+#: templates/d120/header.html:19
 msgid "Webseite"
 msgstr ""
 
-#: templates/d120/header.html:20
-msgid "dasWESENtliche"
-msgstr ""
-
-#: templates/d120/header.html:25
+#: templates/d120/header.html:24
 msgid "Fachbereich"
 msgstr ""
 
@@ -235,26 +611,13 @@ msgstr ""
 msgid "Ablauf"
 msgstr ""
 
-#: templates/feedback/person_form.html:16 templates/veranstalter/index.html:33
-#: templates/veranstalter/index.html:40
-msgid "Basisdaten"
-msgstr ""
-
 #: templates/feedback/person_form.html:17
 #: templates/feedback/person_form.html:22 templates/veranstalter/index.html:34
 msgid "Datenüberprüfung"
 msgstr ""
 
-#: templates/feedback/person_form.html:18 templates/veranstalter/index.html:35
-msgid "Freie Fragen"
-msgstr ""
-
 #: templates/feedback/person_form.html:19 templates/veranstalter/index.html:36
 msgid "Details zur Übung"
-msgstr ""
-
-#: templates/feedback/person_form.html:20 templates/veranstalter/index.html:37
-msgid "Zusammenfassung"
 msgstr ""
 
 #: templates/feedback/person_form.html:24
@@ -286,11 +649,6 @@ msgstr ""
 msgid "Erfassung der Basisdaten"
 msgstr ""
 
-#: templates/formtools/wizard/basisdaten.html:9
-#: templates/intern/fragebogensprache.html:11
-msgid "Veranstaltung"
-msgstr ""
-
 #: templates/formtools/wizard/basisdaten.html:10
 #: templates/intern/lange_ohne_evaluation.html:26
 #: templates/veranstalter/index.html:52
@@ -310,10 +668,6 @@ msgstr ""
 msgid "Ausloggen"
 msgstr ""
 
-#: templates/formtools/wizard/digitale_evaluation.html:5
-msgid "Digitale Evaluation"
-msgstr ""
-
 #: templates/formtools/wizard/email_zusammenfassung.html:6
 msgid "Zusammenfassung der Bestelldaten"
 msgstr ""
@@ -321,12 +675,6 @@ msgstr ""
 #: templates/formtools/wizard/email_zusammenfassung.html:45
 #, python-format
 msgid "Zusammenfassung der Fragebogenbestellung für %(veranstaltung)s"
-msgstr ""
-
-#: templates/formtools/wizard/email_zusammenfassung.html:66
-#: templates/formtools/wizard/zusammenfassung.html:61
-#: templates/veranstalter/dashboard.html:101
-msgid "Tutoren"
 msgstr ""
 
 #: templates/formtools/wizard/email_zusammenfassung.html:70
@@ -505,16 +853,8 @@ msgstr ""
 msgid "Zuordnung Veranstaltungen zu Sprache des Fragebogens"
 msgstr ""
 
-#: templates/intern/fragebogensprache.html:12
-msgid "Sprache"
-msgstr ""
-
 #: templates/intern/fragebogensprache.html:13
 msgid "Anzahl"
-msgstr ""
-
-#: templates/intern/fragebogensprache.html:14
-msgid "Typ"
 msgstr ""
 
 #: templates/intern/fragebogensprache.html:15
