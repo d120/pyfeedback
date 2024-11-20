@@ -5,11 +5,11 @@
 
 {% block content %}
 <h1>{% translate "Lange nicht evaluierte Lehrveranstaltungen" %}</h1>
-<p>{% translate "Veranstaltungen für die seit mehr als zwei Jahren keine Ergebnisse vorliegen und 
+<p>{% blocktranslate %}Veranstaltungen für die seit mehr als zwei Jahren keine Ergebnisse vorliegen und 
 die diese Semester angeboten werden. Es werden nur Veranstaltungen angezeigt, für die keine Bestellung von Bögen vorliegt 
-oder die zurückgemeldeten haben, dass sie nicht an der Evaluation teilnehmen möchten." %}</p>
-<p>{% translate "Diese Liste an das Studiendekanat z.B. Wolfgang Heenes weiterleiten damit die 
-Dozenten noch einmal darauf hingewiesen werden, dass die Veranstaltung an der Evaluation teilnehmen sollten." %}</p>
+oder die zurückgemeldeten haben, dass sie nicht an der Evaluation teilnehmen möchten.{% endblocktranslate %}</p>
+<p>{% blocktranslate %}Diese Liste an das Studiendekanat z.B. Wolfgang Heenes weiterleiten damit die 
+Dozenten noch einmal darauf hingewiesen werden, dass die Veranstaltung an der Evaluation teilnehmen sollten.{% endblocktranslate %}</p>
 <h2>{% translate "Liste" %}</h2>
 <ul>
 {% for lv in veranstaltungen %}

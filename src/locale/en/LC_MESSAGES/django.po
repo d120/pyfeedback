@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-19 18:41+0100\n"
+"POT-Creation-Date: 2024-11-20 22:57+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,63 +20,65 @@ msgstr ""
 
 #: feedback/models/base.py:32
 msgid "Administratoren"
-msgstr ""
+msgstr "Administrators"
 
 #: feedback/models/base.py:33
 msgid "Veranstalter"
-msgstr ""
+msgstr "Organizer"
 
 #: feedback/models/base.py:34
 msgid "alle (öffentlich)"
-msgstr ""
+msgstr "all (public)"
 
 #: feedback/models/base.py:40
 msgid "Verwendete Version des Fragebogens."
-msgstr ""
+msgstr "Version of the form used."
 
 #: feedback/models/base.py:51
 msgid "Ergebnisversand"
-msgstr ""
+msgstr "Sending results"
 
 #: feedback/models/base.py:51
 msgid "Standarddatum für den Ergebnisversand"
-msgstr ""
+msgstr "Standard date for sending results"
 
 #: feedback/models/base.py:141
 msgid "Fachgebiet"
-msgstr ""
+msgstr "Subject area"
 
 #: feedback/models/base.py:142
 msgid "Fachgebiete"
-msgstr ""
+msgstr "Subject areas"
 
 #: feedback/models/base.py:150
 msgid "Hier soll der Domainname einer Email-Adresse eines Fachgebiets stehen."
 msgstr ""
+"The domain name of an email address for a subject area should be entered "
+"here."
 
 #: feedback/models/base.py:159
 msgid "Fachgebiet Emailendung"
-msgstr ""
+msgstr "Email ending for subject area"
 
 #: feedback/models/base.py:160
 msgid "Fachgebiet Emailendungen"
-msgstr ""
+msgstr "Email endings for subject area"
 
 #: feedback/models/base.py:170
 msgid "Fachgebiet Email"
-msgstr ""
+msgstr "Subject area email"
 
 #: feedback/models/base.py:171
 msgid "Fachgebiet Emails"
-msgstr ""
+msgstr "Subject area emails"
 
 #: feedback/models/base.py:179
 msgid "Herr"
-msgstr ""
+msgstr "Mr."
 
 #: feedback/models/base.py:180
 msgid "Frau"
-msgstr ""
+msgstr "Ms."
 
 #: feedback/models/base.py:190 feedback/models/base.py:308
 #: feedback/models/base.py:723
@@ -93,13 +95,15 @@ msgstr ""
 
 #: feedback/models/base.py:193
 msgid "anschrift"
-msgstr ""
+msgstr "address"
 
 #: feedback/models/base.py:194
 msgid ""
 "Tragen Sie bitte nur die Anschrift ohne Namen ein, da der Name automatisch "
 "hinzugefügt wird."
 msgstr ""
+"Please only enter the address without the name, as the name will be added "
+"automatically."
 
 #: feedback/models/base.py:216
 msgid "Person"
@@ -107,71 +111,71 @@ msgstr ""
 
 #: feedback/models/base.py:217
 msgid "Personen"
-msgstr ""
+msgstr "people"
 
 #: feedback/models/base.py:218
 msgid "nachname"
-msgstr ""
+msgstr "last name"
 
 #: feedback/models/base.py:218
 msgid "vorname"
-msgstr ""
+msgstr "first name"
 
 #: feedback/models/base.py:315
 msgid "Vorlesung"
-msgstr ""
+msgstr "Lecture"
 
 #: feedback/models/base.py:316
 msgid "Vorlesung mit Übung"
-msgstr ""
+msgstr "Lecture with exercise"
 
 #: feedback/models/base.py:317
 msgid "Praktikum"
-msgstr ""
+msgstr "Internship"
 
 #: feedback/models/base.py:318
 msgid "Seminar"
-msgstr ""
+msgstr "Seminar"
 
 #: feedback/models/base.py:322
 msgid "Deutsch"
-msgstr ""
+msgstr "German"
 
 #: feedback/models/base.py:323
 msgid "Englisch"
-msgstr ""
+msgstr "English"
 
 #: feedback/models/base.py:397
 msgid "Angelegt"
-msgstr ""
+msgstr "Created"
 
 #: feedback/models/base.py:398
 msgid "Bestellung geöffnet"
-msgstr ""
+msgstr "Order started"
 
 #: feedback/models/base.py:399
 msgid "Keine Evaluation"
-msgstr ""
+msgstr "No evaluation"
 
 #: feedback/models/base.py:400
 msgid "Keine Evaluation final"
-msgstr ""
+msgstr "No evaluation final"
 
 #: feedback/models/base.py:401
 msgid "Bestellung liegt vor"
-msgstr ""
+msgstr "Order ready"
 
 #: feedback/models/base.py:402
 msgid "Bestellung wird verarbeitet"
-msgstr ""
+msgstr "Order being processed"
 
 #: feedback/models/base.py:403
 msgid "Gedruckt"
-msgstr ""
+msgstr "Printed"
 
 #: feedback/models/base.py:404
 msgid "Versandt"
-msgstr ""
+msgstr "Sent"
 
 #: feedback/models/base.py:405
 msgid "Bögen eingegangen"
@@ -179,92 +183,98 @@ msgstr ""
 
 #: feedback/models/base.py:406
 msgid "Bögen gescannt"
-msgstr ""
+msgstr "From recieved"
 
 #: feedback/models/base.py:407
 msgid "Ergebnisse versandt"
-msgstr ""
+msgstr "Results sent"
 
 #: feedback/models/base.py:411
 msgid "Ja"
-msgstr ""
+msgstr "Yes"
 
 #: feedback/models/base.py:412
 msgid "Nein"
-msgstr ""
+msgstr "No`"
 
 #: feedback/models/base.py:436
 #, python-format
 msgid "Wenn Ihre Vorlesung keine Übung hat wählen Sie bitte <i>%s</i> aus"
-msgstr ""
+msgstr "If your lecture does not have exercise, please choose <i>%s</i>"
 
 #: feedback/models/base.py:445
 msgid "LV-Nummer"
-msgstr ""
+msgstr "LV-Number"
 
 #: feedback/models/base.py:450
 msgid ""
 "Alle Personen, die mit der Veranstaltung befasst sind und z.B. Fragebögen "
 "bestellen können sollen."
 msgstr ""
+"All people involved in the event who should , for example, be able to order "
+"questionnaires"
 
 #: feedback/models/base.py:455
 msgid ""
 "Diese Person wird von uns bei Rückfragen kontaktiert und bekommt die "
 "Fragenbögen zugeschickt"
 msgstr ""
+"This person will be contacted by us in case of further questions and will be "
+"sent the form"
 
 #: feedback/models/base.py:458
 msgid "Empfänger der Ergebnisse"
-msgstr ""
+msgstr "Recipients of the results"
 
 #: feedback/models/base.py:459
 msgid "An diese Personen werden die Ergebnisse per E-Mail geschickt."
-msgstr ""
+msgstr "The results are sent to these people by e-mail."
 
 #: feedback/models/base.py:461
 msgid "Die Person, die im Anschreiben erwähnt wird"
-msgstr ""
+msgstr "The person mentioned in the cover letter"
 
 #: feedback/models/base.py:463 feedback/views/veranstalter.py:66
 msgid "Auswertungstermin"
-msgstr ""
+msgstr "Evaluation date"
 
 #: feedback/models/base.py:464
 msgid ""
 "An welchem Tag sollen Fragebögen für diese Veranstaltung ausgewerter werden? "
-msgstr ""
+msgstr "On which day should questionnaires for this event be evaluated? "
 
 #: feedback/models/base.py:465
 msgid "Fragebögen die danach eintreffen werden nicht mehr ausgewertet."
-msgstr ""
+msgstr "Questionnaires received after this date will no longer be evaluated."
 
 #: feedback/models/base.py:468
 msgid "1. Freie Frage"
-msgstr ""
+msgstr "1. Free question"
 
 #: feedback/models/base.py:469
 msgid "2. Freie Frage"
-msgstr ""
+msgstr "2. Free question"
 
 #: feedback/models/base.py:470
 msgid "Kleingruppen"
-msgstr ""
+msgstr "Subgroup"
 
 #: feedback/models/base.py:472 feedback/views/veranstalter.py:94
 #: templates/formtools/wizard/digitale_evaluation.html:5
 msgid "Digitale Evaluation"
-msgstr ""
+msgstr "Digital evaluation"
 
 #: feedback/models/base.py:473
 msgid ""
 "Die Evaluation soll digital durchgeführt werden. Die Studierenden füllen die "
 "Evaluation online aus."
 msgstr ""
+"The evaluation is to be carried out digitally. Students complete the "
+"evaluation online."
 
 #: feedback/models/base.py:478
 msgid "Digitaler Evaluationstyp"
-msgstr ""
+msgstr "Digital evaluation type"
 
 #: feedback/models/base.py:479
 msgid ""
@@ -274,23 +284,27 @@ msgid ""
 "wird bereitgestellt). Beim losungsbasierten Verfahren erhalten Sie einen "
 "einfachen, mehrfachbenutzbaren Link zum Onlinefragebogen."
 msgstr ""
+"Two types of distribution methods are generally offered: For TANs, you will "
+"receive an Excel file with a list of all TANs, which you can distribute "
+"using moodle, for example (instructions will be provided). With the losung "
+"method, you will receive a simple, reusable link to the online questionnaire."
 
 #: feedback/models/base.py:563
 msgid "Tutorgruppe muss kleiner 100 sein"
-msgstr ""
+msgstr "Tutor group must be less than 100"
 
 #: feedback/models/base.py:566
 msgid "Tutorgruppe muss eine ganze Zahl sein"
-msgstr ""
+msgstr "Tutor group must be an integer"
 
 #: feedback/models/base.py:589
 msgid "Der Barcode ist nicht valide"
-msgstr ""
+msgstr "The barcode is not valid"
 
 #: feedback/models/base.py:633
 #, python-brace-format
 msgid "Der Auswertungstermin muss vor dem {toLateDate} liegen."
-msgstr ""
+msgstr "The evaluation date must be before {toLateDate}."
 
 #: feedback/models/base.py:649
 #, python-brace-format
@@ -299,19 +313,22 @@ msgid ""
 "Bei weniger als {self.MIN_BESTELLUNG_ANZAHL} Teilnehmenden ist eine "
 "Evaluation leider nicht möglich"
 msgstr ""
+"The number of orders must be at least {self.MIN_BESTELLUNG_ANZAHL}. If there "
+"are fewer than {self.MIN_BESTELLUNG_ANZAHL} participants, an evaluation is "
+"unfortunately not possible"
 
 #: feedback/models/base.py:675
 msgid "Der Veranstalter Link wird erst nach dem Anlegen angezeigt"
-msgstr ""
+msgstr "The organizer link is only displayed after it has been created"
 
 #: feedback/models/base.py:713 templates/formtools/wizard/basisdaten.html:9
 #: templates/intern/fragebogensprache.html:11
 msgid "Veranstaltung"
-msgstr ""
+msgstr "Event"
 
 #: feedback/models/base.py:714
 msgid "Veranstaltungen"
-msgstr ""
+msgstr "Events"
 
 #: feedback/models/base.py:725
 msgid "e-mail address"
@@ -326,129 +343,129 @@ msgstr ""
 #: templates/formtools/wizard/zusammenfassung.html:61
 #: templates/veranstalter/dashboard.html:101
 msgid "Tutoren"
-msgstr ""
+msgstr "Tutors"
 
 #: feedback/models/base.py:752
 msgid "Mailvorlage"
-msgstr ""
+msgstr "Mail template"
 
 #: feedback/models/base.py:778
 msgid "Erlaubter Zustand"
-msgstr ""
+msgstr "Permitted state"
 
 #: feedback/models/base.py:779
 msgid "Erlaubte Zustände"
-msgstr ""
+msgstr "Permitted states"
 
 #: feedback/views/veranstalter.py:51
 msgid "Evaluieren"
-msgstr ""
+msgstr "Evaluate"
 
 #: feedback/views/veranstalter.py:53 templates/intern/fragebogensprache.html:14
 msgid "Typ"
-msgstr ""
+msgstr "Type"
 
 #: feedback/views/veranstalter.py:54
 msgid "Anazhl"
-msgstr ""
+msgstr "Number"
 
 #: feedback/views/veranstalter.py:55 templates/intern/fragebogensprache.html:12
 msgid "Sprache"
-msgstr ""
+msgstr "Language"
 
 #: feedback/views/veranstalter.py:56
 msgid "Verantwortlich"
-msgstr ""
+msgstr "Responsible"
 
 #: feedback/views/veranstalter.py:63
 msgid "Ergebnis Empfänger"
-msgstr ""
+msgstr "Result recipient"
 
 #: feedback/views/veranstalter.py:68
 msgid "Primärdozent"
-msgstr ""
+msgstr "Primary lecturer"
 
 #: feedback/views/veranstalter.py:69
 msgid "Freie Frage 1"
-msgstr ""
+msgstr "Free question 1"
 
 #: feedback/views/veranstalter.py:70
 msgid "Freie Frage 2"
-msgstr ""
+msgstr "Free question 2"
 
 #: feedback/views/veranstalter.py:71
 msgid "Veröffentlichen"
-msgstr ""
+msgstr "Publish"
 
 #: feedback/views/veranstalter.py:92
 msgid "Evaluation"
-msgstr ""
+msgstr "Evaluation"
 
 #: feedback/views/veranstalter.py:93 templates/feedback/person_form.html:16
 #: templates/veranstalter/index.html:33 templates/veranstalter/index.html:40
 msgid "Basisdaten"
-msgstr ""
+msgstr "Basic data"
 
 #: feedback/views/veranstalter.py:95 templates/feedback/person_form.html:18
 #: templates/veranstalter/index.html:35
 msgid "Freie Fragen"
-msgstr ""
+msgstr "Free questions"
 
 #: feedback/views/veranstalter.py:96
 msgid "Veroeffentlichen"
-msgstr ""
+msgstr "Publish"
 
 #: feedback/views/veranstalter.py:97 templates/feedback/person_form.html:20
 #: templates/veranstalter/index.html:37
 msgid "Zusammenfassung"
-msgstr ""
+msgstr "Summary"
 
 #: feedback/views/veranstalter.py:162
 msgid ""
 "Ihre Session ist abgelaufen. Bitte loggen Sie sich erneut über den Link ein."
-msgstr ""
+msgstr "Your session has expired. Please log in again using the link."
 
 #: feedback/views/veranstalter.py:291
 #, python-brace-format
 msgid ""
 "Evaluation der Lehrveranstaltungen - Zusammenfassung der Daten für "
 "{veranstaltung.name}"
-msgstr ""
+msgstr "Evaluation of courses - summary of data for {veranstaltung.name}"
 
 #: feedback/views/veranstalter.py:292
 msgid "Nachfolgend finder Sie Informationen zu Ihrer Bestellung"
-msgstr ""
+msgstr "Below you will find information about your order"
 
 #: settings.py:45
 msgid "German"
-msgstr ""
+msgstr "German"
 
 #: settings.py:46
 msgid "English"
-msgstr ""
+msgstr "English"
 
 #: templates/404.html:4 templates/404.html:7
 msgid "Seite nicht gefunden"
-msgstr ""
+msgstr "Page not found"
 
 #: templates/404.html:8
 msgid ""
 "Es sieht so aus, als ob Du auf eine Seite zugreifen möchtest, die nicht "
 "existiert."
-msgstr ""
+msgstr "It looks like you are trying to access a page that does not exist."
 
 #: templates/404.html:9
 msgid "Bitte überprüfe die Schreibweise der URL und versuche es erneut."
-msgstr ""
+msgstr "Please check the spelling of the URL and try again."
 
 #: templates/404.html:10
 #, python-format
 msgid " Fehler: %(exception)s"
-msgstr ""
+msgstr " Error: %(exception)s"
 
 #: templates/500.html:4 templates/500.html:7
 msgid "Serverfehler"
-msgstr ""
+msgstr "Server error"
 
 #: templates/500.html:8
 msgid "HTTP 500 - Internal Server Error"
@@ -456,11 +473,11 @@ msgstr ""
 
 #: templates/500.html:9
 msgid "Der Administrator wurde benachrichtigt."
-msgstr ""
+msgstr "The administrator has been notified."
 
 #: templates/admin/fachgebiet.html:8
 msgid "Folgende Personen werden einem Fachgebiet zugewiesen:"
-msgstr ""
+msgstr "The following people are assigned to a subject area:"
 
 #: templates/admin/fachgebiet.html:13
 msgid "Name"
@@ -468,59 +485,59 @@ msgstr ""
 
 #: templates/admin/fachgebiet.html:14
 msgid "Vorschlag für Fachgebiet"
-msgstr ""
+msgstr "Proposal for subject area"
 
 #: templates/admin/fachgebiet.html:28
 msgid "Unbekannt"
-msgstr ""
+msgstr "Unknown"
 
 #: templates/admin/fachgebiet.html:37 templates/admin/fachgebiet.html:39
 msgid "Sichern und weiter bearbeiten"
-msgstr ""
+msgstr "Save and continue editing"
 
 #: templates/admin/fachgebiet.html:41
 msgid "Sichern"
-msgstr ""
+msgstr "Save"
 
 #: templates/admin/keine_evaluation.html:8
 msgid ""
 "Es wird für folgende Veranstaltungen der Status auf keine Evaluation "
 "geändert:"
-msgstr ""
+msgstr "The status of the following events is changed to no evaluation:"
 
 #: templates/admin/keine_evaluation.html:13
 #: templates/admin/status_aendern.html:13
 #: templates/intern/rechte_uebernehmen.html:18
 msgid "Übernehmen"
-msgstr ""
+msgstr "Accept"
 
 #: templates/admin/status_aendern.html:8
 msgid "Es wird der Status für folgende Veranstaltungen geändert:"
-msgstr ""
+msgstr "The status of the following events will be changed:"
 
 #: templates/bestellung_base.html:10
 msgid "zurück zum internen Bereich"
-msgstr ""
+msgstr "back to the internal area"
 
 #: templates/bestellung_base.html:12
 msgid "zurück zum Veranstalterbereich"
-msgstr ""
+msgstr "back to the organizer area"
 
 #: templates/d120/footer.html:7
 msgid "Startseite"
-msgstr ""
+msgstr "Home page"
 
 #: templates/d120/footer.html:8
 msgid "Kontakt"
-msgstr ""
+msgstr "Contact"
 
 #: templates/d120/footer.html:9
 msgid "Impressum"
-msgstr ""
+msgstr "Legal notice"
 
 #: templates/d120/footer.html:10
 msgid "Datenschutzerklärung"
-msgstr ""
+msgstr "Privacy policy"
 
 #: templates/d120/header.html:19
 msgid "Webseite"
@@ -528,7 +545,7 @@ msgstr ""
 
 #: templates/d120/header.html:24
 msgid "Fachbereich"
-msgstr ""
+msgstr "Department"
 
 #: templates/d120/sidebar.html:6
 msgid "Feedback"
@@ -545,28 +562,29 @@ msgstr ""
 #: templates/d120/sidebar.html:15 templates/public/index.html:3
 #: templates/public/keine_ergebnisse.html:4 templates/public/unauth.html:4
 msgid "Ergebnisse"
-msgstr ""
+msgstr "Results"
 
 #: templates/d120/sidebar.html:18
 msgid "Webinterface"
-msgstr ""
+msgstr "Web interface"
 
 #: templates/d120_base.html:6
 msgid "Leere Seite"
-msgstr ""
+msgstr "Blank page"
 
 #: templates/d120_base.html:6
 msgid " - Evaluation der Lehre"
-msgstr ""
+msgstr " - Evaluation of teaching"
 
 #: templates/d120_base.html:40
 #, python-format
 msgid "Du nutzt momentan die Rechte der Veranstalter von %(veranstaltung)s."
 msgstr ""
+"You are currently using the rights of the organizers of %(veranstaltung)s."
 
 #: templates/d120_base.html:40
 msgid "Zu meinem Account zurückkehren."
-msgstr ""
+msgstr "Return to my account."
 
 #: templates/feedback/CreateBarcodeScannEvent.html:4
 msgid "Create"
@@ -575,22 +593,24 @@ msgstr ""
 #: templates/feedback/VeranstaltungsDeadlines.html:2
 #: templates/feedback/VeranstaltungsDeadlines.html:4
 msgid "Auswertungstermine für das aktuelle Semester"
-msgstr ""
+msgstr "Evaluation dates for the current semester"
 
 #: templates/feedback/VeranstaltungsDeadlines.html:5
 msgid ""
 "Dein ausgefüllter Fragebogen muss bis zu diesem Tag in der Fachschaft "
 "eingegangen sein, damit er erfasst wird."
 msgstr ""
+"Your completed questionnaire must be received by the student council by this "
+"date in order to be recorded."
 
 #: templates/feedback/person_form.html:4
 #: templates/veranstalter/dashboard.html:5 templates/veranstalter/index.html:4
 msgid "Veranstalterbereich"
-msgstr ""
+msgstr "Organizer area"
 
 #: templates/feedback/person_form.html:9
 msgid "eingeloggt für "
-msgstr ""
+msgstr "logged in for "
 
 #: templates/feedback/person_form.html:9
 #, python-format
@@ -600,29 +620,29 @@ msgstr ""
 #: templates/feedback/person_form.html:10
 #: templates/formtools/wizard/base.html:74 templates/veranstalter/index.html:13
 msgid "ausloggen"
-msgstr ""
+msgstr "logout"
 
 #: templates/feedback/person_form.html:13
 msgid "Fragebogenbestellung Schritt 2 von 5"
-msgstr ""
+msgstr "Ordering a questionnaire Step 2 of 5"
 
 #: templates/feedback/person_form.html:14 templates/intern/index.html:25
 #: templates/veranstalter/index.html:30
 msgid "Ablauf"
-msgstr ""
+msgstr "Procedure"
 
 #: templates/feedback/person_form.html:17
 #: templates/feedback/person_form.html:22 templates/veranstalter/index.html:34
 msgid "Datenüberprüfung"
-msgstr ""
+msgstr "Data verification"
 
 #: templates/feedback/person_form.html:19 templates/veranstalter/index.html:36
 msgid "Details zur Übung"
-msgstr ""
+msgstr "Exercise details"
 
 #: templates/feedback/person_form.html:24
 msgid "Bitte überprüfen Sie jetzt die Daten des Verantwortlichen "
-msgstr ""
+msgstr "Please check the data of the person responsible now "
 
 #: templates/feedback/person_form.html:24
 #, python-format
@@ -631,51 +651,51 @@ msgstr ""
 
 #: templates/feedback/person_form.html:27
 msgid "weiter"
-msgstr ""
+msgstr "continue"
 
 #: templates/formtools/wizard/address.html:9
 msgid "Erfassung der Daten des Verantwortlichen: "
-msgstr ""
+msgstr "Recording the data of the person responsible:"
 
 #: templates/formtools/wizard/base.html:69
 msgid "Bestellprozess "
-msgstr ""
+msgstr "Order process "
 
 #: templates/formtools/wizard/base.html:75
 msgid "Bestellung für "
-msgstr ""
+msgstr "Order for "
 
 #: templates/formtools/wizard/basisdaten.html:5
 msgid "Erfassung der Basisdaten"
-msgstr ""
+msgstr "Collecting basic data"
 
 #: templates/formtools/wizard/basisdaten.html:10
 #: templates/intern/lange_ohne_evaluation.html:26
 #: templates/veranstalter/index.html:52
 msgid "Bestellte Bögen"
-msgstr ""
+msgstr "Ordered forms"
 
 #: templates/formtools/wizard/basisdaten.html:11
 msgid "Rückläufe"
-msgstr ""
+msgstr "Responses"
 
 #: templates/formtools/wizard/bestellung_done.html:5
 msgid "Die Bestellung wurde entgegengenommen"
-msgstr ""
+msgstr "The order has been accepted"
 
 #: templates/formtools/wizard/bestellung_done.html:7
 #: templates/intern/index.html:16 templates/veranstalter/dashboard.html:64
 msgid "Ausloggen"
-msgstr ""
+msgstr "Log out"
 
 #: templates/formtools/wizard/email_zusammenfassung.html:6
 msgid "Zusammenfassung der Bestelldaten"
-msgstr ""
+msgstr "Summary of order data"
 
 #: templates/formtools/wizard/email_zusammenfassung.html:45
 #, python-format
 msgid "Zusammenfassung der Fragebogenbestellung für %(veranstaltung)s"
-msgstr ""
+msgstr "Summary of the questionnaire order for %(veranstaltung)s"
 
 #: templates/formtools/wizard/email_zusammenfassung.html:70
 #: templates/veranstalter/dashboard.html:105
@@ -685,12 +705,12 @@ msgstr ""
 #: templates/formtools/wizard/email_zusammenfassung.html:71
 #: templates/veranstalter/dashboard.html:106
 msgid "Vorname"
-msgstr ""
+msgstr "First name"
 
 #: templates/formtools/wizard/email_zusammenfassung.html:72
 #: templates/veranstalter/dashboard.html:107
 msgid "Nachname"
-msgstr ""
+msgstr "Last name"
 
 #: templates/formtools/wizard/email_zusammenfassung.html:73
 #: templates/veranstalter/dashboard.html:108
@@ -700,15 +720,15 @@ msgstr ""
 #: templates/formtools/wizard/email_zusammenfassung.html:74
 #: templates/veranstalter/dashboard.html:109
 msgid "Anmerkung"
-msgstr ""
+msgstr "Note"
 
 #: templates/formtools/wizard/evaluation.html:5
 msgid "Möchten Sie ihre Veranstaltung evaluieren?"
-msgstr ""
+msgstr "Would you like to evaluate your event?"
 
 #: templates/formtools/wizard/evaluation.html:6
 msgid "Datenschutzrechtliche Einwilligungserklärung"
-msgstr ""
+msgstr "Declaration of consent under data protection law"
 
 #: templates/formtools/wizard/evaluation.html:8
 msgid ""
@@ -729,11 +749,27 @@ msgid ""
 "dem Zugang meiner Widerrufserklärung meine\n"
 "Daten bei den entsprechenden Stellen gelöscht."
 msgstr ""
+"I agree that my data may be collected, processed and used by the Department "
+"of Computer Science and the Computer Science Student Council in connection "
+"with the teaching evaluation and for\n"
+" the following purposes: internal evaluation of the department and the "
+"student council, feedback on the evaluation (e.g. awarding of teaching "
+"prizes), as well as publication of the\n"
+" numerical results on the intranet of TU Darmstadt.\n"
+"<br>\n"
+"<br>\n"
+"The collection, processing and use of my data is voluntary. I can refuse my "
+"consent without any adverse consequences for me or revoke it at any time "
+"with effect for\n"
+" the future. I address my revocation to the Office of the Dean of Studies of "
+"the Department of Computer Science. In the event of revocation, my\n"
+" data will be deleted from the relevant offices upon receipt of my "
+"declaration of revocation."
 
 #: templates/formtools/wizard/evaluation.html:20
 #: templates/veranstalter/index.html:17
 msgid "Information zur Vollerhebung"
-msgstr ""
+msgstr "Information on the full survey"
 
 #: templates/formtools/wizard/evaluation.html:21
 msgid ""
@@ -754,14 +790,30 @@ msgid ""
 "            <a href=\"mailto:feedback@fachschaft.informatik.tu-darmstadt."
 "de\">feedback@fachschaft.informatik.tu-darmstadt.de</a>"
 msgstr ""
+"\n"
+"            This semester, a full survey of all courses at the Department of "
+"Computer Science will take place.\n"
+"            Participation in the evaluation of teaching is therefore "
+"mandatory according to §4 Para. 9 Guidelines for the area of\n"
+"            Course evaluation of the Technical University Darmstadt "
+"published in the\n"
+"            <a href=\"https://www.intern.tu-darmstadt.de/media/dezernat_ii/"
+"satzungsbeilagen/sb_14_III.pdf\">Satzungsbeilage 2014-III</a>\n"
+"            <strong>mandatory</strong> for all courses. If your event is a "
+"service-event\n"
+"             and the evaluation is carried out by another department, please "
+"contact us:\n"
+"            <br>\n"
+"            <a href=\"mailto:feedback@fachschaft.informatik.tu-darmstadt."
+"de\">feedback@fachschaft.informatik.tu-darmstadt.de</a>"
 
 #: templates/formtools/wizard/freiefragen.html:4
 msgid "Erfassung der Freien Fragen"
-msgstr ""
+msgstr "Entering the free questions"
 
 #: templates/formtools/wizard/freiefragen.html:5
 msgid "Freie Fragen Feld"
-msgstr ""
+msgstr "Free questions field"
 
 #: templates/formtools/wizard/freiefragen.html:6
 msgid ""
@@ -774,14 +826,22 @@ msgid ""
 "i>&ldquo; beantworten.\n"
 "        "
 msgstr ""
+"\n"
+"        On the questionnaire for your course, you can ask students up to\n"
+"        two self-formulated questions.\n"
+"        Students can answer each of the questions with one of five values "
+"between\n"
+"        &bdquo;<i>applies</i>&ldquo; and &bdquo;<i>does not apply</"
+"i>&ldquo;.\n"
+"        "
 
 #: templates/formtools/wizard/primaerdozent.html:5
 msgid "Erfassung des Primärdozenten"
-msgstr ""
+msgstr "Entering the primary lecturer"
 
 #: templates/formtools/wizard/tutoren.html:5
 msgid "Erfassung der Tutoren"
-msgstr ""
+msgstr "Entering the tutors"
 
 #: templates/formtools/wizard/tutoren.html:16
 msgid ""
@@ -795,10 +855,18 @@ msgid ""
 "60 zu.\n"
 "        "
 msgstr ""
+"\n"
+"        Please enter the data separated by commas in the following order "
+"<br />\n"
+"        <strong>Last name, First name, E-Mail Address, Date und Room etc. "
+"Note</strong><br />\n"
+"        and use one for each exercise group <strong>new line</strong>.\n"
+"        We then assign each line a code number between 1 and 60 \n"
+"        "
 
 #: templates/formtools/wizard/tutoren.html:24
 msgid "Beispiel"
-msgstr ""
+msgstr "Example"
 
 #: templates/formtools/wizard/tutoren.html:26
 msgid ""
@@ -815,15 +883,15 @@ msgstr ""
 
 #: templates/formtools/wizard/tutoren.html:40
 msgid "Prüfen"
-msgstr ""
+msgstr "Check"
 
 #: templates/formtools/wizard/veroeffentlichen.html:5
 msgid "Einverständniserklärung zur Veröffentlichung der Evaluationsergebnisse"
-msgstr ""
+msgstr "Declaration of consent to the publication of the evaluation results"
 
 #: templates/formtools/wizard/zusammenfassung.html:41
 msgid "Zusammenfassung der Fragebogenbestellung"
-msgstr ""
+msgstr "Summary of the questionnaire order"
 
 #: templates/includes/semesterauswahl.html:2 templates/public/index.html:8
 msgid "Semester:"
@@ -832,119 +900,129 @@ msgstr ""
 #: templates/intern/export_veranstaltungen.html:4
 #: templates/intern/export_veranstaltungen.html:7
 msgid "Veranstaltungen exportieren"
-msgstr ""
+msgstr "Export events"
 
 #: templates/intern/export_veranstaltungen.html:9
 msgid ""
 "Hier kann eine alle evaluierten Veranstaltungen des gewählten Semesters "
 "enthaltende XML-Datei erzeugt werden, die in EvaSys importiert werden kann."
 msgstr ""
+"Here you can generate an XML file containing all evaluated courses of the "
+"selected semester, which can be imported into EvaSys."
 
 #: templates/intern/export_veranstaltungen.html:13
 msgid "XML für Veranstaltungen erzeugen"
-msgstr ""
+msgstr "Create XML for events"
 
 #: templates/intern/export_veranstaltungen.html:14
 msgid "XML für Übungen erzeugen"
-msgstr ""
+msgstr "Create XML for exercises"
 
 #: templates/intern/fragebogensprache.html:4
 #: templates/intern/fragebogensprache.html:7
 msgid "Zuordnung Veranstaltungen zu Sprache des Fragebogens"
-msgstr ""
+msgstr "Mapping of events to the language of the questionnaire"
 
 #: templates/intern/fragebogensprache.html:13
 msgid "Anzahl"
-msgstr ""
+msgstr "Number"
 
 #: templates/intern/fragebogensprache.html:15
 msgid "gedruckt"
-msgstr ""
+msgstr "printed"
 
 #: templates/intern/fragebogensprache.html:16
 msgid "zurück"
-msgstr ""
+msgstr "back"
 
 #: templates/intern/generate_letters.html:4
 #: templates/intern/generate_letters.html:7
 msgid "Anschreiben erzeugen"
-msgstr ""
+msgstr "Create cover letter"
 
 #: templates/intern/generate_letters.html:9
 msgid ""
 "Das Anschreiben ist ein Brief an die Veranstalter, der den Fragebögen "
 "beigefügt wird."
 msgstr ""
+"The cover letter is a letter to the organizers that is attached to the "
+"questionnaires."
 
 #: templates/intern/generate_letters.html:13
 msgid "Erhebungswoche:"
-msgstr ""
+msgstr "Collection week:"
 
 #: templates/intern/generate_letters.html:15
 msgid "Zu erzeugende Datei:"
-msgstr ""
+msgstr "File to be generated:"
 
 #: templates/intern/generate_letters.html:17
 msgid "Anschreiben"
-msgstr ""
+msgstr "Cover letter"
 
 #: templates/intern/generate_letters.html:18
 msgid "Aufkleber"
-msgstr ""
+msgstr "Sticker"
 
 #: templates/intern/generate_letters.html:19
 msgid "Mindestteilnehmerzahl"
-msgstr ""
+msgstr "Minimum number of participants"
 
 #: templates/intern/generate_letters.html:22
 msgid "PDF erzeugen"
-msgstr ""
+msgstr "Create PDF"
 
 #: templates/intern/generate_letters.html:27
 msgid "Fehler bei der Ausführung von pdflatex"
-msgstr ""
+msgstr "Error during the execution of pdflatex"
 
 #: templates/intern/import_ergebnisse.html:4
 #: templates/intern/import_ergebnisse.html:7 templates/intern/index.html:37
 msgid "Ergebnisse aus EvaSys importieren"
-msgstr ""
+msgstr "Import results from EvaSys"
 
 #: templates/intern/import_ergebnisse.html:10
 msgid ""
 "Hier können die von EvaSys gescannten und eingelesenen Fragebögen in Form "
 "einer CSV-Datei (kann in EvaSys erstellt werden) hochgeladen werden."
 msgstr ""
+"The questionnaires scanned and read by EvaSys can be uploaded here in the "
+"form of a CSV file (can be created in EvaSys)."
 
 #: templates/intern/import_ergebnisse.html:19
 msgid "Vorlesung (2009-2020)"
-msgstr ""
+msgstr "Lecture (2009-2020)"
 
 #: templates/intern/import_ergebnisse.html:24
 msgid "Übung (2016-2020)"
-msgstr ""
+msgstr "Exercise (2016-2020)"
 
 #: templates/intern/import_ergebnisse.html:27
 #: templates/intern/import_vv.html:14
 msgid "Hochladen"
-msgstr ""
+msgstr "Upload"
 
 #: templates/intern/import_vv.html:4 templates/intern/import_vv.html:7
 #: templates/intern/import_vv_edit.html:34
 #: templates/intern/import_vv_edit.html:37
 msgid "Vorlesungsverzeichnis importieren"
-msgstr ""
+msgstr "Import course catalog"
 
 #: templates/intern/import_vv.html:9
 msgid ""
 "Das System erwartet eine XML-Datei, die aus TUCaN exportiert wurde und alle "
 "Veranstaltungen des Semesters enthält."
 msgstr ""
+"The system expects an XML file that has been exported from TUCaN and "
+"contains all courses of the semester."
 
 #: templates/intern/import_vv.html:10
 msgid ""
 "Achtung: Upload und serverseitige Verarbeitung der Datei können aufgrund der "
 "großen Datenmenge etwas dauern."
 msgstr ""
+"Attention: Upload and server-side processing of the file may take some time "
+"due to the large amount of data."
 
 #: templates/intern/import_vv.html:17
 msgid ""
@@ -955,11 +1033,17 @@ msgid ""
 "Vorlesungsverzeichnis erstellen). Es gibt auf dem Sharepoint KEINEN Report, "
 "der das KOMPLETTE Vorlesungsverzeichnis enthält.\"</i>"
 msgstr ""
+"<b>Notice</b> of Wolfgang Heenes, how to access TUCaN (e.g. as an employee "
+"of the Office of Student Affairs) to obtain this data in the appropriate "
+"format in case they are no longer responsible for it:<br />\n"
+"<i>\"The data comes from the backend (Semester offer -> Create course "
+"catalog). There is NO report on the sharepoint that contains the COMPLETE "
+"course catalog.\"</i>"
 
 #: templates/intern/import_vv_edit.html:44
 msgid ""
 "Im Folgenden können die zu importierenden Veranstaltungen ausgewählt werden."
-msgstr ""
+msgstr "The events to be imported can be selected below."
 
 #: templates/intern/import_vv_edit.html:49
 msgid ""
@@ -967,25 +1051,27 @@ msgid ""
 "in der Auswahlliste steht, muss es zunächst über die Datenbank-"
 "Administration hinzugefügt werden."
 msgstr ""
+"If the semester for which courses are to be imported is not in the selection "
+"list, it must first be added via the database administration."
 
 #: templates/intern/import_vv_edit.html:70
 msgid "Alle markieren"
-msgstr ""
+msgstr "Mark all"
 
 #: templates/intern/import_vv_edit.html:70
 msgid "Markierungen aufheben"
-msgstr ""
+msgstr "Cancel markings"
 
 #: templates/intern/import_vv_edit.html:87
 #: templates/intern/tans/process_tans.html:23
 #: templates/veranstalter/index.html:72
 msgid "Weiter"
-msgstr ""
+msgstr "Continue"
 
 #: templates/intern/import_vv_edit.html:88 templates/veranstalter/index.html:73
 #: templates/veranstalter/index.html:100
 msgid "Zurücksetzen"
-msgstr ""
+msgstr "Reset"
 
 #: templates/intern/import_vv_edit_users.html:3
 #: templates/intern/import_vv_edit_users.html:6
@@ -994,21 +1080,21 @@ msgstr ""
 #: templates/intern/import_vv_edit_users_update.html:4
 #: templates/intern/import_vv_edit_users_update.html:7
 msgid "Personendaten vervollständigen"
-msgstr ""
+msgstr "Complete personal data"
 
 #: templates/intern/import_vv_edit_users.html:11
 #, python-format
 msgid "Es sind noch %(persons.count)s Personendaten zu bearbeiten."
-msgstr ""
+msgstr "There are still %(persons.count)s of personal data to be processed."
 
 #: templates/intern/import_vv_edit_users.html:23
 msgid ""
 "Alle Veranstalter des aktuellen Semesters haben vollständige Personendaten."
-msgstr ""
+msgstr "All organizers of the current semester have complete personal data."
 
 #: templates/intern/import_vv_edit_users_namecheck.html:11
 msgid "Die ähnliche Person"
-msgstr ""
+msgstr "The similar person"
 
 #: templates/intern/import_vv_edit_users_namecheck.html:12
 #: templates/intern/import_vv_edit_users_namecheck.html:23
@@ -1023,83 +1109,85 @@ msgstr ""
 #: templates/intern/import_vv_edit_users_namecheck.html:15
 #: templates/intern/import_vv_edit_users_namecheck.html:26
 msgid "Lehrveranstaltungen"
-msgstr ""
+msgstr "Courses"
 
 #: templates/intern/import_vv_edit_users_namecheck.html:22
 msgid "Die neue Person"
-msgstr ""
+msgstr "The new person"
 
 #: templates/intern/import_vv_edit_users_namecheck.html:39
 msgid "Zusammenführen"
-msgstr ""
+msgstr "Combine"
 
 #: templates/intern/import_vv_edit_users_namecheck.html:42
 msgid "Ignorieren"
-msgstr ""
+msgstr "Ignore"
 
 #: templates/intern/import_vv_edit_users_namecheck.html:46
 #: templates/intern/import_vv_edit_users_update.html:42
 msgid "zurück zu Personendaten"
-msgstr ""
+msgstr "back to person data"
 
 #: templates/intern/import_vv_edit_users_update.html:11
 #, python-format
 msgid ""
 "Es sind noch %(person.persons_to_edit.count)s Personendaten zu bearbeiten."
 msgstr ""
+"There are still %(person.persons_to_edit.count)s personal data to be "
+"processed."
 
 #: templates/intern/import_vv_edit_users_update.html:14
 msgid "Auf Google suchen."
-msgstr ""
+msgstr "Search on Google."
 
 #: templates/intern/import_vv_edit_users_update.html:18
 msgid "Es existiert eine Person, die ähnlich zu dieser ist."
-msgstr ""
+msgstr "There is a person who is similar to this one."
 
 #: templates/intern/import_vv_edit_users_update.html:26
 #: templates/intern/import_vv_edit_users_update.html:29
 #: templates/intern/tans/process_tans.html:21
 #: templates/intern/tans/process_tans_preview.html:63
 msgid "Zurück"
-msgstr ""
+msgstr "Back"
 
 #: templates/intern/import_vv_edit_users_update.html:33
 #: templates/intern/import_vv_edit_users_update.html:36
 msgid "Überspringen"
-msgstr ""
+msgstr "Skip"
 
 #: templates/intern/import_vv_edit_users_update.html:38
 msgid "Speichern & Weiter"
-msgstr ""
+msgstr "Save & continue"
 
 #: templates/intern/index.html:5 templates/intern/index.html:9
 #: templates/intern/status_final.html:5
 msgid "Interner Bereich"
-msgstr ""
+msgstr "Internal section"
 
 #: templates/intern/index.html:11
 msgid "Verwaltung der Daten"
-msgstr ""
+msgstr "Data management"
 
 #: templates/intern/index.html:12
 msgid "zu Veranstalter-Account wechseln"
-msgstr ""
+msgstr "Switch to organizer account"
 
 #: templates/intern/index.html:13
 msgid "Mail an Veranstalter verschicken"
-msgstr ""
+msgstr "Send mail to organizer"
 
 #: templates/intern/index.html:14
 msgid "Veranstaltungen zu Fragebogensprache"
-msgstr ""
+msgstr "Events on questionnaire language"
 
 #: templates/intern/index.html:15
 msgid "Veranstaltungen die lange nicht mehr evaluiert wurden"
-msgstr ""
+msgstr "Events that have not been evaluated for a long time"
 
 #: templates/intern/index.html:18
 msgid "Status der Rückmeldungen durch die Veranstalter"
-msgstr ""
+msgstr "Status of feedback from the organizers"
 
 #: templates/intern/index.html:19
 #, python-format
@@ -1107,6 +1195,7 @@ msgid ""
 "Aktuell haben wir %(ruck_veranst)s Rückmeldungen von %(all_veranst)s "
 "Veranstaltungen."
 msgstr ""
+"We currently have %(ruck_veranst)s feedback from %(all_veranst)s events."
 
 #: templates/intern/index.html:26
 #, python-format
@@ -1115,57 +1204,63 @@ msgid ""
 "bookstack/books/feedback/page/feedback-ablauf%%C3%%BCbersicht\" "
 "target=\"_blank\">Ablauf im bookstack</a>."
 msgstr ""
+"These are not all the necessary steps; see <a href=\"https://www.d120.de/"
+"bookstack/books/feedback/page/feedback-ablauf%%C3%%BCbersicht\" "
+"target=\"_blank\">Process in the bookstack</a>."
 
 #: templates/intern/index.html:29
 msgid "neues Semester anlegen"
 msgstr ""
+"These are not all the necessary steps; see <a href=\"https://www.d120.de/"
+"bookstack/books/feedback/page/feedback-ablauf%%C3%%BCbersicht\" "
+"target=\"_blank\">Procedure in the bookstack</a>."
 
 #: templates/intern/index.html:29
 msgid "aktuell"
-msgstr ""
+msgstr "current"
 
 #: templates/intern/index.html:30
 msgid "nicht Vorhanden"
-msgstr ""
+msgstr "not present"
 
 #: templates/intern/index.html:31
 msgid "Veranstaltungen aus VV importieren"
-msgstr ""
+msgstr "Import events from VV"
 
 #: templates/intern/index.html:31 templates/intern/index.html:32
 msgid "vor Bestellphase"
-msgstr ""
+msgstr "before ordering phase"
 
 #: templates/intern/index.html:32
 msgid "Fehlende Personendaten nachtragen"
-msgstr ""
+msgstr "Add missing personal data"
 
 #: templates/intern/index.html:33 templates/intern/status_final.html:9
 msgid "Bestellphase abschließen"
-msgstr ""
+msgstr "Complete the ordering phase"
 
 #: templates/intern/index.html:33 templates/intern/index.html:34
 msgid "nach Bestellphase"
-msgstr ""
+msgstr "after ordering phase"
 
 #: templates/intern/index.html:34
 msgid "Anschreiben für Veranstalter erzeugen"
-msgstr ""
+msgstr "Create cover letter for organizers"
 
 #: templates/intern/index.html:35
 msgid "Veranstaltungen für EvaSys exportieren"
-msgstr ""
+msgstr "Exporting events for EvaSys"
 
 #: templates/intern/index.html:36 templates/intern/tans/process_tans.html:3
 #: templates/intern/tans/process_tans.html:5
 #: templates/intern/tans/process_tans_preview.html:3
 #: templates/intern/tans/process_tans_preview.html:5
 msgid "TANs verarbeiten"
-msgstr ""
+msgstr "Process TANs"
 
 #: templates/intern/index.html:36
 msgid "nach der Bestellphase"
-msgstr ""
+msgstr "after the order phase"
 
 #: templates/intern/index.html:38
 msgid "Rankings berechnen"
@@ -1173,36 +1268,63 @@ msgstr ""
 
 #: templates/intern/index.html:38
 msgid "nach dem Ergebnis-Import"
-msgstr ""
+msgstr "calculate rankings"
 
 #: templates/intern/index.html:40
 msgid "Ergebnisse veröffentlichen"
-msgstr ""
+msgstr "Publish results"
 
 #: templates/intern/index.html:40
 #, python-format
 msgid " (aktuell: sichtbar für %(cur_semester.get_sichtbarkeit_display)s)"
-msgstr ""
+msgstr " (current: visible for %(cur_semester.get_sichtbarkeit_display)s)"
 
 #: templates/intern/lange_ohne_evaluation.html:4
 msgid "Lange nicht evaluierte Veranstaltungen"
-msgstr ""
+msgstr "Events not evaluated for a long time"
 
 #: templates/intern/lange_ohne_evaluation.html:7
 msgid "Lange nicht evaluierte Lehrveranstaltungen"
+msgstr "Courses not evaluated for a long time"
+
+#: templates/intern/lange_ohne_evaluation.html:8
+msgid ""
+"Veranstaltungen für die seit mehr als zwei Jahren keine Ergebnisse vorliegen "
+"und \n"
+"die diese Semester angeboten werden. Es werden nur Veranstaltungen "
+"angezeigt, für die keine Bestellung von Bögen vorliegt \n"
+"oder die zurückgemeldeten haben, dass sie nicht an der Evaluation teilnehmen "
+"möchten."
 msgstr ""
+"Courses for which no results have been available for more than two years and "
+"which \n"
+"are offered this semester. Only courses for which no forms have been "
+"ordered or which have reported back that they do not \n"
+"wish to participate in the evaluation are displayed."
+
+#: templates/intern/lange_ohne_evaluation.html:11
+msgid ""
+"Diese Liste an das Studiendekanat z.B. Wolfgang Heenes weiterleiten damit "
+"die \n"
+"Dozenten noch einmal darauf hingewiesen werden, dass die Veranstaltung an "
+"der Evaluation teilnehmen sollten."
+msgstr ""
+"Forward this list to the Office of the Dean of Studies, e.g. Wolfgang Heenes, "
+"so \n"
+"that the lecturers are reminded once again that the course should "
+"take part in the evaluation."
 
 #: templates/intern/lange_ohne_evaluation.html:13
 msgid "Liste"
-msgstr ""
+msgstr "List"
 
 #: templates/intern/lange_ohne_evaluation.html:16
 msgid "letzte Ergebnisse:"
-msgstr ""
+msgstr "last results:"
 
 #: templates/intern/lange_ohne_evaluation.html:20
 msgid "Ausführliche Liste mit allen Bestellungen"
-msgstr ""
+msgstr "Detailed list with all orders"
 
 #: templates/intern/lange_ohne_evaluation.html:25
 #: templates/veranstalter/index.html:51
@@ -1212,12 +1334,12 @@ msgstr ""
 #: templates/intern/lange_ohne_evaluation.html:27
 #: templates/veranstalter/index.html:53
 msgid "Ausgefüllte Bögen"
-msgstr ""
+msgstr "Completed forms"
 
 #: templates/intern/rechte_uebernehmen.html:4
 #: templates/intern/rechte_uebernehmen.html:7
 msgid "Veranstalter-Account übernehmen"
-msgstr ""
+msgstr "Take over organizer account"
 
 #: templates/intern/rechte_uebernehmen.html:9
 msgid ""
@@ -1225,71 +1347,77 @@ msgid ""
 "ausgewählten Veranstaltung ein. Auf diese Weise kannst du z.B. berichtete "
 "Probleme einfacher nachvollziehen."
 msgstr ""
+"Click on 'Apply' to log in as the organizer of the selected event. This "
+"makes it easier for you to track reported problems, for example."
 
 #: templates/intern/rechte_uebernehmen.html:10
 msgid ""
 "Das System bietet dir nach der Rechteübernahme auf jeder Seite die Rückkehr "
 "zu deinem Account an."
 msgstr ""
+"The system offers you the option to return to your account on every page "
+"after the rights have been transferred."
 
 #: templates/intern/sendmail.html:3 templates/intern/sendmail_preview.html:4
 msgid "Mail versenden"
-msgstr ""
+msgstr "Send mail"
 
 #: templates/intern/sendmail.html:10 templates/intern/sendmail_preview.html:7
 msgid "Mail an Veranstalter versenden"
-msgstr ""
+msgstr "Send mail to organizer"
 
 #: templates/intern/sendmail.html:16
 msgid "Mail senden an Veranstalter der Veranstaltung mit Bestellstatus:"
-msgstr ""
+msgstr "Send an e-mail to the organizer of the event with the order status:"
 
 #: templates/intern/sendmail.html:28
 msgid "Mail auch an die Tutoren der jeweiligen Veranstaltungen schicken?"
-msgstr ""
+msgstr "Send an e-mail to the tutors of the respective courses?"
 
 #: templates/intern/sendmail.html:38
 msgid "Vorlage:"
-msgstr ""
+msgstr "Template:"
 
 #: templates/intern/sendmail.html:45
 msgid "Vorlage übernehmen"
-msgstr ""
+msgstr "Apply template"
 
 #: templates/intern/sendmail.html:49 templates/intern/sendmail_preview.html:26
 msgid "Betreff:"
-msgstr ""
+msgstr "Subject:"
 
 #: templates/intern/sendmail.html:54
 msgid "Mailtext:"
-msgstr ""
+msgstr "Mail text:"
 
 #: templates/intern/sendmail.html:59
 #: templates/intern/tans/process_tans_preview.html:6
 msgid "Vorschau"
-msgstr ""
+msgstr "Preview"
 
 #: templates/intern/sendmail.html:63
 msgid "Verfügbare Variablen"
-msgstr ""
+msgstr "Available variables"
 
 #: templates/intern/sendmail.html:66
 msgid "Name der Veranstaltung"
-msgstr ""
+msgstr "Name of the event"
 
 #: templates/intern/sendmail.html:67
 msgid "Link zum Veranstalterbereich"
-msgstr ""
+msgstr "Link to the organizer area"
 
 #: templates/intern/sendmail_preview.html:11
 msgid ""
 "Vorschau (Ersetzte Begriffe sind <span style=\"color: blue;\">blau markiert</"
 "span>)"
 msgstr ""
+"Preview (Replaced terms are <span style=\"color: blue;\">marked in blue</"
+"span>)"
 
 #: templates/intern/sendmail_preview.html:13
 msgid "Absender:"
-msgstr ""
+msgstr "Sender"
 
 #: templates/intern/sendmail_preview.html:18
 #, python-format
@@ -1297,75 +1425,80 @@ msgid ""
 "<em>Empfänger:</em></label>\n"
 "            %(to)s aus dem %(semester_selected)s"
 msgstr ""
+"<em>Receiver:</em></label>\n"
+"            %(to)s from %(semester_selected)s"
 
 #: templates/intern/sendmail_preview.html:36
 msgid "Ändern"
-msgstr ""
+msgstr "Change"
 
 #: templates/intern/sendmail_preview.html:37
 msgid "Mails senden"
-msgstr ""
+msgstr "Send mails"
 
 #: templates/intern/status_final.html:10
 msgid ""
 "Sie sind dabei die Bestellphase zu beenden. Möchten Sie das wirklich tun?"
 msgstr ""
+"You are about to end the order phase. Are you sure you want to do this?"
 
 #: templates/intern/status_final.html:14
 msgid "Bestätigen"
-msgstr ""
+msgstr "Confirm"
 
 #: templates/intern/sync_ergebnisse.html:4
 #: templates/intern/sync_ergebnisse.html:7
 #: templates/intern/sync_ergebnisse.html:13
 msgid "Ranking berechnen"
-msgstr ""
+msgstr "Calculate ranking"
 
 #: templates/intern/sync_ergebnisse.html:9
 msgid ""
 "Nachdem die Ergebnisse in Form von Rohdaten importiert wurden, kann über "
 "diesen Punkt das Ranking berechnet werden."
 msgstr ""
+"After the results have been imported in the form of raw data, the ranking "
+"can be calculated via this point."
 
 #: templates/intern/tans/process_tans_preview.html:10
 msgid "Losungsmail Vorschau"
-msgstr ""
+msgstr "Solution mail preview"
 
 #: templates/intern/tans/process_tans_preview.html:18
 #: templates/intern/tans/process_tans_preview.html:38
 msgid "Empfänger"
-msgstr ""
+msgstr "Receiver"
 
 #: templates/intern/tans/process_tans_preview.html:30
 msgid "TANmail Vorschau"
-msgstr ""
+msgstr "TAN mail preview"
 
 #: templates/intern/tans/process_tans_preview.html:65
 msgid "Absenden"
-msgstr ""
+msgstr "Send"
 
 #: templates/public/index.html:4
 #, python-format
 msgid "Feedback-Ergebnisse (%(semester)s)"
-msgstr ""
+msgstr "Feedback-results (%(semester)s)"
 
 #: templates/public/index.html:20 templates/public/veranstaltung.html:10
 msgid ""
 "Hinweis: Diese Ergebnisse sind momentan noch nicht öffentlich verfügbar."
-msgstr ""
+msgstr "Note: These results are not yet publicly available."
 
 #: templates/public/index.html:22
 msgid ""
 "Hinweis: Die Spalten zum Feedbackpreis sind nur für Administratoren sichtbar."
-msgstr ""
+msgstr "Note: The feedback price columns are only visible to administrators."
 
 #: templates/public/index.html:27
 msgid "alphabetisch"
-msgstr ""
+msgstr "alphabetical"
 
 #: templates/public/index.html:76
 msgid "Darstellung der Noten"
-msgstr ""
+msgstr "Presentation of the notes"
 
 #: templates/public/index.html:78
 #, python-format
@@ -1374,6 +1507,8 @@ msgid ""
 "class=\"invalid\">gekennzeichnet</span>, falls weniger als %(thresh_valid)s "
 "Antworten einflossen."
 msgstr ""
+"Average scores are <span class=\"invalid\">marked</span> accordingly, if "
+"less than %(thresh_valid)s answers were included."
 
 #: templates/public/index.html:79
 #, python-format
@@ -1381,27 +1516,29 @@ msgid ""
 "Bei weniger als %(thresh_show)s Antworten wird die zugehörige Note gar nicht "
 "angezeigt."
 msgstr ""
+"If there are less than %(thresh_show)s answers, the corresponding grade is "
+"not displayed at all."
 
 #: templates/public/index.html:82
 msgid "Aufschlüsselung der Kategorien"
-msgstr ""
+msgstr "Breakdown of the categories"
 
 #: templates/public/index.html:83
 msgid ""
 "Hier sind die Fragen aufgelistet, die in die einzelnen Noten einfließen."
-msgstr ""
+msgstr "Here are the questions that are included in the individual grades."
 
 #: templates/public/keine_ergebnisse.html:7
 msgid "Keine Ergebnisse verfügbar"
-msgstr ""
+msgstr "No results available"
 
 #: templates/public/keine_ergebnisse.html:9
 msgid "Im Moment liegen (noch?) keine Ergebnisse vor."
-msgstr ""
+msgstr "There are no results available (yet?)."
 
 #: templates/public/unauth.html:7
 msgid "Zugriff eingeschränkt"
-msgstr ""
+msgstr "Access restricted"
 
 #: templates/public/unauth.html:9
 msgid ""
@@ -1409,10 +1546,13 @@ msgid ""
 "Mitglieder der Universität können sich allerdings per <a href=\"https://www."
 "hrz.tu-darmstadt.de/vpn\">VPN</a> einwählen."
 msgstr ""
+"This website is not available from outside the university network. However, "
+"all members of the university can connect via <a href=\"https://www.hrz.tu-"
+"darmstadt.de/vpn\">VPN</a>"
 
 #: templates/public/veranstaltung.html:7
 msgid "zurück zur Übersicht"
-msgstr ""
+msgstr "back to overview"
 
 #: templates/public/veranstaltung.html:13
 msgid "Details"
@@ -1424,12 +1564,12 @@ msgstr ""
 
 #: templates/public/veranstaltung.html:18
 msgid "Antworten"
-msgstr ""
+msgstr "Answers"
 
 #: templates/public/veranstaltung.html:34
 #, python-format
 msgid "Insgesamt abgegebene Fragebögen: %(ergebnis.anzahl)s"
-msgstr ""
+msgstr "Total number of questionnaires submitted : %(ergebnis.anzahl)s"
 
 #: templates/public/veranstaltung.html:35
 #, python-format
@@ -1437,46 +1577,50 @@ msgid ""
 "Die ausführlichen Ergebnisse zu dieser Veranstaltung hat "
 "<em>%(v.verantwortlich.full_name)s</em> per E-Mail erhalten."
 msgstr ""
+"<em>%(v.verantwortlich.full_name)s</em> has received the detailed results of "
+"this event by email"
 
 #: templates/public/veranstaltung.html:37
 msgid "Legende"
-msgstr ""
+msgstr "Legend"
 
 #: templates/public/veranstaltung.html:39
 msgid ""
 "<strong>Note:</strong> Durchschnittsnote, gemittelt über alle abgegebenen "
 "Antworten"
-msgstr ""
+msgstr "<strong>Note:</strong> Average score, averaged over all answers given"
 
 #: templates/public/veranstaltung.html:40
 msgid "<strong>Antworten:</strong> Anzahl der abgegebenen Antworten"
-msgstr ""
+msgstr "<strong>Answers:</strong> Number of submitted answers"
 
 #: templates/public/veranstaltung.html:42
 msgid ""
 "Die Fragen, die in die einzelnen Noten einfließen, werden nach einem Klick "
 "auf die jeweilige Kategorie angezeigt."
 msgstr ""
+"The questions that are included in the individual grades are displayed after "
+"clicking on the respective category."
 
 #: templates/public/veranstaltung.html:44
 msgid "Kommentar der Veranstalter zum Ergebnis"
-msgstr ""
+msgstr "Organizer's comment on the result"
 
 #: templates/public/veranstaltung.html:48
 msgid "Es wurde kein Kommentar hinterlegt."
-msgstr ""
+msgstr "No comment was entered."
 
 #: templates/registration/logged_out.html:1
 msgid "Ausgeloggt"
-msgstr ""
+msgstr "Logged out"
 
 #: templates/registration/logged_out.html:2
 msgid "Auf Wiedersehen!"
-msgstr ""
+msgstr "Goodbye!"
 
 #: templates/registration/logged_out.html:4
 msgid "weiter zu den Ergebnissen"
-msgstr ""
+msgstr "continue to the results"
 
 #: templates/veranstalter/dashboard.html:61
 msgid "Dashboard"
@@ -1493,23 +1637,23 @@ msgstr ""
 
 #: templates/veranstalter/dashboard.html:72
 msgid "Datum"
-msgstr ""
+msgstr "Date"
 
 #: templates/veranstalter/dashboard.html:85
 msgid "Aktuelle Bestellung"
-msgstr ""
+msgstr "Current order"
 
 #: templates/veranstalter/dashboard.html:87
 msgid "Bestellung ändern"
-msgstr ""
+msgstr "Change order"
 
 #: templates/veranstalter/dashboard.html:128
 msgid "Bestellung durchführen"
-msgstr ""
+msgstr "Execute order"
 
 #: templates/veranstalter/index.html:8
 msgid "Herzlich willkommen!"
-msgstr ""
+msgstr "Welcome!"
 
 #: templates/veranstalter/index.html:11
 #, python-format
@@ -1517,6 +1661,8 @@ msgid ""
 "eingeloggt für <strong>%(veranstaltung.name)s "
 "(%(veranstaltung.semester.short)s)</strong>"
 msgstr ""
+"logged in for <strong>%(veranstaltung.name)s "
+"(%(veranstaltung.semester.short)s)</strong>"
 
 #: templates/veranstalter/index.html:18
 msgid ""
@@ -1537,31 +1683,50 @@ msgid ""
 "de\">feedback@fachschaft.informatik.tu-darmstadt.de</a>\n"
 "        "
 msgstr ""
+"\n"
+"            This semester, a full survey of all courses at the Department of "
+"Computer Science will take place.\n"
+"            Participation in the evaluation of teaching is therefore "
+"mandatory according to §4 Para. 9 Guidelines for the area of\n"
+"            Course evaluation of the Technical University Darmstadt "
+"published in the\n"
+"            <a href=\"https://www.intern.tu-darmstadt.de/media/dezernat_ii/"
+"satzungsbeilagen/sb_14_III.pdf\">Satzungsbeilage 2014-III</a>\n"
+"            <strong>mandatory</strong> for all courses. If your event is a "
+"service-event\n"
+"             and the evaluation is carried out by another department, please "
+"contact us:\n"
+"            <a href=\"mailto:feedback@fachschaft.informatik.tu-darmstadt."
+"de\">feedback@fachschaft.informatik.tu-darmstadt.de</a>        "
 
 #: templates/veranstalter/index.html:29
 msgid "Fragebogenbestellung Schritt 1 von 5"
-msgstr ""
+msgstr "Questionnaire order step 1 of 5"
 
 #: templates/veranstalter/index.html:43
 msgid ""
 "Im Moment können keine Fragebögen bestellt werden. Sie erhalten eine E-Mail, "
 "sobald dies wieder möglich ist."
 msgstr ""
+"No questionnaires can be ordered at the moment. You will receive an e-mail "
+"as soon as this is possible again."
 
 #: templates/veranstalter/index.html:46
 msgid ""
 "Bitte geben Sie an, wie viele Fragebögen Sie in welcher Sprache benötigen."
-msgstr ""
+msgstr "Please specify how many questionnaires you need and in which language."
 
 #: templates/veranstalter/index.html:48
 msgid ""
 "Zur Orientierung finden Sie hier die Anzahl bestellter und ausgefüllter "
 "Bögen vergangener Semester:"
 msgstr ""
+"For orientation, you can find the number of questionnaires ordered and "
+"completed in previous semesters here:"
 
 #: templates/veranstalter/index.html:79
 msgid "Kommentar"
-msgstr ""
+msgstr "Comment"
 
 #: templates/veranstalter/index.html:86
 #, python-format
@@ -1573,21 +1738,27 @@ msgid ""
 "hochschul-öffentlich angezeigt werden.\n"
 "            "
 msgstr ""
+" %%}\n"
+"            You can write a comment on the\n"
+"            <a href=\"%(ergebnis_url)s\">evaluation result</a> here.\n"
+"            This comment will be displayed publicly on the corresponding "
+"results page.\n"
+"            "
 
 #: templates/veranstalter/index.html:93
 msgid ""
 "Um einen Kommentar wieder zu entfernen, löschen Sie bitte den vorhandenen "
 "Kommentartext."
-msgstr ""
+msgstr "To remove a comment, please delete the existing comment text."
 
 #: templates/veranstalter/index.html:99
 msgid "Speichern"
-msgstr ""
+msgstr "Save"
 
 #: templates/veranstalter/login_failed.html:4
 #: templates/veranstalter/login_failed.html:7
 msgid "Login fehlgeschlagen"
-msgstr ""
+msgstr "Login failed"
 
 #: templates/veranstalter/login_failed.html:9
 msgid ""
@@ -1600,6 +1771,14 @@ msgid ""
 "de\">Feedback-Team</a>.\n"
 "Wir bitten für die Unannehmlichkeiten um Entschuldigung.\n"
 msgstr ""
+"\n"
+"Please check whether the login link from the e-mail has been completely "
+"transferred to\n"
+"the address line of your browser. If this is the case and the login still "
+"fails, please contact the \n"
+"<a href=\"mailto:feedback@fachschaft.informatik.tu-darmstadt.de\">Feedback-"
+"Team</a>.\n"
+"We apologize for any inconvenience caused.\n"
 
 #: templates/veranstalter/logout.html:4
 msgid "Logout"
@@ -1607,12 +1786,12 @@ msgstr ""
 
 #: templates/veranstalter/logout.html:8
 msgid "Sie sind ausgeloggt"
-msgstr ""
+msgstr "You logged out"
 
 #: templates/veranstalter/not_authenticated.html:4
 #: templates/veranstalter/not_authenticated.html:8
 msgid "Login benötigt"
-msgstr ""
+msgstr "Login required"
 
 #: templates/veranstalter/not_authenticated.html:10
 msgid ""
@@ -1628,7 +1807,16 @@ msgid ""
 "        Wir bitten für die Unannehmlichkeiten um Entschuldigung.\n"
 "        "
 msgstr ""
+"\n"
+"        You can only access this page if you access it via the login link "
+"from the e-mail \n"
+"        that we have sent you in your capacity as organizer.\n"
+"        If you do not (or no longer) have this e-mail, please contact\n"
+"        <a href=\"mailto:feedback@fachschaft.informatik.tu-darmstadt."
+"de\">Feedback-Team</a>.\n"
+"        We apologize for any inconvenience caused.\n"
+"        "
 
 #: templates/veranstalter/not_authenticated.html:19
 msgid "zum Admin-Login"
-msgstr ""
+msgstr "to the admin-login"
