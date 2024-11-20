@@ -211,7 +211,7 @@ msgid ""
 "Alle Personen, die mit der Veranstaltung befasst sind und z.B. Fragebögen "
 "bestellen können sollen."
 msgstr ""
-"All people involved in the event who should , for example, be able to order "
+"All people involved in the course who should , for example, be able to order "
 "questionnaires"
 
 #: feedback/models/base.py:455
@@ -241,7 +241,7 @@ msgstr "Evaluation date"
 #: feedback/models/base.py:464
 msgid ""
 "An welchem Tag sollen Fragebögen für diese Veranstaltung ausgewerter werden? "
-msgstr "On which day should questionnaires for this event be evaluated? "
+msgstr "On which day should questionnaires for this course be evaluated? "
 
 #: feedback/models/base.py:465
 msgid "Fragebögen die danach eintreffen werden nicht mehr ausgewertet."
@@ -503,7 +503,7 @@ msgstr "Save"
 msgid ""
 "Es wird für folgende Veranstaltungen der Status auf keine Evaluation "
 "geändert:"
-msgstr "The status of the following events is changed to no evaluation:"
+msgstr "The status of the following courses is changed to no evaluation:"
 
 #: templates/admin/keine_evaluation.html:13
 #: templates/admin/status_aendern.html:13
@@ -513,7 +513,7 @@ msgstr "Accept"
 
 #: templates/admin/status_aendern.html:8
 msgid "Es wird der Status für folgende Veranstaltungen geändert:"
-msgstr "The status of the following events will be changed:"
+msgstr "The status of the following courses will be changed:"
 
 #: templates/bestellung_base.html:10
 msgid "zurück zum internen Bereich"
@@ -724,7 +724,7 @@ msgstr "Note"
 
 #: templates/formtools/wizard/evaluation.html:5
 msgid "Möchten Sie ihre Veranstaltung evaluieren?"
-msgstr "Would you like to evaluate your event?"
+msgstr "Would you like to evaluate your course?"
 
 #: templates/formtools/wizard/evaluation.html:6
 msgid "Datenschutzrechtliche Einwilligungserklärung"
@@ -799,8 +799,8 @@ msgstr ""
 "published in the\n"
 "            <a href=\"https://www.intern.tu-darmstadt.de/media/dezernat_ii/"
 "satzungsbeilagen/sb_14_III.pdf\">Satzungsbeilage 2014-III</a>\n"
-"            <strong>mandatory</strong> for all courses. If your event is a "
-"service-event\n"
+"            <strong>mandatory</strong> for all courses. If your course is a "
+"service-course\n"
 "             and the evaluation is carried out by another department, please "
 "contact us:\n"
 "            <br>\n"
@@ -900,7 +900,7 @@ msgstr ""
 #: templates/intern/export_veranstaltungen.html:4
 #: templates/intern/export_veranstaltungen.html:7
 msgid "Veranstaltungen exportieren"
-msgstr "Export events"
+msgstr "Export courses"
 
 #: templates/intern/export_veranstaltungen.html:9
 msgid ""
@@ -912,7 +912,7 @@ msgstr ""
 
 #: templates/intern/export_veranstaltungen.html:13
 msgid "XML für Veranstaltungen erzeugen"
-msgstr "Create XML for events"
+msgstr "Create XML for courses"
 
 #: templates/intern/export_veranstaltungen.html:14
 msgid "XML für Übungen erzeugen"
@@ -921,7 +921,7 @@ msgstr "Create XML for exercises"
 #: templates/intern/fragebogensprache.html:4
 #: templates/intern/fragebogensprache.html:7
 msgid "Zuordnung Veranstaltungen zu Sprache des Fragebogens"
-msgstr "Mapping of events to the language of the questionnaire"
+msgstr "Mapping of courses to the language of the questionnaire"
 
 #: templates/intern/fragebogensprache.html:13
 msgid "Anzahl"
@@ -1043,7 +1043,7 @@ msgstr ""
 #: templates/intern/import_vv_edit.html:44
 msgid ""
 "Im Folgenden können die zu importierenden Veranstaltungen ausgewählt werden."
-msgstr "The events to be imported can be selected below."
+msgstr "The courses to be imported can be selected below."
 
 #: templates/intern/import_vv_edit.html:49
 msgid ""
@@ -1179,11 +1179,11 @@ msgstr "Send mail to organizer"
 
 #: templates/intern/index.html:14
 msgid "Veranstaltungen zu Fragebogensprache"
-msgstr "Events on questionnaire language"
+msgstr "Courses on questionnaire language"
 
 #: templates/intern/index.html:15
 msgid "Veranstaltungen die lange nicht mehr evaluiert wurden"
-msgstr "Events that have not been evaluated for a long time"
+msgstr "Courses that have not been evaluated for a long time"
 
 #: templates/intern/index.html:18
 msgid "Status der Rückmeldungen durch die Veranstalter"
@@ -1195,7 +1195,7 @@ msgid ""
 "Aktuell haben wir %(ruck_veranst)s Rückmeldungen von %(all_veranst)s "
 "Veranstaltungen."
 msgstr ""
-"We currently have %(ruck_veranst)s feedback from %(all_veranst)s events."
+"We currently have %(ruck_veranst)s feedback from %(all_veranst)s courses."
 
 #: templates/intern/index.html:26
 #, python-format
@@ -1225,7 +1225,7 @@ msgstr "not present"
 
 #: templates/intern/index.html:31
 msgid "Veranstaltungen aus VV importieren"
-msgstr "Import events from VV"
+msgstr "Import courses from VV"
 
 #: templates/intern/index.html:31 templates/intern/index.html:32
 msgid "vor Bestellphase"
@@ -1249,7 +1249,7 @@ msgstr "Create cover letter for organizers"
 
 #: templates/intern/index.html:35
 msgid "Veranstaltungen für EvaSys exportieren"
-msgstr "Exporting events for EvaSys"
+msgstr "Exporting courses for EvaSys"
 
 #: templates/intern/index.html:36 templates/intern/tans/process_tans.html:3
 #: templates/intern/tans/process_tans.html:5
@@ -1281,7 +1281,7 @@ msgstr " (current: visible for %(cur_semester.get_sichtbarkeit_display)s)"
 
 #: templates/intern/lange_ohne_evaluation.html:4
 msgid "Lange nicht evaluierte Veranstaltungen"
-msgstr "Events not evaluated for a long time"
+msgstr "Courses not evaluated for a long time"
 
 #: templates/intern/lange_ohne_evaluation.html:7
 msgid "Lange nicht evaluierte Lehrveranstaltungen"
@@ -1347,7 +1347,7 @@ msgid ""
 "ausgewählten Veranstaltung ein. Auf diese Weise kannst du z.B. berichtete "
 "Probleme einfacher nachvollziehen."
 msgstr ""
-"Click on 'Apply' to log in as the organizer of the selected event. This "
+"Click on 'Apply' to log in as the organizer of the selected course. This "
 "makes it easier for you to track reported problems, for example."
 
 #: templates/intern/rechte_uebernehmen.html:10
@@ -1368,7 +1368,7 @@ msgstr "Send mail to organizer"
 
 #: templates/intern/sendmail.html:16
 msgid "Mail senden an Veranstalter der Veranstaltung mit Bestellstatus:"
-msgstr "Send an e-mail to the organizer of the event with the order status:"
+msgstr "Send an e-mail to the organizer of the course with the order status:"
 
 #: templates/intern/sendmail.html:28
 msgid "Mail auch an die Tutoren der jeweiligen Veranstaltungen schicken?"
@@ -1401,7 +1401,7 @@ msgstr "Available variables"
 
 #: templates/intern/sendmail.html:66
 msgid "Name der Veranstaltung"
-msgstr "Name of the event"
+msgstr "Name of the course"
 
 #: templates/intern/sendmail.html:67
 msgid "Link zum Veranstalterbereich"
@@ -1693,7 +1693,7 @@ msgstr ""
 "            <a href=\"https://www.intern.tu-darmstadt.de/media/dezernat_ii/"
 "satzungsbeilagen/sb_14_III.pdf\">Satzungsbeilage 2014-III</a>\n"
 "            <strong>mandatory</strong> for all courses. If your event is a "
-"service-event\n"
+"service-course\n"
 "             and the evaluation is carried out by another department, please "
 "contact us:\n"
 "            <a href=\"mailto:feedback@fachschaft.informatik.tu-darmstadt."

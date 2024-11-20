@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-19 18:41+0100\n"
+"POT-Creation-Date: 2024-11-20 23:14+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1190,6 +1190,24 @@ msgstr ""
 
 #: templates/intern/lange_ohne_evaluation.html:7
 msgid "Lange nicht evaluierte Lehrveranstaltungen"
+msgstr ""
+
+#: templates/intern/lange_ohne_evaluation.html:8
+msgid ""
+"Veranstaltungen für die seit mehr als zwei Jahren keine Ergebnisse vorliegen "
+"und \n"
+"die diese Semester angeboten werden. Es werden nur Veranstaltungen "
+"angezeigt, für die keine Bestellung von Bögen vorliegt \n"
+"oder die zurückgemeldeten haben, dass sie nicht an der Evaluation teilnehmen "
+"möchten."
+msgstr ""
+
+#: templates/intern/lange_ohne_evaluation.html:11
+msgid ""
+"Diese Liste an das Studiendekanat z.B. Wolfgang Heenes weiterleiten damit "
+"die \n"
+"Dozenten noch einmal darauf hingewiesen werden, dass die Veranstaltung an "
+"der Evaluation teilnehmen sollten."
 msgstr ""
 
 #: templates/intern/lange_ohne_evaluation.html:13
