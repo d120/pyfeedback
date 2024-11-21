@@ -56,7 +56,7 @@ msgstr "Change the status of course"
 #| "Es wird für folgende Veranstaltungen der Status auf keine Evaluation "
 #| "geändert:"
 msgid "Veranstaltungen wurden erfolgreich auf Keine Evaluation gesetzt."
-msgstr "Events were successfully set to No evaluation."
+msgstr "Courses were successfully set to No evaluation."
 
 #: feedback/admin.py:152
 #, fuzzy
@@ -425,11 +425,11 @@ msgstr "The organizer link is only displayed after it has been created"
 #: feedback/models/base.py:713 templates/formtools/wizard/basisdaten.html:9
 #: templates/intern/fragebogensprache.html:11
 msgid "Veranstaltung"
-msgstr "Event"
+msgstr "Course"
 
 #: feedback/models/base.py:714
 msgid "Veranstaltungen"
-msgstr "Events"
+msgstr "Courses"
 
 #: feedback/models/base.py:725
 msgid "e-mail address"
@@ -1690,7 +1690,7 @@ msgid ""
 "<em>%(v.verantwortlich.full_name)s</em> per E-Mail erhalten."
 msgstr ""
 "<em>%(v.verantwortlich.full_name)s</em> has received the detailed results of "
-"this event by email"
+"this course by email"
 
 #: templates/public/veranstaltung.html:37
 msgid "Legende"
@@ -1804,7 +1804,7 @@ msgstr ""
 "published in the\n"
 "            <a href=\"https://www.intern.tu-darmstadt.de/media/dezernat_ii/"
 "satzungsbeilagen/sb_14_III.pdf\">Satzungsbeilage 2014-III</a>\n"
-"            <strong>mandatory</strong> for all courses. If your event is a "
+"            <strong>mandatory</strong> for all courses. If your course is a "
 "service-course\n"
 "             and the evaluation is carried out by another department, please "
 "contact us:\n"
