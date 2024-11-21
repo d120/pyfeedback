@@ -99,17 +99,17 @@
             {% endblock %}
         </table>
         {% block feedback_veranstalter_extra %}{% endblock %}
-        <p style="color: #636363;">*Pflichtfeld</p>
+        <p style="color: #636363;">*{% translate "Pflichtfeld" %}</p>
         {% if wizard.steps.prev %}
-            <button class="btn btn-secondary float-left" name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">Zurück</button>&nbsp;
+            <button class="btn btn-secondary float-left" name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">{% translate "Zurück" %}</button>&nbsp;
         {% endif %}
 
         {% if wizard.steps.next %}
-            <input class="btn btn-primary float-right" type="submit" name="next_step" value="Weiter"/>
+            <input class="btn btn-primary float-right" type="submit" name="next_step" value="{% translate "Weiter" %}"/>
         {% endif %}
 
         {% if wizard.steps.current == wizard.steps.last %}
-            <input class="btn btn-primary float-right" type="submit" name="save" value="Speichern"/>
+            <input class="btn btn-primary float-right" type="submit" name="save" value="{% translate "Speichern" %}"/>
         {% endif %}
     </form>
 

@@ -4,7 +4,7 @@
 import random
 
 from django.db import models
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 from django.db.utils import OperationalError
 from django.urls import reverse
 from django.core.exceptions import ValidationError
@@ -215,7 +215,7 @@ class Person(models.Model):
     class Meta:
         verbose_name = _('Person')
         verbose_name_plural = _('Personen')
-        ordering = _('nachname'), _('vorname')
+        ordering = 'nachname', 'vorname'
         app_label = 'feedback'
 
     @staticmethod

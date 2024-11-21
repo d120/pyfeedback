@@ -6,6 +6,7 @@ from django.forms import widgets
 
 from feedback.models import Person, Veranstaltung, Kommentar, BarcodeScannEvent
 from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 
 from feedback.models import Semester, Mailvorlage
 
@@ -56,7 +57,7 @@ class VeranstaltungBasisdatenForm(BestellWizardForm):
         self.fields["anzahl"] = forms.IntegerField(min_value=1)
 
         self.fields["auswertungstermin"] = forms.DateField(
-            help_text="Zu diesem Termin werden die Ergebnisse versandt. Nach diesem Datum können keine Evaluationsbögen mehr abgegeben werden und die digitale Evaluation geschlossen.",
+            help_text=_("Zu diesem Termin werden die Ergebnisse versandt. Nach diesem Datum können keine Evaluationsbögen mehr abgegeben werden und die digitale Evaluation geschlossen."),
             widget=forms.DateInput(attrs={"type": "date", "value": Semester.current().standard_ergebnisversand}),
         )
 
@@ -118,7 +119,7 @@ class VeranstaltungVeroeffentlichung(BestellWizardForm):
 
 class UploadFileForm(forms.Form):
     """Definiert die Form für den XML Import."""
-    file = forms.FileField(label="Datei")
+    file = forms.FileField(label=_("Datei"))
 
 
 class PersonForm(forms.ModelForm):
@@ -133,7 +134,7 @@ class PersonForm(forms.ModelForm):
         email = self.cleaned_data.get("email")
 
         if not geschlecht or not email:
-            raise forms.ValidationError("Das Feld für die Anrede oder Email ist leer.")
+            raise forms.ValidationError(_("Das Feld für die Anrede oder Email ist leer."))
 
 
 class PersonUpdateForm(forms.ModelForm):
@@ -163,7 +164,7 @@ class KommentarModelForm(forms.ModelForm):
         exclude = ("veranstaltung",)
 
 
-CLOSE_ORDER_CHOICES = (("ja", "Ja"), ("nein", "Nein"))
+CLOSE_ORDER_CHOICES = (("ja", _("Ja")), ("nein", _("Nein")))
 
 
 class CloseOrderForm(forms.Form):
@@ -198,12 +199,12 @@ class CreateBarcodeScannEventForm(forms.ModelForm):
 
 
 class UploadTANCSV(forms.Form):
-    csv = forms.FileField(label='CSV Datei aus Evasys', help_text='Im Evasysseitenmenü unter dem Punkt "Teilnahmeübersicht" generierbar.')
+    csv = forms.FileField(label=_('CSV Datei aus Evasys'), help_text=_('Im Evasysseitenmenü unter dem Punkt "Teilnahmeübersicht" generierbar.'))
 
 class SendOrPDF(forms.Form):
-    choice = forms.ChoiceField(choices=(('mail', 'Versende TANs per E-Mail',),), label='Verarbeitungsart')
+    choice = forms.ChoiceField(choices=(('mail', _('Versende TANs per E-Mail'),),), label=_('Verarbeitungsart'))
 
 class EMailTemplates(forms.Form):
     losungstemplate = forms.ModelChoiceField(Mailvorlage.objects.all(), 
-    required=False, help_text='Hier wird eine E-Mail an alle Veranstalter*innen ohne Anhang versendet. Es werden die selben Ersetzungen wie beim Standardmailsystem unterstützt und zusätzlich das Feld {{ losung }}.')
-    tantemplate = forms.ModelChoiceField(Mailvorlage.objects.all(), required=False, help_text='Hier wird die gewählte Vorlage an alle Veranstalter*innen mit einer CSV Datei versendet. Es werden die selben Ersetzungen wie beim Standardmailsystem unterstützt.')
+    required=False, help_text=_('Hier wird eine E-Mail an alle Veranstalter*innen ohne Anhang versendet. Es werden die selben Ersetzungen wie beim Standardmailsystem unterstützt und zusätzlich das Feld {{ losung }}.'))
+    tantemplate = forms.ModelChoiceField(Mailvorlage.objects.all(), required=False, help_text=_('Hier wird die gewählte Vorlage an alle Veranstalter*innen mit einer CSV Datei versendet. Es werden die selben Ersetzungen wie beim Standardmailsystem unterstützt.'))

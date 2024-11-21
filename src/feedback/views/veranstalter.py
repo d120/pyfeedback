@@ -9,7 +9,7 @@ from django.urls import reverse
 from django.shortcuts import render
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
 from formtools.wizard.views import SessionWizardView
 from feedback.models import Veranstaltung, Tutor, past_semester_orders, Log

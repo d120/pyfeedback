@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-20 22:57+0100\n"
+"POT-Creation-Date: 2024-11-21 23:05+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,123 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: feedback/admin.py:49
+msgid "Fachgebiete erfolgreich zugewiesen."
+msgstr "Subject areas successfully assigned."
+
+#: feedback/admin.py:61
+#, fuzzy
+#| msgid "Fachgebiet Emails"
+msgid "Einem Fachgebiet zuweisen"
+msgstr "Assign to a subject area"
+
+#: feedback/admin.py:78 feedback/admin.py:178
+#, fuzzy
+#| msgid "Basisdaten"
+msgid "Stammdaten"
+msgstr "Basic data"
+
+#: feedback/admin.py:82
+#, fuzzy
+#| msgid "Bestellung für "
+msgid "Bestellung"
+msgstr "Order"
+
+#: feedback/admin.py:121
+msgid "Status erfolgreich geändert."
+msgstr "Status successfully changed."
+
+#: feedback/admin.py:129
+#, fuzzy
+#| msgid "Name der Veranstaltung"
+msgid "Ändere den Status einer Veranstaltung"
+msgstr "Change the status of course"
+
+#: feedback/admin.py:145
+#, fuzzy
+#| msgid ""
+#| "Es wird für folgende Veranstaltungen der Status auf keine Evaluation "
+#| "geändert:"
+msgid "Veranstaltungen wurden erfolgreich auf Keine Evaluation gesetzt."
+msgstr "Events were successfully set to No evaluation."
+
+#: feedback/admin.py:152
+#, fuzzy
+#| msgid "Keine Evaluation final"
+msgid "Keine Evaluation für diese Veranstaltung(en)"
+msgstr "No evaluation for this course(s)"
+
+#: feedback/admin.py:181
+#, fuzzy
+#| msgid "Lehrveranstaltungen"
+msgid "Lehrveranstaltung"
+msgstr "Course"
+
+#: feedback/admin.py:248
+#, python-brace-format
+msgid "Dieses Fachgebiet wurde {count_added} Personen zugeordnet"
+msgstr "This subject area has been assigned to {count_added} persons"
+
+#: feedback/forms.py:60
+msgid ""
+"Zu diesem Termin werden die Ergebnisse versandt. Nach diesem Datum können "
+"keine Evaluationsbögen mehr abgegeben werden und die digitale Evaluation "
+"geschlossen."
+msgstr ""
+"The results will be sent out on this date. After this date, no more "
+"evaluation forms can be submitted and the digital evaluation will be closed."
+
+#: feedback/forms.py:122
+msgid "Datei"
+msgstr "File"
+
+#: feedback/forms.py:137
+msgid "Das Feld für die Anrede oder Email ist leer."
+msgstr "The field for the salutation or email is empty."
+
+#: feedback/forms.py:167 feedback/models/base.py:411
+msgid "Ja"
+msgstr "Yes"
+
+#: feedback/forms.py:167 feedback/models/base.py:412
+msgid "Nein"
+msgstr "No"
+
+#: feedback/forms.py:202
+msgid "CSV Datei aus Evasys"
+msgstr "CSV file from Evasys"
+
+#: feedback/forms.py:202
+msgid "Im Evasysseitenmenü unter dem Punkt \"Teilnahmeübersicht\" generierbar."
+msgstr "Can be generated in the Evasys side menu under \"Participation overview\""
+
+#: feedback/forms.py:205
+msgid "Versende TANs per E-Mail"
+msgstr "Send TANs by e-mail"
+
+#: feedback/forms.py:205
+msgid "Verarbeitungsart"
+msgstr "Processing type"
+
+#: feedback/forms.py:209
+msgid ""
+"Hier wird eine E-Mail an alle Veranstalter*innen ohne Anhang versendet. Es "
+"werden die selben Ersetzungen wie beim Standardmailsystem unterstützt und "
+"zusätzlich das Feld {{ losung }}."
+msgstr ""
+"An e-mail will be sent to all organizers without an attachment. "
+"The same replacements are supported as in the standard mail "
+"system and the {{ losung }} field is also supported."
+
+#: feedback/forms.py:210
+msgid ""
+"Hier wird die gewählte Vorlage an alle Veranstalter*innen mit einer CSV "
+"Datei versendet. Es werden die selben Ersetzungen wie beim "
+"Standardmailsystem unterstützt."
+msgstr ""
+"Here, the selected template is sent to all organizers with a CSV file. "
+"The same replacements are supported as with the standard mail system."
 
 #: feedback/models/base.py:32
 msgid "Administratoren"
@@ -113,14 +230,6 @@ msgstr ""
 msgid "Personen"
 msgstr "people"
 
-#: feedback/models/base.py:218
-msgid "nachname"
-msgstr "last name"
-
-#: feedback/models/base.py:218
-msgid "vorname"
-msgstr "first name"
-
 #: feedback/models/base.py:315
 msgid "Vorlesung"
 msgstr "Lecture"
@@ -188,14 +297,6 @@ msgstr "From recieved"
 #: feedback/models/base.py:407
 msgid "Ergebnisse versandt"
 msgstr "Results sent"
-
-#: feedback/models/base.py:411
-msgid "Ja"
-msgstr "Yes"
-
-#: feedback/models/base.py:412
-msgid "Nein"
-msgstr "No`"
 
 #: feedback/models/base.py:436
 #, python-format
@@ -665,6 +766,30 @@ msgstr "Order process "
 msgid "Bestellung für "
 msgstr "Order for "
 
+#: templates/formtools/wizard/base.html:102
+msgid "Pflichtfeld"
+msgstr "Required field"
+
+#: templates/formtools/wizard/base.html:104
+#: templates/intern/import_vv_edit_users_update.html:26
+#: templates/intern/import_vv_edit_users_update.html:29
+#: templates/intern/tans/process_tans.html:21
+#: templates/intern/tans/process_tans_preview.html:63
+msgid "Zurück"
+msgstr "Back"
+
+#: templates/formtools/wizard/base.html:108
+#: templates/intern/import_vv_edit.html:87
+#: templates/intern/tans/process_tans.html:23
+#: templates/veranstalter/index.html:72
+msgid "Weiter"
+msgstr "Continue"
+
+#: templates/formtools/wizard/base.html:112
+#: templates/veranstalter/index.html:99
+msgid "Speichern"
+msgstr "Save"
+
 #: templates/formtools/wizard/basisdaten.html:5
 msgid "Erfassung der Basisdaten"
 msgstr "Collecting basic data"
@@ -1062,12 +1187,6 @@ msgstr "Mark all"
 msgid "Markierungen aufheben"
 msgstr "Cancel markings"
 
-#: templates/intern/import_vv_edit.html:87
-#: templates/intern/tans/process_tans.html:23
-#: templates/veranstalter/index.html:72
-msgid "Weiter"
-msgstr "Continue"
-
 #: templates/intern/import_vv_edit.html:88 templates/veranstalter/index.html:73
 #: templates/veranstalter/index.html:100
 msgid "Zurücksetzen"
@@ -1143,13 +1262,6 @@ msgstr "Search on Google."
 #: templates/intern/import_vv_edit_users_update.html:18
 msgid "Es existiert eine Person, die ähnlich zu dieser ist."
 msgstr "There is a person who is similar to this one."
-
-#: templates/intern/import_vv_edit_users_update.html:26
-#: templates/intern/import_vv_edit_users_update.html:29
-#: templates/intern/tans/process_tans.html:21
-#: templates/intern/tans/process_tans_preview.html:63
-msgid "Zurück"
-msgstr "Back"
 
 #: templates/intern/import_vv_edit_users_update.html:33
 #: templates/intern/import_vv_edit_users_update.html:36
@@ -1298,8 +1410,8 @@ msgid ""
 msgstr ""
 "Courses for which no results have been available for more than two years and "
 "which \n"
-"are offered this semester. Only courses for which no forms have been "
-"ordered or which have reported back that they do not \n"
+"are offered this semester. Only courses for which no forms have been ordered "
+"or which have reported back that they do not \n"
 "wish to participate in the evaluation are displayed."
 
 #: templates/intern/lange_ohne_evaluation.html:11
@@ -1309,10 +1421,10 @@ msgid ""
 "Dozenten noch einmal darauf hingewiesen werden, dass die Veranstaltung an "
 "der Evaluation teilnehmen sollten."
 msgstr ""
-"Forward this list to the Office of the Dean of Studies, e.g. Wolfgang Heenes, "
-"so \n"
-"that the lecturers are reminded once again that the course should "
-"take part in the evaluation."
+"Forward this list to the Office of the Dean of Studies, e.g. Wolfgang "
+"Heenes, so \n"
+"that the lecturers are reminded once again that the course should take part "
+"in the evaluation."
 
 #: templates/intern/lange_ohne_evaluation.html:13
 msgid "Liste"
@@ -1751,10 +1863,6 @@ msgid ""
 "Kommentartext."
 msgstr "To remove a comment, please delete the existing comment text."
 
-#: templates/veranstalter/index.html:99
-msgid "Speichern"
-msgstr "Save"
-
 #: templates/veranstalter/login_failed.html:4
 #: templates/veranstalter/login_failed.html:7
 msgid "Login fehlgeschlagen"
@@ -1820,3 +1928,9 @@ msgstr ""
 #: templates/veranstalter/not_authenticated.html:19
 msgid "zum Admin-Login"
 msgstr "to the admin-login"
+
+#~ msgid "nachname"
+#~ msgstr "last name"
+
+#~ msgid "vorname"
+#~ msgstr "first name"

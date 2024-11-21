@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-20 23:14+0100\n"
+"POT-Creation-Date: 2024-11-21 23:05+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,100 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: feedback/admin.py:49
+msgid "Fachgebiete erfolgreich zugewiesen."
+msgstr ""
+
+#: feedback/admin.py:61
+msgid "Einem Fachgebiet zuweisen"
+msgstr ""
+
+#: feedback/admin.py:78 feedback/admin.py:178
+msgid "Stammdaten"
+msgstr ""
+
+#: feedback/admin.py:82
+msgid "Bestellung"
+msgstr ""
+
+#: feedback/admin.py:121
+msgid "Status erfolgreich geändert."
+msgstr ""
+
+#: feedback/admin.py:129
+msgid "Ändere den Status einer Veranstaltung"
+msgstr ""
+
+#: feedback/admin.py:145
+msgid "Veranstaltungen wurden erfolgreich auf Keine Evaluation gesetzt."
+msgstr ""
+
+#: feedback/admin.py:152
+msgid "Keine Evaluation für diese Veranstaltung(en)"
+msgstr ""
+
+#: feedback/admin.py:181
+msgid "Lehrveranstaltung"
+msgstr ""
+
+#: feedback/admin.py:248
+#, python-brace-format
+msgid "Dieses Fachgebiet wurde {count_added} Personen zugeordnet"
+msgstr ""
+
+#: feedback/forms.py:60
+msgid ""
+"Zu diesem Termin werden die Ergebnisse versandt. Nach diesem Datum können "
+"keine Evaluationsbögen mehr abgegeben werden und die digitale Evaluation "
+"geschlossen."
+msgstr ""
+
+#: feedback/forms.py:122
+msgid "Datei"
+msgstr ""
+
+#: feedback/forms.py:137
+msgid "Das Feld für die Anrede oder Email ist leer."
+msgstr ""
+
+#: feedback/forms.py:167 feedback/models/base.py:411
+msgid "Ja"
+msgstr ""
+
+#: feedback/forms.py:167 feedback/models/base.py:412
+msgid "Nein"
+msgstr ""
+
+#: feedback/forms.py:202
+msgid "CSV Datei aus Evasys"
+msgstr ""
+
+#: feedback/forms.py:202
+msgid "Im Evasysseitenmenü unter dem Punkt \"Teilnahmeübersicht\" generierbar."
+msgstr ""
+
+#: feedback/forms.py:205
+msgid "Versende TANs per E-Mail"
+msgstr ""
+
+#: feedback/forms.py:205
+msgid "Verarbeitungsart"
+msgstr ""
+
+#: feedback/forms.py:209
+msgid ""
+"Hier wird eine E-Mail an alle Veranstalter*innen ohne Anhang versendet. Es "
+"werden die selben Ersetzungen wie beim Standardmailsystem unterstützt und "
+"zusätzlich das Feld {{ losung }}."
+msgstr ""
+
+#: feedback/forms.py:210
+msgid ""
+"Hier wird die gewählte Vorlage an alle Veranstalter*innen mit einer CSV "
+"Datei versendet. Es werden die selben Ersetzungen wie beim "
+"Standardmailsystem unterstützt."
+msgstr ""
 
 #: feedback/models/base.py:32
 msgid "Administratoren"
@@ -109,14 +203,6 @@ msgstr ""
 msgid "Personen"
 msgstr ""
 
-#: feedback/models/base.py:218
-msgid "nachname"
-msgstr ""
-
-#: feedback/models/base.py:218
-msgid "vorname"
-msgstr ""
-
 #: feedback/models/base.py:315
 msgid "Vorlesung"
 msgstr ""
@@ -183,14 +269,6 @@ msgstr ""
 
 #: feedback/models/base.py:407
 msgid "Ergebnisse versandt"
-msgstr ""
-
-#: feedback/models/base.py:411
-msgid "Ja"
-msgstr ""
-
-#: feedback/models/base.py:412
-msgid "Nein"
 msgstr ""
 
 #: feedback/models/base.py:436
@@ -645,6 +723,30 @@ msgstr ""
 msgid "Bestellung für "
 msgstr ""
 
+#: templates/formtools/wizard/base.html:102
+msgid "Pflichtfeld"
+msgstr ""
+
+#: templates/formtools/wizard/base.html:104
+#: templates/intern/import_vv_edit_users_update.html:26
+#: templates/intern/import_vv_edit_users_update.html:29
+#: templates/intern/tans/process_tans.html:21
+#: templates/intern/tans/process_tans_preview.html:63
+msgid "Zurück"
+msgstr ""
+
+#: templates/formtools/wizard/base.html:108
+#: templates/intern/import_vv_edit.html:87
+#: templates/intern/tans/process_tans.html:23
+#: templates/veranstalter/index.html:72
+msgid "Weiter"
+msgstr ""
+
+#: templates/formtools/wizard/base.html:112
+#: templates/veranstalter/index.html:99
+msgid "Speichern"
+msgstr ""
+
 #: templates/formtools/wizard/basisdaten.html:5
 msgid "Erfassung der Basisdaten"
 msgstr ""
@@ -976,12 +1078,6 @@ msgstr ""
 msgid "Markierungen aufheben"
 msgstr ""
 
-#: templates/intern/import_vv_edit.html:87
-#: templates/intern/tans/process_tans.html:23
-#: templates/veranstalter/index.html:72
-msgid "Weiter"
-msgstr ""
-
 #: templates/intern/import_vv_edit.html:88 templates/veranstalter/index.html:73
 #: templates/veranstalter/index.html:100
 msgid "Zurücksetzen"
@@ -1054,13 +1150,6 @@ msgstr ""
 
 #: templates/intern/import_vv_edit_users_update.html:18
 msgid "Es existiert eine Person, die ähnlich zu dieser ist."
-msgstr ""
-
-#: templates/intern/import_vv_edit_users_update.html:26
-#: templates/intern/import_vv_edit_users_update.html:29
-#: templates/intern/tans/process_tans.html:21
-#: templates/intern/tans/process_tans_preview.html:63
-msgid "Zurück"
 msgstr ""
 
 #: templates/intern/import_vv_edit_users_update.html:33
@@ -1596,10 +1685,6 @@ msgstr ""
 msgid ""
 "Um einen Kommentar wieder zu entfernen, löschen Sie bitte den vorhandenen "
 "Kommentartext."
-msgstr ""
-
-#: templates/veranstalter/index.html:99
-msgid "Speichern"
 msgstr ""
 
 #: templates/veranstalter/login_failed.html:4
