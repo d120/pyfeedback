@@ -288,7 +288,7 @@ def send_mail_to_verantwortliche(ergebnis_empfaenger, context, veranstaltung):
     if ergebnis_empfaenger is not None:
         for e in ergebnis_empfaenger:
             send_mail(
-                _(f'Evaluation der Lehrveranstaltungen - Zusammenfassung der Daten für {veranstaltung.name}'),
+                _('Evaluation der Lehrveranstaltungen - Zusammenfassung der Daten für {name}').format(name=veranstaltung.name),
                 _('Nachfolgend finder Sie Informationen zu Ihrer Bestellung'),
                 settings.DEFAULT_FROM_EMAIL,
                 [e.email],

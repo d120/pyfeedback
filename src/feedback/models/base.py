@@ -36,18 +36,12 @@ class Semester(models.Model):
 
     semester = models.IntegerField(help_text='Aufbau: YYYYS, wobei YYYY = Jahreszahl und S = Semester (0=SS, 5=WS).',
                                    unique=True)
-    fragebogen = models.CharField(max_length=5, choices=FRAGEBOGEN_CHOICES,
+    fragebogen = models.CharField(max_length=5, choices=FRAGEBOGEN_CHOICES, verbose_name=_("Fragebogen"),
                                   help_text=_('Verwendete Version des Fragebogens.'))
-    sichtbarkeit = models.CharField(max_length=3, choices=SICHTBARKEIT_CHOICES,
-                                    help_text='Sichtbarkeit der Evaluationsergebnisse.<br /><em>' +
-                                              SICHTBARKEIT_CHOICES[0][1] +
-                                              ':</em> nur für Mitglieder des Feedback-Teams<br /><em>' +
-                                              SICHTBARKEIT_CHOICES[1][1] +
-                                              ':</em> Veranstalter und Mitglieder des Feedback-Teams<br /><em>' +
-                                              SICHTBARKEIT_CHOICES[2][1] +
-                                              ':</em> alle (beschränkt auf das Uninetz)<br />'
+    sichtbarkeit = models.CharField(max_length=3, choices=SICHTBARKEIT_CHOICES, verbose_name=_("Sichtbarkeit"),
+                                    help_text=_('Sichtbarkeit der Evaluationsergebnisse.<br /><em>{s1}:</em> nur für Mitglieder des Feedback-Teams<br /><em>{s2}:</em> Veranstalter und Mitglieder des Feedback-Teams<br /><em>{s3}:</em> alle (beschränkt auf das Uninetz)<br />').format(s1=SICHTBARKEIT_CHOICES[0][1],s2=SICHTBARKEIT_CHOICES[1][1],s3=SICHTBARKEIT_CHOICES[2][1])
                                     )
-    vollerhebung = models.BooleanField(default=False)
+    vollerhebung = models.BooleanField(default=False, verbose_name=_("Vollerhebung"))
     standard_ergebnisversand = models.DateField(null=True, blank=True, verbose_name=_('Ergebnisversand'), help_text=_('Standarddatum für den Ergebnisversand'))
 
     def _format_generic(self, ss, ws, space, modulus):
@@ -187,14 +181,14 @@ class Person(models.Model):
         'w': 'f',
     }
 
-    geschlecht = models.CharField(max_length=1, choices=GESCHLECHT_CHOICES, blank=True, verbose_name='Anrede')
+    geschlecht = models.CharField(max_length=1, choices=GESCHLECHT_CHOICES, blank=True, verbose_name=_('Anrede'))
     vorname = models.CharField(_('first name'), max_length=30, blank=True)
     nachname = models.CharField(_('last name'), max_length=30, blank=True)
     email = models.EmailField(_('E-Mail'), blank=True)
     anschrift = models.CharField(_('anschrift'), max_length=80, blank=True,
                                  help_text=_('Tragen Sie bitte nur die Anschrift ohne Namen ein, '
                                            'da der Name automatisch hinzugefügt wird.'))
-    fachgebiet = models.ForeignKey(Fachgebiet, null=True, blank=True, on_delete=models.CASCADE)
+    fachgebiet = models.ForeignKey(Fachgebiet, verbose_name=_("Fachgebiet"), null=True, blank=True, on_delete=models.CASCADE)
 
     def full_name(self):
         return '%s %s' % (self.vorname, self.nachname)
@@ -437,7 +431,7 @@ class Veranstaltung(models.Model):
     vlNoEx = _('Wenn Ihre Vorlesung keine Übung hat wählen Sie bitte <i>%s</i> aus')
     for cur in TYP_CHOICES:
         if cur[0] == 'v':
-            vlNoEx = vlNoEx % cur[1]
+            vlNoEx = _('Wenn Ihre Vorlesung keine Übung hat wählen Sie bitte <i>{s}</i> aus').format(s=cur[1])
             break
 
     typ = models.CharField(verbose_name=_("Typ"), max_length=2, choices=TYP_CHOICES, help_text=vlNoEx)
@@ -631,7 +625,7 @@ class Veranstaltung(models.Model):
 
     def auwertungstermin_to_late_msg(self):
         toLateDate = self.semester.last_Auswertungstermin_to_late_human()
-        return _(f'Der Auswertungstermin muss vor dem {toLateDate} liegen.')
+        return _('Der Auswertungstermin muss vor dem {toLateDate} liegen.').format(toLateDate=toLateDate)
 
     def has_uebung(self):
         """Gibt True zurück wenn die Veranstaltung eine Übung hat sonst False"""
@@ -647,7 +641,7 @@ class Veranstaltung(models.Model):
     
     
     def anzahl_too_few_msg(self) :
-        return _(f'Anzahl der Bestellungen muss mindestens {self.MIN_BESTELLUNG_ANZAHL} sein. Bei weniger als {self.MIN_BESTELLUNG_ANZAHL} Teilnehmenden ist eine Evaluation leider nicht möglich')
+        return _('Anzahl der Bestellungen muss mindestens {MIN_BESTELLUNG_ANZAHL} sein. Bei weniger als {MIN_BESTELLUNG_ANZAHL} Teilnehmenden ist eine Evaluation leider nicht möglich').format(MIN_BESTELLUNG_ANZAHL=self.MIN_BESTELLUNG_ANZAHL)
 
 
     def clean(self, *args, **kwargs):
@@ -724,8 +718,8 @@ class Tutor(models.Model):
     vorname = models.CharField(_('first name'), max_length=30)
     nachname = models.CharField(_('last name'), max_length=30)
     email = models.EmailField(_('e-mail address'))
-    anmerkung = models.CharField(max_length=100)
-    veranstaltung = models.ForeignKey(Veranstaltung, on_delete=models.CASCADE)
+    anmerkung = models.CharField(max_length=100, verbose_name=_("Anmerkung"))
+    veranstaltung = models.ForeignKey(Veranstaltung, verbose_name=_("Veranstaltung"), on_delete=models.CASCADE)
 
     def get_barcode_number(self):
         """Gibt die Barcodenummer anhand der Tutorennummer zurück."""

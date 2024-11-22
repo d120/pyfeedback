@@ -54,9 +54,10 @@ class VeranstaltungBasisdatenForm(BestellWizardForm):
         self.fields["ergebnis_empfaenger"].queryset = veranstalter_queryset
 
         # Keine negative Anzahl möglich
-        self.fields["anzahl"] = forms.IntegerField(min_value=1)
+        self.fields["anzahl"] = forms.IntegerField(label=_("Anzahl"), min_value=1)
 
         self.fields["auswertungstermin"] = forms.DateField(
+            label=_("Auswertungstermin"),
             help_text=_("Zu diesem Termin werden die Ergebnisse versandt. Nach diesem Datum können keine Evaluationsbögen mehr abgegeben werden und die digitale Evaluation geschlossen."),
             widget=forms.DateInput(attrs={"type": "date", "value": Semester.current().standard_ergebnisversand}),
         )

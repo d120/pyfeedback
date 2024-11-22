@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-22 21:41+0100\n"
+"POT-Creation-Date: 2024-11-22 23:09+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,20 +23,14 @@ msgid "Fachgebiete erfolgreich zugewiesen."
 msgstr "Subject areas successfully assigned."
 
 #: feedback/admin.py:61
-#, fuzzy
-#| msgid "Fachgebiet Emails"
 msgid "Einem Fachgebiet zuweisen"
 msgstr "Assign to a subject area"
 
 #: feedback/admin.py:78 feedback/admin.py:178
-#, fuzzy
-#| msgid "Basisdaten"
 msgid "Stammdaten"
 msgstr "Basic data"
 
 #: feedback/admin.py:82
-#, fuzzy
-#| msgid "Bestellung für "
 msgid "Bestellung"
 msgstr "Order"
 
@@ -45,28 +39,18 @@ msgid "Status erfolgreich geändert."
 msgstr "Status successfully changed."
 
 #: feedback/admin.py:129
-#, fuzzy
-#| msgid "Name der Veranstaltung"
 msgid "Ändere den Status einer Veranstaltung"
 msgstr "Change the status of course"
 
 #: feedback/admin.py:145
-#, fuzzy
-#| msgid ""
-#| "Es wird für folgende Veranstaltungen der Status auf keine Evaluation "
-#| "geändert:"
 msgid "Veranstaltungen wurden erfolgreich auf Keine Evaluation gesetzt."
 msgstr "Courses were successfully set to No evaluation."
 
 #: feedback/admin.py:152
-#, fuzzy
-#| msgid "Keine Evaluation final"
 msgid "Keine Evaluation für diese Veranstaltung(en)"
 msgstr "No evaluation for this course(s)"
 
 #: feedback/admin.py:181
-#, fuzzy
-#| msgid "Lehrveranstaltungen"
 msgid "Lehrveranstaltung"
 msgstr "Course"
 
@@ -75,7 +59,17 @@ msgstr "Course"
 msgid "Dieses Fachgebiet wurde {count_added} Personen zugeordnet"
 msgstr "This subject area has been assigned to {count_added} persons"
 
-#: feedback/forms.py:60
+#: feedback/forms.py:57 feedback/models/base.py:448
+#: templates/intern/fragebogensprache.html:13
+msgid "Anzahl"
+msgstr "Number"
+
+#: feedback/forms.py:60 feedback/models/base.py:458
+#: feedback/views/veranstalter.py:66
+msgid "Auswertungstermin"
+msgstr "Evaluation date"
+
+#: feedback/forms.py:61
 msgid ""
 "Zu diesem Termin werden die Ergebnisse versandt. Nach diesem Datum können "
 "keine Evaluationsbögen mehr abgegeben werden und die digitale Evaluation "
@@ -84,40 +78,40 @@ msgstr ""
 "The results will be sent out on this date. After this date, no more "
 "evaluation forms can be submitted and the digital evaluation will be closed."
 
-#: feedback/forms.py:122
+#: feedback/forms.py:123
 msgid "Datei"
 msgstr "File"
 
-#: feedback/forms.py:137
+#: feedback/forms.py:138
 msgid "Das Feld für die Anrede oder Email ist leer."
 msgstr "The field for the salutation or email is empty."
 
-#: feedback/forms.py:167 feedback/models/base.py:412
+#: feedback/forms.py:168 feedback/models/base.py:406
 msgid "Ja"
 msgstr "Yes"
 
-#: feedback/forms.py:167 feedback/models/base.py:413
+#: feedback/forms.py:168 feedback/models/base.py:407
 msgid "Nein"
 msgstr "No"
 
-#: feedback/forms.py:202
+#: feedback/forms.py:203
 msgid "CSV Datei aus Evasys"
 msgstr "CSV file from Evasys"
 
-#: feedback/forms.py:202
+#: feedback/forms.py:203
 msgid "Im Evasysseitenmenü unter dem Punkt \"Teilnahmeübersicht\" generierbar."
 msgstr ""
 "Can be generated in the Evasys side menu under \"Participation overview\""
 
-#: feedback/forms.py:205
+#: feedback/forms.py:206
 msgid "Versende TANs per E-Mail"
 msgstr "Send TANs by e-mail"
 
-#: feedback/forms.py:205
+#: feedback/forms.py:206
 msgid "Verarbeitungsart"
 msgstr "Processing type"
 
-#: feedback/forms.py:209
+#: feedback/forms.py:210
 msgid ""
 "Hier wird eine E-Mail an alle Veranstalter*innen ohne Anhang versendet. Es "
 "werden die selben Ersetzungen wie beim Standardmailsystem unterstützt und "
@@ -127,7 +121,7 @@ msgstr ""
 "replacements are supported as in the standard mail system and the "
 "{{ losung }} field is also supported."
 
-#: feedback/forms.py:210
+#: feedback/forms.py:211
 msgid ""
 "Hier wird die gewählte Vorlage an alle Veranstalter*innen mit einer CSV "
 "Datei versendet. Es werden die selben Ersetzungen wie beim "
@@ -140,7 +134,7 @@ msgstr ""
 msgid "Administratoren"
 msgstr "Administrators"
 
-#: feedback/models/base.py:33 feedback/models/base.py:450
+#: feedback/models/base.py:33 feedback/models/base.py:444
 msgid "Veranstalter"
 msgstr "Organizer"
 
@@ -148,77 +142,104 @@ msgstr "Organizer"
 msgid "alle (öffentlich)"
 msgstr "all (public)"
 
+#: feedback/models/base.py:39
+msgid "Fragebogen"
+msgstr "Questionnaire"
+
 #: feedback/models/base.py:40
 msgid "Verwendete Version des Fragebogens."
 msgstr "Version of the form used."
 
-#: feedback/models/base.py:51
+#: feedback/models/base.py:41
+msgid "Sichtbarkeit"
+msgstr "Visibility"
+
+#: feedback/models/base.py:42
+#, python-brace-format
+msgid ""
+"Sichtbarkeit der Evaluationsergebnisse.<br /><em>{s1}:</em> nur für "
+"Mitglieder des Feedback-Teams<br /><em>{s2}:</em> Veranstalter und "
+"Mitglieder des Feedback-Teams<br /><em>{s3}:</em> alle (beschränkt auf das "
+"Uninetz)<br />"
+msgstr ""
+"Visibility of the evaluation results.<br />\n"
+"<em>{s1}:</em> only for Members of the feedback team<br />\n"
+"<em>{s2}:</em> organizer and members of the feedback team<br />\n"
+"<em>{s3}:</em> all (limited to the Uninetz)<br />"
+
+#: feedback/models/base.py:44
+msgid "Vollerhebung"
+msgstr "Full survey"
+
+#: feedback/models/base.py:45
 msgid "Ergebnisversand"
 msgstr "Sending results"
 
-#: feedback/models/base.py:51
+#: feedback/models/base.py:45
 msgid "Standarddatum für den Ergebnisversand"
 msgstr "Standard date for sending results"
 
-#: feedback/models/base.py:141 feedback/models/base.py:150
-#: feedback/models/base.py:167
+#: feedback/models/base.py:135 feedback/models/base.py:144
+#: feedback/models/base.py:161 feedback/models/base.py:191
 msgid "Fachgebiet"
 msgstr "Subject area"
 
-#: feedback/models/base.py:142
+#: feedback/models/base.py:136
 msgid "Fachgebiete"
 msgstr "Subject areas"
 
-#: feedback/models/base.py:151
+#: feedback/models/base.py:145
 msgid "Hier soll der Domainname einer Email-Adresse eines Fachgebiets stehen."
 msgstr ""
 "The domain name of an email address for a subject area should be entered "
 "here."
 
-#: feedback/models/base.py:160
+#: feedback/models/base.py:154
 msgid "Fachgebiet Emailendung"
 msgstr "Email ending for subject area"
 
-#: feedback/models/base.py:161
+#: feedback/models/base.py:155
 msgid "Fachgebiet Emailendungen"
 msgstr "Email endings for subject area"
 
-#: feedback/models/base.py:171
+#: feedback/models/base.py:165
 msgid "Fachgebiet Email"
 msgstr "Subject area email"
 
-#: feedback/models/base.py:172
+#: feedback/models/base.py:166
 msgid "Fachgebiet Emails"
 msgstr "Subject area emails"
 
-#: feedback/models/base.py:180
+#: feedback/models/base.py:174
 msgid "Herr"
 msgstr "Mr."
 
-#: feedback/models/base.py:181
+#: feedback/models/base.py:175
 msgid "Frau"
 msgstr "Ms."
 
-#: feedback/models/base.py:191 feedback/models/base.py:309
-#: feedback/models/base.py:724
+#: feedback/models/base.py:184
+msgid "Anrede"
+msgstr "Salutation"
+
+#: feedback/models/base.py:185 feedback/models/base.py:303
+#: feedback/models/base.py:718
 msgid "first name"
 msgstr ""
 
-#: feedback/models/base.py:192 feedback/models/base.py:725
+#: feedback/models/base.py:186 feedback/models/base.py:719
 msgid "last name"
 msgstr ""
 
-#: feedback/models/base.py:193
+#: feedback/models/base.py:187
 msgid "E-Mail"
 msgstr ""
 
-#: feedback/models/base.py:194
-#, fuzzy
-#| msgid "anschrift"
+#: feedback/models/base.py:188
 msgid "anschrift"
 msgstr "address"
 
-#: feedback/models/base.py:195
+#: feedback/models/base.py:189
 msgid ""
 "Tragen Sie bitte nur die Anschrift ohne Namen ein, da der Name automatisch "
 "hinzugefügt wird."
@@ -226,109 +247,114 @@ msgstr ""
 "Please only enter the address without the name, as the name will be added "
 "automatically."
 
-#: feedback/models/base.py:217
+#: feedback/models/base.py:211
 msgid "Person"
 msgstr ""
 
-#: feedback/models/base.py:218
+#: feedback/models/base.py:212
 msgid "Personen"
 msgstr "people"
 
-#: feedback/models/base.py:316
+#: feedback/models/base.py:310
 msgid "Vorlesung"
 msgstr "Lecture"
 
-#: feedback/models/base.py:317
+#: feedback/models/base.py:311
 msgid "Vorlesung mit Übung"
 msgstr "Lecture with exercise"
 
-#: feedback/models/base.py:318
+#: feedback/models/base.py:312
 msgid "Praktikum"
 msgstr "Internship"
 
-#: feedback/models/base.py:319
+#: feedback/models/base.py:313
 msgid "Seminar"
 msgstr "Seminar"
 
-#: feedback/models/base.py:323
+#: feedback/models/base.py:317
 msgid "Deutsch"
 msgstr "German"
 
-#: feedback/models/base.py:324
+#: feedback/models/base.py:318
 msgid "Englisch"
 msgstr "English"
 
-#: feedback/models/base.py:398
+#: feedback/models/base.py:392
 msgid "Angelegt"
 msgstr "Created"
 
-#: feedback/models/base.py:399
+#: feedback/models/base.py:393
 msgid "Bestellung geöffnet"
 msgstr "Order started"
 
-#: feedback/models/base.py:400
+#: feedback/models/base.py:394
 msgid "Keine Evaluation"
 msgstr "No evaluation"
 
-#: feedback/models/base.py:401
+#: feedback/models/base.py:395
 msgid "Keine Evaluation final"
 msgstr "No evaluation final"
 
-#: feedback/models/base.py:402
+#: feedback/models/base.py:396
 msgid "Bestellung liegt vor"
 msgstr "Order ready"
 
-#: feedback/models/base.py:403
+#: feedback/models/base.py:397
 msgid "Bestellung wird verarbeitet"
 msgstr "Order being processed"
 
-#: feedback/models/base.py:404
+#: feedback/models/base.py:398
 msgid "Gedruckt"
 msgstr "Printed"
 
-#: feedback/models/base.py:405
+#: feedback/models/base.py:399
 msgid "Versandt"
 msgstr "Sent"
 
-#: feedback/models/base.py:406
+#: feedback/models/base.py:400
 msgid "Bögen eingegangen"
 msgstr "Forms received"
 
-#: feedback/models/base.py:407
+#: feedback/models/base.py:401
 msgid "Bögen gescannt"
 msgstr "From recieved"
 
-#: feedback/models/base.py:408
+#: feedback/models/base.py:402
 msgid "Ergebnisse versandt"
 msgstr "Results sent"
 
-#: feedback/models/base.py:437
-#, fuzzy, python-format
+#: feedback/models/base.py:431
+#, python-format
 msgid "Wenn Ihre Vorlesung keine Übung hat wählen Sie bitte <i>%s</i> aus"
-msgstr "If your lecture does not have exercise, please choose <i>{cur[1]}</i>"
+msgstr "If your lecture does not have exercise, please choose <i>%s</i>"
 
-#: feedback/models/base.py:443 feedback/views/veranstalter.py:53
+#: feedback/models/base.py:434
+#, python-brace-format
+msgid "Wenn Ihre Vorlesung keine Übung hat wählen Sie bitte <i>{s}</i> aus"
+msgstr "If your lecture does not have exercise, please choose <i>{s}</i>"
+
+#: feedback/models/base.py:437 feedback/views/veranstalter.py:53
 #: templates/intern/fragebogensprache.html:14
 msgid "Typ"
 msgstr "Type"
 
-#: feedback/models/base.py:444 templates/admin/fachgebiet.html:13
+#: feedback/models/base.py:438 templates/admin/fachgebiet.html:13
 msgid "Name"
 msgstr ""
 
-#: feedback/models/base.py:446
+#: feedback/models/base.py:440
 msgid "LV-Nummer"
 msgstr "LV-Number"
 
-#: feedback/models/base.py:448
+#: feedback/models/base.py:442
 msgid "Grundstudium"
 msgstr "Foundation course"
 
-#: feedback/models/base.py:449 feedback/views/veranstalter.py:51
+#: feedback/models/base.py:443 feedback/views/veranstalter.py:51
 msgid "Evaluieren"
 msgstr "Evaluate"
 
-#: feedback/models/base.py:451
+#: feedback/models/base.py:445
 msgid ""
 "Alle Personen, die mit der Veranstaltung befasst sind und z.B. Fragebögen "
 "bestellen können sollen."
@@ -336,20 +362,16 @@ msgstr ""
 "All people involved in the course who should , for example, be able to order "
 "questionnaires"
 
-#: feedback/models/base.py:453 feedback/views/veranstalter.py:55
+#: feedback/models/base.py:447 feedback/views/veranstalter.py:55
 #: templates/intern/fragebogensprache.html:12
 msgid "Sprache"
 msgstr "Language"
 
-#: feedback/models/base.py:454 templates/intern/fragebogensprache.html:13
-msgid "Anzahl"
-msgstr "Number"
-
-#: feedback/models/base.py:455 feedback/views/veranstalter.py:56
+#: feedback/models/base.py:449 feedback/views/veranstalter.py:56
 msgid "Verantwortlich"
 msgstr "Responsible"
 
-#: feedback/models/base.py:456
+#: feedback/models/base.py:450
 msgid ""
 "Diese Person wird von uns bei Rückfragen kontaktiert und bekommt die "
 "Fragenbögen zugeschickt"
@@ -357,59 +379,53 @@ msgstr ""
 "This person will be contacted by us in case of further questions and will be "
 "sent the form"
 
-#: feedback/models/base.py:459
+#: feedback/models/base.py:453
 msgid "Empfänger der Ergebnisse"
 msgstr "Recipients of the results"
 
-#: feedback/models/base.py:460
+#: feedback/models/base.py:454
 msgid "An diese Personen werden die Ergebnisse per E-Mail geschickt."
 msgstr "The results are sent to these people by e-mail."
 
-#: feedback/models/base.py:461
-#, fuzzy
-#| msgid "Primärdozent"
+#: feedback/models/base.py:455
 msgid "Primaerdozent"
 msgstr "Primary lecturer"
 
-#: feedback/models/base.py:462
+#: feedback/models/base.py:456
 msgid "Die Person, die im Anschreiben erwähnt wird"
 msgstr "The person mentioned in the cover letter"
 
-#: feedback/models/base.py:464 feedback/views/veranstalter.py:66
-msgid "Auswertungstermin"
-msgstr "Evaluation date"
-
-#: feedback/models/base.py:465
+#: feedback/models/base.py:459
 msgid ""
 "An welchem Tag sollen Fragebögen für diese Veranstaltung ausgewerter werden? "
 msgstr "On which day should questionnaires for this course be evaluated? "
 
-#: feedback/models/base.py:466
+#: feedback/models/base.py:460
 msgid "Fragebögen die danach eintreffen werden nicht mehr ausgewertet."
 msgstr "Questionnaires received after this date will no longer be evaluated."
 
-#: feedback/models/base.py:469
+#: feedback/models/base.py:463
 msgid "1. Freie Frage"
 msgstr "1. Free question"
 
-#: feedback/models/base.py:470
+#: feedback/models/base.py:464
 msgid "2. Freie Frage"
 msgstr "2. Free question"
 
-#: feedback/models/base.py:471
+#: feedback/models/base.py:465
 msgid "Kleingruppen"
 msgstr "Subgroup"
 
-#: feedback/models/base.py:472 feedback/views/veranstalter.py:96
+#: feedback/models/base.py:466 feedback/views/veranstalter.py:96
 msgid "Veroeffentlichen"
 msgstr "Publish"
 
-#: feedback/models/base.py:473 feedback/views/veranstalter.py:94
+#: feedback/models/base.py:467 feedback/views/veranstalter.py:94
 #: templates/formtools/wizard/digitale_evaluation.html:5
 msgid "Digitale Evaluation"
 msgstr "Digital evaluation"
 
-#: feedback/models/base.py:474
+#: feedback/models/base.py:468
 msgid ""
 "Die Evaluation soll digital durchgeführt werden. Die Studierenden füllen die "
 "Evaluation online aus."
@@ -417,11 +433,11 @@ msgstr ""
 "The evaluation is to be carried out digitally. Students complete the "
 "evaluation online."
 
-#: feedback/models/base.py:479
+#: feedback/models/base.py:473
 msgid "Digitaler Evaluationstyp"
 msgstr "Digital evaluation type"
 
-#: feedback/models/base.py:480
+#: feedback/models/base.py:474
 msgid ""
 "Es werden generell zwei Typen von Verteilungsmethoden angeboten: Bei TANs "
 "erhalten Sie eine Excel Datei mit einer Liste aller TANs, welche Sie "
@@ -434,71 +450,78 @@ msgstr ""
 "using moodle, for example (instructions will be provided). With the losung "
 "method, you will receive a simple, reusable link to the online questionnaire."
 
-#: feedback/models/base.py:564
+#: feedback/models/base.py:558
 msgid "Tutorgruppe muss kleiner 100 sein"
 msgstr "Tutor group must be less than 100"
 
-#: feedback/models/base.py:567
+#: feedback/models/base.py:561
 msgid "Tutorgruppe muss eine ganze Zahl sein"
 msgstr "Tutor group must be an integer"
 
-#: feedback/models/base.py:590
+#: feedback/models/base.py:584
 msgid "Der Barcode ist nicht valide"
 msgstr "The barcode is not valid"
 
-#: feedback/models/base.py:634
-#, fuzzy, python-brace-format
+#: feedback/models/base.py:628
+#, python-brace-format
 msgid "Der Auswertungstermin muss vor dem {toLateDate} liegen."
 msgstr "The evaluation date must be before {toLateDate}."
 
-#: feedback/models/base.py:650
+#: feedback/models/base.py:644
 #, python-brace-format
 msgid ""
-"Anzahl der Bestellungen muss mindestens {self.MIN_BESTELLUNG_ANZAHL} sein. "
-"Bei weniger als {self.MIN_BESTELLUNG_ANZAHL} Teilnehmenden ist eine "
-"Evaluation leider nicht möglich"
+"Anzahl der Bestellungen muss mindestens {MIN_BESTELLUNG_ANZAHL} sein. Bei "
+"weniger als {MIN_BESTELLUNG_ANZAHL} Teilnehmenden ist eine Evaluation leider "
+"nicht möglich"
 msgstr ""
-"The number of orders must be at least {self.MIN_BESTELLUNG_ANZAHL}. If there "
-"are fewer than {self.MIN_BESTELLUNG_ANZAHL} participants, an evaluation is "
+"The number of orders must be at least {MIN_BESTELLUNG_ANZAHL}. If there are "
+"fewer than {MIN_BESTELLUNG_ANZAHL} participants, an evaluation is "
 "unfortunately not possible"
 
-#: feedback/models/base.py:676
+#: feedback/models/base.py:670
 msgid "Der Veranstalter Link wird erst nach dem Anlegen angezeigt"
 msgstr "The organizer link is only displayed after it has been created"
 
-#: feedback/models/base.py:714 templates/formtools/wizard/basisdaten.html:9
+#: feedback/models/base.py:708 feedback/models/base.py:722
+#: templates/formtools/wizard/basisdaten.html:9
 #: templates/intern/fragebogensprache.html:11
 msgid "Veranstaltung"
 msgstr "Course"
 
-#: feedback/models/base.py:715
+#: feedback/models/base.py:709
 msgid "Veranstaltungen"
 msgstr "Courses"
 
-#: feedback/models/base.py:726
+#: feedback/models/base.py:720
 msgid "e-mail address"
 msgstr ""
 
-#: feedback/models/base.py:738
+#: feedback/models/base.py:721
+#: templates/formtools/wizard/email_zusammenfassung.html:74
+#: templates/veranstalter/dashboard.html:109
+msgid "Anmerkung"
+msgstr "Note"
+
+#: feedback/models/base.py:732
 msgid "Tutor"
 msgstr ""
 
-#: feedback/models/base.py:739
+#: feedback/models/base.py:733
 #: templates/formtools/wizard/email_zusammenfassung.html:66
 #: templates/formtools/wizard/zusammenfassung.html:61
 #: templates/veranstalter/dashboard.html:101
 msgid "Tutoren"
 msgstr "Tutors"
 
-#: feedback/models/base.py:753
+#: feedback/models/base.py:747
 msgid "Mailvorlage"
 msgstr "Mail template"
 
-#: feedback/models/base.py:779
+#: feedback/models/base.py:773
 msgid "Erlaubter Zustand"
 msgstr "Permitted state"
 
-#: feedback/models/base.py:780
+#: feedback/models/base.py:774
 msgid "Erlaubte Zustände"
 msgstr "Permitted states"
 
@@ -553,9 +576,8 @@ msgstr "Your session has expired. Please log in again using the link."
 #: feedback/views/veranstalter.py:291
 #, python-brace-format
 msgid ""
-"Evaluation der Lehrveranstaltungen - Zusammenfassung der Daten für "
-"{veranstaltung.name}"
-msgstr "Evaluation of courses - summary of data for {veranstaltung.name}"
+"Evaluation der Lehrveranstaltungen - Zusammenfassung der Daten für {name}"
+msgstr "Evaluation of courses - summary of data for {name}"
 
 #: feedback/views/veranstalter.py:292
 msgid "Nachfolgend finder Sie Informationen zu Ihrer Bestellung"
@@ -861,11 +883,6 @@ msgstr "Last name"
 #: templates/veranstalter/dashboard.html:108
 msgid "Email"
 msgstr ""
-
-#: templates/formtools/wizard/email_zusammenfassung.html:74
-#: templates/veranstalter/dashboard.html:109
-msgid "Anmerkung"
-msgstr "Note"
 
 #: templates/formtools/wizard/evaluation.html:5
 msgid "Möchten Sie ihre Veranstaltung evaluieren?"
@@ -1335,8 +1352,8 @@ msgid "Mail an Veranstalter verschicken"
 msgstr "Send mail to organizer"
 
 #: templates/intern/index.html:14
-msgid "Veranstaltungen zu Fragebogensprache"
-msgstr "Courses on questionnaire language"
+msgid "Zuordnung Veranstaltungen zu Fragebogensprache"
+msgstr "Assignment of events to questionnaire language"
 
 #: templates/intern/index.html:15
 msgid "Veranstaltungen die lange nicht mehr evaluiert wurden"
@@ -1973,6 +1990,21 @@ msgstr ""
 #: templates/veranstalter/not_authenticated.html:19
 msgid "zum Admin-Login"
 msgstr "to the admin-login"
+
+#~ msgid "auswertungstermin"
+#~ msgstr "Evaluation date"
+
+#~ msgid "Sichtbarkeit der Evaluationsergebnisse.<br /><em>"
+#~ msgstr "Visibility of the evaluation results.<br /><em>"
+
+#~ msgid ":</em> nur für Mitglieder des Feedback-Teams<br /><em>"
+#~ msgstr ":</em> nur für Mitglieder des Feedback-Teams<br /><em>"
+
+#~ msgid ":</em> Veranstalter und Mitglieder des Feedback-Teams<br /><em>"
+#~ msgstr ":</em> Veranstalter und Mitglieder des Feedback-Teams<br /><em>"
+
+#~ msgid ":</em> alle (beschränkt auf das Uninetz)<br />"
+#~ msgstr "</em> all (limited to the Uninetz)<br />"
 
 #~ msgid "nachname"
 #~ msgstr "last name"

@@ -245,7 +245,7 @@ class FachgebietAdmin(admin.ModelAdmin):
                         person.save()
                         count_added += 1
             if count_added > 0:
-                self.message_user(request, _(f"Dieses Fachgebiet wurde {count_added} Personen zugeordnet"))
+                self.message_user(request, _("Dieses Fachgebiet wurde {count_added} Personen zugeordnet").format(count_added=count_added))
 
 
 class FragebogenAdmin(admin.ModelAdmin):
