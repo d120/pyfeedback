@@ -170,7 +170,7 @@ CLOSE_ORDER_CHOICES = (("ja", _("Ja")), ("nein", _("Nein")))
 
 class CloseOrderForm(forms.Form):
     """Definiert die Form für das Beenden der Bestellphase"""
-    auswahl = forms.ChoiceField(choices=CLOSE_ORDER_CHOICES)
+    auswahl = forms.ChoiceField(choices=CLOSE_ORDER_CHOICES, label=_("Auswahl"))
 
 
 class CreateBarcodeScannEventForm(forms.ModelForm):

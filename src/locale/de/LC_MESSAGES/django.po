@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-22 23:39+0100\n"
+"POT-Creation-Date: 2024-11-22 23:50+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -90,6 +90,10 @@ msgstr ""
 
 #: feedback/forms.py:168 feedback/models/base.py:407
 msgid "Nein"
+msgstr ""
+
+#: feedback/forms.py:173
+msgid "Auswahl"
 msgstr ""
 
 #: feedback/forms.py:203
