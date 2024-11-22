@@ -147,6 +147,7 @@ class EmailEndung(models.Model):
     """Repräsentiert alle Domains die für E-Mails von Veranstaltern verwendet werden"""
     fachgebiet = models.ForeignKey(Fachgebiet,
                                    blank=True,
+                                   verbose_name=_("Fachgebiet"),
                                    help_text=_("Hier soll der Domainname einer Email-Adresse eines Fachgebiets stehen."),
                                    on_delete=models.CASCADE)
     domain = models.CharField(max_length=150,
@@ -163,7 +164,7 @@ class EmailEndung(models.Model):
 
 class FachgebietEmail(models.Model):
     """Repräsentiert die E-Mail Domänen für die jeweiligen Fachgebiete des FBs 20."""
-    fachgebiet = models.ForeignKey(Fachgebiet, related_name='fachgebiet', on_delete=models.CASCADE)
+    fachgebiet = models.ForeignKey(Fachgebiet, related_name='fachgebiet', verbose_name=_("Fachgebiet"), on_delete=models.CASCADE)
     email_sekretaerin = models.EmailField(blank=True)
 
     class Meta:
@@ -439,25 +440,25 @@ class Veranstaltung(models.Model):
             vlNoEx = vlNoEx % cur[1]
             break
 
-    typ = models.CharField(max_length=2, choices=TYP_CHOICES, help_text=vlNoEx)
-    name = models.CharField(max_length=150)
+    typ = models.CharField(verbose_name=_("Typ"), max_length=2, choices=TYP_CHOICES, help_text=vlNoEx)
+    name = models.CharField(verbose_name=_("Name"),max_length=150)
     semester = models.ForeignKey(Semester, on_delete=models.CASCADE)
     lv_nr = models.CharField(max_length=15, blank=True, verbose_name=_('LV-Nummer'))
     status = models.IntegerField(choices=STATUS_CHOICES, default=STATUS_ANGELEGT)
-    grundstudium = models.BooleanField()
-    evaluieren = models.BooleanField(choices=BOOL_CHOICES, default=True)
-    veranstalter = models.ManyToManyField(Person, blank=True,
+    grundstudium = models.BooleanField(verbose_name=_("Grundstudium"))
+    evaluieren = models.BooleanField(verbose_name=_("Evaluieren"), choices=BOOL_CHOICES, default=True)
+    veranstalter = models.ManyToManyField(Person, verbose_name=_("Veranstalter"), blank=True,
                                           help_text=_('Alle Personen, die mit der Veranstaltung befasst sind und z.B. Fragebögen bestellen können sollen.'))
 
-    sprache = models.CharField(max_length=2, choices=SPRACHE_CHOICES, null=True, blank=True)
-    anzahl = models.IntegerField(null=True, blank=True)
-    verantwortlich = models.ForeignKey(Person, related_name='verantwortlich', null=True, blank=True, on_delete=models.CASCADE,
+    sprache = models.CharField(max_length=2, choices=SPRACHE_CHOICES, null=True, blank=True, verbose_name=_("Sprache"))
+    anzahl = models.IntegerField(verbose_name=_("Anzahl"), null=True, blank=True)
+    verantwortlich = models.ForeignKey(Person, related_name='verantwortlich', verbose_name=_("Verantwortlich"), null=True, blank=True, on_delete=models.CASCADE,
                                        help_text=_('Diese Person wird von uns bei Rückfragen kontaktiert und bekommt die Fragenbögen zugeschickt'))
     ergebnis_empfaenger = models.ManyToManyField(Person, blank=True,
                                                  related_name='ergebnis_empfaenger',
                                                  verbose_name=_('Empfänger der Ergebnisse'),
                                                  help_text=_('An diese Personen werden die Ergebnisse per E-Mail geschickt.'))
-    primaerdozent = models.ForeignKey(Person, related_name='primaerdozent', null=True, blank=True, on_delete=models.CASCADE,
+    primaerdozent = models.ForeignKey(Person, related_name='primaerdozent', verbose_name=_("Primaerdozent"), null=True, blank=True, on_delete=models.CASCADE,
                                       help_text=_('Die Person, die im Anschreiben erwähnt wird'))
     auswertungstermin = models.DateField(null=True, blank=True,
                                          verbose_name=_('Auswertungstermin'),
@@ -468,7 +469,7 @@ class Veranstaltung(models.Model):
     freiefrage1 = models.TextField(verbose_name=_('1. Freie Frage'), blank=True)
     freiefrage2 = models.TextField(verbose_name=_('2. Freie Frage'), blank=True)
     kleingruppen = models.TextField(verbose_name=_('Kleingruppen'), blank=True)
-    veroeffentlichen = models.BooleanField(default=True, choices=BOOL_CHOICES)
+    veroeffentlichen = models.BooleanField(verbose_name=_('Veroeffentlichen'), default=True, choices=BOOL_CHOICES)
     digitale_eval = models.BooleanField(default=True, verbose_name=_('Digitale Evaluation'),
                                         help_text=_('Die Evaluation soll digital durchgeführt werden. Die Studierenden füllen die Evaluation online aus.'), blank=True)
     digitale_eval_type = models.CharField(
