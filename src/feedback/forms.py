@@ -93,7 +93,10 @@ class VeranstaltungBasisdatenForm(BestellWizardForm):
         
         # "digitale_eval" and "verantwortlich" removed from user interface
         cleaned_data["digitale_eval"] = True
-        cleaned_data["verantwortlich"] = cleaned_data["ergebnis_empfaenger"][0]
+
+        if "ergebnis_empfaenger" in cleaned_data :
+            # because it does not validate yet, django doesn't notice that "ergebnis_empfaenger" does not exist and this causes error
+            cleaned_data["verantwortlich"] = cleaned_data["ergebnis_empfaenger"][0]
 
 
 class VeranstaltungDigitaleEvaluationForm(BestellWizardForm):
