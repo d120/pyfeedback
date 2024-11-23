@@ -428,11 +428,7 @@ class Veranstaltung(models.Model):
     MIN_BESTELLUNG_ANZAHL = 5
 
     # Helfertext für Dozenten für den Veranstaltungstyp.
-    vlNoEx = _('Wenn Ihre Vorlesung keine Übung hat wählen Sie bitte <i>%s</i> aus')
-    for cur in TYP_CHOICES:
-        if cur[0] == 'v':
-            vlNoEx = _('Wenn Ihre Vorlesung keine Übung hat wählen Sie bitte <i>{s}</i> aus').format(s=cur[1])
-            break
+    vlNoEx = _('Wenn Ihre Vorlesung keine Übung hat wählen Sie bitte <i>Vorlesung</i> aus')
 
     typ = models.CharField(verbose_name=_("Typ"), max_length=2, choices=TYP_CHOICES, help_text=vlNoEx)
     name = models.CharField(verbose_name=_("Name"),max_length=150)
