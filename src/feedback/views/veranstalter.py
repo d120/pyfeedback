@@ -269,8 +269,8 @@ class VeranstalterWizard(SessionWizardView):
         context = self.get_context_data('zusammenfassung')
         send_mail_to_verantwortliche(ergebnis_empfaenger, context, instance)
 
-        ## there is no need for HttpRequest() other than for translating with translate_url templatetag which needs request
-        return render(request=HttpRequest(), template_name='formtools/wizard/bestellung_done.html', )
+        # previously render_to_response was used which didn't require request, but later it was deprecated, leaving this only viable option
+        return render(request=None, template_name='formtools/wizard/bestellung_done.html', )
 
 
 
