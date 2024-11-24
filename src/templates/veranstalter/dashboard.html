@@ -1,4 +1,5 @@
 {% extends "d120_base.html" %}
+{% load static %}
 {% load i18n %}
 
 {% block title %}
@@ -136,6 +137,9 @@
 {% endblock %}
 
 {% block javascript_block %}
+<script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
+<script src="{% static '@popperjs/core/dist/umd/popper.min.js' %}"></script>
+<script src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
 <script>
     {% if bestellung %}
     $(document).ready(function() {
