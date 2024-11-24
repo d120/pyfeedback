@@ -25,7 +25,7 @@
                 </a>
             </li>
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <a class="nav-link header-navbar-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     {% get_current_language as CURRENT_LANG %}
                     {% get_language_info for CURRENT_LANG as lang %}
                     <i class="fa fa-globe fa-lg"></i> <span class="d-none d-sm-inline">{{ lang.name_local }}</span>
@@ -37,7 +37,7 @@
                         <li><a class="dropdown-item" href="{% translate_url language.code %}" style="color: black;">{{ language.name_local }}</a></li>
                     {% endfor %}
                 </ul>
-            </li>                 
+            </li>
         </ul>
     </div>
 </nav>
