@@ -1389,10 +1389,7 @@ msgstr ""
 
 #: templates/intern/index.html:29
 msgid "neues Semester anlegen"
-msgstr ""
-"These are not all the necessary steps; see <a href=\"https://www.d120.de/"
-"bookstack/books/feedback/page/feedback-ablauf%%C3%%BCbersicht\" "
-"target=\"_blank\">Procedure in the bookstack</a>."
+msgstr "create new semester"
 
 #: templates/intern/index.html:29
 msgid "aktuell"
