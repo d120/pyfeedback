@@ -1,4 +1,4 @@
-{% extends "bestellung_base.html" %}{% load static %}{% load filter_range %}
+{% extends "bestellung_base.html" %}{% load static %}{% load filter_range %}{% load i18n %}
 
 {% block extra_header %}
 <link rel="stylesheet" type="text/css" href="{% static 'jquery/jquery-ui.min.css' %}" />
@@ -31,22 +31,22 @@
 </style>
 {% endblock %}
 
-{% block title %}Vorlesungsverzeichnis importieren{% endblock %}
+{% block title %}{% translate "Vorlesungsverzeichnis importieren" %}{% endblock %}
 
 {% block content %}
-<h1>Vorlesungsverzeichnis importieren</h1>
+<h1>{% translate "Vorlesungsverzeichnis importieren" %}</h1>
 
 <noscript>
-    <p>Bitte JavaScript aktivieren, um bequemer durch das Verzeichnis navigieren und Veranstaltungen auswählen zu
-        können!</p>
+    <p>{% translate "Bitte JavaScript aktivieren, um bequemer durch das Verzeichnis navigieren und Veranstaltungen auswählen zu
+        können!" %}</p>
 </noscript>
 
-<p>Im Folgenden können die zu importierenden Veranstaltungen ausgewählt werden.</p>
+<p>{% translate "Im Folgenden können die zu importierenden Veranstaltungen ausgewählt werden." %}</p>
 
 <form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
     <p>
         {% include 'includes/semesterauswahl.html' %}<br />
-        Falls das Semester, für das Veranstaltungen importiert werden sollen, nicht in der Auswahlliste steht, muss es zunächst über die Datenbank-Administration hinzugefügt werden.
+        {% translate "Falls das Semester, für das Veranstaltungen importiert werden sollen, nicht in der Auswahlliste steht, muss es zunächst über die Datenbank-Administration hinzugefügt werden." %}
     </p>
 
     {% for category in vv %}
@@ -67,7 +67,7 @@
 
         <h3><a href="#">{{ category.name }}</a></h3>
         <div>
-            <div class="mark_unmark"><a href="#" class="markall">Alle markieren</a> | <a href="#" class="unmarkall">Markierungen aufheben</a></div>
+            <div class="mark_unmark"><a href="#" class="markall">{% translate "Alle markieren" %}</a> | <a href="#" class="unmarkall">{% translate "Markierungen aufheben" %}</a></div>
             <ul>
                 {% for iv in category.ivs.all %}
                     <li style="list-style-type: none" class="{{ iv.is_attended_course | yesno:"attended_course,unattended_course" }} ">
@@ -84,8 +84,8 @@
         {% endfor %}
 
         <div>
-            <input type="submit" name="submit" value="Weiter" />&nbsp;
-            <input type="reset" name="reset" value="Zurücksetzen" />
+            <input type="submit" name="submit" value="{% translate "Weiter" %}" />&nbsp;
+            <input type="reset" name="reset" value="{% translate "Zurücksetzen" %}" />
         </div>
 </form>
 

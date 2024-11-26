@@ -1,13 +1,14 @@
 {% extends "formtools/wizard/base.html" %}
+{% load i18n %}
 
 {% block feedback_veranstalter_pre_form %}
-    <h3>Erfassung der Basisdaten</h3>
+    <h3>{% translate "Erfassung der Basisdaten" %}</h3>
     {% if past_semester_data %}
         <table style="border: 1px solid #636363;">
             <tr>
-                <th>Veranstaltung</th>
-                <th>Bestellte Bögen</th>
-                <th>Rückläufe</th>
+                <th>{% translate "Veranstaltung" %}</th>
+                <th>{% translate "Bestellte Bögen" %}</th>
+                <th>{% translate "Rückläufe" %}</th>
             </tr>
             {% for data in past_semester_data %}
                 <tr>

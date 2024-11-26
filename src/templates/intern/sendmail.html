@@ -1,19 +1,19 @@
-{% extends "bestellung_base.html" %}{% load static %}
+{% extends "bestellung_base.html" %}{% load static %}{% load i18n %}
 
-{% block title %}Mail versenden{% endblock %}
+{% block title %}{% translate "Mail versenden" %}{% endblock %}
 
 {% block extra_header %}
 <link rel="stylesheet" type="text/css" href="{% static 'jquery/chosen/chosen.min.css' %}" />
 {% endblock %}
 
 {% block content %}
-<h1>Mail an Veranstalter versenden</h1>
+<h1>{% translate "Mail an Veranstalter versenden" %}</h1>
 
 <form method="post" action="">{% csrf_token %}
     <p>{% include 'includes/semesterauswahl.html' %}</p>
     <p>
         <label for="selectRecipient" >
-            Mail senden an Veranstalter der Veranstaltung mit Bestellstatus:
+            {% translate "Mail senden an Veranstalter der Veranstaltung mit Bestellstatus:" %}
             <select multiple class="chosen-select" style="width: 175px;" data-placeholder="Wähle einen Status..." id="selectRecipient" name="recipient">
 		    {{recipient_selected}}
                 {% for choice in veranstaltung_status_choices %}
@@ -25,7 +25,7 @@
 
     <p>
         <label for="selectTutoren">
-            Mail auch an die Tutoren der jeweiligen Veranstaltungen schicken?
+            {% translate "Mail auch an die Tutoren der jeweiligen Veranstaltungen schicken?" %}
             <select id="selectTutoren" name="tutoren">
                 {% for choice in tutoren_choices %}
                     <option value="{{ choice.0 }}">{{ choice.1 }}</option>
@@ -35,36 +35,36 @@
     </p>
 
     <p>
-        <label for="vorlage">Vorlage:</label><br />
+        <label for="vorlage">{% translate "Vorlage:" %}</label><br />
         <select size="1" name="vorlage" id="vorlage">
             <option value="" selected="selected">---</option>
             {% for v in vorlagen %}
                 <option value="{{ v.id }}">{{ v }}</option>
             {% endfor %}
         </select>
-        <input type="submit" name="uebernehmen" value="Vorlage übernehmen" />
+        <input type="submit" name="uebernehmen" value="{% translate "Vorlage übernehmen" %}" />
     </p>
 
     <p>
-        <label for="subject">Betreff:</label><br />
+        <label for="subject">{% translate "Betreff:" %}</label><br />
         <input type="text" size="70" maxlength="60" name="subject" id="subject" value="{{ subject }}" />
     </p>
 
     <p>
-        <label for="body">Mailtext:</label><br />
+        <label for="body">{% translate "Mailtext:" %}</label><br />
         <textarea class="fullwidth" cols="70" rows="20" name="body" id="body">{{ body }}</textarea>
     </p>
 
     <p>
-        <input type="submit" name="vorschau" value="Vorschau" />
+        <input type="submit" name="vorschau" value="{% translate "Vorschau" %}" />
     </p>
 </form>
 
-<h2>Verfügbare Variablen</h2>
+<h2>{% translate "Verfügbare Variablen" %}</h2>
 <p>
 <ul>
-    <li>&#123;&#123; veranstaltung &#125;&#125; - Name der Veranstaltung</li>
-    <li>&#123;&#123; link_veranstalter &#125;&#125; - Link zum Veranstalterbereich</li>
+    <li>&#123;&#123; veranstaltung &#125;&#125; - {% translate "Name der Veranstaltung" %}</li>
+    <li>&#123;&#123; link_veranstalter &#125;&#125; - {% translate "Link zum Veranstalterbereich" %}</li>
 </ul>
 </p>
 {% endblock %}

@@ -1,4 +1,5 @@
 {% extends "formtools/wizard/base.html" %}{% load static %}
+{% load i18n %}
 
 {% block child_extra_header %}
     <link rel="stylesheet" type="text/css" href="{% static 'tutoren.css' %}" />
@@ -37,7 +38,7 @@
 {% endblock %}
 
 {% block feedback_veranstalter_form %}
-    <h2>Zusammenfassung der Fragebogenbestellung</h2>
+    <h2>{% translate "Zusammenfassung der Fragebogenbestellung" %}</h2>
 
     <table class="summary_table">
         {% for form_data in all_form_data %}
@@ -57,7 +58,7 @@
 
     </table>
     {% if tutoren_csv %}
-        <p class="tutoren_title">Tutoren</p>
+        <p class="tutoren_title">{% translate "Tutoren" %}</p>
         <div id="table_tutoren_csvview">{{ tutoren_csv }}</div>
     {% endif %}
 {% endblock %}

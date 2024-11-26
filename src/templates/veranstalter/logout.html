@@ -1,8 +1,9 @@
 {% extends "bestellung_base.html" %}
+{% load i18n %}
 {% block title %}
-    Logout
+    {% translate "Logout" %}
 {% endblock %}
 
 {% block content %}
-    <h1>Sie sind ausgeloggt</h1>
+    <h1>{% translate "Sie sind ausgeloggt" %}</h1>
 {% endblock %}

@@ -1,10 +1,11 @@
 {% extends "ergebnisse_base.html" %}
+{% load i18n %}
 
-{% block title %}Ergebnisse{% endblock %}
+{% block title %}{% translate "Ergebnisse" %}{% endblock %}
 
 {% block content %}
-<h1>Keine Ergebnisse verfügbar</h1>
+<h1>{% translate "Keine Ergebnisse verfügbar" %}</h1>
 
-<p>Im Moment liegen (noch?) keine Ergebnisse vor.</p>
+<p>{% translate "Im Moment liegen (noch?) keine Ergebnisse vor." %}</p>
 
 {% endblock %}

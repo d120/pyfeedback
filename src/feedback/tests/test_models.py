@@ -17,6 +17,7 @@ from feedback.models import Fragebogen2012, Ergebnis2012
 from feedback.tests.tools import get_veranstaltung
 from django.urls import reverse
 from django.contrib.auth.models import User
+from django.utils.translation import get_language
 
 
 class InitTest(TestCase):
@@ -501,7 +502,7 @@ class VeranstaltungTest(TransactionTestCase):
         self.assertEqual(len(url_parts), 2)
         ver_id = self.v[0].id
         self.assertEqual(url_parts[0],
-                         'https://www.fachschaft.informatik.tu-darmstadt.de/veranstalter/login/?vid=%d' % ver_id)
+                         f'https://www.fachschaft.informatik.tu-darmstadt.de/{get_language()}/veranstalter/login/?vid={ver_id}')
         access_token = self.v[0].access_token
         self.assertEqual('token=' + access_token, url_parts[1])
         # FIXME: Is the below assert necessary? Since Python3 strings are all Unicode

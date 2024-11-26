@@ -1,42 +1,43 @@
 {% extends "bestellung_base.html" %}
+{% load i18n %}
 {% load static %}
 {% block title %}
-    Interner Bereich
+    {% translate "Interner Bereich" %}
 {% endblock %}
 
 {% block content %}
-    <h1>Interner Bereich</h1>
+    <h1>{% translate "Interner Bereich" %}</h1>
     <ul>
-        <li><a href="{% url 'admin:index' %}" target="_blank">Verwaltung der Daten</a></li>
-        <li><a href="{% url 'rechte-uebernehmen' %}">zu Veranstalter-Account wechseln</a></li>
-        <li><a href="{% url 'sendmail' %}">Mail an Veranstalter verschicken</a></li>
-        <li><a href="{% url 'fragebogensprache' %}">Zuordnung Veranstaltungen zu Fragebogensprache</a></li>
-        <li><a href="{% url 'lange_ohne_evaluation' %}">Veranstaltungen die lange nicht mehr evaluiert wurden</a></li>
-        <li><a href="{% url 'logout' %}">Ausloggen</a></li>
+        <li><a href="{% url 'admin:index' %}" target="_blank">{% translate "Verwaltung der Daten" %}</a></li>
+        <li><a href="{% url 'rechte-uebernehmen' %}">{% translate "zu Veranstalter-Account wechseln" %}</a></li>
+        <li><a href="{% url 'sendmail' %}">{% translate "Mail an Veranstalter verschicken" %}</a></li>
+        <li><a href="{% url 'fragebogensprache' %}">{% translate "Zuordnung Veranstaltungen zu Fragebogensprache" %}</a></li>
+        <li><a href="{% url 'lange_ohne_evaluation' %}">{% translate "Veranstaltungen die lange nicht mehr evaluiert wurden" %}</a></li>
+        <li><a href="{% url 'logout' %}">{% translate "Ausloggen" %}</a></li>
     </ul>
-    <h3>Status der Rückmeldungen durch die Veranstalter</h3>
-    <p>Aktuell haben wir {{ruck_veranst}} Rückmeldungen von {{all_veranst}} Veranstaltungen.</p>
+    <h3>{% translate "Status der Rückmeldungen durch die Veranstalter" %}</h3>
+    <p>{% blocktranslate %}Aktuell haben wir {{ruck_veranst}} Rückmeldungen von {{all_veranst}} Veranstaltungen.{% endblocktranslate %}</p>
     <div style="width:{{width_progressbar}}px; background-color:#eeeeec;">
         <div style="width:{{width_progressbar_success}}px; background-color:#babdb6;">
             <p style="text-align:center;">{{relativ_result|floatformat:-2}}%</p>
         </div>
     </div>
-    <h3>Ablauf</h3>
-    <p>Dies sind nicht alle nötigen Schritte; siehe <a href="https://www.d120.de/bookstack/books/feedback/page/feedback-ablauf%C3%BCbersicht" target="_blank">Ablauf im bookstack</a>.</p>
+    <h3>{% translate "Ablauf" %}</h3>
+    <p>{% blocktranslate %}Dies sind nicht alle nötigen Schritte; siehe <a href="https://www.d120.de/bookstack/books/feedback/page/feedback-ablauf%C3%BCbersicht" target="_blank">Ablauf im bookstack</a>.{% endblocktranslate %}</p>
 
     <ol>
-        <li><a href="{% url 'admin:feedback_semester_add' %}" target="_blank">neues Semester anlegen</a> (aktuell:
-        {% if cur_semester %}{{cur_semester.short}}{% else %}nicht Vorhanden{% endif %})</li>
-        <li><a href="{% url 'import_vv' %}">Veranstaltungen aus VV importieren</a> (vor Bestellphase)</li>
-        <li><a href="{% url 'import_vv_edit_users' %}">Fehlende Personendaten nachtragen</a> (vor Bestellphase)</li>
-        <li><a href="{% url 'status_final' %}">Bestellphase abschließen</a> (nach Bestellphase)</li>
-        <li><a href="{% url 'generate_letters' %}">Anschreiben für Veranstalter erzeugen</a> (nach Bestellphase)</li>
-        <li><a href="{% url 'export_veranstaltungen' %}">Veranstaltungen für EvaSys exportieren</a> (vor dem Scannen)</li>
-        <li><a href="{% url 'process-tans' %}">TANs verarbeiten</a>  (nach der Bestellphase)</li>
-        <li><a href="{% url 'import_ergebnisse' %}">Ergebnisse aus EvaSys importieren</a> (nach dem Scannen)</li>
-        <li><a href="{% url 'sync_ergebnisse' %}">Rankings berechnen</a> (nach dem Ergebnis-Import)</li>
+        <li><a href="{% url 'admin:feedback_semester_add' %}" target="_blank">{% translate "neues Semester anlegen" %}</a> ({% translate "aktuell" %}:
+        {% if cur_semester %}{{cur_semester.short}}{% else %}{% translate "nicht Vorhanden" %}{% endif %})</li>
+        <li><a href="{% url 'import_vv' %}">{% translate "Veranstaltungen aus VV importieren" %}</a> ({% translate "vor Bestellphase" %})</li>
+        <li><a href="{% url 'import_vv_edit_users' %}">{% translate "Fehlende Personendaten nachtragen" %}</a> ({% translate "vor Bestellphase" %})</li>
+        <li><a href="{% url 'status_final' %}">{% translate "Bestellphase abschließen" %}</a> ({% translate "nach Bestellphase" %})</li>
+        <li><a href="{% url 'generate_letters' %}">{% translate "Anschreiben für Veranstalter erzeugen" %}</a> ({% translate "nach Bestellphase" %})</li>
+        <li><a href="{% url 'export_veranstaltungen' %}">{% translate "Veranstaltungen für EvaSys exportieren" %}</a></li>
+        <li><a href="{% url 'process-tans' %}">{% translate "TANs verarbeiten" %}</a>  ({% translate "nach der Bestellphase" %})</li>
+        <li><a href="{% url 'import_ergebnisse' %}">{% translate "Ergebnisse aus EvaSys importieren" %}</a></li>
+        <li><a href="{% url 'sync_ergebnisse' %}">{% translate "Rankings berechnen" %}</a> ({% translate "nach dem Ergebnis-Import" %})</li>
         {% if cur_semester %}
-        <li><a href="{% url 'admin:feedback_semester_change' cur_semester.id %}" target="_blank">Ergebnisse veröffentlichen</a> (aktuell: sichtbar für {{cur_semester.get_sichtbarkeit_display}})</li>
+        <li><a href="{% url 'admin:feedback_semester_change' cur_semester.id %}" target="_blank">{% translate "Ergebnisse veröffentlichen" %}</a>{% blocktranslate %} (aktuell: sichtbar für {{cur_semester.get_sichtbarkeit_display}}){% endblocktranslate %}</li>
         {% endif %}
     </ol>
 {% endblock %}

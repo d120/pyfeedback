@@ -1,19 +1,21 @@
 {% extends "bestellung_base.html" %}
+{% load i18n %}
 {% block title %}
-    Veranstalterbereich
+    {% translate "Veranstalterbereich" %}
 {% endblock %}
 {% block content %}
 
-    <h1>Herzlich willkommen!</h1>
+    <h1>{% translate "Herzlich willkommen!" %}</h1>
 
     <p>
-        eingeloggt für <strong>{{veranstaltung.name}} ({{veranstaltung.semester.short}})</strong>
+        {% blocktranslate %}eingeloggt für <strong>{{veranstaltung.name}} ({{veranstaltung.semester.short}})</strong>{% endblocktranslate %}
 	    <br />
-	    <a href="{% url 'logout' %}">ausloggen</a>
+	    <a href="{% url 'logout' %}">{% translate "ausloggen" %}</a>
     </p>
 
     {% if order_form and veranstaltung.semester.vollerhebung %}
-        <h2>Information zur Vollerhebung</h2>
+        <h2>{% translate "Information zur Vollerhebung" %}</h2>
+        {% blocktranslate %}
         In diesem Semester findet eine Vollerhebung aller Lehrveranstaltungen am Fachbereich Informatik statt.
         Die Teilnahme an der Evaluation der Lehre ist somit laut §4 Abs. 9 Richtlinien für den Bereich der
         Lehrveranstaltungsevaluation der Technischen Universität Darmstadt veröffentlicht in der
@@ -21,33 +23,34 @@
         <strong>verpflichtend</strong> für alle Lehrveranstaltungen. Falls Ihre Veranstaltung eine Service-Veranstaltung
         ist und die Evaluation durch einen anderen Fachbereich durchgeführt wird setzen Sie sich bitte mit uns in Verbindung:
         <a href="mailto:feedback@fachschaft.informatik.tu-darmstadt.de">feedback@fachschaft.informatik.tu-darmstadt.de</a>
+        {% endblocktranslate %}
     {% endif %}
 
-    <h2>Fragebogenbestellung Schritt 1 von 5</h2>
-    <h3>Ablauf</h3>
+    <h2>{% translate "Fragebogenbestellung Schritt 1 von 5" %}</h2>
+    <h3>{% translate "Ablauf" %}</h3>
 
     <ol>
-	    <li><strong>Basisdaten</strong></li>
-	    <li>Datenüberprüfung</li>
-	    <li>Freie Fragen</li>
-	    <li>Details zur Übung</li>
-	    <li>Zusammenfassung</li>
+	    <li><strong>{% translate "Basisdaten" %}</strong></li>
+	    <li>{% translate "Datenüberprüfung" %}</li>
+	    <li>{% translate "Freie Fragen" %}</li>
+	    <li>{% translate "Details zur Übung" %}</li>
+	    <li>{% translate "Zusammenfassung" %}</li>
     </ol>
 
-    <h3>Basisdaten</h3>
+    <h3>{% translate "Basisdaten" %}</h3>
     {% if not order_form %}
         <p>
-            Im Moment können keine Fragebögen bestellt werden. Sie erhalten eine E-Mail, sobald dies wieder möglich ist.
+            {% translate "Im Moment können keine Fragebögen bestellt werden. Sie erhalten eine E-Mail, sobald dies wieder möglich ist." %}
         </p>
     {% else %}
-        <p>Bitte geben Sie an, wie viele Fragebögen Sie in welcher Sprache benötigen.
+        <p>{% translate "Bitte geben Sie an, wie viele Fragebögen Sie in welcher Sprache benötigen." %}
             {% if paper_dict|length > 0 %}
-                Zur Orientierung finden Sie hier die Anzahl bestellter und ausgefüllter Bögen vergangener Semester:</p>
+                {% translate "Zur Orientierung finden Sie hier die Anzahl bestellter und ausgefüllter Bögen vergangener Semester:" %}</p>
                 <table>
                     <tr>
-                        <th>Semester</th>
-                        <th>Bestellte Bögen</th>
-                        <th>Ausgefüllte Bögen</th>
+                        <th>{% translate "Semester" %}</th>
+                        <th>{% translate "Bestellte Bögen" %}</th>
+                        <th>{% translate "Ausgefüllte Bögen" %}</th>
                     </tr>
                     {% for cur_sem in paper_dict %}
                         <tr>
@@ -66,34 +69,35 @@
             {% csrf_token %}
             <table>{{order_form}}</table>
 	        <div>
-		        <input type="submit" name="submit" value="Weiter" />&nbsp;
-		        <input type="reset" name="reset" value="Zurücksetzen" />
+		        <input type="submit" name="submit" value="{% translate "Weiter" %}" />&nbsp;
+		        <input type="reset" name="reset" value="{% translate "Zurücksetzen" %}" />
 	        </div>
         </form>
     {% endif %}
 
 
-    <h2>Kommentar</h2>
+    <h2>{% translate "Kommentar" %}</h2>
     {% if not comment_form %}
         <p>
-            Für diese Veranstaltung können im Moment noch keine Kommentare verfasst werden.
-            Sie erhalten eine E-Mail, sobald dies möglich ist.
+            {% translate "Für diese Veranstaltung können im Moment noch keine Kommentare verfasst werden.
+            Sie erhalten eine E-Mail, sobald dies möglich ist." %}
         </p>
     {% else %}
-        <p>
+        <p>{% blocktranslate with ergebnis_url={% url 'public-veranstaltung' veranstaltung.id %} %}
             Sie können hier einen Kommentar zum
-            <a href="{% url 'public-veranstaltung' veranstaltung.id %}">Evaluationsergebnis</a> verfassen.
+            <a href="{{ergebnis_url}}">Evaluationsergebnis</a> verfassen.
             Dieser Kommentar wird auf der zugehörigen Ergebnis-Seite hochschul-öffentlich angezeigt werden.
+            {% endblocktranslate %}
         </p>
 
-        <p>Um einen Kommentar wieder zu entfernen, löschen Sie bitte den vorhandenen Kommentartext.</p>
+        <p>{% translate "Um einen Kommentar wieder zu entfernen, löschen Sie bitte den vorhandenen Kommentartext." %}</p>
 
         <form action="" method="post" enctype="multipart/form-data" accept-charset="utf-8">
             {% csrf_token %}
 	        <table>{{comment_form}}</table>
 	        <div>
-		        <input type="submit" name="submit" value="Speichern" />&nbsp;
-		        <input type="reset" name="reset" value="Zurücksetzen" />
+		        <input type="submit" name="submit" value="{% translate "Speichern" %}" />&nbsp;
+		        <input type="reset" name="reset" value="{% translate "Zurücksetzen" %}" />
 	        </div>
         </form>
     {% endif %}

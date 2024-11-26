@@ -1,4 +1,5 @@
-<label for="semester">Semester:</label>
+{% load i18n %}
+<label for="semester">{% translate "Semester:" %}</label>
 <select size="1" id="semester" name="semester">
 {% for sem in semester %}
   <option value="{{ sem.semester }}"{% if sem == semester_selected %} selected="selected"{% endif %}>

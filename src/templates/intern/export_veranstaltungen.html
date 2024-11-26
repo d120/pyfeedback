@@ -1,16 +1,17 @@
 {% extends "bestellung_base.html" %}
+{% load i18n %}
 
-{% block title %}Veranstaltungen exportieren{% endblock %}
+{% block title %}{% translate "Veranstaltungen exportieren" %}{% endblock %}
 
 {% block content %}
-<h1>Veranstaltungen exportieren</h1>
+<h1>{% translate "Veranstaltungen exportieren" %}</h1>
 
-<p>Hier kann eine alle evaluierten Veranstaltungen des gewählten Semesters enthaltende XML-Datei erzeugt werden, die in EvaSys importiert werden kann.</p>
+<p>{% translate "Hier kann eine alle evaluierten Veranstaltungen des gewählten Semesters enthaltende XML-Datei erzeugt werden, die in EvaSys importiert werden kann." %}</p>
 <p>
 <form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
     {% include 'includes/semesterauswahl.html' %}
-    <input type="submit" name="xml_veranstaltung" value="XML für Veranstaltungen erzeugen" />
-    <input type="submit" name="xml_ubung" value="XML für Übungen erzeugen" />
+    <input type="submit" name="xml_veranstaltung" value="{% translate "XML für Veranstaltungen erzeugen" %}" />
+    <input type="submit" name="xml_ubung" value="{% translate "XML für Übungen erzeugen" %}" />
 </form>
 </p>
 {% endblock %}

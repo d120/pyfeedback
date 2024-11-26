@@ -12,17 +12,18 @@ from feedback.tests import redirect_urls
 import json
 from freezegun import freeze_time
 import datetime
+from django.utils.translation import get_language
 
 
 @override_settings(ROOT_URLCONF=redirect_urls)
 class RedirectTest(TestCase):
 
     def test_redirect(self):
-        response = self.client.get('/redirect/')
+        response = self.client.get(f'/{get_language()}/redirect/')
         self.assertEqual(response.status_code, 301)
         self.assertEqual(response['Location'], 'http://www.d120.de/')
 
-        response = self.client.get('/redirect/fachschaft/')
+        response = self.client.get(f'/{get_language()}/redirect/fachschaft/')
         self.assertEqual(response.status_code, 301)
         self.assertEqual(response['Location'], 'http://www.d120.de/fachschaft/')
 
@@ -44,25 +45,25 @@ class PublicIndexTest(TestCase):
 
     def test_unauth(self):
         # von außerhalb des Uninetzes
-        response = self.client.get('/ergebnisse/')
+        response = self.client.get(f'/{get_language()}/ergebnisse/')
         self.assertEqual(response.templates[0].name, 'public/unauth.html')
 
     def test_normal(self):
         # aus dem Uninetz ohne sichtbare Veranstaltungen (s1 nur für Admins)
         extra = {'REMOTE_ADDR': '130.83.0.1'}
-        response = self.client.get('/ergebnisse/', **extra)
+        response = self.client.get(f'/{get_language()}/ergebnisse/', **extra)
         self.assertEqual(response.templates[0].name, 'public/keine_ergebnisse.html')
 
         # aus dem Uninetz ohne sichtbare Veranstaltungen (s1 nur für Admins und Veranstalter)
         self.s1.sichtbarkeit = 'VER'
         self.s1.save()
-        response = self.client.get('/ergebnisse/', **extra)
+        response = self.client.get(f'/{get_language()}/ergebnisse/', **extra)
         self.assertEqual(response.templates[0].name, 'public/keine_ergebnisse.html')
 
         # aus dem Uninetz, s1 ist sichtbar
         self.s1.sichtbarkeit = 'ALL'
         self.s1.save()
-        response = self.client.get('/ergebnisse/', **extra)
+        response = self.client.get(f'/{get_language()}/ergebnisse/', **extra)
         self.assertEqual(response.templates[0].name, 'public/index.html')
         self.assertEqual(response.context['semester'], self.s1)
         self.assertSequenceEqual(response.context['semester_list'], [self.s1])
@@ -70,7 +71,7 @@ class PublicIndexTest(TestCase):
         # aus dem Uninetz, s1 und s2 sind sichtbar
         self.s0.sichtbarkeit = 'ALL'
         self.s0.save()
-        response = self.client.get('/ergebnisse/', **extra)
+        response = self.client.get(f'/{get_language()}/ergebnisse/', **extra)
         self.assertEqual(response.templates[0].name, 'public/index.html')
         ctx = response.context
         self.assertEqual(ctx['semester'], self.s1)
@@ -84,7 +85,7 @@ class PublicIndexTest(TestCase):
         self.assertEqual(ctx['include_hidden'], False)
 
         # GET-Parameter: nur semester (Semesterauswahl)
-        response = self.client.get('/ergebnisse/', {'semester': self.s0.semester}, **extra)
+        response = self.client.get(f'/{get_language()}/ergebnisse/', {'semester': self.s0.semester}, **extra)
         self.assertEqual(response.templates[0].name, 'public/index.html')
         ctx = response.context
         self.assertEqual(ctx['semester'], self.s0)
@@ -95,7 +96,7 @@ class PublicIndexTest(TestCase):
         self.assertSequenceEqual(ctx['parts'], Ergebnis2009.parts)
 
         # GET-Parameter: nur order
-        response = self.client.get('/ergebnisse/', {'order': 'v_gesamt'}, **extra)
+        response = self.client.get(f'/{get_language()}/ergebnisse/', {'order': 'v_gesamt'}, **extra)
         self.assertEqual(response.templates[0].name, 'public/index.html')
         ctx = response.context
         self.assertEqual(ctx['semester'], self.s1)
@@ -106,7 +107,7 @@ class PublicIndexTest(TestCase):
         self.assertSequenceEqual(ctx['parts'], Ergebnis2009.parts)
 
         # GET-Parameter: nur order (ungültig)
-        response = self.client.get('/ergebnisse/', {'order': 'gibts_nicht'}, **extra)
+        response = self.client.get(f'/{get_language()}/ergebnisse/', {'order': 'gibts_nicht'}, **extra)
         self.assertEqual(response.templates[0].name, 'public/index.html')
         ctx = response.context
         self.assertEqual(ctx['order'], 'alpha')
@@ -118,7 +119,7 @@ class PublicIndexTest(TestCase):
         self.v0.save()
         self.v1.semester = self.s0
         self.v1.save()
-        response = self.client.get('/ergebnisse/', {'semester': self.s0.semester, 'order': 'v_didaktik'},
+        response = self.client.get(f'/{get_language()}/ergebnisse/', {'semester': self.s0.semester, 'order': 'v_didaktik'},
                                    **extra)
         self.assertEqual(response.templates[0].name, 'public/index.html')
         ctx = response.context
@@ -131,7 +132,7 @@ class PublicIndexTest(TestCase):
 
     def test_superuser(self):
         self.client.login(username='testuser', password='secretpw')
-        response = self.client.get('/intern/ergebnisse/')
+        response = self.client.get(f'/{get_language()}/intern/ergebnisse/')
         self.assertEqual(response.templates[0].name, 'public/index.html')
         ctx = response.context
         self.assertEqual(ctx['semester'], self.s1)
@@ -155,18 +156,18 @@ class PublicVeranstaltungTest(TestCase):
 
     def test_unauth(self):
         # von außerhalb des Uninetzes
-        response = self.client.get('/ergebnisse/%d/' % self.v.id)
+        response = self.client.get(f'/{get_language()}/ergebnisse/{self.v.id}/')
         self.assertEqual(response.templates[0].name, 'public/unauth.html')
 
     def test_nonexisting(self):
         extra = {'REMOTE_ADDR': '130.83.0.1'}
-        response = self.client.get('/ergebnisse/1337/', **extra)
+        response = self.client.get(f'/{get_language()}/ergebnisse/1337/', **extra)
         self.assertEqual(response.status_code, 404)
         self.assertEqual(response.templates[0].name, '404.html')
 
     def test_unsichtbar_adm(self):
         extra = {'REMOTE_ADDR': '130.83.0.1'}
-        response = self.client.get('/ergebnisse/%d/' % self.v.id, **extra)
+        response = self.client.get(f'/{get_language()}/ergebnisse/{self.v.id}/', **extra)
         self.assertEqual(response.status_code, 404)
         self.assertEqual(response.templates[0].name, '404.html')
 
@@ -174,7 +175,7 @@ class PublicVeranstaltungTest(TestCase):
         self.s.sichtbarkeit = 'VER'
         self.s.save()
         extra = {'REMOTE_ADDR': '130.83.0.1'}
-        response = self.client.get('/ergebnisse/%d/' % self.v.id, **extra)
+        response = self.client.get(f'/{get_language()}/ergebnisse/{self.v.id}/', **extra)
         self.assertEqual(response.status_code, 404)
         self.assertEqual(response.templates[0].name, '404.html')
 
@@ -182,7 +183,7 @@ class PublicVeranstaltungTest(TestCase):
         self.s.sichtbarkeit = 'ALL'
         self.s.save()
         extra = {'REMOTE_ADDR': '130.83.0.1'}
-        response = self.client.get('/ergebnisse/%d/' % self.v.id, **extra)
+        response = self.client.get(f'/{get_language()}/ergebnisse/{self.v.id}/', **extra)
         ctx = response.context
         self.assertEqual(ctx['v'], self.v)
         with self.assertRaises(KeyError):
@@ -198,7 +199,7 @@ class PublicVeranstaltungTest(TestCase):
         self.v.typ = 'v'
         self.v.save()
         extra = {'REMOTE_ADDR': '130.83.0.1'}
-        response = self.client.get('/ergebnisse/%d/' % self.v.id, **extra)
+        response = self.client.get(f'/{get_language()}/ergebnisse/{self.v.id}/', **extra)
         ctx = response.context
         self.assertEqual(ctx['v'], self.v)
         self.assertEqual(ctx['parts'], list(zip(Ergebnis2009.parts_vl, list(self.e.values()))))
@@ -210,13 +211,13 @@ class PublicVeranstaltungTest(TestCase):
         p = Person.objects.create()
         k = Kommentar.objects.create(veranstaltung=self.v, autor=p, text='Ganz ganz toll!')
         extra = {'REMOTE_ADDR': '130.83.0.1'}
-        response = self.client.get('/ergebnisse/%d/' % self.v.id, **extra)
+        response = self.client.get(f'/{get_language()}/ergebnisse/{self.v.id}/', **extra)
         ctx = response.context
         self.assertEqual(ctx['kommentar'], k)
 
     def test_veranstalter_adm(self):
         c = login_veranstalter(self.v)
-        response = c.get('/ergebnisse/%d/' % self.v.id)
+        response = c.get(f'/{get_language()}/ergebnisse/{self.v.id}/')
         self.assertEqual(response.status_code, 404)
         self.assertEqual(response.templates[0].name, '404.html')
 
@@ -224,20 +225,20 @@ class PublicVeranstaltungTest(TestCase):
         self.s.sichtbarkeit = 'VER'
         self.s.save()
         c = login_veranstalter(self.v)
-        response = c.get('/ergebnisse/%d/' % self.v.id)
+        response = c.get(f'/{get_language()}/ergebnisse/{self.v.id}/')
         ctx = response.context
         self.assertEqual(ctx['restricted'], True)
 
     def test_superuser(self):
         self.client.login(username='testuser', password='secretpw')
-        response = self.client.get('/ergebnisse/%d/' % self.v.id, **{'REMOTE_USER':'testuser'})
+        response = self.client.get(f'/{get_language()}/ergebnisse/{self.v.id}/', **{'REMOTE_USER':'testuser'})
         ctx = response.context
         self.assertEqual(ctx['restricted'], True)
 
 
 class PublicDropBarcode(TestCase):
     def setUp(self):
-        self.path = "/barcodedrop/"
+        self.path = f"/{get_language()}/barcodedrop/"
         self.barcode_scanner_no_access_right = BarcodeScanner.objects.create(token="LRh73Ds22", description="")
 
         self.barcode_scanner = BarcodeScanner.objects.create(token="LRh73Ds23", description="")

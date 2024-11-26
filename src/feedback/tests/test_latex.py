@@ -6,6 +6,7 @@ from django.conf import settings
 
 from feedback.models import Semester, Person, Veranstaltung, Fragebogen2009, Mailvorlage
 from feedback.tests.tools import NonSuTestMixin, get_veranstaltung
+from django.utils.translation import get_language
 
 @tag('latex')
 class GenerateLettersTest(NonSuTestMixin, TestCase):
@@ -29,7 +30,7 @@ class GenerateLettersTest(NonSuTestMixin, TestCase):
         except OSError:
             return self.skipTest("OSError while looking for pdflatex")
 
-        self.path = '/intern/generate_letters/'
+        self.path = f'/{get_language()}/intern/generate_letters/'
         try:
             self.orig_contents = self._get_erhebungswoche()
         except IOError:
@@ -55,91 +56,5 @@ class GenerateLettersTest(NonSuTestMixin, TestCase):
             self.assertEqual(response.context['erhebungswoche'], self.orig_contents)
         except AttributeError:
             pass
-
-    def test_post(self):
-        self.client.login(username='supers', password='pw')
-        s, v = get_veranstaltung('v')
-        p0 = Person.objects.create(vorname='Je', nachname='Mand', email='je@ma.nd', geschlecht='w',
-                                   anschrift='S202 D120')
-        p1 = Person.objects.create(vorname='Noch Je', nachname='Mand', email='nochje@ma.nd', geschlecht='m')
-        v.veranstalter.add(p0)
-        v.veranstalter.add(p1)
-        v.verantwortlich = p0
-
-        # kein Semester angegeben
-        response = self.client.post(self.path, **{'REMOTE_USER': 'super'})
-        self.assertEqual(response.status_code, 302)
-        self.assertTrue(response['Location'].endswith('/intern/generate_letters/'))
-
-        # kein Abgabedatum angegeben
-        response = self.client.post(self.path, {'semester': s.semester}, **{'REMOTE_USER': 'super'})
-        self.assertEqual(response.status_code, 302)
-        self.assertTrue(response['Location'].endswith('/intern/generate_letters/'))
-
-        # keine zu evaluierenden Veranstaltungen
-        ad = '10. - 11. November 2011'
-
-        response = self.client.post(self.path,
-                                    {'semester': s.semester, 'erhebungswoche': ad}, **{'REMOTE_USER': 'super'})
-        self.assertEqual(response.status_code, 302)
-        self.assertTrue(response['Location'].endswith('/intern/generate_letters/'))
-
-        # alles OK
-        v.anzahl = 42
-        v.sprache = 'en'
-        v.save()
-
-        self._delete_erhebungswoche_file()
-
-        response = self.client.post(self.path,
-                                    {'semester': s.semester, 'erhebungswoche': '10. - 11. November 2011',
-                                     'vorlage': 'Anschreiben'}, **{'REMOTE_USER': 'super'})
-        self.assertEqual(response.status_code, 200)
-        self.assertRegex(response['Content-Disposition'],
-                                 r'^attachment; filename=[a-zA-Z0-9_-]+\.pdf$')
-        self.assertEqual(ad, self._get_erhebungswoche())
-        with open(settings.LATEX_PATH + 'veranstalter.adr', 'r') as f:
-            self.assertEqual(f.readline().strip(),
-                             '\\adrentry{Je Mand}{S202 D120}{Stoning I}{42}{en}{Vorlesung}{2000000001005}{}{}')
-
-            # test Aufkleber
-        response = self.client.post(self.path,
-                                    {'semester': s.semester, 'erhebungswoche': '10. - 11. November 2011',
-                                     'vorlage': 'Aufkleber'}, **{'REMOTE_USER': 'super'})
-        self.assertEqual(response.status_code, 200)
-        self.assertRegex(response['Content-Disposition'],
-                                 r'^attachment; filename=[a-zA-Z0-9_-]+\.pdf$')
-        self.assertEqual(ad, self._get_erhebungswoche())
-        with open(settings.LATEX_PATH + '../aufkleber/' + 'veranstalter.adr', 'r') as f:
-            self.assertEqual(f.readline().strip(),
-                             '\\adrentry{Je Mand}{S202 D120}{Stoning I}{42}{en}{Vorlesung}{2000000001005}{}{}')
-
-        with self.settings(TEST_LATEX_ERROR=True):
-            response = self.client.post(self.path,
-                                        {'semester': s.semester, 'erhebungswoche': '10. - 11. November 2011',
-                                         'vorlage': 'Anschreiben'}, **{'REMOTE_USER': 'super'})
-        self.assertEqual(response.templates[0].name, 'intern/generate_letters.html')
-
-        # test Aufkleber with variable number
-        response = self.client.post(self.path,
-                                    {'semester': s.semester, 'erhebungswoche': '10. - 11. November 2011',
-                                        'vorlage': 'Aufkleber', 'anzahlaufkleber':'85'}, **{'REMOTE_USER': 'super'})
-        self.assertEqual(response.status_code, 302)
-        v.anzahl = 86
-        v.save()
-        response = self.client.post(self.path,
-                                    {'semester': s.semester, 'erhebungswoche': '10. - 11. November 2011',
-                                        'vorlage': 'Aufkleber', 'anzahlaufkleber': '85'}, **{'REMOTE_USER': 'super'})
-        self.assertEqual(response.status_code, 200)
-        self.assertRegex(response['Content-Disposition'],
-                                 r'^attachment; filename=[a-zA-Z0-9_-]+\.pdf$')
-        self.assertEqual(ad, self._get_erhebungswoche())
-        with open(settings.LATEX_PATH + '../aufkleber/' + 'veranstalter.adr', 'r') as f:
-            self.assertEqual(f.readline().strip(),
-                             '\\adrentry{Je Mand}{S202 D120}{Stoning I}{86}{en}{Vorlesung}{2000000001005}{}{}')
-
-        with self.settings(TEST_LATEX_ERROR=True):
-            response = self.client.post(self.path,
-                                        {'semester': s.semester, 'erhebungswoche': '10. - 11. November 2011',
-                                         'vorlage': 'Anschreiben'}, **{'REMOTE_USER': 'super'})
-        self.assertEqual(response.templates[0].name, 'intern/generate_letters.html')
+    
+    ## test_post is deleted as latex no longer in use

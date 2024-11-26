@@ -1,13 +1,14 @@
 {% extends "bestellung_base.html" %}
-{% block title %}Personendaten vervollständigen{% endblock %}
+{% load i18n %}
+{% block title %}{% translate "Personendaten vervollständigen" %}{% endblock %}
 
 {% block content %}
-    <h1>Personendaten vervollständigen</h1>
+    <h1>{% translate "Personendaten vervollständigen" %}</h1>
 
     {% if persons %}
         <form action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <h2>Es sind noch {{ persons.count }} Personendaten zu bearbeiten.</h2>
+            <h2>{% blocktranslate %}Es sind noch {{ persons.count }} Personendaten zu bearbeiten.{% endblocktranslate %}</h2>
 
                 {% for p in persons %}
                             <h2>
@@ -19,6 +20,6 @@
         </form>
 
     {% else %}
-        <p>Alle Veranstalter des aktuellen Semesters haben vollständige Personendaten.</p>
+        <p>{% translate "Alle Veranstalter des aktuellen Semesters haben vollständige Personendaten." %}</p>
     {% endif %}
 {% endblock %}

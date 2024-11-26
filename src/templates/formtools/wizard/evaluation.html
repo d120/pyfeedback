@@ -1,23 +1,24 @@
 {% extends "formtools/wizard/base.html" %}
+{% load i18n %}
 
 {% block feedback_veranstalter_form %}
-    <h3>Möchten Sie ihre Veranstaltung evaluieren?</h3>
-    <h2>Datenschutzrechtliche Einwilligungserklärung</h2>
+    <h3>{% translate "Möchten Sie ihre Veranstaltung evaluieren?" %}</h3>
+    <h2>{% translate "Datenschutzrechtliche Einwilligungserklärung" %}</h2>
     <div style="border: 1px solid red; padding: 10px; border-radius: 5px;"> 
-	    <p style='font-size: 1.3em;'>Ich bin einverstanden, dass meine Daten im Zusammenhang mit der Lehrevaluation vom Fachbereich Informatik und der Fachschaft Informatik erhoben, verarbeitet und genutzt werden, und für
+	    <p style='font-size: 1.3em;'>{% blocktranslate %}Ich bin einverstanden, dass meine Daten im Zusammenhang mit der Lehrevaluation vom Fachbereich Informatik und der Fachschaft Informatik erhoben, verarbeitet und genutzt werden, und für
 folgende Zwecke verwendet werden: interne Evaluation des Fachbereichs und der Fachschaft, Rückmeldungen zur Evaluation (z.B. Vergabe von Lehrpreisen), sowie Veröffentlichung der
 numerischen Ergebnisse im Intranet der TU Darmstadt.
 <br>
 <br>
 Die Erhebung, Verarbeitung und Nutzung meiner Daten erfolgt auf freiwilliger Basis. Ich kann mein Einverständnis ohne für mich nachteilige Folgen verweigern bzw. jederzeit mit Wirkung für
 die Zukunft widerrufen. Meine Widerrufserklärung richte ich an das Studiendekanat des Fachbereichs Informatik. Im Fall des Widerrufs werden mit dem Zugang meiner Widerrufserklärung meine
-Daten bei den entsprechenden Stellen gelöscht.</p>
+Daten bei den entsprechenden Stellen gelöscht.{% endblocktranslate %}</p>
     </div>
 
 
     {% if veranstaltung.semester.vollerhebung %}
-        <h2>Information zur Vollerhebung</h2>
-        <p style="text-align: justify">
+        <h2>{% translate "Information zur Vollerhebung" %}</h2>
+        <p style="text-align: justify">{% blocktranslate %}
             In diesem Semester findet eine Vollerhebung aller Lehrveranstaltungen am Fachbereich Informatik statt.
             Die Teilnahme an der Evaluation der Lehre ist somit laut §4 Abs. 9 Richtlinien für den Bereich der
             Lehrveranstaltungsevaluation der Technischen Universität Darmstadt veröffentlicht in der
@@ -25,7 +26,7 @@ Daten bei den entsprechenden Stellen gelöscht.</p>
             <strong>verpflichtend</strong> für alle Lehrveranstaltungen. Falls Ihre Veranstaltung eine Service-Veranstaltung
             ist und die Evaluation durch einen anderen Fachbereich durchgeführt wird setzen Sie sich bitte mit uns in Verbindung:
             <br>
-            <a href="mailto:feedback@fachschaft.informatik.tu-darmstadt.de">feedback@fachschaft.informatik.tu-darmstadt.de</a>
+            <a href="mailto:feedback@fachschaft.informatik.tu-darmstadt.de">feedback@fachschaft.informatik.tu-darmstadt.de</a>{% endblocktranslate %}
         </p>
     {% endif %}
     {{ wizard.form }}

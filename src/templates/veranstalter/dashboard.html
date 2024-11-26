@@ -1,7 +1,9 @@
 {% extends "d120_base.html" %}
+{% load static %}
+{% load i18n %}
 
 {% block title %}
-    Veranstalterbereich
+    {% translate "Veranstalterbereich" %}
 {% endblock %}
 
 {% block extra_header %}
@@ -57,19 +59,19 @@
 
     <h1>
         <span class="header_veranst">{{ veranstaltung.name }} - </span>
-        Dashboard
+        {% translate "Dashboard" %}
     </h1>
 
-    <a href="{% url 'veranstalter-logout' %}">Ausloggen</a>
+    <a href="{% url 'veranstalter-logout' %}">{% translate "Ausloggen" %}</a>
 
-    <p class="subHeaderDashboard">Status</p>
+    <p class="subHeaderDashboard">{% translate "Status" %}</p>
     <span class="borderLine">{{ veranstaltung.get_status_display }}</span>
 
-    <p class="subHeaderDashboard">Log</p>
+    <p class="subHeaderDashboard">{% translate "Log" %}</p>
     <table class="dashboardTable dashboardTableBordered">
         <tr>
-            <th>Datum</th>
-            <th>Status</th>
+            <th>{% translate "Datum" %}</th>
+            <th>{% translate "Status" %}</th>
         </tr>
         {% for log in logs %}
         <tr>
@@ -81,9 +83,9 @@
 
     {% if bestellung %}
         <div class="orderHeadContainer">
-            <span style="display: block; float: left" class="subHeaderDashboard">Aktuelle Bestellung</span>
+            <span style="display: block; float: left" class="subHeaderDashboard">{% translate "Aktuelle Bestellung" %}</span>
             {% if allow_order %}
-                <button class="orderButton" onclick="window.location='{% url 'veranstalter-bestellung' %}';">Bestellung ändern</button>
+                <button class="orderButton" onclick="window.location='{% url 'veranstalter-bestellung' %}';">{% translate "Bestellung ändern" %}</button>
             {% endif %}
         </div>
         <div class="dashboardOrderContainer dashboardTableBordered">
@@ -97,15 +99,15 @@
                 {% endfor %}
                 {% if tutoren %}
                 <tr>
-                    <th>Tutoren</th>
+                    <th>{% translate "Tutoren" %}</th>
                     <th>
                         <table class="tableTutoren">
                             <tr>
-                                <th>Num</th>
-                                <th>Vorname</th>
-                                <th>Nachname</th>
-                                <th>Email</th>
-                                <th>Anmerkung</th>
+                                <th>{% translate "Num" %}</th>
+                                <th>{% translate "Vorname" %}</th>
+                                <th>{% translate "Nachname" %}</th>
+                                <th>{% translate "Email" %}</th>
+                                <th>{% translate "Anmerkung" %}</th>
                             </tr>
                             {% for tutor in tutoren %}
                                 <tr>
@@ -124,7 +126,7 @@
         </div>
     {% else %}
         {% if allow_order %}
-            <button style="padding: 2px; background-color: #4CAF50; margin:2px; color:white; border: 1px solid black;" onclick="window.location='{% url 'veranstalter-bestellung' %}';">Bestellung durchführen</button>
+            <button style="padding: 2px; background-color: #4CAF50; margin:2px; color:white; border: 1px solid black;" onclick="window.location='{% url 'veranstalter-bestellung' %}';">{% translate "Bestellung durchführen" %}</button>
         {% endif %}
     {% endif %}
 
@@ -135,6 +137,9 @@
 {% endblock %}
 
 {% block javascript_block %}
+<script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
+<script src="{% static '@popperjs/core/dist/umd/popper.min.js' %}"></script>
+<script src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
 <script>
     {% if bestellung %}
     $(document).ready(function() {

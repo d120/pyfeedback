@@ -29,26 +29,20 @@ class Semester(models.Model):
 
     )
     SICHTBARKEIT_CHOICES = (
-        ('ADM', 'Administratoren'),
-        ('VER', 'Veranstalter'),
-        ('ALL', 'alle (öffentlich)'),
+        ('ADM', _('Administratoren')),
+        ('VER', _('Veranstalter')),
+        ('ALL', _('alle (öffentlich)')),
     )
 
     semester = models.IntegerField(help_text='Aufbau: YYYYS, wobei YYYY = Jahreszahl und S = Semester (0=SS, 5=WS).',
                                    unique=True)
-    fragebogen = models.CharField(max_length=5, choices=FRAGEBOGEN_CHOICES,
-                                  help_text='Verwendete Version des Fragebogens.')
-    sichtbarkeit = models.CharField(max_length=3, choices=SICHTBARKEIT_CHOICES,
-                                    help_text='Sichtbarkeit der Evaluationsergebnisse.<br /><em>' +
-                                              SICHTBARKEIT_CHOICES[0][1] +
-                                              ':</em> nur für Mitglieder des Feedback-Teams<br /><em>' +
-                                              SICHTBARKEIT_CHOICES[1][1] +
-                                              ':</em> Veranstalter und Mitglieder des Feedback-Teams<br /><em>' +
-                                              SICHTBARKEIT_CHOICES[2][1] +
-                                              ':</em> alle (beschränkt auf das Uninetz)<br />'
+    fragebogen = models.CharField(max_length=5, choices=FRAGEBOGEN_CHOICES, verbose_name=_("Fragebogen"),
+                                  help_text=_('Verwendete Version des Fragebogens.'))
+    sichtbarkeit = models.CharField(max_length=3, choices=SICHTBARKEIT_CHOICES, verbose_name=_("Sichtbarkeit"),
+                                    help_text=_('Sichtbarkeit der Evaluationsergebnisse.<br /><em>{s1}:</em> nur für Mitglieder des Feedback-Teams<br /><em>{s2}:</em> Veranstalter und Mitglieder des Feedback-Teams<br /><em>{s3}:</em> alle (beschränkt auf das Uninetz)<br />').format(s1=SICHTBARKEIT_CHOICES[0][1],s2=SICHTBARKEIT_CHOICES[1][1],s3=SICHTBARKEIT_CHOICES[2][1])
                                     )
-    vollerhebung = models.BooleanField(default=False)
-    standard_ergebnisversand = models.DateField(null=True, blank=True, verbose_name='Ergebnisversand', help_text='Standarddatum für den Ergebnisversand')
+    vollerhebung = models.BooleanField(default=False, verbose_name=_("Vollerhebung"))
+    standard_ergebnisversand = models.DateField(null=True, blank=True, verbose_name=_('Ergebnisversand'), help_text=_('Standarddatum für den Ergebnisversand'))
 
     def _format_generic(self, ss, ws, space, modulus):
         sem = self.semester // 10
@@ -138,8 +132,8 @@ class Fachgebiet(models.Model):
         return self.name
 
     class Meta:
-        verbose_name = 'Fachgebiet'
-        verbose_name_plural = 'Fachgebiete'
+        verbose_name = _('Fachgebiet')
+        verbose_name_plural = _('Fachgebiete')
         app_label = 'feedback'
 
 
@@ -147,7 +141,8 @@ class EmailEndung(models.Model):
     """Repräsentiert alle Domains die für E-Mails von Veranstaltern verwendet werden"""
     fachgebiet = models.ForeignKey(Fachgebiet,
                                    blank=True,
-                                   help_text="Hier soll der Domainname einer Email-Adresse eines Fachgebiets stehen.",
+                                   verbose_name=_("Fachgebiet"),
+                                   help_text=_("Hier soll der Domainname einer Email-Adresse eines Fachgebiets stehen."),
                                    on_delete=models.CASCADE)
     domain = models.CharField(max_length=150,
                               null=True)
@@ -156,19 +151,19 @@ class EmailEndung(models.Model):
         return self.domain
 
     class Meta:
-        verbose_name = 'Fachgebiet Emailendung'
-        verbose_name_plural = 'Fachgebiet Emailendungen'
+        verbose_name = _('Fachgebiet Emailendung')
+        verbose_name_plural = _('Fachgebiet Emailendungen')
         app_label = 'feedback'
 
 
 class FachgebietEmail(models.Model):
     """Repräsentiert die E-Mail Domänen für die jeweiligen Fachgebiete des FBs 20."""
-    fachgebiet = models.ForeignKey(Fachgebiet, related_name='fachgebiet', on_delete=models.CASCADE)
+    fachgebiet = models.ForeignKey(Fachgebiet, related_name='fachgebiet', verbose_name=_("Fachgebiet"), on_delete=models.CASCADE)
     email_sekretaerin = models.EmailField(blank=True)
 
     class Meta:
-        verbose_name = 'Fachgebiet Email'
-        verbose_name_plural = 'Fachgebiet Emails'
+        verbose_name = _('Fachgebiet Email')
+        verbose_name_plural = _('Fachgebiet Emails')
         app_label = 'feedback'
 
 
@@ -176,8 +171,8 @@ class Person(models.Model):
     """Repräsentiert eine Person der TUD aus dem FB20."""
     GESCHLECHT_CHOICES = (
         ('', ''),
-        ('m', 'Herr'),
-        ('w', 'Frau'),
+        ('m', _('Herr')),
+        ('w', _('Frau')),
     )
 
     GESCHLECHT_EVASYS_XML = {
@@ -186,14 +181,14 @@ class Person(models.Model):
         'w': 'f',
     }
 
-    geschlecht = models.CharField(max_length=1, choices=GESCHLECHT_CHOICES, blank=True, verbose_name='Anrede')
+    geschlecht = models.CharField(max_length=1, choices=GESCHLECHT_CHOICES, blank=True, verbose_name=_('Anrede'))
     vorname = models.CharField(_('first name'), max_length=30, blank=True)
     nachname = models.CharField(_('last name'), max_length=30, blank=True)
     email = models.EmailField(_('E-Mail'), blank=True)
     anschrift = models.CharField(_('anschrift'), max_length=80, blank=True,
-                                 help_text='Tragen Sie bitte nur die Anschrift ohne Namen ein, '
-                                           'da der Name automatisch hinzugefügt wird.')
-    fachgebiet = models.ForeignKey(Fachgebiet, null=True, blank=True, on_delete=models.CASCADE)
+                                 help_text=_('Tragen Sie bitte nur die Anschrift ohne Namen ein, '
+                                           'da der Name automatisch hinzugefügt wird.'))
+    fachgebiet = models.ForeignKey(Fachgebiet, verbose_name=_("Fachgebiet"), null=True, blank=True, on_delete=models.CASCADE)
 
     def full_name(self):
         return '%s %s' % (self.vorname, self.nachname)
@@ -213,8 +208,8 @@ class Person(models.Model):
         return self.vorname != "" and self.nachname != "" and self.email != "" and self.anschrift != ""
 
     class Meta:
-        verbose_name = 'Person'
-        verbose_name_plural = 'Personen'
+        verbose_name = _('Person')
+        verbose_name_plural = _('Personen')
         ordering = 'nachname', 'vorname'
         app_label = 'feedback'
 
@@ -312,15 +307,15 @@ class AlternativVorname(models.Model):
 class Veranstaltung(models.Model):
     """Repräsentiert eine Veranstaltung der TUD."""
     TYP_CHOICES = (
-        ('v', 'Vorlesung'),
-        ('vu', 'Vorlesung mit Übung'),
-        ('pr', 'Praktikum'),
-        ('se', 'Seminar'),
+        ('v', _('Vorlesung')),
+        ('vu', _('Vorlesung mit Übung')),
+        ('pr', _('Praktikum')),
+        ('se', _('Seminar')),
     )
 
     SPRACHE_CHOICES = (
-        ('de', 'Deutsch'),
-        ('en', 'Englisch'),
+        ('de', _('Deutsch')),
+        ('en', _('Englisch')),
     )
     # 0    undefiniert
     # 1    Vorlesung
@@ -394,22 +389,22 @@ class Veranstaltung(models.Model):
     STATUS_ERGEBNISSE_VERSANDT = 1000
 
     STATUS_CHOICES = (
-        (STATUS_ANGELEGT, 'Angelegt'),
-        (STATUS_BESTELLUNG_GEOEFFNET, 'Bestellung geöffnet'),
-        (STATUS_KEINE_EVALUATION, 'Keine Evaluation'),
-        (STATUS_KEINE_EVALUATION_FINAL, 'Keine Evaluation final'),
-        (STATUS_BESTELLUNG_LIEGT_VOR, 'Bestellung liegt vor'),
-        (STATUS_BESTELLUNG_WIRD_VERARBEITET, 'Bestellung wird verarbeitet'),
-        (STATUS_GEDRUCKT, 'Gedruckt'),
-        (STATUS_VERSANDT, 'Versandt'),
-        (STATUS_BOEGEN_EINGEGANGEN, 'Bögen eingegangen'),
-        (STATUS_BOEGEN_GESCANNT, 'Bögen gescannt'),
-        (STATUS_ERGEBNISSE_VERSANDT, 'Ergebnisse versandt'),
+        (STATUS_ANGELEGT, _('Angelegt')),
+        (STATUS_BESTELLUNG_GEOEFFNET, _('Bestellung geöffnet')),
+        (STATUS_KEINE_EVALUATION, _('Keine Evaluation')),
+        (STATUS_KEINE_EVALUATION_FINAL, _('Keine Evaluation final')),
+        (STATUS_BESTELLUNG_LIEGT_VOR, _('Bestellung liegt vor')),
+        (STATUS_BESTELLUNG_WIRD_VERARBEITET, _('Bestellung wird verarbeitet')),
+        (STATUS_GEDRUCKT, _('Gedruckt')),
+        (STATUS_VERSANDT, _('Versandt')),
+        (STATUS_BOEGEN_EINGEGANGEN, _('Bögen eingegangen')),
+        (STATUS_BOEGEN_GESCANNT, _('Bögen gescannt')),
+        (STATUS_ERGEBNISSE_VERSANDT, _('Ergebnisse versandt')),
     )
 
     BOOL_CHOICES = (
-        (True, 'Ja'),
-        (False, 'Nein'),
+        (True, _('Ja')),
+        (False, _('Nein')),
     )
 
     # TODO: not the final version of status transition
@@ -433,50 +428,46 @@ class Veranstaltung(models.Model):
     MIN_BESTELLUNG_ANZAHL = 5
 
     # Helfertext für Dozenten für den Veranstaltungstyp.
-    vlNoEx = 'Wenn Ihre Vorlesung keine Übung hat wählen Sie bitte <i>%s</i> aus'
-    for cur in TYP_CHOICES:
-        if cur[0] == 'v':
-            vlNoEx = vlNoEx % cur[1]
-            break
+    vlNoEx = _('Wenn Ihre Vorlesung keine Übung hat wählen Sie bitte <i>Vorlesung</i> aus')
 
-    typ = models.CharField(max_length=2, choices=TYP_CHOICES, help_text=vlNoEx)
-    name = models.CharField(max_length=150)
+    typ = models.CharField(verbose_name=_("Typ"), max_length=2, choices=TYP_CHOICES, help_text=vlNoEx)
+    name = models.CharField(verbose_name=_("Name"),max_length=150)
     semester = models.ForeignKey(Semester, on_delete=models.CASCADE)
-    lv_nr = models.CharField(max_length=15, blank=True, verbose_name='LV-Nummer')
+    lv_nr = models.CharField(max_length=15, blank=True, verbose_name=_('LV-Nummer'))
     status = models.IntegerField(choices=STATUS_CHOICES, default=STATUS_ANGELEGT)
-    grundstudium = models.BooleanField()
-    evaluieren = models.BooleanField(choices=BOOL_CHOICES, default=True)
-    veranstalter = models.ManyToManyField(Person, blank=True,
-                                          help_text='Alle Personen, die mit der Veranstaltung befasst sind und z.B. Fragebögen bestellen können sollen.')
+    grundstudium = models.BooleanField(verbose_name=_("Grundstudium"))
+    evaluieren = models.BooleanField(verbose_name=_("Evaluieren"), choices=BOOL_CHOICES, default=True)
+    veranstalter = models.ManyToManyField(Person, verbose_name=_("Veranstalter"), blank=True,
+                                          help_text=_('Alle Personen, die mit der Veranstaltung befasst sind und z.B. Fragebögen bestellen können sollen.'))
 
-    sprache = models.CharField(max_length=2, choices=SPRACHE_CHOICES, null=True, blank=True)
-    anzahl = models.IntegerField(null=True, blank=True)
-    verantwortlich = models.ForeignKey(Person, related_name='verantwortlich', null=True, blank=True, on_delete=models.CASCADE,
-                                       help_text='Diese Person wird von uns bei Rückfragen kontaktiert und bekommt die Fragenbögen zugeschickt')
+    sprache = models.CharField(max_length=2, choices=SPRACHE_CHOICES, null=True, blank=True, verbose_name=_("Sprache"))
+    anzahl = models.IntegerField(verbose_name=_("Anzahl"), null=True, blank=True)
+    verantwortlich = models.ForeignKey(Person, related_name='verantwortlich', verbose_name=_("Verantwortlich"), null=True, blank=True, on_delete=models.CASCADE,
+                                       help_text=_('Diese Person wird von uns bei Rückfragen kontaktiert und bekommt die Fragenbögen zugeschickt'))
     ergebnis_empfaenger = models.ManyToManyField(Person, blank=True,
                                                  related_name='ergebnis_empfaenger',
-                                                 verbose_name='Empfänger der Ergebnisse',
-                                                 help_text='An diese Personen werden die Ergebnisse per E-Mail geschickt.')
-    primaerdozent = models.ForeignKey(Person, related_name='primaerdozent', null=True, blank=True, on_delete=models.CASCADE,
-                                      help_text='Die Person, die im Anschreiben erwähnt wird')
+                                                 verbose_name=_('Empfänger der Ergebnisse'),
+                                                 help_text=_('An diese Personen werden die Ergebnisse per E-Mail geschickt.'))
+    primaerdozent = models.ForeignKey(Person, related_name='primaerdozent', verbose_name=_("Primaerdozent"), null=True, blank=True, on_delete=models.CASCADE,
+                                      help_text=_('Die Person, die im Anschreiben erwähnt wird'))
     auswertungstermin = models.DateField(null=True, blank=True,
-                                         verbose_name='Auswertungstermin',
-                                         help_text='An welchem Tag sollen Fragebögen für diese Veranstaltung ausgewerter werden? ' +
-                                                   'Fragebögen die danach eintreffen werden nicht mehr ausgewertet.')
+                                         verbose_name=_('Auswertungstermin'),
+                                         help_text=_('An welchem Tag sollen Fragebögen für diese Veranstaltung ausgewerter werden? ') +
+                                                   _('Fragebögen die danach eintreffen werden nicht mehr ausgewertet.'))
     bestelldatum = models.DateField(null=True, blank=True)
     access_token = models.CharField(max_length=16, blank=True)
-    freiefrage1 = models.TextField(verbose_name='1. Freie Frage', blank=True)
-    freiefrage2 = models.TextField(verbose_name='2. Freie Frage', blank=True)
-    kleingruppen = models.TextField(verbose_name='Kleingruppen', blank=True)
-    veroeffentlichen = models.BooleanField(default=True, choices=BOOL_CHOICES)
-    digitale_eval = models.BooleanField(default=True, verbose_name='Digitale Evaluation',
-                                        help_text='Die Evaluation soll digital durchgeführt werden. Die Studierenden füllen die Evaluation online aus.', blank=True)
+    freiefrage1 = models.TextField(verbose_name=_('1. Freie Frage'), blank=True)
+    freiefrage2 = models.TextField(verbose_name=_('2. Freie Frage'), blank=True)
+    kleingruppen = models.TextField(verbose_name=_('Kleingruppen'), blank=True)
+    veroeffentlichen = models.BooleanField(verbose_name=_('Veroeffentlichen'), default=True, choices=BOOL_CHOICES)
+    digitale_eval = models.BooleanField(default=True, verbose_name=_('Digitale Evaluation'),
+                                        help_text=_('Die Evaluation soll digital durchgeführt werden. Die Studierenden füllen die Evaluation online aus.'), blank=True)
     digitale_eval_type = models.CharField(
         default='T',
         choices=DIGITALE_EVAL,
         max_length=1,
-        verbose_name='Digitaler Evaluationstyp',
-        help_text='Es werden generell zwei Typen von Verteilungsmethoden angeboten: Bei TANs erhalten Sie eine Excel Datei mit einer Liste aller TANs, welche Sie beispielsweise mithilfe von moodle verteilen können (eine Anleitung dazu wird bereitgestellt). Beim losungsbasierten Verfahren erhalten Sie einen einfachen, mehrfachbenutzbaren Link zum Onlinefragebogen.'
+        verbose_name=_('Digitaler Evaluationstyp'),
+        help_text=_('Es werden generell zwei Typen von Verteilungsmethoden angeboten: Bei TANs erhalten Sie eine Excel Datei mit einer Liste aller TANs, welche Sie beispielsweise mithilfe von moodle verteilen können (eine Anleitung dazu wird bereitgestellt). Beim losungsbasierten Verfahren erhalten Sie einen einfachen, mehrfachbenutzbaren Link zum Onlinefragebogen.')
     )
 
     def get_next_state(self):
@@ -560,10 +551,10 @@ class Veranstaltung(models.Model):
     def get_barcode_number(self, tutorgruppe=0):
         """Barcode Nummer für diese Veranstaltung"""
         if tutorgruppe > 99:
-            raise ValueError("Tutorgruppe muss kleiner 100 sein")
+            raise ValueError(_("Tutorgruppe muss kleiner 100 sein"))
 
         if isinstance(tutorgruppe, int) == False:
-            raise ValueError("Tutorgruppe muss eine ganze Zahl sein")
+            raise ValueError(_("Tutorgruppe muss eine ganze Zahl sein"))
 
         base = Veranstaltung.BARCODE_BASE
         veranst = self.pk
@@ -586,7 +577,7 @@ class Veranstaltung(models.Model):
     @staticmethod
     def decode_barcode(barcode):
         if (ean_checksum_valid(barcode) != True):
-            raise ValueError("Der Barcode ist nicht valide")
+            raise ValueError(_("Der Barcode ist nicht valide"))
 
         # entferne das Padding am Anfang
         information = barcode % Veranstaltung.BARCODE_BASE
@@ -630,7 +621,7 @@ class Veranstaltung(models.Model):
 
     def auwertungstermin_to_late_msg(self):
         toLateDate = self.semester.last_Auswertungstermin_to_late_human()
-        return 'Der Auswertungstermin muss vor dem %s liegen.' % toLateDate
+        return _('Der Auswertungstermin muss vor dem {toLateDate} liegen.').format(toLateDate=toLateDate)
 
     def has_uebung(self):
         """Gibt True zurück wenn die Veranstaltung eine Übung hat sonst False"""
@@ -646,7 +637,7 @@ class Veranstaltung(models.Model):
     
     
     def anzahl_too_few_msg(self) :
-        return f'Anzahl der Bestellungen muss mindestens {self.MIN_BESTELLUNG_ANZAHL} sein. Bei weniger als {self.MIN_BESTELLUNG_ANZAHL} Teilnehmenden ist eine Evaluation leider nicht möglich'
+        return _('Anzahl der Bestellungen muss mindestens {MIN_BESTELLUNG_ANZAHL} sein. Bei weniger als {MIN_BESTELLUNG_ANZAHL} Teilnehmenden ist eine Evaluation leider nicht möglich').format(MIN_BESTELLUNG_ANZAHL=self.MIN_BESTELLUNG_ANZAHL)
 
 
     def clean(self, *args, **kwargs):
@@ -672,7 +663,7 @@ class Veranstaltung(models.Model):
         if self.pk is not None and self.access_token is not None:
             return link_veranstalter + (link_suffix_format % (self.pk, self.access_token))
         else:
-            return "Der Veranstalter Link wird erst nach dem Anlegen angezeigt"
+            return _("Der Veranstalter Link wird erst nach dem Anlegen angezeigt")
 
     def allow_order(self):
         """Überprüft anhand des Status' der Veranstaltung, ob bestellt werden darf."""
@@ -710,8 +701,8 @@ class Veranstaltung(models.Model):
                     nummer += 1
 
     class Meta:
-        verbose_name = 'Veranstaltung'
-        verbose_name_plural = 'Veranstaltungen'
+        verbose_name = _('Veranstaltung')
+        verbose_name_plural = _('Veranstaltungen')
         ordering = ['semester', 'typ', 'name']
         unique_together = ('name', 'lv_nr', 'semester')
         app_label = 'feedback'
@@ -723,8 +714,8 @@ class Tutor(models.Model):
     vorname = models.CharField(_('first name'), max_length=30)
     nachname = models.CharField(_('last name'), max_length=30)
     email = models.EmailField(_('e-mail address'))
-    anmerkung = models.CharField(max_length=100)
-    veranstaltung = models.ForeignKey(Veranstaltung, on_delete=models.CASCADE)
+    anmerkung = models.CharField(max_length=100, verbose_name=_("Anmerkung"))
+    veranstaltung = models.ForeignKey(Veranstaltung, verbose_name=_("Veranstaltung"), on_delete=models.CASCADE)
 
     def get_barcode_number(self):
         """Gibt die Barcodenummer anhand der Tutorennummer zurück."""
@@ -734,8 +725,8 @@ class Tutor(models.Model):
         return '%s %s %d' % (self.vorname, self.nachname, self.nummer)
 
     class Meta:
-        verbose_name = 'Tutor'
-        verbose_name_plural = 'Tutoren'
+        verbose_name = _('Tutor')
+        verbose_name_plural = _('Tutoren')
         unique_together = (('nummer', 'veranstaltung'),)
         app_label = 'feedback'
 
@@ -749,7 +740,7 @@ class Mailvorlage(models.Model):
         return self.subject
 
     class Meta:
-        verbose_name = 'Mailvorlage'
+        verbose_name = _('Mailvorlage')
         verbose_name_plural = verbose_name + 'n'
         ordering = ['subject']
         app_label = 'feedback'
@@ -775,8 +766,8 @@ class BarcodeAllowedState(models.Model):
     allow_state = models.IntegerField(choices=Veranstaltung.STATUS_CHOICES, null=True)
 
     class Meta:
-        verbose_name = 'Erlaubter Zustand'
-        verbose_name_plural = 'Erlaubte Zustände'
+        verbose_name = _('Erlaubter Zustand')
+        verbose_name_plural = _('Erlaubte Zustände')
         unique_together = (('barcode_scanner', 'allow_state'),)
         app_label = 'feedback'
 

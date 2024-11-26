@@ -1,5 +1,7 @@
 # coding=utf-8
 
+from django.utils.translation import get_language
+
 #TODO: Aufruf einzelner Tests möglich machen
 
 def suite():
@@ -23,8 +25,8 @@ def suite():
         suite.addTest(unittest.TestLoader().loadTestsFromName(test_module))
     return suite
 
-LOGIN_END = '/intern/'
-INDEX_END = '/intern/uebersicht/'
+LOGIN_END = f'/{get_language()}/intern/'
+INDEX_END = f'/{get_language()}/intern/uebersicht/'
 TESTSERVER_BEGIN = ''
 LOGIN_URL = TESTSERVER_BEGIN+LOGIN_END
 INDEX_URL = TESTSERVER_BEGIN+INDEX_END

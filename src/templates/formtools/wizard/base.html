@@ -1,4 +1,5 @@
 {% extends "bestellung_base.html" %}
+{% load i18n %}
 
 {% block extra_header %}
     <style>
@@ -65,13 +66,13 @@
     {{ wizard.form.media }}
 {% endblock %}
 
-{% block title %}Bestellprozess {{ veranstaltung.name}}{% endblock %}
+{% block title %}{% translate "Bestellprozess " %}{{ veranstaltung.name}}{% endblock %}
 
 {% block content %}
     <form action="" method="post">
         {% csrf_token %}
-        <a style="float: right" href="{% url 'logout' %}">ausloggen</a>
-        <p style="font-size: 14px">Bestellung für <b>{{ veranstaltung.name }}</b>  {{ veranstaltung.semester }}</p>
+        <a style="float: right" href="{% url 'logout' %}">{% translate "ausloggen" %}</a>
+        <p style="font-size: 14px">{% translate "Bestellung für " %}<b>{{ veranstaltung.name }}</b>  {{ veranstaltung.semester }}</p>
 
         <div class="container progressbar_container">
             {% for step in progressbar %}
@@ -98,17 +99,17 @@
             {% endblock %}
         </table>
         {% block feedback_veranstalter_extra %}{% endblock %}
-        <p style="color: #636363;">*Pflichtfeld</p>
+        <p style="color: #636363;">*{% translate "Pflichtfeld" %}</p>
         {% if wizard.steps.prev %}
-            <button class="btn btn-secondary float-left" name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">Zurück</button>&nbsp;
+            <button class="btn btn-secondary float-left" name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">{% translate "Zurück" %}</button>&nbsp;
         {% endif %}
 
         {% if wizard.steps.next %}
-            <input class="btn btn-primary float-right" type="submit" name="next_step" value="Weiter"/>
+            <input class="btn btn-primary float-right" type="submit" name="next_step" value="{% translate "Weiter" %}"/>
         {% endif %}
 
         {% if wizard.steps.current == wizard.steps.last %}
-            <input class="btn btn-primary float-right" type="submit" name="save" value="Speichern"/>
+            <input class="btn btn-primary float-right" type="submit" name="save" value="{% translate "Speichern" %}"/>
         {% endif %}
     </form>
 

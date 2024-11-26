@@ -4,11 +4,12 @@ from django import forms
 from django.conf import settings
 from django.views.decorators.http import require_safe
 from django.contrib import auth
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpRequest, HttpResponseRedirect, Http404
 from django.urls import reverse
 from django.shortcuts import render
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
+from django.utils.translation import gettext_lazy as _
 
 from formtools.wizard.views import SessionWizardView
 from feedback.models import Veranstaltung, Tutor, past_semester_orders, Log
@@ -47,27 +48,27 @@ def veranstalter_dashboard(request):
     data["allow_order"] = veranst.allow_order()
 
     if veranst.status >= Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR:
-        bestellung = [("Evaluieren", veranst.get_evaluieren_display)]
+        bestellung = [(_("Evaluieren"), veranst.get_evaluieren_display)]
         if veranst.evaluieren:
-            bestellung.append(("Typ", veranst.get_typ_display))
-            bestellung.append(("Anazhl", veranst.anzahl))
-            bestellung.append(("Sprache", veranst.get_sprache_display))
-            bestellung.append(("Verantwortlich", veranst.verantwortlich.__str__() + '\n'
+            bestellung.append((_("Typ"), veranst.get_typ_display))
+            bestellung.append((_("Anazhl"), veranst.anzahl))
+            bestellung.append((_("Sprache"), veranst.get_sprache_display))
+            bestellung.append((_("Verantwortlich"), veranst.verantwortlich.__str__() + '\n'
                                + veranst.verantwortlich.anschrift + '\n'
                                + veranst.verantwortlich.email))
 
             ergebnis_empfanger_str = ""
             for empfaenger in veranst.ergebnis_empfaenger.all():
                 ergebnis_empfanger_str += empfaenger.__str__() + "\n"
-            bestellung.append(("Ergebnis Empfänger", ergebnis_empfanger_str))
+            bestellung.append((_("Ergebnis Empfänger"), ergebnis_empfanger_str))
 
             if veranst.auswertungstermin:
-                bestellung.append(("Auswertungstermin", veranst.auswertungstermin))
+                bestellung.append((_("Auswertungstermin"), veranst.auswertungstermin))
 
-            bestellung.append(("Primärdozent", veranst.primaerdozent))
-            bestellung.append(("Freie Frage 1", veranst.freiefrage1))
-            bestellung.append(("Freie Frage 2", veranst.freiefrage2))
-            bestellung.append(("Veröffentlichen", veranst.get_veroeffentlichen_display))
+            bestellung.append((_("Primärdozent"), veranst.primaerdozent))
+            bestellung.append((_("Freie Frage 1"), veranst.freiefrage1))
+            bestellung.append((_("Freie Frage 2"), veranst.freiefrage2))
+            bestellung.append((_("Veröffentlichen"), veranst.get_veroeffentlichen_display))
 
         data["bestellung"] = bestellung
 
@@ -88,12 +89,12 @@ VERANSTALTER_VIEW_TEMPLATES = {
 
 # Alle Schritte, die vom Wizard gebraucht werden.
 VERANSTALTER_WIZARD_STEPS = {
-    "evaluation": "Evaluation",
-    "basisdaten": "Basisdaten",
-    "digitale_eval": "Digitale Evaluation",
-    "freie_fragen": "Freie Fragen",
-    "veroeffentlichen": "Veroeffentlichen",
-    "zusammenfassung": "Zusammenfassung"
+    "evaluation": _("Evaluation"),
+    "basisdaten": _("Basisdaten"),
+    "digitale_eval": _("Digitale Evaluation"),
+    "freie_fragen": _("Freie Fragen"),
+    "veroeffentlichen": _("Veroeffentlichen"),
+    "zusammenfassung": _("Zusammenfassung")
 }
 
 
@@ -158,7 +159,7 @@ class VeranstalterWizard(SessionWizardView):
     def get_instance(self):
         if self.cached_obj.get("veranstaltung_obj", None) is None:
             if 'vid' not in self.request.session:
-                raise Http404('Ihre Session ist abgelaufen. Bitte loggen Sie sich erneut über den Link ein.')
+                raise Http404(_('Ihre Session ist abgelaufen. Bitte loggen Sie sich erneut über den Link ein.'))
             self.cached_obj["veranstaltung_obj"] = Veranstaltung.objects.\
                 select_related().filter(id=self.request.session['vid'])[0]
         return self.cached_obj["veranstaltung_obj"]
@@ -268,6 +269,7 @@ class VeranstalterWizard(SessionWizardView):
         context = self.get_context_data('zusammenfassung')
         send_mail_to_verantwortliche(ergebnis_empfaenger, context, instance)
 
+        # previously render_to_response was used which didn't require request, but later it was deprecated, leaving this only viable option
         return render(request=None, template_name='formtools/wizard/bestellung_done.html', )
 
 
@@ -286,8 +288,8 @@ def send_mail_to_verantwortliche(ergebnis_empfaenger, context, veranstaltung):
     if ergebnis_empfaenger is not None:
         for e in ergebnis_empfaenger:
             send_mail(
-                'Evaluation der Lehrveranstaltungen - Zusammenfassung der Daten für {}'.format(veranstaltung.name),
-                'Nachfolgend finder Sie Informationen zu Ihrer Bestellung',
+                _('Evaluation der Lehrveranstaltungen - Zusammenfassung der Daten für {name}').format(name=veranstaltung.name),
+                _('Nachfolgend finder Sie Informationen zu Ihrer Bestellung'),
                 settings.DEFAULT_FROM_EMAIL,
                 [e.email],
                 html_message=msg_html,

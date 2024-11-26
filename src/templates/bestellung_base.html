@@ -1,4 +1,5 @@
 {% extends "d120_base.html" %}
+{% load i18n %}
 
 {% block section_veranstalter %}
     current
@@ -6,8 +7,8 @@
 
 {% block backlink %}
     {% if request.user.is_superuser %}
-        <p><a href="{% url 'intern-index' %}">zurück zum internen Bereich</a></p>
+        <p><a href="{% url 'intern-index' %}">{% translate "zurück zum internen Bereich" %}</a></p>
     {% else %}
-        <p><a href="{% url 'veranstalter-index' %}">zurück zum Veranstalterbereich</a></p>
+        <p><a href="{% url 'veranstalter-index' %}">{% translate "zurück zum Veranstalterbereich" %}</a></p>
     {% endif %}
 {% endblock %}

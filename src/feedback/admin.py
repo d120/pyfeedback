@@ -4,6 +4,7 @@ from django.contrib import admin
 from django import forms
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render
+from django.utils.translation import gettext_lazy as _
 
 from feedback.models import Person, Veranstaltung, Semester, \
     Mailvorlage, Kommentar, Tutor, BarcodeScanner, BarcodeScannEvent, BarcodeAllowedState, \
@@ -45,7 +46,7 @@ class PersonAdmin(admin.ModelAdmin):
                             person.save()
                             suggestion_list = [(x, y) for x, y in suggestion_list if x is not person]
 
-                self.message_user(request, "Fachgebiete erfolgreich zugewiesen.")
+                self.message_user(request, _("Fachgebiete erfolgreich zugewiesen."))
 
                 if ('save' in request.POST) or not suggestion_list:
                     return HttpResponseRedirect(request.get_full_path())
@@ -57,7 +58,7 @@ class PersonAdmin(admin.ModelAdmin):
 
         return render(request, 'admin/fachgebiet.html', {'data': suggestion_list, 'fachgebiet': form, })
 
-    assign_fachgebiet_action.short_description = "Einem Fachgebiet zuweisen"
+    assign_fachgebiet_action.short_description = _("Einem Fachgebiet zuweisen")
     actions = [assign_fachgebiet_action]
 
 
@@ -74,11 +75,11 @@ class LogInline(admin.TabularInline):
 class VeranstaltungAdmin(admin.ModelAdmin):
     """Admin View für Veranstaltung"""
     fieldsets = [
-        ('Stammdaten', {'fields':
+        (_('Stammdaten'), {'fields':
                         ['typ', 'name', 'semester', 'status', 'lv_nr', 'grundstudium', 'evaluieren',
                          'veranstalter', 'link_veranstalter',
                          ]}),
-        ('Bestellung', {'fields': ['sprache', 'anzahl', 'digitale_eval', 'digitale_eval_type', 'verantwortlich', 'ergebnis_empfaenger', 'primaerdozent',
+        (_('Bestellung'), {'fields': ['sprache', 'anzahl', 'digitale_eval', 'digitale_eval_type', 'verantwortlich', 'ergebnis_empfaenger', 'primaerdozent',
                                    'auswertungstermin', 'freiefrage1', 'freiefrage2', 'kleingruppen', ]}),
     ]
     list_display = ('typ', 'name', 'semester', 'grundstudium', 'evaluieren', 'anzahl',
@@ -117,7 +118,7 @@ class VeranstaltungAdmin(admin.ModelAdmin):
                 for veranstaltung in queryset:
                     veranstaltung.log(request.user)
 
-                self.message_user(request, "Status erfolgreich geändert.")
+                self.message_user(request, _("Status erfolgreich geändert."))
                 return HttpResponseRedirect(request.get_full_path())
 
         if not form:
@@ -125,7 +126,7 @@ class VeranstaltungAdmin(admin.ModelAdmin):
 
         return render(request, 'admin/status_aendern.html', {'veranstaltungen': queryset, 'status': form, })
 
-    status_aendern_action.short_description = "Ändere den Status einer Veranstaltung"
+    status_aendern_action.short_description = _("Ändere den Status einer Veranstaltung")
 
     class KeineEvaluationForm(forms.Form):
         _selected_action = forms.CharField(widget=forms.MultipleHiddenInput)
@@ -141,14 +142,14 @@ class VeranstaltungAdmin(admin.ModelAdmin):
             for veranstaltung in queryset:
                 veranstaltung.log(request.user)
 
-            self.message_user(request, "Veranstaltungen wurden erfolgreich auf Keine Evaluation gesetzt.")
+            self.message_user(request, _("Veranstaltungen wurden erfolgreich auf Keine Evaluation gesetzt."))
             return HttpResponseRedirect(request.get_full_path())
             # nach dem return landet Python in status_aendern_action
         if not form:
             form = self.KeineEvaluationForm(initial={'_selected_action': queryset.values_list('id', flat=True)})
         return render(request, 'admin/keine_evaluation.html', {'veranstaltungen': queryset, 'status': form, })
 
-    keine_evaluation_action.short_description = "Keine Evaluation für diese Veranstaltung(en)"
+    keine_evaluation_action.short_description = _("Keine Evaluation für diese Veranstaltung(en)")
 
     actions = [status_aendern_action, keine_evaluation_action]
 
@@ -174,10 +175,10 @@ class KommentarAdmin(admin.ModelAdmin):
 class TutorAdmin(admin.ModelAdmin):
     """Admin View für Tutor"""
     fieldsets = [
-        ('Stammdaten', {'fields':
+        (_('Stammdaten'), {'fields':
                         ['vorname', 'nachname', 'email',
                          ]}),
-        ('Lehrveranstaltung', {'fields':
+        (_('Lehrveranstaltung'), {'fields':
                                ['veranstaltung', 'nummer', 'anmerkung'
                                 ]}),
     ]
@@ -244,7 +245,7 @@ class FachgebietAdmin(admin.ModelAdmin):
                         person.save()
                         count_added += 1
             if count_added > 0:
-                self.message_user(request, "Dieses Fachgebiet wurde {0} Personen zugeordnet".format(count_added))
+                self.message_user(request, _("Dieses Fachgebiet wurde {count_added} Personen zugeordnet").format(count_added=count_added))
 
 
 class FragebogenAdmin(admin.ModelAdmin):

@@ -1,29 +1,30 @@
 {% extends "bestellung_base.html" %}
+{% load i18n %}
 
-{% block title %}Anschreiben erzeugen{% endblock %}
+{% block title %}{% translate "Anschreiben erzeugen" %}{% endblock %}
 
 {% block content %}
-<h1>Anschreiben erzeugen</h1>
+<h1>{% translate "Anschreiben erzeugen" %}</h1>
 
-<p>Das Anschreiben ist ein Brief an die Veranstalter, der den Fragebögen beigefügt wird.</p>
+<p>{% translate "Das Anschreiben ist ein Brief an die Veranstalter, der den Fragebögen beigefügt wird." %}</p>
 <form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
 <p>
 {% include 'includes/semesterauswahl.html' %}<br />
-<label for="abgabedatum">Erhebungswoche:</label> <input type="text" id="erhebungswoche" name="erhebungswoche" value="{{erhebungswoche}}"></input><br />
+<label for="abgabedatum">{% translate "Erhebungswoche:" %}</label> <input type="text" id="erhebungswoche" name="erhebungswoche" value="{{erhebungswoche}}"></input><br />
 </p>
-<p>Zu erzeugende Datei:
+<p>{% translate "Zu erzeugende Datei:" %}
 <fieldset>
-<input type="radio" id="anschreiben" name="vorlage" value="Anschreiben"><label for="anschreiben"> Anschreiben</label><br>
-<input type="radio" id="aufkleber" name="vorlage" value="Aufkleber"><label for="aufkleber"> Aufkleber</label>
-&nbsp;<label for="aufkleberanzahl">(Mindestteilnehmerzahl: </label> <input type="text" id="aufkleberanzahl" disabled name="anzahlaufkleber" value=0>)
+<input type="radio" id="anschreiben" name="vorlage" value="Anschreiben"><label for="anschreiben"> {% translate "Anschreiben" %}</label><br>
+<input type="radio" id="aufkleber" name="vorlage" value="Aufkleber"><label for="aufkleber"> {% translate "Aufkleber" %}</label>
+&nbsp;<label for="aufkleberanzahl">({% translate "Mindestteilnehmerzahl" %}: </label> <input type="text" id="aufkleberanzahl" disabled name="anzahlaufkleber" value=0>)
 </fieldset>
 <p>
-<input type="submit" name="submit" value="PDF erzeugen" />
+<input type="submit" name="submit" value="{% translate "PDF erzeugen" %}" />
 </p>
 </form>
 
 {% if texlog %}
-<h2>Fehler bei der Ausführung von pdflatex</h2>
+<h2>{% translate "Fehler bei der Ausführung von pdflatex" %}</h2>
 <pre>{{texlog}}</pre>
 {% endif %}
 <script>

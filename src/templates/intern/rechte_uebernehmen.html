@@ -1,12 +1,13 @@
 {% extends "bestellung_base.html" %}
+{% load i18n %}
 
-{% block title %}Veranstalter-Account übernehmen{% endblock %}
+{% block title %}{% translate "Veranstalter-Account übernehmen" %}{% endblock %}
 
 {% block content %}
-<h1>Veranstalter-Account übernehmen</h1>
+<h1>{% translate "Veranstalter-Account übernehmen" %}</h1>
 
-<p>Mit einem Klick auf "Übernehmen" loggst du dich als Veranstalter der ausgewählten Veranstaltung ein. Auf diese Weise kannst du z.B. berichtete Probleme einfacher nachvollziehen.</p>
-<p>Das System bietet dir nach der Rechteübernahme auf jeder Seite die Rückkehr zu deinem Account an.</p>
+<p>{% translate "Mit einem Klick auf 'Übernehmen' loggst du dich als Veranstalter der ausgewählten Veranstaltung ein. Auf diese Weise kannst du z.B. berichtete Probleme einfacher nachvollziehen." %}</p>
+<p>{% translate "Das System bietet dir nach der Rechteübernahme auf jeder Seite die Rückkehr zu deinem Account an." %}</p>
 <p>
 <form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
 <select size="1" name="vid">
@@ -14,7 +15,7 @@
 	<option value="{{v.id}}">{{v}}</option>
 {% endfor %}
 </select>
-<input type="submit" name="submit" value="Übernehmen" /> 
+<input type="submit" name="submit" value="{% translate "Übernehmen" %}" /> 
 </form>
 </p>
 {% endblock %}
