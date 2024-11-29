@@ -10,7 +10,10 @@
     <p>
         {% blocktranslate %}eingeloggt für <strong>{{veranstaltung.name}} ({{veranstaltung.semester.short}})</strong>{% endblocktranslate %}
 	    <br />
-	    <a href="{% url 'logout' %}">{% translate "ausloggen" %}</a>
+        <form action = "{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-link p-0" style="color: #009D81;">{% translate "ausloggen" %}</button>
+        </form>
     </p>
 
     {% if order_form and veranstaltung.semester.vollerhebung %}

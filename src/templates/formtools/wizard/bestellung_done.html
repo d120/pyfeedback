@@ -4,5 +4,8 @@
 {% block content %}
     <h3>{% translate "Die Bestellung wurde entgegengenommen" %}</h3>
 
-     <a href="{% url 'veranstalter-logout' %}">{% translate "Ausloggen" %}</a>
+    <form action = "{% url 'veranstalter-logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-link p-0" style="color: #009D81;">{% translate "Ausloggen" %}</button>
+    </form>
 {% endblock %}
