@@ -69,9 +69,13 @@
 {% block title %}{% translate "Bestellprozess " %}{{ veranstaltung.name}}{% endblock %}
 
 {% block content %}
+    <form action = "{% url 'logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-link p-0" style="color: #009D81; float: right;">{% translate "ausloggen" %}</button>
+    </form>
+
     <form action="" method="post">
         {% csrf_token %}
-        <a style="float: right" href="{% url 'logout' %}">{% translate "ausloggen" %}</a>
         <p style="font-size: 14px">{% translate "Bestellung für " %}<b>{{ veranstaltung.name }}</b>  {{ veranstaltung.semester }}</p>
 
         <div class="container progressbar_container">

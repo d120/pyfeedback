@@ -62,7 +62,10 @@
         {% translate "Dashboard" %}
     </h1>
 
-    <a href="{% url 'veranstalter-logout' %}">{% translate "Ausloggen" %}</a>
+    <form action = "{% url 'veranstalter-logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-link p-0" style="color: #009D81;">{% translate "Ausloggen" %}</button>
+    </form>
 
     <p class="subHeaderDashboard">{% translate "Status" %}</p>
     <span class="borderLine">{{ veranstaltung.get_status_display }}</span>
