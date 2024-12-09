@@ -579,7 +579,7 @@ class Veranstaltung(models.Model):
         if self.primaerdozent is not None:
             personen.append(self.primaerdozent)
         for per in self.ergebnis_empfaenger.all():
-            if per.pk != self.primaerdozent.pk:
+            if self.primaerdozent is None or per.pk != self.primaerdozent.pk:
                 personen.append(per)
         return personen
 
