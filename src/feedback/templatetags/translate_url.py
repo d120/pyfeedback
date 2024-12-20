@@ -15,7 +15,12 @@ def translate_url(context, language):
         view = resolve(context['request'].path)
         request_language = translation.get_language()
         translation.activate(language)
-        url = reverse(view.url_name, args=view.args, kwargs=view.kwargs)
+
+        namespace = view.namespace
+        view_name = f"{namespace}:{view.url_name}" if namespace else view.url_name
+        
+        url = reverse(view_name, args=view.args, kwargs=view.kwargs)
+        
         translation.activate(request_language)
         return url
     return ""
