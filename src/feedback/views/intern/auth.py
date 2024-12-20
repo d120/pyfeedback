@@ -54,6 +54,20 @@ def rechte_zuruecknehmen(request):
         return HttpResponseRedirect(reverse('feedback:intern-index'))
 
 
+def auth_user(request) :
+    if request.method == "POST" :
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+
+        user = auth.authenticate(username=username, password=password)
+
+        if user is None :
+            messages.error(request, "Invalid Password")
+        else :
+            auth.login(request, user)
+
+    return HttpResponseRedirect(reverse('feedback:auth-login'))
+
 @require_safe
 def login(request):
     if settings.DEBUG and not request.user.is_superuser:
@@ -62,6 +76,9 @@ def login(request):
             response = HttpResponse(status=401)
             response['WWW-Authenticate'] = 'Basic realm="Feedback"'
             return response
+
+    if not request.user.is_superuser :
+        return render(request, 'registration/login.html')
 
     # Apache fordert User zum Login mit FS-Account auf, von daher muss hier nur noch weitergeleitet
     # werden.

@@ -80,6 +80,7 @@ urlpatterns += [
 urlpatterns += [
     re_path(r'^intern/rechte_uebernehmen/$', feedback.views.intern.auth.rechte_uebernehmen, name='rechte-uebernehmen'),
     re_path(r'^intern/rechte_zuruecknehmen/$', feedback.views.intern.auth.rechte_zuruecknehmen, name='rechte_zuruecknehmen'),
+    re_path(r'^intern/auth_user/$', feedback.views.intern.auth.auth_user, name='auth-user'),
     re_path(r'^intern/$', feedback.views.intern.auth.login, name='auth-login'),
 ]
 
