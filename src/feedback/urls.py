@@ -1,7 +1,6 @@
 # coding=utf-8
 
 from django.conf.urls import include
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 import feedback.views.public
 import feedback.views.veranstalter
@@ -16,10 +15,7 @@ from django.conf import settings
 from feedback.views.veranstalter import VeranstalterWizard
 from django.utils.translation import get_language
 
-if not settings.DEBUG:
-    default_redirect = f'/{get_language()}/feedback/veranstalter/'
-else:
-    default_redirect = '/veranstalter/' # {'redirect_to': default_redirect}
+default_redirect = f'/{get_language()}/feedback/veranstalter/'
 
 # allgemeine Views
 urlpatterns = [
