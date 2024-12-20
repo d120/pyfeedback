@@ -1,5 +1,5 @@
 {% extends "d120_base.html" %} {% load i18n %} {% block section_veranstalter %}current{% endblock %} {% block title %}{% translate "Ausgeloggt" %}{% endblock %} {% block content %}
 <p>{% translate "Auf Wiedersehen!" %}</p>
 
-<p><a href="{% url 'public-results' %}">{% translate "weiter zu den Ergebnissen" %}</a></p>
+<p><a href="{% url 'feedback:public-results' %}">{% translate "weiter zu den Ergebnissen" %}</a></p>
 {% endblock %}

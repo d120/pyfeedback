@@ -621,7 +621,7 @@ class SendmailTest(NonSuTestMixin, TestCase):
         # ----- Vorschau: Check if the replacements are highlighted ----- #
         color_span = '<span style="color:blue">{}</span>'
         self.assertEqual(color_span.format('Grundlagen der Agrarphilosophie I'), response.context['veranstaltung'])
-        link_veranstalter = 'https://www.fachschaft.informatik.tu-darmstadt.de%s' % reverse('veranstalter-login')
+        link_veranstalter = 'https://www.fachschaft.informatik.tu-darmstadt.de%s' % reverse('feedback:veranstalter-login')
         link_suffix_format = '?vid=%d&token=%s'
         self.assertEqual(color_span.format(link_veranstalter + (link_suffix_format % (1337, '0123456789abcdef'))),
                          response.context['link_veranstalter'])

@@ -62,7 +62,7 @@
         {% translate "Dashboard" %}
     </h1>
 
-    <a href="{% url 'veranstalter-logout' %}">{% translate "Ausloggen" %}</a>
+    <a href="{% url 'feedback:veranstalter-logout' %}">{% translate "Ausloggen" %}</a>
 
     <p class="subHeaderDashboard">{% translate "Status" %}</p>
     <span class="borderLine">{{ veranstaltung.get_status_display }}</span>
@@ -85,7 +85,7 @@
         <div class="orderHeadContainer">
             <span style="display: block; float: left" class="subHeaderDashboard">{% translate "Aktuelle Bestellung" %}</span>
             {% if allow_order %}
-                <button class="orderButton" onclick="window.location='{% url 'veranstalter-bestellung' %}';">{% translate "Bestellung ändern" %}</button>
+                <button class="orderButton" onclick="window.location='{% url 'feedback:veranstalter-bestellung' %}';">{% translate "Bestellung ändern" %}</button>
             {% endif %}
         </div>
         <div class="dashboardOrderContainer dashboardTableBordered">
@@ -126,7 +126,7 @@
         </div>
     {% else %}
         {% if allow_order %}
-            <button style="padding: 2px; background-color: #4CAF50; margin:2px; color:white; border: 1px solid black;" onclick="window.location='{% url 'veranstalter-bestellung' %}';">{% translate "Bestellung durchführen" %}</button>
+            <button style="padding: 2px; background-color: #4CAF50; margin:2px; color:white; border: 1px solid black;" onclick="window.location='{% url 'feedback:veranstalter-bestellung' %}';">{% translate "Bestellung durchführen" %}</button>
         {% endif %}
     {% endif %}
 

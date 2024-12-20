@@ -30,7 +30,7 @@ def rechte_uebernehmen(request):
             request.session['vid'] = v
             request.session['veranstaltung'] = str(veranst)
 
-            return HttpResponseRedirect(reverse('veranstalter-index'))
+            return HttpResponseRedirect(reverse('feedback:veranstalter-index'))
 
         except KeyError:
             pass
@@ -48,10 +48,10 @@ def rechte_zuruecknehmen(request):
         u = User.objects.get(id=uid)
         user = auth.authenticate(reset=True, user=u)
         auth.login(request, user, backend='feedback.auth.TakeoverBackend')
-        return HttpResponseRedirect(reverse('intern-index'))
+        return HttpResponseRedirect(reverse('feedback:intern-index'))
     # Redirect to intern.index view to get a clear session
     except KeyError:
-        return HttpResponseRedirect(reverse('intern-index'))
+        return HttpResponseRedirect(reverse('feedback:intern-index'))
 
 
 @require_safe
@@ -65,4 +65,4 @@ def login(request):
 
     # Apache fordert User zum Login mit FS-Account auf, von daher muss hier nur noch weitergeleitet
     # werden.
-    return HttpResponseRedirect(reverse('intern-index'))
+    return HttpResponseRedirect(reverse('feedback:intern-index'))

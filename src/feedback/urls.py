@@ -14,16 +14,16 @@ import django.contrib.auth.views
 from django.urls import reverse_lazy, re_path
 from django.conf import settings
 from feedback.views.veranstalter import VeranstalterWizard
-
+from django.utils.translation import get_language
 
 if not settings.DEBUG:
-    default_redirect = '/feedback-new/'
+    default_redirect = f'/{get_language()}/feedback/veranstalter/'
 else:
-    default_redirect = '/veranstalter/'
+    default_redirect = '/veranstalter/' # {'redirect_to': default_redirect}
 
 # allgemeine Views
 urlpatterns = [
-    re_path(r'^$', feedback.views.redirect, {'redirect_to': default_redirect}),
+    re_path(r'^$', feedback.views.redirect, {'redirect_to': default_redirect}, name="default"),
 ]
 
 # öffentliche Views
@@ -85,10 +85,9 @@ urlpatterns += [
 
 # Logout
 urlpatterns += [
-    re_path(r'^logout/$', django.contrib.auth.views.LogoutView.as_view(), {'next_page': reverse_lazy('public-results')}, name='logout'),
+    re_path(r'^logout/$', django.contrib.auth.views.LogoutView.as_view(), {'next_page': reverse_lazy('feedback:public-results')}, name='logout'),
 ]
 
-urlpatterns += staticfiles_urlpatterns()
 
 if settings.DEBUG:
     # Ausschließlich in der Entwicklung nötig, damit statische Dateien (JS, CSS, Bilder...)

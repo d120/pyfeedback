@@ -40,10 +40,10 @@
         </form>
         <br>
         <input type="button" name="not_similar" value="{% translate "Ignorieren" %}"
-            onclick="location.href='{% url 'import_vv_edit_users_update' pk=new.id %}'"/>
+            onclick="location.href='{% url 'feedback:import_vv_edit_users_update' pk=new.id %}'"/>
 
         <br><br>
-        <p><a href="{% url 'import_vv_edit_users' %}">{% translate "zurück zu Personendaten" %}</a></p>
+        <p><a href="{% url 'feedback:import_vv_edit_users' %}">{% translate "zurück zu Personendaten" %}</a></p>
     {% endwith %}
     {% endwith %}
 {% endblock %}

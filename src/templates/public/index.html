@@ -57,7 +57,7 @@
     <tbody>
         {% for e in ergebnisse %}
         <tr class="ranking_row {% cycle 'row1' 'row2' %}">
-            <td class="label"><a href="{% url 'public-veranstaltung' e.veranstaltung.id %}">{{ e.veranstaltung.name }}</a></td>
+            <td class="label"><a href="{% url 'feedback:public-veranstaltung' e.veranstaltung.id %}">{{ e.veranstaltung.name }}</a></td>
 
             {% if include_hidden %} {% for val, count in e.all_values %}
             <td class="data{% if order_num == forloop.counter %} selected{% endif %}{% if count < thresh_valid %} invalid{% endif %}">

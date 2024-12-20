@@ -12,7 +12,7 @@
 
                 {% for p in persons %}
                             <h2>
-                                <a href="{% url 'import_vv_edit_users_update' pk=p.id %}">
+                                <a href="{% url 'feedback:import_vv_edit_users_update' pk=p.id %}">
                                     {{p.full_name}}
                                 </a>
                             </h2>

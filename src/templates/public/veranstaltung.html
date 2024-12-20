@@ -4,7 +4,7 @@
 <script type="text/javascript" src="{% static 'ranking.js' %}"></script>
 {% endblock %} {% block content %}
 <h1>{{ v.name }} ({{ v.semester.short }})</h1>
-<p><a href="{% url 'public-results' %}?semester={{ v.semester.semester }}">{% translate "zurück zur Übersicht" %}</a></p>
+<p><a href="{% url 'feedback:public-results' %}?semester={{ v.semester.semester }}">{% translate "zurück zur Übersicht" %}</a></p>
 
 {% if restricted %}
 <p>{% translate "Hinweis: Diese Ergebnisse sind momentan noch nicht öffentlich verfügbar." %}</p>
