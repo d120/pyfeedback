@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-23 19:50+0100\n"
+"POT-Creation-Date: 2024-12-22 11:24+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -76,50 +76,50 @@ msgid ""
 "geschlossen."
 msgstr ""
 
-#: feedback/forms.py:123
+#: feedback/forms.py:126
 msgid "Datei"
 msgstr ""
 
-#: feedback/forms.py:138
+#: feedback/forms.py:141
 msgid "Das Feld für die Anrede oder Email ist leer."
 msgstr ""
 
-#: feedback/forms.py:168 feedback/models/base.py:406
+#: feedback/forms.py:171 feedback/models/base.py:406
 msgid "Ja"
 msgstr ""
 
-#: feedback/forms.py:168 feedback/models/base.py:407
+#: feedback/forms.py:171 feedback/models/base.py:407
 msgid "Nein"
 msgstr ""
 
-#: feedback/forms.py:173
+#: feedback/forms.py:176
 msgid "Auswahl"
 msgstr ""
 
-#: feedback/forms.py:203
+#: feedback/forms.py:206
 msgid "CSV Datei aus Evasys"
 msgstr ""
 
-#: feedback/forms.py:203
+#: feedback/forms.py:206
 msgid "Im Evasysseitenmenü unter dem Punkt \"Teilnahmeübersicht\" generierbar."
 msgstr ""
 
-#: feedback/forms.py:206
+#: feedback/forms.py:209
 msgid "Versende TANs per E-Mail"
 msgstr ""
 
-#: feedback/forms.py:206
+#: feedback/forms.py:209
 msgid "Verarbeitungsart"
 msgstr ""
 
-#: feedback/forms.py:210
+#: feedback/forms.py:213
 msgid ""
 "Hier wird eine E-Mail an alle Veranstalter*innen ohne Anhang versendet. Es "
 "werden die selben Ersetzungen wie beim Standardmailsystem unterstützt und "
 "zusätzlich das Feld {{ losung }}."
 msgstr ""
 
-#: feedback/forms.py:211
+#: feedback/forms.py:214
 msgid ""
 "Hier wird die gewählte Vorlage an alle Veranstalter*innen mit einer CSV "
 "Datei versendet. Es werden die selben Ersetzungen wie beim "
@@ -468,7 +468,7 @@ msgstr ""
 
 #: feedback/models/base.py:717
 #: templates/formtools/wizard/email_zusammenfassung.html:74
-#: templates/veranstalter/dashboard.html:109
+#: templates/veranstalter/dashboard.html:110
 msgid "Anmerkung"
 msgstr ""
 
@@ -479,7 +479,7 @@ msgstr ""
 #: feedback/models/base.py:729
 #: templates/formtools/wizard/email_zusammenfassung.html:66
 #: templates/formtools/wizard/zusammenfassung.html:61
-#: templates/veranstalter/dashboard.html:101
+#: templates/veranstalter/dashboard.html:102
 msgid "Tutoren"
 msgstr ""
 
@@ -714,7 +714,7 @@ msgid ""
 msgstr ""
 
 #: templates/feedback/person_form.html:4
-#: templates/veranstalter/dashboard.html:5 templates/veranstalter/index.html:4
+#: templates/veranstalter/dashboard.html:6 templates/veranstalter/index.html:4
 msgid "Veranstalterbereich"
 msgstr ""
 
@@ -818,7 +818,7 @@ msgid "Die Bestellung wurde entgegengenommen"
 msgstr ""
 
 #: templates/formtools/wizard/bestellung_done.html:7
-#: templates/intern/index.html:16 templates/veranstalter/dashboard.html:64
+#: templates/intern/index.html:16 templates/veranstalter/dashboard.html:65
 msgid "Ausloggen"
 msgstr ""
 
@@ -832,22 +832,22 @@ msgid "Zusammenfassung der Fragebogenbestellung für %(veranstaltung)s"
 msgstr ""
 
 #: templates/formtools/wizard/email_zusammenfassung.html:70
-#: templates/veranstalter/dashboard.html:105
+#: templates/veranstalter/dashboard.html:106
 msgid "Num"
 msgstr ""
 
 #: templates/formtools/wizard/email_zusammenfassung.html:71
-#: templates/veranstalter/dashboard.html:106
+#: templates/veranstalter/dashboard.html:107
 msgid "Vorname"
 msgstr ""
 
 #: templates/formtools/wizard/email_zusammenfassung.html:72
-#: templates/veranstalter/dashboard.html:107
+#: templates/veranstalter/dashboard.html:108
 msgid "Nachname"
 msgstr ""
 
 #: templates/formtools/wizard/email_zusammenfassung.html:73
-#: templates/veranstalter/dashboard.html:108
+#: templates/veranstalter/dashboard.html:109
 msgid "Email"
 msgstr ""
 
@@ -1650,32 +1650,48 @@ msgstr ""
 msgid "weiter zu den Ergebnissen"
 msgstr ""
 
-#: templates/veranstalter/dashboard.html:61
+#: templates/registration/login.html:5 templates/registration/login.html:8
+msgid "Anmeldung"
+msgstr ""
+
+#: templates/registration/login.html:13
+msgid "Benutzername"
+msgstr ""
+
+#: templates/registration/login.html:17
+msgid "Password"
+msgstr ""
+
+#: templates/registration/login.html:20
+msgid "Anmelden"
+msgstr ""
+
+#: templates/veranstalter/dashboard.html:62
 msgid "Dashboard"
 msgstr ""
 
-#: templates/veranstalter/dashboard.html:66
-#: templates/veranstalter/dashboard.html:73
+#: templates/veranstalter/dashboard.html:67
+#: templates/veranstalter/dashboard.html:74
 msgid "Status"
 msgstr ""
 
-#: templates/veranstalter/dashboard.html:69
+#: templates/veranstalter/dashboard.html:70
 msgid "Log"
 msgstr ""
 
-#: templates/veranstalter/dashboard.html:72
+#: templates/veranstalter/dashboard.html:73
 msgid "Datum"
 msgstr ""
 
-#: templates/veranstalter/dashboard.html:85
+#: templates/veranstalter/dashboard.html:86
 msgid "Aktuelle Bestellung"
 msgstr ""
 
-#: templates/veranstalter/dashboard.html:87
+#: templates/veranstalter/dashboard.html:88
 msgid "Bestellung ändern"
 msgstr ""
 
-#: templates/veranstalter/dashboard.html:128
+#: templates/veranstalter/dashboard.html:129
 msgid "Bestellung durchführen"
 msgstr ""
 
