@@ -62,11 +62,15 @@ def auth_user(request) :
         user = auth.authenticate(username=username, password=password)
 
         if user is None :
-            messages.error(request, "Invalid Password")
+            messages.error(request, "Invalid Password or Username")
+            return render(request, 'registration/login.html')
         else :
             auth.login(request, user)
-
-    return HttpResponseRedirect(reverse('feedback:auth-login'))
+            return HttpResponseRedirect(reverse('feedback:auth-login'))
+    
+    elif request.method == "GET" :
+        return render(request, 'registration/login.html')
+    
 
 @require_safe
 def login(request):
@@ -77,8 +81,8 @@ def login(request):
             response['WWW-Authenticate'] = 'Basic realm="Feedback"'
             return response
 
-    if not request.user.is_superuser :
-        return render(request, 'registration/login.html')
+    if not settings.DEBUG and not request.user.is_authenticated :
+        return HttpResponseRedirect(reverse('feedback:auth-user'))
 
     # Apache fordert User zum Login mit FS-Account auf, von daher muss hier nur noch weitergeleitet
     # werden.

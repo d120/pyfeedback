@@ -30,7 +30,7 @@ class GenerateLettersTest(NonSuTestMixin, TestCase):
         except OSError:
             return self.skipTest("OSError while looking for pdflatex")
 
-        self.path = f'/{get_language()}/intern/generate_letters/'
+        self.path = f'/{get_language()}/feedback/intern/generate_letters/'
         try:
             self.orig_contents = self._get_erhebungswoche()
         except IOError:

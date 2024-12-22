@@ -15,7 +15,7 @@ from feedback import tests
 
 class InternVvTest(NonSuTestMixin):
     def test_import_vv(self):
-        path = f'/{get_language()}/intern/import_vv/'
+        path = f'/{get_language()}/feedback/intern/import_vv/'
         self.do_non_su_test(path)
 
         self.assertTrue(self.client.login(username='supers', password='pw'))
@@ -33,7 +33,7 @@ class InternVvTest(NonSuTestMixin):
         self.assertTrue(response['Location'].endswith('/intern/import_vv_edit/'))
 
     def test_import_vv_edit_get(self):
-        path = f'/{get_language()}/intern/import_vv_edit/'
+        path = f'/{get_language()}/feedback/intern/import_vv_edit/'
         self.do_non_su_test(path)
 
         self.client.login(username='supers', password='pw')
@@ -58,7 +58,7 @@ class InternVvTest(NonSuTestMixin):
         iv1_sub = ImportVeranstaltung.objects.create(typ='vu', name='Bla II', category=ic_sub)
 
         self.client.login(username='supers', password='pw')
-        path = f'/{get_language()}/intern/import_vv_edit/'
+        path = f'/{get_language()}/feedback/intern/import_vv_edit/'
 
         # kein Semester angegeben
         response = self.client.post(path, {'v': [iv0.id, iv1.id, iv1_sub.id]}, **{'REMOTE_USER': 'super'})
@@ -80,7 +80,7 @@ class InternVvTest(NonSuTestMixin):
 class InternVvEditUsersTest(NonSuTestMixin, TestCase):
     def setUp(self):
         super(InternVvEditUsersTest, self).setUp()
-        self.path = f'/{get_language()}/intern/import_vv_edit_users/'
+        self.path = f'/{get_language()}/feedback/intern/import_vv_edit_users/'
 
         self.p0 = Person.objects.create(vorname='Je', nachname='Mand')
         self.p1 = Person.objects.create(vorname='Auch Je', nachname='Mand')
