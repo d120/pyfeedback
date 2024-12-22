@@ -4,10 +4,11 @@ from django.conf.urls import include
 from django.contrib import admin
 from django.contrib.auth.models import User
 
-from django.urls import re_path, reverse_lazy
+from django.urls import re_path, reverse_lazy, path
 from django.conf.urls.i18n import i18n_patterns
 from django.views.generic.base import RedirectView
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.conf import settings
 
 # Admin-Seiten konfigurieren
 admin.autodiscover()
@@ -26,3 +27,7 @@ urlpatterns += i18n_patterns(
 )
 
 urlpatterns += staticfiles_urlpatterns()
+
+if not settings.DEBUG :
+    # don't forget to put sample favicon.ico in static files
+    urlpatterns += [path('favicon.ico', RedirectView.as_view(url='/feedback/static/img/favicon.ico', permanent=True))]

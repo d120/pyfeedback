@@ -68,9 +68,10 @@ def auth_user(request) :
             auth.login(request, user)
             return HttpResponseRedirect(reverse('feedback:auth-login'))
     
-    elif request.method == "GET" :
+    elif request.method == "GET" and not request.user.is_authenticated :
         return render(request, 'registration/login.html')
     
+    return HttpResponseRedirect(reverse('feedback:auth-login'))
 
 @require_safe
 def login(request):

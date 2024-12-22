@@ -112,7 +112,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'feedback.auth.FSDebugRemoteUserMiddleware',
-    # 'whitenoise.middleware.WhiteNoiseMiddleware', # useful when testing with DEBUG=False, Note:first pip install whitenoise
+    # 'whitenoise.middleware.WhiteNoiseMiddleware', # while DEBUG=False servers static files, Note:first pip install whitenoise
 ]
 if not TESTING:
     MIDDLEWARE += 'debug_toolbar.middleware.DebugToolbarMiddleware'

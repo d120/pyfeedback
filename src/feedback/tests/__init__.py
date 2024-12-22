@@ -25,8 +25,10 @@ def suite():
         suite.addTest(unittest.TestLoader().loadTestsFromName(test_module))
     return suite
 
-LOGIN_END = f'/{get_language()}/intern/'
-INDEX_END = f'/{get_language()}/intern/uebersicht/'
+LOGIN_END = f'/{get_language()}/feedback/intern/'
+INDEX_END = f'/{get_language()}/feedback/intern/uebersicht/'
+AUTH_END = f'/{get_language()}/feedback/intern/auth_user/'
 TESTSERVER_BEGIN = ''
 LOGIN_URL = TESTSERVER_BEGIN+LOGIN_END
 INDEX_URL = TESTSERVER_BEGIN+INDEX_END
+AUTH_URL = TESTSERVER_BEGIN+AUTH_END
