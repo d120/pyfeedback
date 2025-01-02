@@ -502,7 +502,7 @@ class VeranstaltungTest(TransactionTestCase):
         self.assertEqual(len(url_parts), 2)
         ver_id = self.v[0].id
         self.assertEqual(url_parts[0],
-                         f'https://www.fachschaft.informatik.tu-darmstadt.de/{get_language()}/feedback/veranstalter/login/?vid={ver_id}')
+                         f'https://www.fachschaft.informatik.tu-darmstadt.de/{get_language()}/veranstalter/login/?vid={ver_id}')
         access_token = self.v[0].access_token
         self.assertEqual('token=' + access_token, url_parts[1])
         # FIXME: Is the below assert necessary? Since Python3 strings are all Unicode

@@ -196,8 +196,8 @@ LOGGING = {
     }
 }
 
-LOGIN_URL = '/de/feedback/intern/'
-LOGIN_REDIRECT_URL = '/de/feedback/intern/uebersicht/'
+LOGIN_URL = '/de/intern/'
+LOGIN_REDIRECT_URL = '/de/intern/uebersicht/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 

@@ -15,7 +15,7 @@ from django.conf import settings
 from feedback.views.veranstalter import VeranstalterWizard
 from django.utils.translation import get_language
 
-default_redirect = f'/{get_language()}/feedback/veranstalter/'
+default_redirect = f'/{get_language()}/veranstalter/'
 
 # allgemeine Views
 urlpatterns = [

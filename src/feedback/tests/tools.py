@@ -42,7 +42,7 @@ def get_veranstaltung(typ):
 
 def login_veranstalter(v):
     c = Client()
-    response = c.get(f'/{get_language()}/feedback/veranstalter/login/', {'vid': v.id, 'token': v.access_token})
+    response = c.get(f'/{get_language()}/veranstalter/login/', {'vid': v.id, 'token': v.access_token})
     if response.status_code != 302:
         raise Exception('Veranstalter-Login fehlgeschlagen.')
     return c

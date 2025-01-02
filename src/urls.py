@@ -23,7 +23,7 @@ urlpatterns += i18n_patterns(
     # Muss in dieser Reihenfolge stehen bleiben, da sonst /doc nicht funktioniert!
     re_path(r'^intern/admin/doc/', include('django.contrib.admindocs.urls')),
     re_path(r'^intern/admin/', admin.site.urls),
-    re_path(r'^feedback/', include(("feedback.urls", "feedback"), namespace="feedback")),
+    re_path(r'^', include(("feedback.urls", "feedback"), namespace="feedback")),
 )
 
 urlpatterns += staticfiles_urlpatterns()
