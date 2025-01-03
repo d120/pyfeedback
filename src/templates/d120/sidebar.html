@@ -12,10 +12,10 @@
         <a href="https://www.fachschaft.informatik.tu-darmstadt.de/hall-of-fame/" title="Zeige Seite Hall of Fame">{% translate "Hall of Fame" %}</a>
       </li>
       <li class="nav-item {% block section_ergebnisse %}link{% endblock %}">
-        <a href="{% if request.user.is_superuser %}{% url 'intern-ergebnisse' %}{% else %}{% url 'public-results' %}{% endif %}" title="Zeige Seite Ergebnisse">{% translate "Ergebnisse" %}</a>
+        <a href="{% if request.user.is_superuser %}{% url 'feedback:intern-ergebnisse' %}{% else %}{% url 'feedback:public-results' %}{% endif %}" title="Zeige Seite Ergebnisse">{% translate "Ergebnisse" %}</a>
       </li>
       <li class="nav-item {% block section_veranstalter %}link{% endblock %}">
-        <a href="{% url 'veranstalter-index' %}" title="Zeige Seite Webinterface">{% translate "Webinterface" %}</a>
+        <a href="{% url 'feedback:veranstalter-index' %}" title="Zeige Seite Webinterface">{% translate "Webinterface" %}</a>
       </li>
     </ul>
   </li>

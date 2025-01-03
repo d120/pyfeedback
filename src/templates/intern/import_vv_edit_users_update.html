@@ -14,7 +14,7 @@
             {% translate "Auf Google suchen." %}</a></h2>
 
         {% if view.has_similar_name %}
-            <p><a style="color: red" href="{% url 'import_vv_edit_users_update_namecheck' pk=person.id %}">
+            <p><a style="color: red" href="{% url 'feedback:import_vv_edit_users_update_namecheck' pk=person.id %}">
                 {% translate "Es existiert eine Person, die ähnlich zu dieser ist." %}</a></p>
         {% else %}
             <p></p>
@@ -24,14 +24,14 @@
         <div>
             {% if view.get_id.1 %}
                 <input type="button" name="back" value="{% translate "Zurück" %}"
-                       onclick="location.href='{% url 'import_vv_edit_users_update' pk=view.get_id.1 %}'"/>&nbsp;
+                       onclick="location.href='{% url 'feedback:import_vv_edit_users_update' pk=view.get_id.1 %}'"/>&nbsp;
             {% else %}
                 <input type="button" name="back" value="{% translate "Zurück" %}" disabled="disabled" />&nbsp;
             {% endif %}
 
             {% if view.get_id.0 %}
                 <input type="button" name="jump" value="{% translate "Überspringen" %}"
-                       onclick="location.href='{% url 'import_vv_edit_users_update' pk=view.get_id.0 %}'"/>&nbsp;
+                       onclick="location.href='{% url 'feedback:import_vv_edit_users_update' pk=view.get_id.0 %}'"/>&nbsp;
             {% else %}
                 <input type="button" name="jump" value="{% translate "Überspringen" %}" disabled="disabled" />&nbsp;
             {% endif %}
@@ -39,5 +39,5 @@
         </div>
     </form>
     <br>
-    <p><a href="{% url 'import_vv_edit_users' %}">{% translate "zurück zu Personendaten" %}</a></p>
+    <p><a href="{% url 'feedback:import_vv_edit_users' %}">{% translate "zurück zu Personendaten" %}</a></p>
 {% endblock %}

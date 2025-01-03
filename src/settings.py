@@ -112,6 +112,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'feedback.auth.FSDebugRemoteUserMiddleware',
+    # 'whitenoise.middleware.WhiteNoiseMiddleware', # while DEBUG=False servers static files, Note:first pip install whitenoise
 ]
 if not TESTING:
     MIDDLEWARE += 'debug_toolbar.middleware.DebugToolbarMiddleware'
@@ -195,8 +196,8 @@ LOGGING = {
     }
 }
 
-LOGIN_URL = '/intern/'
-LOGIN_REDIRECT_URL = '/intern/uebersicht/'
+LOGIN_URL = '/de/intern/'
+LOGIN_REDIRECT_URL = '/de/intern/uebersicht/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 

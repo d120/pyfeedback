@@ -1,0 +1,23 @@
+{% extends "d120_base.html" %}
+{% load i18n %}
+
+{% block section_veranstalter %}current{% endblock section_veranstalter %}
+{% block title %}{% translate "Anmeldung" %}{% endblock title %}
+{% block content %}
+<div class="container mt-5">
+    <h2>{% translate "Anmeldung" %}</h2>
+    <br>
+    <form method="post" action="{% url "feedback:auth-user" %}">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="username" class="form-label">{% translate "Benutzername" %}:</label>
+            <input type="text" id="username" name="username" class="form-control" style="width:30%">
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">{% translate "Password" %}:</label>
+            <input type="password" id="password" name="password" class="form-control" style="width:30%">
+        </div>
+        <button type="submit" class="btn btn-primary">{% translate "Anmelden" %}</button>
+    </form>
+</div>
+{% endblock content %}

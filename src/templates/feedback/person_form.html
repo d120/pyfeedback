@@ -7,7 +7,7 @@
 
 <p>
 	{% translate "eingeloggt für " %}<strong>{% blocktranslate %}{{veranstaltung.name}} ({{veranstaltung.semester.short}}){% endblocktranslate %}</strong><br />
-	<a href="{% url 'logout' %}">{% translate "ausloggen" %}</a>
+	<a href="{% url 'feedback:logout' %}">{% translate "ausloggen" %}</a>
 </p>
 
 <h2>{% translate "Fragebogenbestellung Schritt 2 von 5" %}</h2>

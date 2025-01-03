@@ -30,7 +30,7 @@ def rechte_uebernehmen(request):
             request.session['vid'] = v
             request.session['veranstaltung'] = str(veranst)
 
-            return HttpResponseRedirect(reverse('veranstalter-index'))
+            return HttpResponseRedirect(reverse('feedback:veranstalter-index'))
 
         except KeyError:
             pass
@@ -48,11 +48,30 @@ def rechte_zuruecknehmen(request):
         u = User.objects.get(id=uid)
         user = auth.authenticate(reset=True, user=u)
         auth.login(request, user, backend='feedback.auth.TakeoverBackend')
-        return HttpResponseRedirect(reverse('intern-index'))
+        return HttpResponseRedirect(reverse('feedback:intern-index'))
     # Redirect to intern.index view to get a clear session
     except KeyError:
-        return HttpResponseRedirect(reverse('intern-index'))
+        return HttpResponseRedirect(reverse('feedback:intern-index'))
 
+
+def auth_user(request) :
+    if request.method == "POST" :
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+
+        user = auth.authenticate(username=username, password=password)
+
+        if user is None :
+            messages.error(request, "Invalid Password or Username")
+            return render(request, 'registration/login.html')
+        else :
+            auth.login(request, user)
+            return HttpResponseRedirect(reverse('feedback:auth-login'))
+    
+    elif request.method == "GET" and not request.user.is_authenticated :
+        return render(request, 'registration/login.html')
+    
+    return HttpResponseRedirect(reverse('feedback:auth-login'))
 
 @require_safe
 def login(request):
@@ -63,6 +82,9 @@ def login(request):
             response['WWW-Authenticate'] = 'Basic realm="Feedback"'
             return response
 
+    if not settings.DEBUG and not request.user.is_authenticated :
+        return HttpResponseRedirect(reverse('feedback:auth-user'))
+
     # Apache fordert User zum Login mit FS-Account auf, von daher muss hier nur noch weitergeleitet
     # werden.
-    return HttpResponseRedirect(reverse('intern-index'))
+    return HttpResponseRedirect(reverse('feedback:intern-index'))

@@ -92,7 +92,7 @@ def export_veranstaltungen(request):
     try:
         semester = Semester.objects.get(semester=request.POST['semester'])
     except (Semester.DoesNotExist, KeyError):
-        return HttpResponseRedirect(reverse('export_veranstaltungen'))
+        return HttpResponseRedirect(reverse('feedback:export_veranstaltungen'))
 
     ubung_export = False
     if request.POST.get("xml_ubung", None) is not None:
@@ -112,19 +112,19 @@ def export_veranstaltungen(request):
                                     'für Vorlesungen mit Übung vor!' % semester)
         else:
             messages.error(request, 'Für das ausgewählte Semester (%s) liegen keine Bestellungen vor!' % semester)
-        return HttpResponseRedirect(reverse('export_veranstaltungen'))
+        return HttpResponseRedirect(reverse('feedback:export_veranstaltungen'))
 
     missing_verantwortlich = veranst.filter(verantwortlich=None)
     if missing_verantwortlich.count() > 0:
         txt = ', '.join([v.name for v in missing_verantwortlich])
         messages.error(request, 'Für die folgenden Veranstaltungen ist kein Verantwortlicher eingetragen: %s' % txt)
-        return HttpResponseRedirect(reverse('export_veranstaltungen'))
+        return HttpResponseRedirect(reverse('feedback:export_veranstaltungen'))
 
     missing_sprache = veranst.filter(sprache=None)
     if missing_sprache.count() > 0:
         txt = ', '.join([v.name for v in missing_sprache])
         messages.error(request, 'Für die folgenden Veranstaltungen ist keine Sprache eingetragen: %s' % txt)
-        return HttpResponseRedirect(reverse('export_veranstaltungen'))
+        return HttpResponseRedirect(reverse('feedback:export_veranstaltungen'))
 
     person_set = set()
 
@@ -190,12 +190,12 @@ def generate_letters(request):
     try:
         semester = Semester.objects.get(semester=request.POST['semester'])
     except (Semester.DoesNotExist, KeyError):
-        return HttpResponseRedirect(reverse('generate_letters'))
+        return HttpResponseRedirect(reverse('feedback:generate_letters'))
 
     try:
         vorlage = request.POST['vorlage']
     except (Semester.DoesNotExist, KeyError):
-        return HttpResponseRedirect(reverse('generate_letters'))
+        return HttpResponseRedirect(reverse('feedback:generate_letters'))
 
     if vorlage == 'Anschreiben':
         latexpath = settings.LATEX_PATH
@@ -209,7 +209,7 @@ def generate_letters(request):
     try:
         abgabedatum = request.POST['erhebungswoche'].replace('\\', '')
     except KeyError:
-        return HttpResponseRedirect(reverse('generate_letters'))
+        return HttpResponseRedirect(reverse('feedback:generate_letters'))
     with open(datefilename, 'w') as f:
         f.write(abgabedatum)
 
@@ -228,14 +228,14 @@ def generate_letters(request):
     if not veranst.count():
         messages.error(request, 'Für das ausgewählte Semester (%s) liegen '
                                 'keine Bestellungen vor oder die Mindesteilnehmeranzahl ist zu hoch!' % semester)
-        return HttpResponseRedirect(reverse('generate_letters'))
+        return HttpResponseRedirect(reverse('feedback:generate_letters'))
 
     lines = []
     for v in veranst:
         if not v.verantwortlich.printable():
             messages.error(request,
                            mark_safe(f"Der Veranstalter {v.verantwortlich.full_name} ist nicht druckbar, da das Personenprofil nicht vollständig ist. Du kannst das unter <a href={reverse('admin:feedback_person_change', args=(v.verantwortlich.id,))}>hier</a> beheben."))
-            return HttpResponseRedirect(reverse('generate_letters'))
+            return HttpResponseRedirect(reverse('feedback:generate_letters'))
         eva_id = v.get_barcode_number()
         empfaenger = str(v.verantwortlich.full_name())
         line = '\\adrentry{%s}{%s}{%s}{%s}{%s}{%s}{%s}{%s}{%s}\n' % (
@@ -300,7 +300,7 @@ def get_demo_context(request):
     :return: RequestContext, String, String
     """
     color_span = '<span style="color:blue">{}</span>'
-    link_veranstalter = 'https://www.fachschaft.informatik.tu-darmstadt.de%s' % reverse('veranstalter-login')
+    link_veranstalter = 'https://www.fachschaft.informatik.tu-darmstadt.de%s' % reverse('feedback:veranstalter-login')
     link_suffix_format = '?vid=%d&token=%s'
     demo_context = RequestContext(request, {
         'veranstaltung': color_span.format('Grundlagen der Agrarphilosophie I'),
@@ -367,7 +367,7 @@ def sendmail(request):
                 return render(request, 'intern/sendmail.html', data)
 
         except (Semester.DoesNotExist, KeyError):
-            return HttpResponseRedirect(reverse('sendmail'))
+            return HttpResponseRedirect(reverse('feedback:sendmail'))
 
         data['semester_selected'] = semester
         data['subject_rendered'] = "Evaluation: %s" % data['subject']
@@ -379,7 +379,7 @@ def sendmail(request):
                 data['body'] = vorlage.body
 
             except (Mailvorlage.DoesNotExist, KeyError, ValueError):
-                return HttpResponseRedirect(reverse('sendmail'))
+                return HttpResponseRedirect(reverse('feedback:sendmail'))
             return render(request, 'intern/sendmail.html', data)
 
         veranstaltungen = get_relevant_veranstaltungen(data['recipient'], semester)
@@ -445,7 +445,7 @@ def sendmail(request):
                                  '%d Veranstaltungen wurden erfolgreich, samt Tutoren, benachrichtigt.' % (len(mails) - 1))
             else:
                 messages.success(request, '%d Veranstaltungen wurden erfolgreich benachrichtigt.' % (len(mails) - 1))
-            return HttpResponseRedirect(reverse('intern-index'))
+            return HttpResponseRedirect(reverse('feedback:intern-index'))
 
     return render(request, 'intern/sendmail.html', data)
 
@@ -459,7 +459,7 @@ def import_ergebnisse(request):
         try:
             semester = Semester.objects.get(semester=request.POST['semester'])
         except (Semester.DoesNotExist, KeyError):
-            return HttpResponseRedirect(reverse('import_ergebnisse'))
+            return HttpResponseRedirect(reverse('feedback:import_ergebnisse'))
 
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
@@ -480,7 +480,7 @@ def import_ergebnisse(request):
                 messages.warning(request, w)
             for e in errors:
                 messages.error(request, e)
-            return HttpResponseRedirect(reverse('sync_ergebnisse'))
+            return HttpResponseRedirect(reverse('feedback:sync_ergebnisse'))
         else:
             messages.error(request, 'Fehler beim Upload')
     else:
@@ -500,7 +500,7 @@ def sync_ergebnisse(request):
     try:
         semester = Semester.objects.get(semester=request.POST['semester'])
     except (Semester.DoesNotExist, KeyError):
-        return HttpResponseRedirect(reverse('sync_ergebnisse'))
+        return HttpResponseRedirect(reverse('feedback:sync_ergebnisse'))
 
     fragebogen = get_model('Fragebogen', semester)
     ergebnis = get_model('Ergebnis', semester)
@@ -542,7 +542,7 @@ def sync_ergebnisse(request):
         messages.warning(request, 'Für das %s liegen keine Ergebnisse vor.' % semester)
     else:
         messages.success(request, 'Das Ranking für das %s wurde erfolgreich berechnet.' % semester)
-    return HttpResponseRedirect(reverse('sync_ergebnisse'))
+    return HttpResponseRedirect(reverse('feedback:sync_ergebnisse'))
 
 
 @user_passes_test(lambda u: u.is_superuser)
@@ -586,7 +586,7 @@ class CloseOrderFormView(UserPassesTestMixin, FormView):
         return super(CloseOrderFormView, self).form_valid(form)
 
     def form_invalid(self, form):
-        return HttpResponseRedirect(reverse('intern-index'))
+        return HttpResponseRedirect(reverse('feedback:intern-index'))
 
     def get_queryset(self):
         try:
@@ -594,10 +594,10 @@ class CloseOrderFormView(UserPassesTestMixin, FormView):
             return veranstaltungen
         except (Veranstaltung.DoesNotExist, KeyError):
             messages.warning(self.request, 'Keine passenden Veranstaltungen für das aktuelle Semester gefunden.')
-            return HttpResponseRedirect(reverse('intern-index'))
+            return HttpResponseRedirect(reverse('feedback:intern-index'))
 
     def get_success_url(self):
-        return reverse('intern-index')
+        return reverse('feedback:intern-index')
 
     def test_func(self):
         return self.request.user.is_superuser
@@ -662,7 +662,7 @@ class ProcessTANs(UserPassesTestMixin, SessionWizardView):
             self.request,
             '{} Veranstaltungen wurden erfolgreich benachrichtigt.'.format(
                 len(mails)))
-        return HttpResponseRedirect(reverse('intern-index'))
+        return HttpResponseRedirect(reverse('feedback:intern-index'))
 
     def get_template_names(self):
         return [self.template_name] if self.steps.step0 != 3 else [

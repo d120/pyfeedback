@@ -33,7 +33,7 @@ def import_vv(request):
         if form.is_valid():
             # TODO: Fehlerbehandlung
             vv_parser.parse_vv_xml(request.FILES['file'])
-            return HttpResponseRedirect(reverse('import_vv_edit'))
+            return HttpResponseRedirect(reverse('feedback:import_vv_edit'))
         else:
             messages.error(request, 'Fehler beim Upload')
     else:
@@ -68,14 +68,14 @@ def import_vv_edit(request):
             messages.error(request, 'Bevor zu importierende Veranstaltungen ausgewählt werden ' +
                            'können, muss zunächst eine VV-XML-Datei hochgeladen werden.')
 
-            return HttpResponseRedirect(reverse('import_vv'))
+            return HttpResponseRedirect(reverse('feedback:import_vv'))
     else:
         # gewählte Veranstaltungen übernehmen und Personen zuordnen
         # Liste der ausgewählten Veranstaltungen holen
         v_str = [ele[1] for ele in request.POST.lists() if ele[0] == 'v']
         if not len(v_str):
             messages.warning(request, 'Es wurden keine Veranstaltungen für den Import ausgewählt!')
-            return HttpResponseRedirect(reverse('import_vv_edit'))
+            return HttpResponseRedirect(reverse('feedback:import_vv_edit'))
 
         # IDs von unicode nach int konvertieren
         v_ids = [int(ele) for ele in v_str[0]]
@@ -84,7 +84,7 @@ def import_vv_edit(request):
         try:
             semester = Semester.objects.get(semester=request.POST['semester'])
         except (Semester.DoesNotExist, KeyError):
-            return HttpResponseRedirect(reverse('import_vv_edit'))
+            return HttpResponseRedirect(reverse('feedback:import_vv_edit'))
 
         # Veranstaltungen übernehmen
         data['v'] = []
@@ -103,7 +103,7 @@ def import_vv_edit(request):
 
         # temporäre Daten löschen
         vv_parser.parse_vv_clear()
-        return HttpResponseRedirect(reverse('import_vv_edit_users'))
+        return HttpResponseRedirect(reverse('feedback:import_vv_edit_users'))
 
 
 class PersonFormView(RedirectUserPassesTestMixin, ListView):
@@ -158,9 +158,9 @@ class PersonFormUpdateView(RedirectUserPassesTestMixin, UpdateView):
     def get_success_url(self):
         next_id, prev_id = self.get_id()
         if next_id:
-            return reverse('import_vv_edit_users_update', args=[next_id])
+            return reverse('feedback:import_vv_edit_users_update', args=[next_id])
         else:
-            return reverse('import_vv_edit_users')
+            return reverse('feedback:import_vv_edit_users')
 
     def test_func(self):
         return self.request.user.is_superuser
@@ -194,7 +194,7 @@ class SimilarNamesView(RedirectUserPassesTestMixin, DetailView):
         if not Person.is_veranstalter(new_person):
             new_person.delete()
 
-        return HttpResponseRedirect(reverse('import_vv_edit_users'))
+        return HttpResponseRedirect(reverse('feedback:import_vv_edit_users'))
 
     def get_context_data(self, **kwargs):
         context = super(SimilarNamesView, self).get_context_data(**kwargs)

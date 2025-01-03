@@ -71,7 +71,7 @@
 {% block content %}
     <form action="" method="post">
         {% csrf_token %}
-        <a style="float: right" href="{% url 'logout' %}">{% translate "ausloggen" %}</a>
+        <a style="float: right" href="{% url 'feedback:logout' %}">{% translate "ausloggen" %}</a>
         <p style="font-size: 14px">{% translate "Bestellung für " %}<b>{{ veranstaltung.name }}</b>  {{ veranstaltung.semester }}</p>
 
         <div class="container progressbar_container">
