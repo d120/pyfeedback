@@ -1,5 +1,5 @@
 from django import template
-from django.urls import resolve, reverse
+from django.urls import resolve, reverse, Resolver404
 from django.utils import translation
 
 register = template.Library()
@@ -12,7 +12,11 @@ def translate_url(context, language):
     ## this if is here only because of veranstalter.py > VeranstalterWizard > done method.
     ## see comment there, why we might not have request
     if 'request' in context :
-        view = resolve(context['request'].path)
+        try:
+            view = resolve(context['request'].path_info)
+        except Resolver404:
+            return ""
+
         request_language = translation.get_language()
         translation.activate(language)
 
