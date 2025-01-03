@@ -9,8 +9,6 @@ def translate_url(context, language):
     '''
     used to translate urls for switching languages
     '''
-    ## this if is here only because of veranstalter.py > VeranstalterWizard > done method.
-    ## see comment there, why we might not have request
     if 'request' in context :
         try:
             view = resolve(context['request'].path_info)
