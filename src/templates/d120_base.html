@@ -37,7 +37,7 @@
 
 				{% if request.session.orig_uid %}
 				<div class="breadcrumbs">
-					{% blocktranslate %}Du nutzt momentan die Rechte der Veranstalter von {{veranstaltung}}.{% endblocktranslate %} <a href="{% url 'rechte_zuruecknehmen' %}">{% translate "Zu meinem Account zurückkehren." %}</a>
+					{% blocktranslate %}Du nutzt momentan die Rechte der Veranstalter von {{veranstaltung}}.{% endblocktranslate %} <a href="{% url 'feedback:rechte_zuruecknehmen' %}">{% translate "Zu meinem Account zurückkehren." %}</a>
 				</div>
 				{% endif %} {% if messages %}
 				<ul class="messagelist">

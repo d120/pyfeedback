@@ -9,12 +9,12 @@
     <h1>{% translate "Interner Bereich" %}</h1>
     <ul>
         <li><a href="{% url 'admin:index' %}" target="_blank">{% translate "Verwaltung der Daten" %}</a></li>
-        <li><a href="{% url 'rechte-uebernehmen' %}">{% translate "zu Veranstalter-Account wechseln" %}</a></li>
-        <li><a href="{% url 'sendmail' %}">{% translate "Mail an Veranstalter verschicken" %}</a></li>
-        <li><a href="{% url 'fragebogensprache' %}">{% translate "Zuordnung Veranstaltungen zu Fragebogensprache" %}</a></li>
-        <li><a href="{% url 'lange_ohne_evaluation' %}">{% translate "Veranstaltungen die lange nicht mehr evaluiert wurden" %}</a></li>
+        <li><a href="{% url 'feedback:rechte-uebernehmen' %}">{% translate "zu Veranstalter-Account wechseln" %}</a></li>
+        <li><a href="{% url 'feedback:sendmail' %}">{% translate "Mail an Veranstalter verschicken" %}</a></li>
+        <li><a href="{% url 'feedback:fragebogensprache' %}">{% translate "Zuordnung Veranstaltungen zu Fragebogensprache" %}</a></li>
+        <li><a href="{% url 'feedback:lange_ohne_evaluation' %}">{% translate "Veranstaltungen die lange nicht mehr evaluiert wurden" %}</a></li>
         <li>
-            <form action = "{% url 'logout' %}" method="post">
+            <form action = "{% url 'feedback:logout' %}" method="post">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-link p-0" style="color: #009D81;">{% translate "Ausloggen" %}</button>
             </form>
@@ -33,14 +33,14 @@
     <ol>
         <li><a href="{% url 'admin:feedback_semester_add' %}" target="_blank">{% translate "neues Semester anlegen" %}</a> ({% translate "aktuell" %}:
         {% if cur_semester %}{{cur_semester.short}}{% else %}{% translate "nicht Vorhanden" %}{% endif %})</li>
-        <li><a href="{% url 'import_vv' %}">{% translate "Veranstaltungen aus VV importieren" %}</a> ({% translate "vor Bestellphase" %})</li>
-        <li><a href="{% url 'import_vv_edit_users' %}">{% translate "Fehlende Personendaten nachtragen" %}</a> ({% translate "vor Bestellphase" %})</li>
-        <li><a href="{% url 'status_final' %}">{% translate "Bestellphase abschließen" %}</a> ({% translate "nach Bestellphase" %})</li>
-        <li><a href="{% url 'generate_letters' %}">{% translate "Anschreiben für Veranstalter erzeugen" %}</a> ({% translate "nach Bestellphase" %})</li>
-        <li><a href="{% url 'export_veranstaltungen' %}">{% translate "Veranstaltungen für EvaSys exportieren" %}</a></li>
-        <li><a href="{% url 'process-tans' %}">{% translate "TANs verarbeiten" %}</a>  ({% translate "nach der Bestellphase" %})</li>
-        <li><a href="{% url 'import_ergebnisse' %}">{% translate "Ergebnisse aus EvaSys importieren" %}</a></li>
-        <li><a href="{% url 'sync_ergebnisse' %}">{% translate "Rankings berechnen" %}</a> ({% translate "nach dem Ergebnis-Import" %})</li>
+        <li><a href="{% url 'feedback:import_vv' %}">{% translate "Veranstaltungen aus VV importieren" %}</a> ({% translate "vor Bestellphase" %})</li>
+        <li><a href="{% url 'feedback:import_vv_edit_users' %}">{% translate "Fehlende Personendaten nachtragen" %}</a> ({% translate "vor Bestellphase" %})</li>
+        <li><a href="{% url 'feedback:status_final' %}">{% translate "Bestellphase abschließen" %}</a> ({% translate "nach Bestellphase" %})</li>
+        <li><a href="{% url 'feedback:generate_letters' %}">{% translate "Anschreiben für Veranstalter erzeugen" %}</a> ({% translate "nach Bestellphase" %})</li>
+        <li><a href="{% url 'feedback:export_veranstaltungen' %}">{% translate "Veranstaltungen für EvaSys exportieren" %}</a></li>
+        <li><a href="{% url 'feedback:process-tans' %}">{% translate "TANs verarbeiten" %}</a>  ({% translate "nach der Bestellphase" %})</li>
+        <li><a href="{% url 'feedback:import_ergebnisse' %}">{% translate "Ergebnisse aus EvaSys importieren" %}</a></li>
+        <li><a href="{% url 'feedback:sync_ergebnisse' %}">{% translate "Rankings berechnen" %}</a> ({% translate "nach dem Ergebnis-Import" %})</li>
         {% if cur_semester %}
         <li><a href="{% url 'admin:feedback_semester_change' cur_semester.id %}" target="_blank">{% translate "Ergebnisse veröffentlichen" %}</a>{% blocktranslate %} (aktuell: sichtbar für {{cur_semester.get_sichtbarkeit_display}}){% endblocktranslate %}</li>
         {% endif %}

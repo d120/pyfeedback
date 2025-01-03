@@ -30,7 +30,7 @@ def login(request):
             request.session['vid'] = v.id
             request.session['veranstaltung'] = str(v)
 
-            return HttpResponseRedirect(reverse('veranstalter-index'))
+            return HttpResponseRedirect(reverse('feedback:veranstalter-index'))
 
     return render(request, 'veranstalter/login_failed.html')
 
@@ -181,7 +181,7 @@ class VeranstalterWizard(SessionWizardView):
         if veranstaltung.allow_order():
             return super(VeranstalterWizard, self).get(request, *args, **kwargs)
         else:
-            return HttpResponseRedirect(reverse('veranstalter-index'))
+            return HttpResponseRedirect(reverse('feedback:veranstalter-index'))
 
     def get_context_data(self, form, **kwargs):
         context = super(VeranstalterWizard, self).get_context_data(form=form, **kwargs)

@@ -27,6 +27,8 @@ def suite():
 
 LOGIN_END = f'/{get_language()}/intern/'
 INDEX_END = f'/{get_language()}/intern/uebersicht/'
+AUTH_END = f'/{get_language()}/intern/auth_user/'
 TESTSERVER_BEGIN = ''
 LOGIN_URL = TESTSERVER_BEGIN+LOGIN_END
 INDEX_URL = TESTSERVER_BEGIN+INDEX_END
+AUTH_URL = TESTSERVER_BEGIN+AUTH_END

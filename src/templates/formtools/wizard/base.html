@@ -69,7 +69,7 @@
 {% block title %}{% translate "Bestellprozess " %}{{ veranstaltung.name}}{% endblock %}
 
 {% block content %}
-    <form action = "{% url 'logout' %}" method="post">
+    <form action = "{% url 'feedback:logout' %}" method="post">
         {% csrf_token %}
         <button type="submit" class="btn btn-link p-0" style="color: #009D81; float: right;">{% translate "ausloggen" %}</button>
     </form>

@@ -10,7 +10,7 @@
     <p>
         {% blocktranslate %}eingeloggt für <strong>{{veranstaltung.name}} ({{veranstaltung.semester.short}})</strong>{% endblocktranslate %}
 	    <br />
-        <form action = "{% url 'logout' %}" method="post">
+        <form action = "{% url 'feedback:logout' %}" method="post">
             {% csrf_token %}
             <button type="submit" class="btn btn-link p-0" style="color: #009D81;">{% translate "ausloggen" %}</button>
         </form>
@@ -86,7 +86,7 @@
             Sie erhalten eine E-Mail, sobald dies möglich ist." %}
         </p>
     {% else %}
-        <p>{% blocktranslate with ergebnis_url={% url 'public-veranstaltung' veranstaltung.id %} %}
+        <p>{% blocktranslate with ergebnis_url={% url 'feedback:public-veranstaltung' veranstaltung.id %} %}
             Sie können hier einen Kommentar zum
             <a href="{{ergebnis_url}}">Evaluationsergebnis</a> verfassen.
             Dieser Kommentar wird auf der zugehörigen Ergebnis-Seite hochschul-öffentlich angezeigt werden.

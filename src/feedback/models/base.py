@@ -570,7 +570,7 @@ class Veranstaltung(models.Model):
         if self.primaerdozent is not None:
             personen.append(self.primaerdozent)
         for per in self.ergebnis_empfaenger.all():
-            if per.pk != self.primaerdozent.pk:
+            if self.primaerdozent is None or per.pk != self.primaerdozent.pk:
                 personen.append(per)
         return personen
 
@@ -658,7 +658,7 @@ class Veranstaltung(models.Model):
 
     def link_veranstalter(self):  # @see http://stackoverflow.com/a/17948593
         """Gibt die URL für die Bestellunng durch den Veranstalter zurück"""
-        link_veranstalter = 'https://www.fachschaft.informatik.tu-darmstadt.de%s' % reverse('veranstalter-login')
+        link_veranstalter = 'https://www.fachschaft.informatik.tu-darmstadt.de%s' % reverse('feedback:veranstalter-login')
         link_suffix_format = '?vid=%d&token=%s'
         if self.pk is not None and self.access_token is not None:
             return link_veranstalter + (link_suffix_format % (self.pk, self.access_token))

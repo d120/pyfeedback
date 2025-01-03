@@ -7,8 +7,8 @@
 
 {% block backlink %}
     {% if request.user.is_superuser %}
-        <p><a href="{% url 'intern-index' %}">{% translate "zurück zum internen Bereich" %}</a></p>
+        <p><a href="{% url 'feedback:intern-index' %}">{% translate "zurück zum internen Bereich" %}</a></p>
     {% else %}
-        <p><a href="{% url 'veranstalter-index' %}">{% translate "zurück zum Veranstalterbereich" %}</a></p>
+        <p><a href="{% url 'feedback:veranstalter-index' %}">{% translate "zurück zum Veranstalterbereich" %}</a></p>
     {% endif %}
 {% endblock %}
