@@ -7,10 +7,12 @@
 
 <p>
 	{% translate "eingeloggt für " %}<strong>{% blocktranslate %}{{veranstaltung.name}} ({{veranstaltung.semester.short}}){% endblocktranslate %}</strong><br />
+
     <form action = "{% url 'feedback:logout' %}" method="post">
         {% csrf_token %}
         <button type="submit" class="btn btn-link p-0" style="color: #009D81;">{% translate "ausloggen" %}</button>
     </form>
+
 </p>
 
 <h2>{% translate "Fragebogenbestellung Schritt 2 von 5" %}</h2>

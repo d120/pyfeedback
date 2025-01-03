@@ -76,6 +76,7 @@
 
     <form action="" method="post">
         {% csrf_token %}
+
         <p style="font-size: 14px">{% translate "Bestellung für " %}<b>{{ veranstaltung.name }}</b>  {{ veranstaltung.semester }}</p>
 
         <div class="container progressbar_container">
