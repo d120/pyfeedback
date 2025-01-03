@@ -269,8 +269,7 @@ class VeranstalterWizard(SessionWizardView):
         context = self.get_context_data('zusammenfassung')
         send_mail_to_verantwortliche(ergebnis_empfaenger, context, instance)
 
-        # previously render_to_response was used which didn't require request, but later it was deprecated, leaving this only viable option
-        return render(request=None, template_name='formtools/wizard/bestellung_done.html', )
+        return render(request=self.request, template_name='formtools/wizard/bestellung_done.html', )
 
 
 
