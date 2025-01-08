@@ -12,6 +12,7 @@ It is written in Python 3 and utilizes the newest version of the django web fram
 To use pyfeedback the following tools have to be installed:
 * Python 3.11 (including pip and venv)
 * nodejs
+* GNU gettext
 
 ## Preparing development environment
 
@@ -19,6 +20,7 @@ To use pyfeedback the following tools have to be installed:
 * Activate the virtualenv with `source venv/bin/activate`
 * Install all requirements with `pip install -r requirements.txt`
 * Create the test database with `python src/manage.py migrate`
+* Compile translations with `(cd src && django-admin compilemessages)`
 * Install frontend dependencies with `npm i`
 * Start the development server with `python src/manage.py runserver`
 
