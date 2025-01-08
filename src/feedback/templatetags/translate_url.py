@@ -9,20 +9,19 @@ def translate_url(context, language):
     '''
     used to translate urls for switching languages
     '''
-    if 'request' in context :
-        try:
-            view = resolve(context['request'].path_info)
-        except Resolver404:
-            return ""
+    try:
+        view = resolve(context['request'].path_info)
+    except Resolver404:
+        return ""
 
-        request_language = translation.get_language()
-        translation.activate(language)
+    request_language = translation.get_language()
+    translation.activate(language)
 
-        namespace = view.namespace
-        view_name = f"{namespace}:{view.url_name}" if namespace else view.url_name
-        
-        url = reverse(view_name, args=view.args, kwargs=view.kwargs)
-        
-        translation.activate(request_language)
-        return url
-    return ""
+    namespace = view.namespace
+    view_name = f"{namespace}:{view.url_name}" if namespace else view.url_name
+    
+    url = reverse(view_name, args=view.args, kwargs=view.kwargs)
+    
+    translation.activate(request_language)
+    return url
+
