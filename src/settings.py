@@ -112,6 +112,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'feedback.auth.FSDebugRemoteUserMiddleware',
+    "allauth.account.middleware.AccountMiddleware",
     # 'whitenoise.middleware.WhiteNoiseMiddleware', # while DEBUG=False servers static files, Note:first pip install whitenoise
 ]
 if not TESTING:
@@ -147,6 +148,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'formtools',
     'feedback',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.openid_connect',
 ]
 
 if not TESTING:
@@ -157,7 +162,24 @@ AUTHENTICATION_BACKENDS = (
     'feedback.auth.FSAccountBackend',
     'feedback.auth.TakeoverBackend',
     'feedback.auth.VeranstalterBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
 )
+
+SOCIALACCOUNT_PROVIDERS = {
+    "openid_connect": {
+        "APPS": [
+            {
+                "provider_id": "keycloak",
+                "name": "Keycloak",
+                "client_id": "",
+                "secret": "",
+                "settings": {
+                    "server_url": "",
+                },
+            }
+        ]
+    }
+}
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

@@ -15,6 +15,10 @@ admin.autodiscover()
 # admin.site.unregister((User, Group))
 
 urlpatterns = [
+    path('accounts/', include('allauth.urls')),
+]
+
+urlpatterns += [
     re_path(r'^$', RedirectView.as_view(url=reverse_lazy("feedback:default"), permanent=True), name='no-path'),
 ]
 
