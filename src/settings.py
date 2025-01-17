@@ -165,6 +165,10 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 
+ACCOUNT_LOGOUT_REDIRECT_URL ='/accounts/login/'
+
+SOCIALACCOUNT_ADAPTER = 'feedback.views.intern.auth.CustomSocialAccountAdapter'
+
 SOCIALACCOUNT_PROVIDERS = {
     "openid_connect": {
         "APPS": [

@@ -11,6 +11,7 @@ from django.views.decorators.http import require_safe, require_http_methods
 
 from feedback.models import Veranstaltung
 
+from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 
 @user_passes_test(lambda u: u.is_superuser)
 @require_http_methods(('HEAD', 'GET', 'POST'))
@@ -52,6 +53,17 @@ def rechte_zuruecknehmen(request):
     # Redirect to intern.index view to get a clear session
     except KeyError:
         return HttpResponseRedirect(reverse('feedback:intern-index'))
+
+
+class CustomSocialAccountAdapter(DefaultSocialAccountAdapter):
+    def pre_social_login(self, request, sociallogin):
+        super().pre_social_login(request, sociallogin)
+        user = sociallogin.user
+
+        if user.id:
+            user.is_superuser = True
+            user.is_staff = True
+            user.save()
 
 
 def auth_user(request) :
