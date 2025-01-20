@@ -10,9 +10,14 @@ from django.views.generic.base import RedirectView
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf import settings
 
+from allauth.account.decorators import secure_admin_login
+
 # Admin-Seiten konfigurieren
-admin.autodiscover()
 # admin.site.unregister((User, Group))
+
+# this is a workaround as admin sites doesn't use allauth, see: https://docs.allauth.org/en/latest/common/admin.html
+admin.autodiscover()
+admin.site.login = secure_admin_login(admin.site.login)
 
 urlpatterns = [
     path('accounts/', include('allauth.urls')),

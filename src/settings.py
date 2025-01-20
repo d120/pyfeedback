@@ -8,6 +8,9 @@ from django.utils.translation import gettext_lazy as _
 
 DEBUG = True
 
+# default is False, make True to see exeptions when DEBUG = False
+DEBUG_PROPAGATE_EXCEPTIONS = False
+
 ADMINS = (
     ('Feedback-Team', 'feedback@lists.d120.de'),
 )
@@ -112,7 +115,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'feedback.auth.FSDebugRemoteUserMiddleware',
-    "allauth.account.middleware.AccountMiddleware",
+    'allauth.account.middleware.AccountMiddleware',
     # 'whitenoise.middleware.WhiteNoiseMiddleware', # while DEBUG=False servers static files, Note:first pip install whitenoise
 ]
 if not TESTING:
@@ -167,7 +170,11 @@ AUTHENTICATION_BACKENDS = (
 
 ACCOUNT_LOGOUT_REDIRECT_URL ='/accounts/login/'
 
-SOCIALACCOUNT_ADAPTER = 'feedback.views.intern.auth.CustomSocialAccountAdapter'
+
+SOCIALACCOUNT_ADAPTER = 'feedback.auth_adapter.FeedbackSocialAccountAdapter'
+
+SOCIALACCOUNT_ONLY = True
+ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 SOCIALACCOUNT_PROVIDERS = {
     "openid_connect": {

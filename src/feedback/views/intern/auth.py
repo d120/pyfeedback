@@ -11,8 +11,6 @@ from django.views.decorators.http import require_safe, require_http_methods
 
 from feedback.models import Veranstaltung
 
-from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
-
 @user_passes_test(lambda u: u.is_superuser)
 @require_http_methods(('HEAD', 'GET', 'POST'))
 def rechte_uebernehmen(request):
@@ -55,18 +53,8 @@ def rechte_zuruecknehmen(request):
         return HttpResponseRedirect(reverse('feedback:intern-index'))
 
 
-class CustomSocialAccountAdapter(DefaultSocialAccountAdapter):
-    def pre_social_login(self, request, sociallogin):
-        super().pre_social_login(request, sociallogin)
-        user = sociallogin.user
-
-        if user.id:
-            user.is_superuser = True
-            user.is_staff = True
-            user.save()
-
-
 def auth_user(request) :
+    ## this view was used before sso as login view
     if request.method == "POST" :
         username = request.POST.get("username")
         password = request.POST.get("password")
@@ -95,7 +83,7 @@ def login(request):
             return response
 
     if not settings.DEBUG and not request.user.is_authenticated :
-        return HttpResponseRedirect(reverse('feedback:auth-user'))
+        return HttpResponseRedirect(reverse("account_login"))
 
     # Apache fordert User zum Login mit FS-Account auf, von daher muss hier nur noch weitergeleitet
     # werden.
