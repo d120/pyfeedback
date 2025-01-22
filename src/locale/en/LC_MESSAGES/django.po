@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-22 11:24+0100\n"
+"POT-Creation-Date: 2025-01-20 17:24+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -497,7 +497,7 @@ msgstr ""
 
 #: feedback/models/base.py:717
 #: templates/formtools/wizard/email_zusammenfassung.html:74
-#: templates/veranstalter/dashboard.html:110
+#: templates/veranstalter/dashboard.html:113
 msgid "Anmerkung"
 msgstr "Note"
 
@@ -508,7 +508,7 @@ msgstr ""
 #: feedback/models/base.py:729
 #: templates/formtools/wizard/email_zusammenfassung.html:66
 #: templates/formtools/wizard/zusammenfassung.html:61
-#: templates/veranstalter/dashboard.html:102
+#: templates/veranstalter/dashboard.html:105
 msgid "Tutoren"
 msgstr "Tutors"
 
@@ -552,17 +552,17 @@ msgstr "Publish"
 msgid "Evaluation"
 msgstr "Evaluation"
 
-#: feedback/views/veranstalter.py:93 templates/feedback/person_form.html:19
+#: feedback/views/veranstalter.py:93 templates/feedback/person_form.html:21
 #: templates/veranstalter/index.html:36 templates/veranstalter/index.html:43
 msgid "Basisdaten"
 msgstr "Basic data"
 
-#: feedback/views/veranstalter.py:95 templates/feedback/person_form.html:21
+#: feedback/views/veranstalter.py:95 templates/feedback/person_form.html:23
 #: templates/veranstalter/index.html:38
 msgid "Freie Fragen"
 msgstr "Free questions"
 
-#: feedback/views/veranstalter.py:97 templates/feedback/person_form.html:23
+#: feedback/views/veranstalter.py:97 templates/feedback/person_form.html:25
 #: templates/veranstalter/index.html:40
 msgid "Zusammenfassung"
 msgstr "Summary"
@@ -582,11 +582,11 @@ msgstr "Evaluation of courses - summary of data for {name}"
 msgid "Nachfolgend finder Sie Informationen zu Ihrer Bestellung"
 msgstr "Below you will find information about your order"
 
-#: settings.py:45
+#: settings.py:48
 msgid "German"
 msgstr "German"
 
-#: settings.py:46
+#: settings.py:49
 msgid "English"
 msgstr "English"
 
@@ -656,6 +656,50 @@ msgstr "Accept"
 #: templates/admin/status_aendern.html:8
 msgid "Es wird der Status für folgende Veranstaltungen geändert:"
 msgstr "The status of the following courses will be changed:"
+
+#: templates/allauth/layouts/base.html:19
+msgid "Messages:"
+msgstr ""
+
+#: templates/allauth/layouts/base.html:26
+msgid "Menu:"
+msgstr ""
+
+#: templates/allauth/layouts/base.html:32
+msgid "Change Email"
+msgstr ""
+
+#: templates/allauth/layouts/base.html:38
+msgid "Change Password"
+msgstr ""
+
+#: templates/allauth/layouts/base.html:44
+#: templates/socialaccount/connections.html:5
+#: templates/socialaccount/connections.html:9
+msgid "Account Connections"
+msgstr ""
+
+#: templates/allauth/layouts/base.html:50
+msgid "Two-Factor Authentication"
+msgstr ""
+
+#: templates/allauth/layouts/base.html:56
+msgid "Sessions"
+msgstr ""
+
+#: templates/allauth/layouts/base.html:62
+msgid "Sign Out"
+msgstr ""
+
+#: templates/allauth/layouts/base.html:69 templates/socialaccount/login.html:5
+#: templates/socialaccount/login_redirect.html:5
+msgid "Sign In"
+msgstr ""
+
+#: templates/allauth/layouts/base.html:75 templates/socialaccount/signup.html:9
+#: templates/socialaccount/signup.html:25
+msgid "Sign Up"
+msgstr ""
 
 #: templates/bestellung_base.html:10
 msgid "zurück zum internen Bereich"
@@ -759,39 +803,39 @@ msgstr "logged in for "
 msgid "%(veranstaltung.name)s (%(veranstaltung.semester.short)s)"
 msgstr ""
 
-#: templates/feedback/person_form.html:12
+#: templates/feedback/person_form.html:13
 #: templates/formtools/wizard/base.html:74 templates/veranstalter/index.html:15
 msgid "ausloggen"
 msgstr "logout"
 
-#: templates/feedback/person_form.html:16
+#: templates/feedback/person_form.html:18
 msgid "Fragebogenbestellung Schritt 2 von 5"
 msgstr "Ordering a questionnaire Step 2 of 5"
 
-#: templates/feedback/person_form.html:17 templates/intern/index.html:30
+#: templates/feedback/person_form.html:19 templates/intern/index.html:30
 #: templates/veranstalter/index.html:33
 msgid "Ablauf"
 msgstr "Procedure"
 
-#: templates/feedback/person_form.html:20
-#: templates/feedback/person_form.html:25 templates/veranstalter/index.html:37
+#: templates/feedback/person_form.html:22
+#: templates/feedback/person_form.html:27 templates/veranstalter/index.html:37
 msgid "Datenüberprüfung"
 msgstr "Data verification"
 
-#: templates/feedback/person_form.html:22 templates/veranstalter/index.html:39
+#: templates/feedback/person_form.html:24 templates/veranstalter/index.html:39
 msgid "Details zur Übung"
 msgstr "Exercise details"
 
-#: templates/feedback/person_form.html:27
+#: templates/feedback/person_form.html:29
 msgid "Bitte überprüfen Sie jetzt die Daten des Verantwortlichen "
 msgstr "Please check the data of the person responsible now "
 
-#: templates/feedback/person_form.html:27
+#: templates/feedback/person_form.html:29
 #, python-format
 msgid "%(veranstaltung.verantwortlich)s"
 msgstr ""
 
-#: templates/feedback/person_form.html:30
+#: templates/feedback/person_form.html:32
 msgid "weiter"
 msgstr "continue"
 
@@ -803,15 +847,15 @@ msgstr "Recording the data of the person responsible:"
 msgid "Bestellprozess "
 msgstr "Order process "
 
-#: templates/formtools/wizard/base.html:79
+#: templates/formtools/wizard/base.html:80
 msgid "Bestellung für "
 msgstr "Order for "
 
-#: templates/formtools/wizard/base.html:106
+#: templates/formtools/wizard/base.html:107
 msgid "Pflichtfeld"
 msgstr "Required field"
 
-#: templates/formtools/wizard/base.html:108
+#: templates/formtools/wizard/base.html:109
 #: templates/intern/import_vv_edit_users_update.html:26
 #: templates/intern/import_vv_edit_users_update.html:29
 #: templates/intern/tans/process_tans.html:21
@@ -819,14 +863,14 @@ msgstr "Required field"
 msgid "Zurück"
 msgstr "Back"
 
-#: templates/formtools/wizard/base.html:112
+#: templates/formtools/wizard/base.html:113
 #: templates/intern/import_vv_edit.html:87
 #: templates/intern/tans/process_tans.html:23
 #: templates/veranstalter/index.html:75
 msgid "Weiter"
 msgstr "Continue"
 
-#: templates/formtools/wizard/base.html:116
+#: templates/formtools/wizard/base.html:117
 #: templates/veranstalter/index.html:102
 msgid "Speichern"
 msgstr "Save"
@@ -849,8 +893,8 @@ msgstr "Responses"
 msgid "Die Bestellung wurde entgegengenommen"
 msgstr "The order has been accepted"
 
-#: templates/formtools/wizard/bestellung_done.html:7
-#: templates/intern/index.html:16 templates/veranstalter/dashboard.html:65
+#: templates/formtools/wizard/bestellung_done.html:9
+#: templates/intern/index.html:19 templates/veranstalter/dashboard.html:67
 msgid "Ausloggen"
 msgstr "Log out"
 
@@ -864,22 +908,22 @@ msgid "Zusammenfassung der Fragebogenbestellung für %(veranstaltung)s"
 msgstr "Summary of the questionnaire order for %(veranstaltung)s"
 
 #: templates/formtools/wizard/email_zusammenfassung.html:70
-#: templates/veranstalter/dashboard.html:106
+#: templates/veranstalter/dashboard.html:109
 msgid "Num"
 msgstr ""
 
 #: templates/formtools/wizard/email_zusammenfassung.html:71
-#: templates/veranstalter/dashboard.html:107
+#: templates/veranstalter/dashboard.html:110
 msgid "Vorname"
 msgstr "First name"
 
 #: templates/formtools/wizard/email_zusammenfassung.html:72
-#: templates/veranstalter/dashboard.html:108
+#: templates/veranstalter/dashboard.html:111
 msgid "Nachname"
 msgstr "Last name"
 
 #: templates/formtools/wizard/email_zusammenfassung.html:73
-#: templates/veranstalter/dashboard.html:109
+#: templates/veranstalter/dashboard.html:112
 msgid "Email"
 msgstr ""
 
@@ -1814,32 +1858,146 @@ msgstr ""
 msgid "Anmelden"
 msgstr "Login"
 
+#: templates/socialaccount/authentication_error.html:5
+#: templates/socialaccount/authentication_error.html:9
+msgid "Third-Party Login Failure"
+msgstr ""
+
+#: templates/socialaccount/authentication_error.html:12
+msgid ""
+"An error occurred while attempting to login via your third-party account."
+msgstr ""
+
+#: templates/socialaccount/connections.html:13
+msgid ""
+"You can sign in to your account using any of the following third-party "
+"accounts:"
+msgstr ""
+
+#: templates/socialaccount/connections.html:40
+msgid "Remove"
+msgstr ""
+
+#: templates/socialaccount/connections.html:46
+msgid "You currently have no third-party accounts connected to this account."
+msgstr ""
+
+#: templates/socialaccount/connections.html:50
+msgid "Add a Third-Party Account"
+msgstr ""
+
+#: templates/socialaccount/email/account_connected_message.txt:4
+#, python-format
+msgid ""
+"A third-party account from %(provider)s has been connected to your account."
+msgstr ""
+
+#: templates/socialaccount/email/account_connected_subject.txt:3
+msgid "Third-Party Account Connected"
+msgstr ""
+
+#: templates/socialaccount/email/account_disconnected_message.txt:4
+#, python-format
+msgid ""
+"A third-party account from %(provider)s has been disconnected from your "
+"account."
+msgstr ""
+
+#: templates/socialaccount/email/account_disconnected_subject.txt:3
+msgid "Third-Party Account Disconnected"
+msgstr ""
+
+#: templates/socialaccount/login.html:10
+#, python-format
+msgid "Connect %(provider)s"
+msgstr ""
+
+#: templates/socialaccount/login.html:13
+#, python-format
+msgid "You are about to connect a new third-party account from %(provider)s."
+msgstr ""
+
+#: templates/socialaccount/login.html:17
+#, python-format
+msgid "Sign In Via %(provider)s"
+msgstr ""
+
+#: templates/socialaccount/login.html:20
+#, python-format
+msgid "You are about to sign in using a third-party account from %(provider)s."
+msgstr ""
+
+#: templates/socialaccount/login.html:27
+#: templates/socialaccount/login_redirect.html:10
+msgid "Continue"
+msgstr ""
+
+#: templates/socialaccount/login_cancelled.html:5
+#: templates/socialaccount/login_cancelled.html:9
+msgid "Login Cancelled"
+msgstr ""
+
+#: templates/socialaccount/login_cancelled.html:13
+#, python-format
+msgid ""
+"You decided to cancel logging in to our site using one of your existing "
+"accounts. If this was a mistake, please proceed to <a "
+"href=\"%(login_url)s\">sign in</a>."
+msgstr ""
+
+#: templates/socialaccount/messages/account_connected.txt:2
+msgid "The third-party account has been connected."
+msgstr ""
+
+#: templates/socialaccount/messages/account_connected_other.txt:2
+msgid "The third-party account is already connected to a different account."
+msgstr ""
+
+#: templates/socialaccount/messages/account_disconnected.txt:2
+msgid "The third-party account has been disconnected."
+msgstr ""
+
+#: templates/socialaccount/signup.html:5
+msgid "Signup"
+msgstr ""
+
+#: templates/socialaccount/signup.html:12
+#, python-format
+msgid ""
+"You are about to use your %(provider_name)s account to login to\n"
+"%(site_name)s. As a final step, please complete the following form:"
+msgstr ""
+
+#: templates/socialaccount/snippets/login.html:10
+msgid "Or use a third-party"
+msgstr ""
+
 #: templates/veranstalter/dashboard.html:62
 msgid "Dashboard"
 msgstr ""
 
-#: templates/veranstalter/dashboard.html:67
-#: templates/veranstalter/dashboard.html:74
+#: templates/veranstalter/dashboard.html:70
+#: templates/veranstalter/dashboard.html:77
 msgid "Status"
 msgstr ""
 
-#: templates/veranstalter/dashboard.html:70
+#: templates/veranstalter/dashboard.html:73
 msgid "Log"
 msgstr ""
 
-#: templates/veranstalter/dashboard.html:73
+#: templates/veranstalter/dashboard.html:76
 msgid "Datum"
 msgstr "Date"
 
-#: templates/veranstalter/dashboard.html:86
+#: templates/veranstalter/dashboard.html:89
 msgid "Aktuelle Bestellung"
 msgstr "Current order"
 
-#: templates/veranstalter/dashboard.html:88
+#: templates/veranstalter/dashboard.html:91
 msgid "Bestellung ändern"
 msgstr "Change order"
 
-#: templates/veranstalter/dashboard.html:129
+#: templates/veranstalter/dashboard.html:132
 msgid "Bestellung durchführen"
 msgstr "Execute order"
 

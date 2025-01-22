@@ -19,9 +19,9 @@ from allauth.account.decorators import secure_admin_login
 admin.autodiscover()
 admin.site.login = secure_admin_login(admin.site.login)
 
-urlpatterns = [
+urlpatterns = i18n_patterns(
     path('accounts/', include('allauth.urls')),
-]
+)
 
 urlpatterns += [
     re_path(r'^$', RedirectView.as_view(url=reverse_lazy("feedback:default"), permanent=True), name='no-path'),
