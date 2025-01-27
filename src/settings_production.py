@@ -11,7 +11,24 @@ SECRET_KEY = secrets.SECRET_KEY
 URL_PREFIX = 'feedback/'
 LOGIN_URL = '/' + URL_PREFIX[:-1] + LOGIN_URL
 LOGIN_REDIRECT_URL = '/' + URL_PREFIX[:-1] + LOGIN_REDIRECT_URL
+ACCOUNT_LOGOUT_REDIRECT_URL = '/' + URL_PREFIX[:-1] + ACCOUNT_LOGOUT_REDIRECT_URL
 SESSION_COOKIE_SECURE = True
+
+SOCIALACCOUNT_PROVIDERS = {
+    "openid_connect": {
+        "APPS": [
+            {
+                "provider_id": "keycloak",
+                "name": "Keycloak",
+                "client_id": secrets.KEYCLOACK_CLIENT_ID,
+                "secret": secrets.KEYCLOACK_SECRET,
+                "settings": {
+                    "server_url": secrets.KEYCLOACK_SERVER_URL,
+                },
+            }
+        ]
+    }
+}
 
 # @see https://docs.djangoproject.com/es/1.9/topics/email/
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

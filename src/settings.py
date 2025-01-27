@@ -170,27 +170,10 @@ AUTHENTICATION_BACKENDS = (
 
 ACCOUNT_LOGOUT_REDIRECT_URL ='/accounts/login/'
 
-
 SOCIALACCOUNT_ADAPTER = 'feedback.auth_adapter.FeedbackSocialAccountAdapter'
 
 SOCIALACCOUNT_ONLY = True
 ACCOUNT_EMAIL_VERIFICATION = 'none'
-
-SOCIALACCOUNT_PROVIDERS = {
-    "openid_connect": {
-        "APPS": [
-            {
-                "provider_id": "keycloak",
-                "name": "Keycloak",
-                "client_id": "",
-                "secret": "",
-                "settings": {
-                    "server_url": "",
-                },
-            }
-        ]
-    }
-}
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
