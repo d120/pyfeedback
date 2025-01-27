@@ -20,10 +20,10 @@ SOCIALACCOUNT_PROVIDERS = {
             {
                 "provider_id": "keycloak",
                 "name": "Keycloak",
-                "client_id": secrets.KEYCLOACK_CLIENT_ID,
-                "secret": secrets.KEYCLOACK_SECRET,
+                "client_id": secrets.KEYCLOAK_CLIENT_ID,
+                "secret": secrets.KEYCLOAK_SECRET,
                 "settings": {
-                    "server_url": secrets.KEYCLOACK_SERVER_URL,
+                    "server_url": secrets.KEYCLOAK_SERVER_URL,
                 },
             }
         ]
