@@ -37,6 +37,20 @@ class InternAuthTest(NonSuTestMixin, TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response['Location'], tests.INDEX_URL)
 
+    @override_settings(DEBUG=False)
+    def test_login_auth(self) :
+        account_login_url = reverse('account_login')
+
+        response = self.client.get(tests.LOGIN_URL)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response['Location'].endswith(account_login_url))
+
+        response = self.client.get(account_login_url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'socialaccount/snippets/login.html')
+
     def test_auth_user(self) :
         response = self.client.get(tests.AUTH_URL)
         self.assertEqual(response.status_code, 200)

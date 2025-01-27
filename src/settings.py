@@ -8,6 +8,9 @@ from django.utils.translation import gettext_lazy as _
 
 DEBUG = True
 
+# default is False, make True to see exeptions when DEBUG = False
+DEBUG_PROPAGATE_EXCEPTIONS = False
+
 ADMINS = (
     ('Feedback-Team', 'feedback@lists.d120.de'),
 )
@@ -112,6 +115,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'feedback.auth.FSDebugRemoteUserMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
     # 'whitenoise.middleware.WhiteNoiseMiddleware', # while DEBUG=False servers static files, Note:first pip install whitenoise
 ]
 if not TESTING:
@@ -147,6 +151,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'formtools',
     'feedback',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.openid_connect',
 ]
 
 if not TESTING:
@@ -157,7 +165,15 @@ AUTHENTICATION_BACKENDS = (
     'feedback.auth.FSAccountBackend',
     'feedback.auth.TakeoverBackend',
     'feedback.auth.VeranstalterBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
 )
+
+ACCOUNT_LOGOUT_REDIRECT_URL ='/accounts/login/'
+
+SOCIALACCOUNT_ADAPTER = 'feedback.auth_adapter.FeedbackSocialAccountAdapter'
+
+SOCIALACCOUNT_ONLY = True
+ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
