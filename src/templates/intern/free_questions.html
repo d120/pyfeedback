@@ -1,0 +1,25 @@
+{% extends "bestellung_base.html" %}
+{% load i18n %}
+
+{% block title %}{% translate "Freie Fragen Liste" %}{% endblock %}
+
+{% block content %}
+<h1>{% translate "Liste der freien Fragen im aktuellen Semester" %}</h1>
+<br>
+<hr>
+{% for v in veranstaltungen %}
+    {% if v.freiefrage1 or v.freiefrage2 %}
+        <h2> {{ v.name }} </h2>
+        <ul>
+            {% if v.freiefrage1 %}
+                <li>{% translate "Frage 1" %} : {{v.freiefrage1}}</li>
+            {% endif %}
+            {% if v.freiefrage2 %}
+                <li>{% translate "Frage 2" %} : {{v.freiefrage2}}</li>
+            {% endif %}
+        </ul>
+        <hr>
+    {% endif %}
+{% endfor %}
+
+{% endblock %}

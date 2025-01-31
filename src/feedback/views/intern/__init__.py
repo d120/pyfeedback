@@ -151,6 +151,15 @@ def export_veranstaltungen(request):
 
     return response
 
+@user_passes_test(lambda u: u.is_superuser)
+@require_safe
+def freie_frage_veranstaltungen(request) :
+    '''
+    List of courses which have free questions and the questions
+    '''
+    veranstaltung = Veranstaltung.objects.filter(semester=Semester.current())
+
+    return render(request, 'intern/free_questions.html', {"veranstaltungen" : veranstaltung})
 
 def translate_to_latex(text):
     dic = {
