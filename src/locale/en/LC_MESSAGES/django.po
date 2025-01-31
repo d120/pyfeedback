@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-20 17:24+0100\n"
+"POT-Creation-Date: 2025-01-31 16:22+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -812,7 +812,7 @@ msgstr "logout"
 msgid "Fragebogenbestellung Schritt 2 von 5"
 msgstr "Ordering a questionnaire Step 2 of 5"
 
-#: templates/feedback/person_form.html:19 templates/intern/index.html:30
+#: templates/feedback/person_form.html:19 templates/intern/index.html:31
 #: templates/veranstalter/index.html:33
 msgid "Ablauf"
 msgstr "Procedure"
@@ -894,7 +894,7 @@ msgid "Die Bestellung wurde entgegengenommen"
 msgstr "The order has been accepted"
 
 #: templates/formtools/wizard/bestellung_done.html:9
-#: templates/intern/index.html:19 templates/veranstalter/dashboard.html:67
+#: templates/intern/index.html:20 templates/veranstalter/dashboard.html:67
 msgid "Ausloggen"
 msgstr "Log out"
 
@@ -1171,6 +1171,22 @@ msgstr "printed"
 msgid "zurück"
 msgstr "back"
 
+#: templates/intern/free_questions.html:4
+msgid "Freie Fragen Liste"
+msgstr "Free Questions List"
+
+#: templates/intern/free_questions.html:7
+msgid "Liste der freien Fragen im aktuellen Semester"
+msgstr "List of free questions in current semester"
+
+#: templates/intern/free_questions.html:15
+msgid "Frage 1"
+msgstr "Question 1"
+
+#: templates/intern/free_questions.html:18
+msgid "Frage 2"
+msgstr "Question 2"
+
 #: templates/intern/generate_letters.html:4
 #: templates/intern/generate_letters.html:7
 msgid "Anschreiben erzeugen"
@@ -1213,7 +1229,7 @@ msgid "Fehler bei der Ausführung von pdflatex"
 msgstr "Error during the execution of pdflatex"
 
 #: templates/intern/import_ergebnisse.html:4
-#: templates/intern/import_ergebnisse.html:7 templates/intern/index.html:42
+#: templates/intern/import_ergebnisse.html:7 templates/intern/index.html:43
 msgid "Ergebnisse aus EvaSys importieren"
 msgstr "Import results from EvaSys"
 
@@ -1408,11 +1424,15 @@ msgstr "Assignment of events to questionnaire language"
 msgid "Veranstaltungen die lange nicht mehr evaluiert wurden"
 msgstr "Courses that have not been evaluated for a long time"
 
-#: templates/intern/index.html:23
+#: templates/intern/index.html:16
+msgid "Liste der Veranstaltungen mit freien Fragen"
+msgstr "List of courses with free questions"
+
+#: templates/intern/index.html:24
 msgid "Status der Rückmeldungen durch die Veranstalter"
 msgstr "Status of feedback from the organizers"
 
-#: templates/intern/index.html:24
+#: templates/intern/index.html:25
 #, python-format
 msgid ""
 "Aktuell haben wir %(ruck_veranst)s Rückmeldungen von %(all_veranst)s "
@@ -1420,7 +1440,7 @@ msgid ""
 msgstr ""
 "We currently have %(ruck_veranst)s feedback from %(all_veranst)s courses."
 
-#: templates/intern/index.html:31
+#: templates/intern/index.html:32
 #, python-format
 msgid ""
 "Dies sind nicht alle nötigen Schritte; siehe <a href=\"https://www.d120.de/"
@@ -1431,70 +1451,70 @@ msgstr ""
 "bookstack/books/feedback/page/feedback-ablauf%%C3%%BCbersicht\" "
 "target=\"_blank\">Process in the bookstack</a>."
 
-#: templates/intern/index.html:34
+#: templates/intern/index.html:35
 msgid "neues Semester anlegen"
 msgstr "create new semester"
 
-#: templates/intern/index.html:34
+#: templates/intern/index.html:35
 msgid "aktuell"
 msgstr "current"
 
-#: templates/intern/index.html:35
+#: templates/intern/index.html:36
 msgid "nicht Vorhanden"
 msgstr "not present"
 
-#: templates/intern/index.html:36
+#: templates/intern/index.html:37
 msgid "Veranstaltungen aus VV importieren"
 msgstr "Import courses from VV"
 
-#: templates/intern/index.html:36 templates/intern/index.html:37
+#: templates/intern/index.html:37 templates/intern/index.html:38
 msgid "vor Bestellphase"
 msgstr "before ordering phase"
 
-#: templates/intern/index.html:37
+#: templates/intern/index.html:38
 msgid "Fehlende Personendaten nachtragen"
 msgstr "Add missing personal data"
 
-#: templates/intern/index.html:38 templates/intern/status_final.html:9
+#: templates/intern/index.html:39 templates/intern/status_final.html:9
 msgid "Bestellphase abschließen"
 msgstr "Complete the ordering phase"
 
-#: templates/intern/index.html:38 templates/intern/index.html:39
+#: templates/intern/index.html:39 templates/intern/index.html:40
 msgid "nach Bestellphase"
 msgstr "after ordering phase"
 
-#: templates/intern/index.html:39
+#: templates/intern/index.html:40
 msgid "Anschreiben für Veranstalter erzeugen"
 msgstr "Create cover letter for organizers"
 
-#: templates/intern/index.html:40
+#: templates/intern/index.html:41
 msgid "Veranstaltungen für EvaSys exportieren"
 msgstr "Exporting courses for EvaSys"
 
-#: templates/intern/index.html:41 templates/intern/tans/process_tans.html:3
+#: templates/intern/index.html:42 templates/intern/tans/process_tans.html:3
 #: templates/intern/tans/process_tans.html:5
 #: templates/intern/tans/process_tans_preview.html:3
 #: templates/intern/tans/process_tans_preview.html:5
 msgid "TANs verarbeiten"
 msgstr "Process TANs"
 
-#: templates/intern/index.html:41
+#: templates/intern/index.html:42
 msgid "nach der Bestellphase"
 msgstr "after the order phase"
 
-#: templates/intern/index.html:43
+#: templates/intern/index.html:44
 msgid "Rankings berechnen"
 msgstr ""
 
-#: templates/intern/index.html:43
+#: templates/intern/index.html:44
 msgid "nach dem Ergebnis-Import"
 msgstr "calculate rankings"
 
-#: templates/intern/index.html:45
+#: templates/intern/index.html:46
 msgid "Ergebnisse veröffentlichen"
 msgstr "Publish results"
 
-#: templates/intern/index.html:45
+#: templates/intern/index.html:46
 #, python-format
 msgid " (aktuell: sichtbar für %(cur_semester.get_sichtbarkeit_display)s)"
 msgstr " (current: visible for %(cur_semester.get_sichtbarkeit_display)s)"
