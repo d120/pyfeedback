@@ -9,17 +9,42 @@
 <hr>
 {% for v in veranstaltungen %}
     {% if v.freiefrage1 or v.freiefrage2 %}
-        <h2> {{ v.name }} </h2>
+        <h2>{{ v.name }}</h2>
         <ul>
             {% if v.freiefrage1 %}
-                <li>{% translate "Frage 1" %} : {{v.freiefrage1}}</li>
+                <li>
+                    <button class="btn btn-outline-secondary btn-sm" onclick="copyToClipboard(this)" data-text="{{v.freiefrage1}}">
+                        <i class="fa fa-clipboard"></i> Copy
+                    </button>
+                    <span class="ms-2">{% translate "Frage 1" %} : {{v.freiefrage1}}</span>
+                </li>
             {% endif %}
             {% if v.freiefrage2 %}
-                <li>{% translate "Frage 2" %} : {{v.freiefrage2}}</li>
+                <li>
+                    <button class="btn btn-outline-secondary btn-sm" onclick="copyToClipboard(this)" data-text="{{v.freiefrage2}}">
+                        <i class="fa fa-clipboard"></i> Copy
+                    </button>
+                    <span class="ms-2">{% translate "Frage 2" %} : {{v.freiefrage2}}</span>
+                </li>
             {% endif %}
         </ul>
         <hr>
     {% endif %}
 {% endfor %}
 
+<script>
+    function copyToClipboard(button) {
+        var text = button.getAttribute("data-text");
+    
+        navigator.clipboard.writeText(text).then(function() {
+            let alertBox = document.createElement("span");
+            alertBox.className = "text-success ms-2";
+            alertBox.innerText = "Copied!";
+            
+            button.parentElement.appendChild(alertBox);
+            setTimeout(() => alertBox.remove(), 2000);
+        }).catch(err => console.error('Copy failed:', err));
+    }
+</script>
+    
 {% endblock %}
