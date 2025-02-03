@@ -1,7 +1,12 @@
 {% extends "bestellung_base.html" %}
 {% load i18n %}
+{% load static %}
 
 {% block title %}{% translate "Freie Fragen Liste" %}{% endblock %}
+
+{% block extra_header %}
+    <script type="text/javascript" src="{% static "copy.js" %}"></script>
+{% endblock %}
 
 {% block content %}
 <h1>{% translate "Liste der freien Fragen im aktuellen Semester" %}</h1>
@@ -32,19 +37,4 @@
     {% endif %}
 {% endfor %}
 
-<script>
-    function copyToClipboard(button) {
-        var text = button.getAttribute("data-text");
-    
-        navigator.clipboard.writeText(text).then(function() {
-            let alertBox = document.createElement("span");
-            alertBox.className = "text-success ms-2";
-            alertBox.innerText = "Copied!";
-            
-            button.parentElement.appendChild(alertBox);
-            setTimeout(() => alertBox.remove(), 2000);
-        }).catch(err => console.error('Copy failed:', err));
-    }
-</script>
-    
 {% endblock %}
