@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-20 17:24+0100\n"
+"POT-Creation-Date: 2025-01-31 16:22+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -780,7 +780,7 @@ msgstr ""
 msgid "Fragebogenbestellung Schritt 2 von 5"
 msgstr ""
 
-#: templates/feedback/person_form.html:19 templates/intern/index.html:30
+#: templates/feedback/person_form.html:19 templates/intern/index.html:31
 #: templates/veranstalter/index.html:33
 msgid "Ablauf"
 msgstr ""
@@ -862,7 +862,7 @@ msgid "Die Bestellung wurde entgegengenommen"
 msgstr ""
 
 #: templates/formtools/wizard/bestellung_done.html:9
-#: templates/intern/index.html:19 templates/veranstalter/dashboard.html:67
+#: templates/intern/index.html:20 templates/veranstalter/dashboard.html:67
 msgid "Ausloggen"
 msgstr ""
 
@@ -1076,6 +1076,22 @@ msgstr ""
 msgid "zurück"
 msgstr ""
 
+#: templates/intern/free_questions.html:4
+msgid "Freie Fragen Liste"
+msgstr ""
+
+#: templates/intern/free_questions.html:7
+msgid "Liste der freien Fragen im aktuellen Semester"
+msgstr ""
+
+#: templates/intern/free_questions.html:15
+msgid "Frage 1"
+msgstr ""
+
+#: templates/intern/free_questions.html:18
+msgid "Frage 2"
+msgstr ""
+
 #: templates/intern/generate_letters.html:4
 #: templates/intern/generate_letters.html:7
 msgid "Anschreiben erzeugen"
@@ -1116,7 +1132,7 @@ msgid "Fehler bei der Ausführung von pdflatex"
 msgstr ""
 
 #: templates/intern/import_ergebnisse.html:4
-#: templates/intern/import_ergebnisse.html:7 templates/intern/index.html:42
+#: templates/intern/import_ergebnisse.html:7 templates/intern/index.html:43
 msgid "Ergebnisse aus EvaSys importieren"
 msgstr ""
 
@@ -1295,18 +1311,22 @@ msgstr ""
 msgid "Veranstaltungen die lange nicht mehr evaluiert wurden"
 msgstr ""
 
-#: templates/intern/index.html:23
-msgid "Status der Rückmeldungen durch die Veranstalter"
+#: templates/intern/index.html:16
+msgid "Liste der Veranstaltungen mit freien Fragen"
 msgstr ""
 
 #: templates/intern/index.html:24
+msgid "Status der Rückmeldungen durch die Veranstalter"
+msgstr ""
+
+#: templates/intern/index.html:25
 #, python-format
 msgid ""
 "Aktuell haben wir %(ruck_veranst)s Rückmeldungen von %(all_veranst)s "
 "Veranstaltungen."
 msgstr ""
 
-#: templates/intern/index.html:31
+#: templates/intern/index.html:32
 #, python-format
 msgid ""
 "Dies sind nicht alle nötigen Schritte; siehe <a href=\"https://www.d120.de/"
@@ -1314,70 +1334,70 @@ msgid ""
 "target=\"_blank\">Ablauf im bookstack</a>."
 msgstr ""
 
-#: templates/intern/index.html:34
+#: templates/intern/index.html:35
 msgid "neues Semester anlegen"
 msgstr ""
 
-#: templates/intern/index.html:34
+#: templates/intern/index.html:35
 msgid "aktuell"
 msgstr ""
 
-#: templates/intern/index.html:35
+#: templates/intern/index.html:36
 msgid "nicht Vorhanden"
 msgstr ""
 
-#: templates/intern/index.html:36
+#: templates/intern/index.html:37
 msgid "Veranstaltungen aus VV importieren"
 msgstr ""
 
-#: templates/intern/index.html:36 templates/intern/index.html:37
+#: templates/intern/index.html:37 templates/intern/index.html:38
 msgid "vor Bestellphase"
 msgstr ""
 
-#: templates/intern/index.html:37
+#: templates/intern/index.html:38
 msgid "Fehlende Personendaten nachtragen"
 msgstr ""
 
-#: templates/intern/index.html:38 templates/intern/status_final.html:9
+#: templates/intern/index.html:39 templates/intern/status_final.html:9
 msgid "Bestellphase abschließen"
 msgstr ""
 
-#: templates/intern/index.html:38 templates/intern/index.html:39
+#: templates/intern/index.html:39 templates/intern/index.html:40
 msgid "nach Bestellphase"
 msgstr ""
 
-#: templates/intern/index.html:39
+#: templates/intern/index.html:40
 msgid "Anschreiben für Veranstalter erzeugen"
 msgstr ""
 
-#: templates/intern/index.html:40
+#: templates/intern/index.html:41
 msgid "Veranstaltungen für EvaSys exportieren"
 msgstr ""
 
-#: templates/intern/index.html:41 templates/intern/tans/process_tans.html:3
+#: templates/intern/index.html:42 templates/intern/tans/process_tans.html:3
 #: templates/intern/tans/process_tans.html:5
 #: templates/intern/tans/process_tans_preview.html:3
 #: templates/intern/tans/process_tans_preview.html:5
 msgid "TANs verarbeiten"
 msgstr ""
 
-#: templates/intern/index.html:41
+#: templates/intern/index.html:42
 msgid "nach der Bestellphase"
 msgstr ""
 
-#: templates/intern/index.html:43
+#: templates/intern/index.html:44
 msgid "Rankings berechnen"
 msgstr ""
 
-#: templates/intern/index.html:43
+#: templates/intern/index.html:44
 msgid "nach dem Ergebnis-Import"
 msgstr ""
 
-#: templates/intern/index.html:45
+#: templates/intern/index.html:46
 msgid "Ergebnisse veröffentlichen"
 msgstr ""
 
-#: templates/intern/index.html:45
+#: templates/intern/index.html:46
 #, python-format
 msgid " (aktuell: sichtbar für %(cur_semester.get_sichtbarkeit_display)s)"
 msgstr ""
@@ -1719,14 +1739,16 @@ msgstr "Fehlgeschlagene Anmeldung bei Drittanbietern"
 msgid ""
 "An error occurred while attempting to login via your third-party account."
 msgstr ""
-"Beim Versuch, sich über Ihr Drittanbieterkonto anzumelden, ist ein Fehler aufgetreten."
+"Beim Versuch, sich über Ihr Drittanbieterkonto anzumelden, ist ein Fehler "
+"aufgetreten."
 
 #: templates/socialaccount/connections.html:13
 msgid ""
 "You can sign in to your account using any of the following third-party "
 "accounts:"
 msgstr ""
-"Sie können sich mit einem der folgenden Drittanbieterkonten bei Ihrem Konto anmelden:"
+"Sie können sich mit einem der folgenden Drittanbieterkonten bei Ihrem Konto "
+"anmelden:"
 
 #: templates/socialaccount/connections.html:40
 msgid "Remove"
@@ -1734,7 +1756,9 @@ msgstr "Löschen"
 
 #: templates/socialaccount/connections.html:46
 msgid "You currently have no third-party accounts connected to this account."
-msgstr "Sie haben derzeit keine Konten von Dritten, die mit diesem Konto verbunden sind."
+msgstr ""
+"Sie haben derzeit keine Konten von Dritten, die mit diesem Konto verbunden "
+"sind."
 
 #: templates/socialaccount/connections.html:50
 msgid "Add a Third-Party Account"
@@ -1744,7 +1768,8 @@ msgstr "Ein Drittanbieterkonto hinzufügen"
 #, python-format
 msgid ""
 "A third-party account from %(provider)s has been connected to your account."
-msgstr "Ein Drittanbieterkonto von %(provider)s wurde mit Ihrem Konto verbunden."
+msgstr ""
+"Ein Drittanbieterkonto von %(provider)s wurde mit Ihrem Konto verbunden."
 
 #: templates/socialaccount/email/account_connected_subject.txt:3
 msgid "Third-Party Account Connected"
@@ -1755,7 +1780,8 @@ msgstr "Drittanbieterkonto verbunden"
 msgid ""
 "A third-party account from %(provider)s has been disconnected from your "
 "account."
-msgstr "Ein Drittanbieterkonto von %(provider)s wurde von Ihrem Konto getrennt."
+msgstr ""
+"Ein Drittanbieterkonto von %(provider)s wurde von Ihrem Konto getrennt."
 
 #: templates/socialaccount/email/account_disconnected_subject.txt:3
 msgid "Third-Party Account Disconnected"
@@ -1769,7 +1795,8 @@ msgstr "Verbinden %(provider)s"
 #: templates/socialaccount/login.html:13
 #, python-format
 msgid "You are about to connect a new third-party account from %(provider)s."
-msgstr "Sie sind dabei, ein neues Drittanbieterkonto von %(provider)s zu verbinden."
+msgstr ""
+"Sie sind dabei, ein neues Drittanbieterkonto von %(provider)s zu verbinden."
 
 #: templates/socialaccount/login.html:17
 #, python-format
@@ -1779,7 +1806,8 @@ msgstr "Anmeldung über %(provider)s"
 #: templates/socialaccount/login.html:20
 #, python-format
 msgid "You are about to sign in using a third-party account from %(provider)s."
-msgstr "Sie sind dabei, ein neues Drittanbieterkonto von %(provider)s zu verbinden."
+msgstr ""
+"Sie sind dabei, ein neues Drittanbieterkonto von %(provider)s zu verbinden."
 
 #: templates/socialaccount/login.html:27
 #: templates/socialaccount/login_redirect.html:10
@@ -1824,8 +1852,8 @@ msgid ""
 "You are about to use your %(provider_name)s account to login to\n"
 "%(site_name)s. As a final step, please complete the following form:"
 msgstr ""
-"Sie sind dabei, sich mit Ihrem %(provider_name)s-Konto bei %(site_name)s\n "
-"anzumelden. Als letzten Schritt füllen Sie bitte das folgende Formular aus:"
+"Sie sind dabei, sich mit Ihrem %(provider_name)s-Konto bei %(site_name)s\n"
+" anzumelden. Als letzten Schritt füllen Sie bitte das folgende Formular aus:"
 
 #: templates/socialaccount/snippets/login.html:10
 msgid "Or use a third-party"

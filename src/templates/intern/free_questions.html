@@ -1,0 +1,40 @@
+{% extends "bestellung_base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% translate "Freie Fragen Liste" %}{% endblock %}
+
+{% block extra_header %}
+    <script type="text/javascript" src="{% static "copy.js" %}"></script>
+{% endblock %}
+
+{% block content %}
+<h1>{% translate "Liste der freien Fragen im aktuellen Semester" %}</h1>
+<br>
+<hr>
+{% for v in veranstaltungen %}
+    {% if v.freiefrage1 or v.freiefrage2 %}
+        <h2>{{ v.name }}</h2>
+        <ul>
+            {% if v.freiefrage1 %}
+                <li>
+                    <button class="btn btn-outline-secondary btn-sm" onclick="copyToClipboard(this)" data-text="{{v.freiefrage1}}">
+                        <i class="fa fa-clipboard"></i> Copy
+                    </button>
+                    <span class="ms-2">{% translate "Frage 1" %} : {{v.freiefrage1}}</span>
+                </li>
+            {% endif %}
+            {% if v.freiefrage2 %}
+                <li>
+                    <button class="btn btn-outline-secondary btn-sm" onclick="copyToClipboard(this)" data-text="{{v.freiefrage2}}">
+                        <i class="fa fa-clipboard"></i> Copy
+                    </button>
+                    <span class="ms-2">{% translate "Frage 2" %} : {{v.freiefrage2}}</span>
+                </li>
+            {% endif %}
+        </ul>
+        <hr>
+    {% endif %}
+{% endfor %}
+
+{% endblock %}

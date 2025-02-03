@@ -111,6 +111,14 @@ class InternMiscTest(NonSuTestMixin, TestCase):
         self.assertEqual(response.templates[0].name, 'intern/export_veranstaltungen.html')
         self.assertSequenceEqual(response.context['semester'], list(Semester.objects.all()))
 
+    def test_freie_frage_veranstaltungen(self):
+        path = f'/{get_language()}/intern/questions_list/'
+        self.do_non_su_test(path)
+        self.client.login(username='supers', password='pw')
+
+        response = self.client.get(path, **{'REMOTE_USER': 'super'})
+        self.assertTemplateUsed('intern/free_question.html')
+        self.assertEqual(response.status_code, 200)
 
 class ExportVeranstaltungenTest(NonSuTestMixin, TestCase):
     def checkXMLEqual(self, xml1, xml2):

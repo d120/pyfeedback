@@ -48,6 +48,7 @@ urlpatterns += [
 urlpatterns += [
     re_path(r'^intern/uebersicht/$', feedback.views.intern.index, name='intern-index'),
     re_path(r'^intern/sendmail/$', feedback.views.intern.sendmail, name='sendmail'),
+    re_path(r'^intern/questions_list/$', feedback.views.intern.freie_frage_veranstaltungen, name='free-questions'),
     re_path(r'^intern/export_veranstaltungen/$', feedback.views.intern.export_veranstaltungen, name='export_veranstaltungen'),
     re_path(r'^intern/generate_letters/$', feedback.views.intern.generate_letters, name='generate_letters'),
     re_path(r'^intern/import_ergebnisse/$', feedback.views.intern.import_ergebnisse, name='import_ergebnisse'),

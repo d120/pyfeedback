@@ -13,6 +13,7 @@
         <li><a href="{% url 'feedback:sendmail' %}">{% translate "Mail an Veranstalter verschicken" %}</a></li>
         <li><a href="{% url 'feedback:fragebogensprache' %}">{% translate "Zuordnung Veranstaltungen zu Fragebogensprache" %}</a></li>
         <li><a href="{% url 'feedback:lange_ohne_evaluation' %}">{% translate "Veranstaltungen die lange nicht mehr evaluiert wurden" %}</a></li>
+        <li><a href="{% url 'feedback:free-questions' %}">{% translate "Liste der Veranstaltungen mit freien Fragen" %}</a></li>
         <li>
             <form action = "{% url 'feedback:logout' %}" method="post">
                 {% csrf_token %}
