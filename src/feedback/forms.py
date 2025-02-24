@@ -15,6 +15,19 @@ class BestellWizardForm(forms.ModelForm):
     required_css_class = "required"
 
 
+class VeranstaltungAnzahlForm(BestellWizardForm) :
+    """Defines form for number of orders"""
+
+    class Meta:
+        model = Veranstaltung
+        fields = ("anzahl",)
+    
+    def __init__(self, *args, **kwargs) :
+        super(VeranstaltungAnzahlForm, self).__init__(*args, **kwargs)
+
+        self.fields["anzahl"] = forms.IntegerField(label=_("Anzahl der Teilnehmende"), min_value=0)
+
+
 class VeranstaltungEvaluationForm(BestellWizardForm):
     """Definiert die Form für den 1. Schritt des Wizards"""
 
@@ -24,24 +37,17 @@ class VeranstaltungEvaluationForm(BestellWizardForm):
         widgets = {"evaluieren": forms.RadioSelect()}
 
     def __init__(self, *args, **kwargs):
+        hide_field = kwargs.pop('hide_eval_field', False)
+
         super(VeranstaltungEvaluationForm, self).__init__(
-            *args, **dict(kwargs, initial={"evaluieren": "False"})
+            *args, **dict(kwargs, initial={"evaluieren": "True"})
         )
+
+        self.fields['evaluieren'].required = True
         
-        eval_field = self.fields['evaluieren']
-        if not (Semester.current().vollerhebung):
-            eval_field.required = True
-        else:
-            self.initial['evaluieren'] = True
-            eval_field.disabled = True
-
-    def clean(self):
-        cleaned_data = super().clean()
-        if Semester.current().vollerhebung:
-            cleaned_data["evaluieren"] = True
-        return cleaned_data
-
-
+        if hide_field :
+            # with vollerhebung and correct anzahl hide field so no option not to evaluate
+            self.fields['evaluieren'].widget = forms.HiddenInput()
 class VeranstaltungBasisdatenForm(BestellWizardForm):
     """Definiert die Form für den 2. Schritt des Wizards."""
 
@@ -52,9 +58,6 @@ class VeranstaltungBasisdatenForm(BestellWizardForm):
 
         # Schränke QuerySet nur auf den Veranstalter ein
         self.fields["ergebnis_empfaenger"].queryset = veranstalter_queryset
-
-        # Keine negative Anzahl möglich
-        self.fields["anzahl"] = forms.IntegerField(label=_("Anzahl"), min_value=1)
 
         self.fields["auswertungstermin"] = forms.DateField(
             label=_("Auswertungstermin"),
@@ -83,7 +86,6 @@ class VeranstaltungBasisdatenForm(BestellWizardForm):
         model = Veranstaltung
         fields = (
             "typ",
-            "anzahl",
             "sprache",
             "ergebnis_empfaenger",
             "auswertungstermin",

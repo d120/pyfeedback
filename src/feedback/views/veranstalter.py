@@ -10,11 +10,12 @@ from django.shortcuts import render
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
+from django.contrib import messages
 
 from formtools.wizard.views import SessionWizardView
 from feedback.models import Veranstaltung, Tutor, past_semester_orders, Log
 from feedback.forms import VeranstaltungEvaluationForm, VeranstaltungBasisdatenForm, \
-    VeranstaltungFreieFragen, VeranstaltungVeroeffentlichung, VeranstaltungDigitaleEvaluationForm
+    VeranstaltungFreieFragen, VeranstaltungVeroeffentlichung, VeranstaltungDigitaleEvaluationForm, VeranstaltungAnzahlForm
 
 
 @require_safe
@@ -79,6 +80,7 @@ def veranstalter_dashboard(request):
 
 # Alle Templates, die vom Wizard gebraucht werden.
 VERANSTALTER_VIEW_TEMPLATES = {
+    "anzahl" : "formtools/wizard/anzahl.html",
     "evaluation": "formtools/wizard/evaluation.html",
     "basisdaten": "formtools/wizard/basisdaten.html",
     "digitale_eval": "formtools/wizard/digitale_evaluation.html",
@@ -89,6 +91,7 @@ VERANSTALTER_VIEW_TEMPLATES = {
 
 # Alle Schritte, die vom Wizard gebraucht werden.
 VERANSTALTER_WIZARD_STEPS = {
+    "anzahl" : _("Anzahl"),
     "evaluation": _("Evaluation"),
     "basisdaten": _("Basisdaten"),
     "digitale_eval": _("Digitale Evaluation"),
@@ -100,28 +103,57 @@ VERANSTALTER_WIZARD_STEPS = {
 
 def perform_evalution(wizard):
     """
-    Wenn wir keine Vollerhebung haben, und der Veranstalter nicht evauliert, dann
-    springt der Wizard direkt zur Zusammenfassung.
+    Checks if user has choosen to evaluate, default returns True
     """
-    if not wizard.cached_obj.get("cleaned_data_evaluation", {}):
-        wizard.cached_obj["cleaned_data_evaluation"] = wizard.get_cleaned_data_for_step('evaluation') or {}
+    wizard.cached_obj["cleaned_data_evaluation"] = wizard.get_cleaned_data_for_step('evaluation') or {}
     cleaned_data = wizard.cached_obj["cleaned_data_evaluation"]
-
-    v = wizard.get_instance()
-
-    if v.semester.vollerhebung:
-        return True
 
     return cleaned_data.get('evaluieren', True)
 
+def vollerhebung_check(wizard) :
+    """
+    Checks if the semester is a vollerhebung semester
+    """
+    v = wizard.get_instance()
+
+    return v.semester.vollerhebung
+
 def show_digital_eval_form(wizard):
-    show_summary_form = perform_evalution(wizard)
+    show_summary_form = perform_evalution(wizard) and vollerhebung_check(wizard)
     if show_summary_form:
         cleaned_data = wizard.get_cleaned_basisdaten()
         digitale_eval = cleaned_data.get('digitale_eval', '')
         return digitale_eval
     return show_summary_form
 
+def order_amount_check(wizard) :
+    """
+    Checks if amount of orders greater than or equal to MIN_BESTELLUNG_ANZAHL
+    """
+    wizard.cached_obj["cleaned_data_anzahl"] = wizard.get_cleaned_data_for_step('anzahl') or {}
+    cleaned_data = wizard.cached_obj["cleaned_data_anzahl"]
+
+    return cleaned_data.get('anzahl', 0) >= Veranstaltung.MIN_BESTELLUNG_ANZAHL
+
+def activate_step(wizard, step) :
+    """
+    Checks if given step should be shown in the form
+    """
+    vollerhebung = vollerhebung_check(wizard)
+    amount = order_amount_check(wizard)
+    evaluation = perform_evalution(wizard)
+    show_form = show_digital_eval_form(wizard)
+
+    if step == "basisdaten" :
+        return (evaluation or vollerhebung) and amount
+    elif step == "digitale_eval" :
+        return amount and show_form
+    elif step == "freie_fragen" :
+        return (evaluation or vollerhebung) and amount
+    elif step == "veroeffentlichen" :
+        return (evaluation or vollerhebung) and amount
+    
+    return True
 
 def swap(collection, i, j):
     """Einfache Swap-Funktion, die für die Darstellung von Daten in der Zusammenfassung gebraucht wird."""
@@ -135,6 +167,7 @@ def swap(collection, i, j):
 class VeranstalterWizard(SessionWizardView):
     """Definiert den Wizard für den Bestellprozess."""
     form_list = [
+        ('anzahl', VeranstaltungAnzahlForm),
         ('evaluation', VeranstaltungEvaluationForm),
         ('basisdaten', VeranstaltungBasisdatenForm),
         ('digitale_eval', VeranstaltungDigitaleEvaluationForm),
@@ -144,14 +177,38 @@ class VeranstalterWizard(SessionWizardView):
     ]
 
     condition_dict = {
-        'basisdaten': perform_evalution,
-        'digitale_eval': show_digital_eval_form,
-        'freie_fragen': perform_evalution,
-        'veroeffentlichen': perform_evalution,
+        'basisdaten': lambda wizard : activate_step(wizard, 'basisdaten'),
+        'digitale_eval': lambda wizard : activate_step(wizard, 'digitale_eval'),
+        'freie_fragen': lambda wizard : activate_step(wizard, 'freie_fragen'),
+        'veroeffentlichen': lambda wizard : activate_step(wizard, 'veroeffentlichen'),
     }
 
     cached_obj = {}
 
+    def process_step(self, form):
+        step = self.steps.current
+        request = self.request
+
+        if step == 'anzahl' :
+            anzahl_data = form.cleaned_data.get('anzahl', 0)
+            if anzahl_data < Veranstaltung.MIN_BESTELLUNG_ANZAHL :
+                messages.info(request, Veranstaltung.anzahl_too_few_msg())
+
+        return super().process_step(form)
+        
+    def render_next_step(self, form, **kwargs):
+        step = self.steps.current
+
+        if step == 'evaluation' :
+            evaluation = form.cleaned_data.get('evaluieren', True)
+
+            if evaluation and not order_amount_check(self) :
+                messages.error(self.request, Veranstaltung.anzahl_too_few_msg())
+                #stay on the same step
+                return self.render(form)
+            
+        return super().render_next_step(form, **kwargs)
+    
     def dispatch(self, request, *args, **kwargs):
         self.cached_obj = {}
         return super(VeranstalterWizard, self).dispatch(request, *args, **kwargs)
@@ -247,7 +304,11 @@ class VeranstalterWizard(SessionWizardView):
     def get_form_kwargs(self, step=None):
         kwargs = super(VeranstalterWizard, self).get_form_kwargs(step)
 
-        if step == "basisdaten":
+        if step == 'evaluation' :
+            if vollerhebung_check(self) and order_amount_check(self) :
+                kwargs.update({'hide_eval_field': True})
+
+        elif step == "basisdaten":
             kwargs.update({'all_veranstalter': self.get_all_veranstalter()})
             
         return kwargs
@@ -257,9 +318,9 @@ class VeranstalterWizard(SessionWizardView):
 
     def done(self, form_list, **kwargs):
         cleaned_data = {}
-        if perform_evalution(self) :
+        if activate_step(self, 'basisdaten') :
             # django-formtools uses get_form_list to get steps, which are added when their method in condition_dict is True
-            # get_cleaned_basisdaten uses step 'basisdaten', which is not added to steps if perform_evalution is False
+            # get_cleaned_basisdaten uses step 'basisdaten', which is not added to steps if activate_step at step basisdaten is False
             cleaned_data = self.get_cleaned_basisdaten()
         ergebnis_empfaenger = cleaned_data.get('ergebnis_empfaenger', None)
 

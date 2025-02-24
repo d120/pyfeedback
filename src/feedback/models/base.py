@@ -425,7 +425,7 @@ class Veranstaltung(models.Model):
         ('L', 'Losung'),
     ]
 
-    MIN_BESTELLUNG_ANZAHL = 5
+    MIN_BESTELLUNG_ANZAHL = 6
 
     # Helfertext für Dozenten für den Veranstaltungstyp.
     vlNoEx = _('Wenn Ihre Vorlesung keine Übung hat wählen Sie bitte <i>Vorlesung</i> aus')
@@ -635,20 +635,15 @@ class Veranstaltung(models.Model):
         list = [x.full_name() for x in self.veranstalter.all()]
         return ', '.join(list)
     
-    
-    def anzahl_too_few_msg(self) :
-        return _('Anzahl der Bestellungen muss mindestens {MIN_BESTELLUNG_ANZAHL} sein. Bei weniger als {MIN_BESTELLUNG_ANZAHL} Teilnehmenden ist eine Evaluation leider nicht möglich').format(MIN_BESTELLUNG_ANZAHL=self.MIN_BESTELLUNG_ANZAHL)
-
+    @staticmethod
+    def anzahl_too_few_msg() :
+        return _('Anzahl der Bestellungen muss mindestens {MIN_BESTELLUNG_ANZAHL} sein. Bei weniger als {MIN_BESTELLUNG_ANZAHL} Teilnehmenden ist eine Evaluation leider nicht möglich').format(MIN_BESTELLUNG_ANZAHL=Veranstaltung.MIN_BESTELLUNG_ANZAHL)
 
     def clean(self, *args, **kwargs):
         super(Veranstaltung, self).clean(*args, **kwargs)
 
         if self.auswertungstermin is not None and self.id is not None and self.auswertungstermin > self.semester.last_Auswertungstermin().date():
             raise ValidationError(self.auwertungstermin_to_late_msg())
-        
-        if self.anzahl is not None and self.anzahl < self.MIN_BESTELLUNG_ANZAHL :
-            raise ValidationError(self.anzahl_too_few_msg())
-
 
     def save(self, *args, **kwargs):
         # beim Speichern Zugangsschlüssel erzeugen, falls noch keiner existiert
