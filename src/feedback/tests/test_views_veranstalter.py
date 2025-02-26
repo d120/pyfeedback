@@ -80,6 +80,9 @@ class VeranstalterIndexTest(TestCase):
 
     def test_post_bestellung(self):
         c = login_veranstalter(self.v)
+        c.post(f'/{get_language()}/veranstalter/bestellung', {'anzahl-anzahl': 12,
+                                                        "veranstalter_wizard-current_step": "anzahl"})
+        
         response_first_step = c.post(f'/{get_language()}/veranstalter/bestellung', {'evaluation-evaluieren': True,
                                                         "veranstalter_wizard-current_step": "evaluation"})
 
@@ -88,7 +91,6 @@ class VeranstalterIndexTest(TestCase):
         response_second_temp_step = c.post(f'/{get_language()}/veranstalter/bestellung', {
             "veranstalter_wizard-current_step": "basisdaten",
             "basisdaten-typ": "vu",
-            "basisdaten-anzahl": 22,
             "basisdaten-sprache": "de",
             "basisdaten-verantwortlich": self.p.id,
             "basisdaten-ergebnis_empfaenger": [self.p.id, self.p2.id],
@@ -140,7 +142,7 @@ class VeranstalterIndexTest(TestCase):
         # step "primaerdozent" removed
         self.assertEqual(Tutor.objects.count(), 0) # step "tutoren" removed
         self.assertEqual(self.p.email, "v1n1@fb.de") # step "verantwortlicher_address" removed
-        self.assertEqual(self.v.anzahl, 22)
+        self.assertEqual(self.v.anzahl, 12)
         self.assertEqual(self.v.ergebnis_empfaenger.count(), 2)
         self.assertEqual(self.v.sprache, "de")
 
@@ -153,6 +155,10 @@ class VeranstalterIndexTest(TestCase):
 
     def test_post_keine_evaluation(self):
         c = login_veranstalter(self.v)
+
+        c.post(f'/{get_language()}/veranstalter/bestellung', {"anzahl-anzahl": 12,
+                                                        "veranstalter_wizard-current_step": "anzahl"})
+        
         response_firststep = c.post(f'/{get_language()}/veranstalter/bestellung', {"evaluation-evaluieren": False,
                                                         "veranstalter_wizard-current_step": "evaluation"})
         self.assertTemplateUsed(response_firststep, "formtools/wizard/zusammenfassung.html")
@@ -169,7 +175,8 @@ class VeranstalterIndexTest(TestCase):
         self.s.save()
         c = login_veranstalter(self.v)
 
-        response_vollerhebung = c.get(f'/{get_language()}/veranstalter/bestellung')
+        response_vollerhebung = c.post(f'/{get_language()}/veranstalter/bestellung', {"anzahl-anzahl": 12,
+                                                       "veranstalter_wizard-current_step": "anzahl"})
 
         self.assertContains(response_vollerhebung, "<h2>Information zur Vollerhebung</h2>")
 
@@ -186,6 +193,11 @@ class VeranstalterIndexTest(TestCase):
 
         c = login_veranstalter(self.v)
 
+        c.post(f'/{get_language()}/veranstalter/bestellung', {
+            'anzahl-anzahl': 12,
+            "veranstalter_wizard-current_step": "anzahl"
+        })
+
         response_firststep = c.post(f'/{get_language()}/veranstalter/bestellung', {
             'evaluation-evaluieren': True,
             "veranstalter_wizard-current_step": "evaluation"
@@ -197,6 +209,9 @@ class VeranstalterIndexTest(TestCase):
 
     def test_post_bestellung_ein_ergebnis_empfaenger(self):
         c = login_veranstalter(self.v)
+        c.post(f'/{get_language()}/veranstalter/bestellung', {'anzahl-anzahl': 12,
+                                                       "veranstalter_wizard-current_step": "anzahl"})
+        
         response_firststep = c.post(f'/{get_language()}/veranstalter/bestellung', {'evaluation-evaluieren': True,
                                                        "veranstalter_wizard-current_step": "evaluation"})
 
@@ -205,7 +220,6 @@ class VeranstalterIndexTest(TestCase):
         response_second_temp_step = c.post(f'/{get_language()}/veranstalter/bestellung', {
             "veranstalter_wizard-current_step": "basisdaten",
             "basisdaten-typ": "vu",
-            "basisdaten-anzahl": 22,
             "basisdaten-sprache": "de",
             "basisdaten-verantwortlich": self.p.id,
             "basisdaten-ergebnis_empfaenger": self.p2.id,
@@ -257,13 +271,15 @@ class VeranstalterIndexTest(TestCase):
 
     def test_post_bestellung_without_excercises(self):
         c = login_veranstalter(self.v_wo_excercises)
+        c.post(f'/{get_language()}/veranstalter/bestellung', {'anzahl-anzahl': 12,
+                                                       "veranstalter_wizard-current_step": "anzahl"})
+        
         c.post(f'/{get_language()}/veranstalter/bestellung', {'evaluation-evaluieren': True,
                                                        "veranstalter_wizard-current_step": "evaluation"})
 
         c.post(f'/{get_language()}/veranstalter/bestellung', {
             "veranstalter_wizard-current_step": "basisdaten",
             "basisdaten-typ": "v",
-            "basisdaten-anzahl": 11,
             "basisdaten-sprache": "de",
             "basisdaten-verantwortlich": self.p3.id,
             "basisdaten-ergebnis_empfaenger": self.p3.id,
@@ -290,6 +306,9 @@ class VeranstalterIndexTest(TestCase):
     def test_status_changes(self):
         c = login_veranstalter(self.v)
 
+        c.post(f'/{get_language()}/veranstalter/bestellung', {"anzahl-anzahl": 12,
+                                                                 "veranstalter_wizard-current_step": "anzahl"})
+
         c.post(f'/{get_language()}/veranstalter/bestellung', {"evaluation-evaluieren": False,
                                                                  "veranstalter_wizard-current_step": "evaluation"})
 
@@ -300,13 +319,16 @@ class VeranstalterIndexTest(TestCase):
         self.assertEqual(self.v.status, Veranstaltung.STATUS_KEINE_EVALUATION)
 
         c.post(f'/{get_language()}/veranstalter/bestellung', {
+            'anzahl-anzahl': 12,
+            "veranstalter_wizard-current_step": "anzahl"})
+        
+        c.post(f'/{get_language()}/veranstalter/bestellung', {
             'evaluation-evaluieren': True,
             "veranstalter_wizard-current_step": "evaluation"})
 
         c.post(f'/{get_language()}/veranstalter/bestellung', {
             "veranstalter_wizard-current_step": "basisdaten",
             "basisdaten-typ": "vu",
-            "basisdaten-anzahl": 22,
             "basisdaten-sprache": "de",
             "basisdaten-verantwortlich": self.p.id,
             "basisdaten-ergebnis_empfaenger": [self.p.id, self.p2.id],
@@ -347,6 +369,9 @@ class VeranstalterIndexTest(TestCase):
         self.assertTrue(self.v.evaluieren)
         self.assertEqual(self.v.status, Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR)
 
+        c.post(f'/{get_language()}/veranstalter/bestellung', {"anzahl-anzahl": 12,
+                                            "veranstalter_wizard-current_step": "anzahl"})
+        
         c.post(f'/{get_language()}/veranstalter/bestellung', {"evaluation-evaluieren": False,
                                             "veranstalter_wizard-current_step": "evaluation"})
 
@@ -361,6 +386,12 @@ class VeranstalterIndexTest(TestCase):
         c = login_veranstalter(self.v_wo_excercises)
         c.post(
             f'/{get_language()}/veranstalter/bestellung', {
+                'anzahl-anzahl': 12,
+                "veranstalter_wizard-current_step": "anzahl"
+            })
+        
+        c.post(
+            f'/{get_language()}/veranstalter/bestellung', {
                 'evaluation-evaluieren': True,
                 "veranstalter_wizard-current_step": "evaluation"
             })
@@ -369,7 +400,6 @@ class VeranstalterIndexTest(TestCase):
             f'/{get_language()}/veranstalter/bestellung', {
                 "veranstalter_wizard-current_step": "basisdaten",
                 "basisdaten-typ": "v",
-                "basisdaten-anzahl": 11,
                 "basisdaten-sprache": "de",
                 "basisdaten-verantwortlich": self.p3.id,
                 "basisdaten-ergebnis_empfaenger": self.p3.id,

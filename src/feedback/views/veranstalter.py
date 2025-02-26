@@ -118,14 +118,6 @@ def vollerhebung_check(wizard) :
 
     return v.semester.vollerhebung
 
-def show_digital_eval_form(wizard):
-    show_summary_form = perform_evalution(wizard) and vollerhebung_check(wizard)
-    if show_summary_form:
-        cleaned_data = wizard.get_cleaned_basisdaten()
-        digitale_eval = cleaned_data.get('digitale_eval', '')
-        return digitale_eval
-    return show_summary_form
-
 def order_amount_check(wizard) :
     """
     Checks if amount of orders greater than or equal to MIN_BESTELLUNG_ANZAHL
@@ -142,12 +134,11 @@ def activate_step(wizard, step) :
     vollerhebung = vollerhebung_check(wizard)
     amount = order_amount_check(wizard)
     evaluation = perform_evalution(wizard)
-    show_form = show_digital_eval_form(wizard)
 
     if step == "basisdaten" :
         return (evaluation or vollerhebung) and amount
     elif step == "digitale_eval" :
-        return amount and show_form
+        return (evaluation or vollerhebung) and amount
     elif step == "freie_fragen" :
         return (evaluation or vollerhebung) and amount
     elif step == "veroeffentlichen" :

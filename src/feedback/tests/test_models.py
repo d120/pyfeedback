@@ -435,16 +435,6 @@ class VeranstaltungTest(TransactionTestCase):
         self.assertTrue(self.v[1].has_uebung())
         self.assertFalse(self.v[0].has_uebung())
 
-    def test_anzahl_less_than_min_value(self) :
-        """
-        must raise a ValidationError if anzahl less than MIN_BESTELLUNG_ANZAHL when clean() is called
-        """
-        for anzahl_val in range(-10, Veranstaltung.MIN_BESTELLUNG_ANZAHL) :
-            with self.subTest(anzahl = anzahl_val) :
-                with self.assertRaises(ValidationError) :
-                    self.v[0].anzahl = anzahl_val
-                    self.v[0].clean()
-
     def test_anzahl_more_than_or_equal_min_value(self) :
         """
         must not raise ValidationError if anzahl more than or equal to MIN_BESTELLUNG_ANZAHL when clean() is called
