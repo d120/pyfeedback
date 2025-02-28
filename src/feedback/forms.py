@@ -44,10 +44,13 @@ class VeranstaltungEvaluationForm(BestellWizardForm):
         )
 
         self.fields['evaluieren'].required = True
-        
+
         if hide_field :
             # with vollerhebung and correct anzahl hide field so no option not to evaluate
             self.fields['evaluieren'].widget = forms.HiddenInput()
+            # this prevents user from changing hidden input data in inspect mode of browser
+            self.fields['evaluieren'].disabled = True
+
 class VeranstaltungBasisdatenForm(BestellWizardForm):
     """Definiert die Form für den 2. Schritt des Wizards."""
 
