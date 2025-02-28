@@ -25,7 +25,7 @@ class VeranstaltungAnzahlForm(BestellWizardForm) :
     def __init__(self, *args, **kwargs) :
         super(VeranstaltungAnzahlForm, self).__init__(*args, **kwargs)
 
-        self.fields["anzahl"] = forms.IntegerField(label=_("Anzahl der Teilnehmende"), min_value=0)
+        self.fields["anzahl"] = forms.IntegerField(label=_("Anzahl der Bestellungen"), min_value=0)
 
 
 class VeranstaltungEvaluationForm(BestellWizardForm):
