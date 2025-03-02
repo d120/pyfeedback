@@ -38,15 +38,22 @@ class VeranstaltungEvaluationForm(BestellWizardForm):
 
     def __init__(self, *args, **kwargs):
         hide_field = kwargs.pop('hide_eval_field', False)
+        no_eval = kwargs.pop('no_eval', False)
 
         super(VeranstaltungEvaluationForm, self).__init__(
-            *args, **dict(kwargs, initial={"evaluieren": "True"})
+            *args, **dict(kwargs, initial={"evaluieren": not no_eval})
         )
 
         self.fields['evaluieren'].required = True
 
-        if hide_field :
+        if not no_eval and hide_field :
             # with vollerhebung and correct anzahl hide field so no option not to evaluate
+            self.fields['evaluieren'].widget = forms.HiddenInput()
+            # this prevents user from changing hidden input data in inspect mode of browser
+            self.fields['evaluieren'].disabled = True
+
+        elif no_eval and hide_field :
+            # when anzahl less than MIN_BESTELLUNG_ANZAHL hide
             self.fields['evaluieren'].widget = forms.HiddenInput()
             # this prevents user from changing hidden input data in inspect mode of browser
             self.fields['evaluieren'].disabled = True

@@ -185,20 +185,11 @@ class VeranstalterWizard(SessionWizardView):
             if anzahl_data < Veranstaltung.MIN_BESTELLUNG_ANZAHL :
                 messages.info(request, Veranstaltung.anzahl_too_few_msg())
 
-        return super().process_step(form)
-        
-    def render_next_step(self, form, **kwargs):
-        step = self.steps.current
-
-        if step == 'evaluation' :
-            evaluation = form.cleaned_data.get('evaluieren', True)
-
-            if evaluation and not order_amount_check(self) :
+        elif step == 'evaluation' :
+            if not order_amount_check(self) :
                 messages.error(self.request, Veranstaltung.anzahl_too_few_msg())
-                #stay on the same step
-                return self.render(form)
-            
-        return super().render_next_step(form, **kwargs)
+
+        return super().process_step(form)
     
     def dispatch(self, request, *args, **kwargs):
         self.cached_obj = {}
@@ -296,7 +287,13 @@ class VeranstalterWizard(SessionWizardView):
         kwargs = super(VeranstalterWizard, self).get_form_kwargs(step)
 
         if step == 'evaluation' :
-            if vollerhebung_check(self) and order_amount_check(self) :
+            if not order_amount_check(self) :
+                # anzahl less than MIN_BESTELLUNG_ANZAHL, so no evaluaiton
+                kwargs.update({'hide_eval_field': True})
+                kwargs.update({'no_eval' : True})
+
+            elif vollerhebung_check(self) and order_amount_check(self) :
+                # vollerhebung with correct anzahl, so always evaluate
                 kwargs.update({'hide_eval_field': True})
 
         elif step == "basisdaten":
