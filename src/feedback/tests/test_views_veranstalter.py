@@ -200,17 +200,8 @@ class VeranstalterIndexTest(TestCase):
                                                        "veranstalter_wizard-current_step": "anzahl"})
 
         self.assertTemplateUsed(response_initial_step, "formtools/wizard/evaluation.html")
-        self.assertContains(response_initial_step, '<legend class="required">Evaluieren:</legend>')
 
-        response_firststep = c.post(f'/{get_language()}/veranstalter/bestellung', {"evaluation-evaluieren": True,
-                                                       "veranstalter_wizard-current_step": "evaluation"})
-        
-        # stay in step evaluation
-        self.assertTemplateUsed(response_firststep, "formtools/wizard/evaluation.html")
-        self.assertContains(response_initial_step, '<legend class="required">Evaluieren:</legend>')
-
-        response_firststep = c.post(f'/{get_language()}/veranstalter/bestellung', {"evaluation-evaluieren": False,
-                                                "veranstalter_wizard-current_step": "evaluation"})
+        response_firststep = c.post(f'/{get_language()}/veranstalter/bestellung', {"veranstalter_wizard-current_step": "evaluation"})
         
         self.assertTemplateUsed(response_firststep, "formtools/wizard/zusammenfassung.html")
 
@@ -226,7 +217,6 @@ class VeranstalterIndexTest(TestCase):
                                                        "veranstalter_wizard-current_step": "anzahl"})
 
         self.assertTemplateUsed(response_initial_step, "formtools/wizard/evaluation.html")
-        self.assertNotContains(response_initial_step, '<legend class="required">Evaluieren:</legend>')
 
         response_first_step = c.post(f'/{get_language()}/veranstalter/bestellung', {'evaluation-evaluieren': True,
                                                         "veranstalter_wizard-current_step": "evaluation"})
@@ -540,3 +530,33 @@ class VeranstalterIndexTest(TestCase):
 
         self.v_wo_excercises.refresh_from_db()
         self.assertEqual(self.v_wo_excercises.digitale_eval_type, 'L')
+
+
+    def test_evaluation_option_present(self) :
+        c = login_veranstalter(self.v)
+
+        response_initial_step = c.post(f'/{get_language()}/veranstalter/bestellung', {"anzahl-anzahl": Veranstaltung.MIN_BESTELLUNG_ANZAHL - 1,
+                                                    "veranstalter_wizard-current_step": "anzahl"})
+
+        self.assertNotContains(response_initial_step, '<legend class="required">Evaluieren:</legend>')
+
+        response_initial_step = c.post(f'/{get_language()}/veranstalter/bestellung', {"anzahl-anzahl": Veranstaltung.MIN_BESTELLUNG_ANZAHL + 1,
+                                                    "veranstalter_wizard-current_step": "anzahl"})
+        
+        self.assertContains(response_initial_step, '<legend class="required">Evaluieren:</legend>')
+
+
+    def test_evaluation_option_present_vollerhebung(self) :
+        self.s.vollerhebung = True
+        self.s.save()
+        c = login_veranstalter(self.v)
+
+        response_initial_step = c.post(f'/{get_language()}/veranstalter/bestellung', {"anzahl-anzahl": Veranstaltung.MIN_BESTELLUNG_ANZAHL - 1,
+                                                       "veranstalter_wizard-current_step": "anzahl"})
+
+        self.assertNotContains(response_initial_step, '<legend class="required">Evaluieren:</legend>')
+
+        response_initial_step = c.post(f'/{get_language()}/veranstalter/bestellung', {"anzahl-anzahl": Veranstaltung.MIN_BESTELLUNG_ANZAHL + 1,
+                                                       "veranstalter_wizard-current_step": "anzahl"})
+        
+        self.assertNotContains(response_initial_step, '<legend class="required">Evaluieren:</legend>')
