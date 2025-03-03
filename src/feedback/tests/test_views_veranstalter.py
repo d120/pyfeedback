@@ -80,6 +80,12 @@ class VeranstalterIndexTest(TestCase):
 
     def test_post_bestellung(self):
         c = login_veranstalter(self.v)
+
+        response_initial_step = c.post(f'/{get_language()}/veranstalter/bestellung', {'anzahl-anzahl': 12,
+                                                        "veranstalter_wizard-current_step": "anzahl"})
+        
+        self.assertTemplateUsed(response_initial_step, "formtools/wizard/evaluation.html")
+        
         response_first_step = c.post(f'/{get_language()}/veranstalter/bestellung', {'evaluation-evaluieren': True,
                                                         "veranstalter_wizard-current_step": "evaluation"})
 
@@ -88,7 +94,6 @@ class VeranstalterIndexTest(TestCase):
         response_second_temp_step = c.post(f'/{get_language()}/veranstalter/bestellung', {
             "veranstalter_wizard-current_step": "basisdaten",
             "basisdaten-typ": "vu",
-            "basisdaten-anzahl": 22,
             "basisdaten-sprache": "de",
             "basisdaten-verantwortlich": self.p.id,
             "basisdaten-ergebnis_empfaenger": [self.p.id, self.p2.id],
@@ -140,19 +145,25 @@ class VeranstalterIndexTest(TestCase):
         # step "primaerdozent" removed
         self.assertEqual(Tutor.objects.count(), 0) # step "tutoren" removed
         self.assertEqual(self.p.email, "v1n1@fb.de") # step "verantwortlicher_address" removed
-        self.assertEqual(self.v.anzahl, 22)
+        self.assertEqual(self.v.anzahl, 12)
         self.assertEqual(self.v.ergebnis_empfaenger.count(), 2)
         self.assertEqual(self.v.sprache, "de")
 
     def test_missing_sessionid(self):
         c = login_veranstalter(self.v)
         del c.cookies[settings.SESSION_COOKIE_NAME]
-        response = c.post(f'/{get_language()}/veranstalter/bestellung', {'evaluation-evaluieren': True,
-                                                        "veranstalter_wizard-current_step": "evaluation"})
+        response = c.post(f'/{get_language()}/veranstalter/bestellung', {'anzahl-anzahl': 12,
+                                                        "veranstalter_wizard-current_step": "anzahl"})
         self.assertEqual(response.status_code, 404)
 
     def test_post_keine_evaluation(self):
         c = login_veranstalter(self.v)
+
+        response_initial_step = c.post(f'/{get_language()}/veranstalter/bestellung', {"anzahl-anzahl": 12,
+                                                        "veranstalter_wizard-current_step": "anzahl"})
+        
+        self.assertTemplateUsed(response_initial_step, "formtools/wizard/evaluation.html")
+        
         response_firststep = c.post(f'/{get_language()}/veranstalter/bestellung', {"evaluation-evaluieren": False,
                                                         "veranstalter_wizard-current_step": "evaluation"})
         self.assertTemplateUsed(response_firststep, "formtools/wizard/zusammenfassung.html")
@@ -169,9 +180,11 @@ class VeranstalterIndexTest(TestCase):
         self.s.save()
         c = login_veranstalter(self.v)
 
-        response_vollerhebung = c.get(f'/{get_language()}/veranstalter/bestellung')
+        response_vollerhebung = c.post(f'/{get_language()}/veranstalter/bestellung', {"anzahl-anzahl": 12,
+                                                       "veranstalter_wizard-current_step": "anzahl"})
 
         self.assertContains(response_vollerhebung, "<h2>Information zur Vollerhebung</h2>")
+        self.assertTemplateUsed(response_vollerhebung, "formtools/wizard/evaluation.html")
 
         response_firststep = c.post(f'/{get_language()}/veranstalter/bestellung', {"evaluation-evaluieren": True,
                                                        "veranstalter_wizard-current_step": "evaluation"})
@@ -180,11 +193,93 @@ class VeranstalterIndexTest(TestCase):
         self.assertTrue(self.v.evaluieren)
         self.assertTemplateUsed(response_firststep, "formtools/wizard/basisdaten.html")
 
+
+        ### test anzahl less than MIN_BESTELLUNG_ANZAHL ###
+
+        response_initial_step = c.post(f'/{get_language()}/veranstalter/bestellung', {"anzahl-anzahl": Veranstaltung.MIN_BESTELLUNG_ANZAHL - 1,
+                                                       "veranstalter_wizard-current_step": "anzahl"})
+
+        self.assertTemplateUsed(response_initial_step, "formtools/wizard/evaluation.html")
+
+        response_firststep = c.post(f'/{get_language()}/veranstalter/bestellung', {"veranstalter_wizard-current_step": "evaluation"})
+        
+        self.assertTemplateUsed(response_firststep, "formtools/wizard/zusammenfassung.html")
+
+        c.post(f'/{get_language()}/veranstalter/bestellung', {"veranstalter_wizard-current_step": "zusammenfassung"})
+
+        self.v.refresh_from_db()
+        self.assertFalse(self.v.evaluieren)
+
+
+        ### test anzahl more than or equal to MIN_BESTELLUNG_ANZAHL ###
+
+        response_initial_step = c.post(f'/{get_language()}/veranstalter/bestellung', {"anzahl-anzahl": Veranstaltung.MIN_BESTELLUNG_ANZAHL + 1,
+                                                       "veranstalter_wizard-current_step": "anzahl"})
+
+        self.assertTemplateUsed(response_initial_step, "formtools/wizard/evaluation.html")
+
+        response_first_step = c.post(f'/{get_language()}/veranstalter/bestellung', {'evaluation-evaluieren': True,
+                                                        "veranstalter_wizard-current_step": "evaluation"})
+
+        self.assertTemplateUsed(response_first_step, "formtools/wizard/basisdaten.html")
+
+        response_second_temp_step = c.post(f'/{get_language()}/veranstalter/bestellung', {
+            "veranstalter_wizard-current_step": "basisdaten",
+            "basisdaten-typ": "vu",
+            "basisdaten-sprache": "de",
+            "basisdaten-verantwortlich": self.p.id,
+            "basisdaten-ergebnis_empfaenger": [self.p.id, self.p2.id],
+            "basisdaten-auswertungstermin": '2011-01-01',
+            "basisdaten-digitale_eval": "on",
+            "save": "Speichern"
+        })
+
+        self.assertTemplateUsed(response_second_temp_step, "formtools/wizard/digitale_evaluation.html")
+
+        response_second_step = c.post(f'/{get_language()}/veranstalter/bestellung', {
+            "veranstalter_wizard-current_step": "digitale_eval",
+            "digitale_eval-digitale_eval_type": "T",
+        })
+
+        self.assertTemplateUsed(response_second_step, "formtools/wizard/freiefragen.html")
+
+        response_fifth_step = c.post(f'/{get_language()}/veranstalter/bestellung', {
+            "veranstalter_wizard-current_step": "freie_fragen",
+            "freie_fragen-freifrage1": "Ist das die erste Frage?",
+            "freie_fragen-freifrage2": "Ist das die zweite Frage?"
+        })
+
+        self.assertTemplateUsed(response_fifth_step, "formtools/wizard/veroeffentlichen.html")
+
+        response_seventh_step = c.post(f'/{get_language()}/veranstalter/bestellung', {'veroeffentlichen-veroeffentlichen': True,
+                                    "veranstalter_wizard-current_step": "veroeffentlichen"})
+
+        self.assertTemplateUsed(response_seventh_step, "formtools/wizard/zusammenfassung.html")
+
+        response_eight_step = c.post(f'/{get_language()}/veranstalter/bestellung', {
+            "veranstalter_wizard-current_step": "zusammenfassung"
+        })
+
+        self.assertTemplateUsed(response_eight_step, "formtools/wizard/bestellung_done.html")
+
+        self.v.refresh_from_db()
+        self.assertTrue(self.v.evaluieren)
+        self.assertEqual(self.v.anzahl, Veranstaltung.MIN_BESTELLUNG_ANZAHL + 1)
+        self.assertEqual(self.v.ergebnis_empfaenger.count(), 2)
+        self.assertEqual(self.v.sprache, "de")
+
     def test_post_access_bestellung(self):
         self.v.status = Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR
         self.v.save()
 
         c = login_veranstalter(self.v)
+
+        response_initial_step = c.post(f'/{get_language()}/veranstalter/bestellung', {
+            'anzahl-anzahl': 12,
+            "veranstalter_wizard-current_step": "anzahl"
+        })
+
+        self.assertTemplateUsed(response_initial_step, "formtools/wizard/evaluation.html")
 
         response_firststep = c.post(f'/{get_language()}/veranstalter/bestellung', {
             'evaluation-evaluieren': True,
@@ -197,6 +292,12 @@ class VeranstalterIndexTest(TestCase):
 
     def test_post_bestellung_ein_ergebnis_empfaenger(self):
         c = login_veranstalter(self.v)
+        
+        response_initial_step = c.post(f'/{get_language()}/veranstalter/bestellung', {'anzahl-anzahl': 12,
+                                                       "veranstalter_wizard-current_step": "anzahl"})
+        
+        self.assertTemplateUsed(response_initial_step, "formtools/wizard/evaluation.html")
+        
         response_firststep = c.post(f'/{get_language()}/veranstalter/bestellung', {'evaluation-evaluieren': True,
                                                        "veranstalter_wizard-current_step": "evaluation"})
 
@@ -205,7 +306,6 @@ class VeranstalterIndexTest(TestCase):
         response_second_temp_step = c.post(f'/{get_language()}/veranstalter/bestellung', {
             "veranstalter_wizard-current_step": "basisdaten",
             "basisdaten-typ": "vu",
-            "basisdaten-anzahl": 22,
             "basisdaten-sprache": "de",
             "basisdaten-verantwortlich": self.p.id,
             "basisdaten-ergebnis_empfaenger": self.p2.id,
@@ -257,13 +357,18 @@ class VeranstalterIndexTest(TestCase):
 
     def test_post_bestellung_without_excercises(self):
         c = login_veranstalter(self.v_wo_excercises)
+
+        response_initial_step = c.post(f'/{get_language()}/veranstalter/bestellung', {'anzahl-anzahl': 12,
+                                                       "veranstalter_wizard-current_step": "anzahl"})
+        
+        self.assertTemplateUsed(response_initial_step, "formtools/wizard/evaluation.html")
+        
         c.post(f'/{get_language()}/veranstalter/bestellung', {'evaluation-evaluieren': True,
                                                        "veranstalter_wizard-current_step": "evaluation"})
 
         c.post(f'/{get_language()}/veranstalter/bestellung', {
             "veranstalter_wizard-current_step": "basisdaten",
             "basisdaten-typ": "v",
-            "basisdaten-anzahl": 11,
             "basisdaten-sprache": "de",
             "basisdaten-verantwortlich": self.p3.id,
             "basisdaten-ergebnis_empfaenger": self.p3.id,
@@ -290,6 +395,9 @@ class VeranstalterIndexTest(TestCase):
     def test_status_changes(self):
         c = login_veranstalter(self.v)
 
+        c.post(f'/{get_language()}/veranstalter/bestellung', {"anzahl-anzahl": 12,
+                                                                 "veranstalter_wizard-current_step": "anzahl"})
+
         c.post(f'/{get_language()}/veranstalter/bestellung', {"evaluation-evaluieren": False,
                                                                  "veranstalter_wizard-current_step": "evaluation"})
 
@@ -300,13 +408,16 @@ class VeranstalterIndexTest(TestCase):
         self.assertEqual(self.v.status, Veranstaltung.STATUS_KEINE_EVALUATION)
 
         c.post(f'/{get_language()}/veranstalter/bestellung', {
+            'anzahl-anzahl': 12,
+            "veranstalter_wizard-current_step": "anzahl"})
+        
+        c.post(f'/{get_language()}/veranstalter/bestellung', {
             'evaluation-evaluieren': True,
             "veranstalter_wizard-current_step": "evaluation"})
 
         c.post(f'/{get_language()}/veranstalter/bestellung', {
             "veranstalter_wizard-current_step": "basisdaten",
             "basisdaten-typ": "vu",
-            "basisdaten-anzahl": 22,
             "basisdaten-sprache": "de",
             "basisdaten-verantwortlich": self.p.id,
             "basisdaten-ergebnis_empfaenger": [self.p.id, self.p2.id],
@@ -347,6 +458,9 @@ class VeranstalterIndexTest(TestCase):
         self.assertTrue(self.v.evaluieren)
         self.assertEqual(self.v.status, Veranstaltung.STATUS_BESTELLUNG_LIEGT_VOR)
 
+        c.post(f'/{get_language()}/veranstalter/bestellung', {"anzahl-anzahl": 12,
+                                            "veranstalter_wizard-current_step": "anzahl"})
+        
         c.post(f'/{get_language()}/veranstalter/bestellung', {"evaluation-evaluieren": False,
                                             "veranstalter_wizard-current_step": "evaluation"})
 
@@ -359,6 +473,15 @@ class VeranstalterIndexTest(TestCase):
 
     def test_post_bestellung_with_digital(self):
         c = login_veranstalter(self.v_wo_excercises)
+
+        response_initial_step = c.post(
+            f'/{get_language()}/veranstalter/bestellung', {
+                'anzahl-anzahl': 12,
+                "veranstalter_wizard-current_step": "anzahl"
+            })
+        
+        self.assertTemplateUsed(response_initial_step, "formtools/wizard/evaluation.html")
+        
         c.post(
             f'/{get_language()}/veranstalter/bestellung', {
                 'evaluation-evaluieren': True,
@@ -369,7 +492,6 @@ class VeranstalterIndexTest(TestCase):
             f'/{get_language()}/veranstalter/bestellung', {
                 "veranstalter_wizard-current_step": "basisdaten",
                 "basisdaten-typ": "v",
-                "basisdaten-anzahl": 11,
                 "basisdaten-sprache": "de",
                 "basisdaten-verantwortlich": self.p3.id,
                 "basisdaten-ergebnis_empfaenger": self.p3.id,
@@ -408,3 +530,33 @@ class VeranstalterIndexTest(TestCase):
 
         self.v_wo_excercises.refresh_from_db()
         self.assertEqual(self.v_wo_excercises.digitale_eval_type, 'L')
+
+
+    def test_evaluation_option_present(self) :
+        c = login_veranstalter(self.v)
+
+        response_initial_step = c.post(f'/{get_language()}/veranstalter/bestellung', {"anzahl-anzahl": Veranstaltung.MIN_BESTELLUNG_ANZAHL - 1,
+                                                    "veranstalter_wizard-current_step": "anzahl"})
+
+        self.assertNotContains(response_initial_step, '<legend class="required">Evaluieren:</legend>')
+
+        response_initial_step = c.post(f'/{get_language()}/veranstalter/bestellung', {"anzahl-anzahl": Veranstaltung.MIN_BESTELLUNG_ANZAHL + 1,
+                                                    "veranstalter_wizard-current_step": "anzahl"})
+        
+        self.assertContains(response_initial_step, '<legend class="required">Evaluieren:</legend>')
+
+
+    def test_evaluation_option_present_vollerhebung(self) :
+        self.s.vollerhebung = True
+        self.s.save()
+        c = login_veranstalter(self.v)
+
+        response_initial_step = c.post(f'/{get_language()}/veranstalter/bestellung', {"anzahl-anzahl": Veranstaltung.MIN_BESTELLUNG_ANZAHL - 1,
+                                                       "veranstalter_wizard-current_step": "anzahl"})
+
+        self.assertNotContains(response_initial_step, '<legend class="required">Evaluieren:</legend>')
+
+        response_initial_step = c.post(f'/{get_language()}/veranstalter/bestellung', {"anzahl-anzahl": Veranstaltung.MIN_BESTELLUNG_ANZAHL + 1,
+                                                       "veranstalter_wizard-current_step": "anzahl"})
+        
+        self.assertNotContains(response_initial_step, '<legend class="required">Evaluieren:</legend>')

@@ -7,7 +7,6 @@ from django.test.client import Client
 
 from feedback.models import Veranstaltung, Semester
 from feedback import tests
-from django.utils.translation import get_language
 
 class NonSuTestMixin(TransactionTestCase):
     def setUp(self):
@@ -40,9 +39,9 @@ def get_veranstaltung(typ):
     return s, v
 
 
-def login_veranstalter(v):
+def login_veranstalter(v, lang="de"):
     c = Client()
-    response = c.get(f'/{get_language()}/veranstalter/login/', {'vid': v.id, 'token': v.access_token})
+    response = c.get(f'/{lang}/veranstalter/login/', {'vid': v.id, 'token': v.access_token})
     if response.status_code != 302:
         raise Exception('Veranstalter-Login fehlgeschlagen.')
     return c
