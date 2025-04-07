@@ -1,5 +1,6 @@
 from csv import reader, Sniffer
 from typing import Dict, List
+import re
 
 def parse(csv: bytes) -> Dict[str, List[str]]:
     data: Dict[str, List[str]] = {}
@@ -18,9 +19,31 @@ def parse(csv: bytes) -> Dict[str, List[str]]:
         else:
             # codewords are saved in the second field
             tan = row[1]
-        if row[0] not in data:
-            data[row[0]] = [tan]
+        
+        pattern = r"\(\d{2}-\d{2}-.*\)"
+
+        dic = {
+            "&amp;" : "&",
+            "&auml;" : "ä",
+            "&Auml;" : "Ä",
+            "&ouml;" : "ö",
+            "&Ouml;" : "Ö",
+            "&uuml;" : "ü",
+            "&Uuml;" : "Ü",
+            "&szlig;" : "ß",
+        }
+
+        # remove suffix with modul number
+        row_0 = re.sub(pattern, "", row[0]).strip()
+
+        # replace html characters
+        for ch in dic.keys() :
+            if ch in row_0 :
+                row_0 = row_0.replace(ch, dic.get(ch))
+
+        if row_0 not in data:
+            data[row_0] = [tan]
         else:
-            data[row[0]].append(tan)
+            data[row_0].append(tan)
 
     return data
