@@ -93,8 +93,3 @@ if settings.DEBUG:
     urlpatterns += [
         re_path(r'^d120de/(?P<tail>.*)$', feedback.views.redirect, {'redirect_to': 'http://www.d120.de/d120de/'}),
     ]
-
-    import debug_toolbar
-    urlpatterns += [
-        re_path(r'^__debug__/', include(debug_toolbar.urls)),
-    ]

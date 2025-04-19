@@ -101,7 +101,7 @@ STATICFILES_FINDERS = (
 SECRET_KEY = 's=15!5%-sw+4w*hsw(=h%rzyn&jy*&l1w%x2z4$5d^4p&feiwb'
 
 # Testing Setting to unload the debug toolbar when testing, see https://github.com/jazzband/django-debug-toolbar/issues/1405
-TESTING = 'test' or 'check' in sys.argv
+TESTING = any(arg in sys.argv for arg in ['test', 'check'])
 
 # List of callables that know how to import templates from various sources.
 # Filesystem muss vor app_directories stehen, damit unsere Templates für registration den Standard
@@ -119,7 +119,7 @@ MIDDLEWARE = [
     # 'whitenoise.middleware.WhiteNoiseMiddleware', # while DEBUG=False servers static files, Note:first pip install whitenoise
 ]
 if not TESTING:
-    MIDDLEWARE += 'debug_toolbar.middleware.DebugToolbarMiddleware'
+    MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
 
 ROOT_URLCONF = 'urls'
 
@@ -158,7 +158,7 @@ INSTALLED_APPS = [
 ]
 
 if not TESTING:
-    INSTALLED_APPS += 'django_debug'
+    INSTALLED_APPS += ['debug_toolbar']
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
@@ -247,7 +247,9 @@ COVERAGE_MODULE_EXCLUDES = ['tests$', 'settings$', 'locale$', 'django', 'migrati
                             'debug_toolbar']
 COVERAGE_CODE_EXCLUDES = ['from .* import .*', 'import .*']
 
-DEBUG_TOOLBAR_CONFIG = {'INTERCEPT_REDIRECTS': False}
+DEBUG_TOOLBAR_CONFIG = {
+    "SHOW_COLLAPSED": True,
+}
 
 # application-specific-cookies
 CSRF_COOKIE_NAME = 'pyfeedback_csrftoken'
