@@ -4,5 +4,4 @@ django-debug-toolbar==4.4.6
 docutils==0.21.2
 freezegun==1.5.1
 django-formtools==2.5.1
-django-allauth==65.3.1
-requests==2.32.3
+django-allauth[socialaccount,keycloak]==65.7.0
