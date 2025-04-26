@@ -95,43 +95,7 @@
 <script src="{% static 'jquery/jquery.min.js' %}"></script>
 <script src="{% static 'jquery/jquery-ui.min.js' %}"></script>
 
-<script type="text/javascript">
-    function check_checkboxes(event, checked) {
-        var parentElem = $(event.target).parent().parent();
-
-        var checkboxes;
-        if (checked) {
-            checkboxes = parentElem.find(".attended_course > input:checkbox");
-            var unattended_courses = parentElem.find(".unattended_course");
-            if (unattended_courses.length > 0) {
-                alert("Es gibt Veranstaltungen ohne validen Dozenten. Diese Veranstaltungen wurden nicht ausgewählt.");
-
-                var expandParent = function (childElem) {
-                    var accordeon_div = childElem.parent().parent();
-                    var accordeon_title = accordeon_div.prev();
-                    if (accordeon_title.is("h3")) {
-                        if (!accordeon_div.is(":visible")) { // only expand if collapsed
-                            accordeon_title.click();
-                        }
-                        expandParent(accordeon_title);
-                    }
-                }
-                expandParent(unattended_courses.eq(0))
-            }
-        } else {
-            checkboxes = parentElem.find("input:checkbox");
-        }
-        checkboxes.prop('checked', checked);
-        event.preventDefault();
-    }
-
-    $(function () {
-        $(".accordion").accordion({ heightStyle: "content", collapsible: true, active: false });
-
-        $("a.markall").click(function (event) { check_checkboxes(event, true); });
-        $("a.unmarkall").click(function (event) { check_checkboxes(event, false); });
-    });
-</script>
+<script src="{% static 'import_vv.js' %}"></script>
 
 <script
     src="https://www.fachschaft.informatik.tu-darmstadt.de/static/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
