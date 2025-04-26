@@ -1,3 +1,14 @@
+function expandParent(childElem) {
+    var accordeon_div = childElem.parent().parent();
+    var accordeon_title = accordeon_div.prev();
+    if (accordeon_title.is("h3")) {
+        if (!accordeon_div.is(":visible")) { // only expand if collapsed
+            accordeon_title.click();
+        }
+        expandParent(accordeon_title);
+    }
+}
+
 function check_checkboxes(event, checked) {
     var parentElem = $(event.target).parent().parent();
 
@@ -6,19 +17,8 @@ function check_checkboxes(event, checked) {
         checkboxes = parentElem.find(".attended_course > input:checkbox");
         var unattended_courses = parentElem.find(".unattended_course");
         if (unattended_courses.length > 0) {
-            alert("Es gibt Veranstaltungen ohne validen Dozenten. Diese Veranstaltungen wurden nicht ausgewählt.");
-
-            var expandParent = function (childElem) {
-                var accordeon_div = childElem.parent().parent();
-                var accordeon_title = accordeon_div.prev();
-                if (accordeon_title.is("h3")) {
-                    if (!accordeon_div.is(":visible")) { // only expand if collapsed
-                        accordeon_title.click();
-                    }
-                    expandParent(accordeon_title);
-                }
-            }
-            expandParent(unattended_courses.eq(0))
+            alert(`Es gibt ${unattended_courses.length} Veranstaltungen ohne validen Dozenten. Diese Veranstaltungen wurden nicht ausgewählt.`);
+            expandParent(unattended_courses.eq(0));
         }
     } else {
         checkboxes = parentElem.find("input:checkbox");
@@ -27,14 +27,12 @@ function check_checkboxes(event, checked) {
     event.preventDefault();
 }
 
-
 $(function () {
     $(".accordion").accordion({ heightStyle: "content", collapsible: true, active: false });
 
-    $("a.markall").click(function (event) { check_checkboxes(event, true); });
-    $("a.unmarkall").click(function (event) { check_checkboxes(event, false); });
+    $("a.markall").on('click', function (event) { check_checkboxes(event, true); });
+    $("a.unmarkall").on('click', function (event) { check_checkboxes(event, false); });
 });
-
 
 window.onload = () => {
     let regex = /\(20-[0-9]{2}-.*\)/;
@@ -51,6 +49,10 @@ window.onload = () => {
     }
 
     if (li_unattended.length > 0) {
-        alert(`There are ${li_unattended.length} courses that were not automatically selected in FB20`);
+        // if run immediately it does expand as expected, as page is still loading at this point
+        setTimeout(() => {
+            alert(`There are ${li_unattended.length} courses that were not automatically selected in FB20`);
+            expandParent($(li_unattended).eq(0));
+        }, 100);
     }
 }
