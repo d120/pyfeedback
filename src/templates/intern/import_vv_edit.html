@@ -71,7 +71,7 @@
             <ul>
                 {% for iv in category.ivs.all %}
                     <li style="list-style-type: none" class="{{ iv.is_attended_course | yesno:"attended_course,unattended_course" }} ">
-                        <input type="checkbox" id="v{{iv.id}}" name="v" value="{{iv.id}}" />
+                        <input class="checkbox" type="checkbox" id="v{{iv.id}}" name="v" value="{{iv.id}}" />
                         <label for="v{{iv.id}}">{{ iv }}</label>
                     </li>
                 {% endfor %}
