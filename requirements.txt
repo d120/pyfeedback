@@ -4,3 +4,4 @@ django-debug-toolbar==6.0.0
 freezegun==1.5.5
 django-formtools==2.5.1
 django-allauth[socialaccount,keycloak]==65.12.1
+gunicorn==23.0.0

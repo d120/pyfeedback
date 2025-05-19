@@ -1,0 +1,27 @@
+latex/anschreiben/veranstalter.adr
+# Ignore all files in db folder
+db/*
+# But keep the folder
+!db/.gitkeep
+
+*.pyc
+htmlcov
+pyenv
+*.aux
+*.log
+.idea
+*.pdf
+*.adr
+.project
+.pydevproject
+.settings/*
+.coverage
+settings_secret.py
+static/*
+venv/
+.vscode/*
+.python-version
+
+node_modules/
+
+*.mo
