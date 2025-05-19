@@ -23,3 +23,5 @@ venv/
 .python-version
 
 node_modules/
+
+*.mo
