@@ -57,14 +57,14 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app/src
 
+# switch to non-root user
+USER appuser
+
 # compile translations 
-RUN python manage.py compilemessages
+RUN django-admin compilemessages
 
 # migrate db changes
 RUN python manage.py migrate --no-input
-
-# switch to non-root user
-USER appuser
 
 EXPOSE 8000
 
