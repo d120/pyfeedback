@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-28 00:57+0100\n"
+"POT-Creation-Date: 2025-05-27 20:02+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -59,16 +59,29 @@ msgstr "Course"
 msgid "Dieses Fachgebiet wurde {count_added} Personen zugeordnet"
 msgstr "This subject area has been assigned to {count_added} persons"
 
-#: feedback/forms.py:28 templates/formtools/wizard/anzahl.html:5
+#: feedback/forms.py:30 templates/formtools/wizard/anzahl.html:5
 msgid "Anzahl der Bestellungen"
 msgstr "Count of orders"
 
-#: feedback/forms.py:63 feedback/models/base.py:454
+#: feedback/forms.py:33
+msgid ""
+"Bitte geben Sie die Anzahl an Teilnehmenden "
+"an.                                                 Auf der nächsten Seite "
+"haben Sie die Wahl,                                                 ob Sie "
+"Ihre Veranstaltung evaluieren möchten."
+msgstr "Please enter the number of participants. "
+"On the next page you can choose whether you would like to evaluate your course."
+
+#: feedback/forms.py:37
+msgid "Bitte geben Sie die Anzahl an Teilnehmenden an."
+msgstr "Please enter the number of participants."
+
+#: feedback/forms.py:81 feedback/models/base.py:454
 #: feedback/views/veranstalter.py:67
 msgid "Auswertungstermin"
 msgstr "Evaluation date"
 
-#: feedback/forms.py:64
+#: feedback/forms.py:82
 msgid ""
 "Zu diesem Termin werden die Ergebnisse versandt. Nach diesem Datum können "
 "keine Evaluationsbögen mehr abgegeben werden und die digitale Evaluation "
@@ -77,44 +90,44 @@ msgstr ""
 "The results will be sent out on this date. After this date, no more "
 "evaluation forms can be submitted and the digital evaluation will be closed."
 
-#: feedback/forms.py:128
+#: feedback/forms.py:146
 msgid "Datei"
 msgstr "File"
 
-#: feedback/forms.py:143
+#: feedback/forms.py:161
 msgid "Das Feld für die Anrede oder Email ist leer."
 msgstr "The field for the salutation or email is empty."
 
-#: feedback/forms.py:173 feedback/models/base.py:406
+#: feedback/forms.py:191 feedback/models/base.py:406
 msgid "Ja"
 msgstr "Yes"
 
-#: feedback/forms.py:173 feedback/models/base.py:407
+#: feedback/forms.py:191 feedback/models/base.py:407
 msgid "Nein"
 msgstr "No"
 
-#: feedback/forms.py:178
+#: feedback/forms.py:196
 msgid "Auswahl"
 msgstr "Choise"
 
-#: feedback/forms.py:208
+#: feedback/forms.py:226
 msgid "CSV Datei aus Evasys"
 msgstr "CSV file from Evasys"
 
-#: feedback/forms.py:208
+#: feedback/forms.py:226
 msgid "Im Evasysseitenmenü unter dem Punkt \"Teilnahmeübersicht\" generierbar."
 msgstr ""
 "Can be generated in the Evasys side menu under \"Participation overview\""
 
-#: feedback/forms.py:211
+#: feedback/forms.py:229
 msgid "Versende TANs per E-Mail"
 msgstr "Send TANs by e-mail"
 
-#: feedback/forms.py:211
+#: feedback/forms.py:229
 msgid "Verarbeitungsart"
 msgstr "Processing type"
 
-#: feedback/forms.py:215
+#: feedback/forms.py:233
 msgid ""
 "Hier wird eine E-Mail an alle Veranstalter*innen ohne Anhang versendet. Es "
 "werden die selben Ersetzungen wie beim Standardmailsystem unterstützt und "
@@ -124,7 +137,7 @@ msgstr ""
 "replacements are supported as in the standard mail system and the "
 "{{ losung }} field is also supported."
 
-#: feedback/forms.py:216
+#: feedback/forms.py:234
 msgid ""
 "Hier wird die gewählte Vorlage an alle Veranstalter*innen mit einer CSV "
 "Datei versendet. Es werden die selben Ersetzungen wie beim "
@@ -571,18 +584,18 @@ msgstr "Free questions"
 msgid "Zusammenfassung"
 msgstr "Summary"
 
-#: feedback/views/veranstalter.py:212
+#: feedback/views/veranstalter.py:201
 msgid ""
 "Ihre Session ist abgelaufen. Bitte loggen Sie sich erneut über den Link ein."
 msgstr "Your session has expired. Please log in again using the link."
 
-#: feedback/views/veranstalter.py:344
+#: feedback/views/veranstalter.py:342
 #, python-brace-format
 msgid ""
 "Evaluation der Lehrveranstaltungen - Zusammenfassung der Daten für {name}"
 msgstr "Evaluation of courses - summary of data for {name}"
 
-#: feedback/views/veranstalter.py:345
+#: feedback/views/veranstalter.py:343
 msgid "Nachfolgend finder Sie Informationen zu Ihrer Bestellung"
 msgstr "Below you will find information about your order"
 
@@ -1124,7 +1137,7 @@ msgid ""
 "erhalten zu können, ist die Veröffentlichung der Ergebnisse notwendig.\n"
 "Sind Sie mit der Veröffentlichung einverstanden?"
 msgstr ""
-"The results of the event evaluation are published on the student\n"
+"The results of the course evaluation are published on the student\n"
 "council website within the university network as average values across\n"
 "several questions in a category. However, the free text fields will\n"
 "not be published. As the organizer, you have the opportunity to comment\n"
@@ -1422,7 +1435,7 @@ msgstr "Send mail to organizer"
 
 #: templates/intern/index.html:14
 msgid "Zuordnung Veranstaltungen zu Fragebogensprache"
-msgstr "Assignment of events to questionnaire language"
+msgstr "Assignment of courses to questionnaire language"
 
 #: templates/intern/index.html:15
 msgid "Veranstaltungen die lange nicht mehr evaluiert wurden"

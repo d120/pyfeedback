@@ -285,8 +285,11 @@ class VeranstalterWizard(SessionWizardView):
 
     def get_form_kwargs(self, step=None):
         kwargs = super(VeranstalterWizard, self).get_form_kwargs(step)
+        if step == 'anzahl' :
+            # don't show help text when vollerhebung
+            kwargs.update({'vollerhebung' : vollerhebung_check(self)})
 
-        if step == 'evaluation' :
+        elif step == 'evaluation' :
             if not order_amount_check(self) :
                 # anzahl less than MIN_BESTELLUNG_ANZAHL, so no evaluaiton
                 kwargs.update({'hide_eval_field': True})
