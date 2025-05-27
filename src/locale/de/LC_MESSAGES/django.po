@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-28 00:57+0100\n"
+"POT-Creation-Date: 2025-05-27 20:02+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -59,66 +59,78 @@ msgstr ""
 msgid "Dieses Fachgebiet wurde {count_added} Personen zugeordnet"
 msgstr ""
 
-#: feedback/forms.py:28 templates/formtools/wizard/anzahl.html:5
+#: feedback/forms.py:30 templates/formtools/wizard/anzahl.html:5
 msgid "Anzahl der Bestellungen"
 msgstr ""
 
-#: feedback/forms.py:63 feedback/models/base.py:454
+#: feedback/forms.py:33
+msgid ""
+"Bitte geben Sie die Anzahl an Teilnehmenden "
+"an.                                                 Auf der nächsten Seite "
+"haben Sie die Wahl,                                                 ob Sie "
+"Ihre Veranstaltung evaluieren möchten."
+msgstr ""
+
+#: feedback/forms.py:37
+msgid "Bitte geben Sie die Anzahl an Teilnehmenden an."
+msgstr ""
+
+#: feedback/forms.py:81 feedback/models/base.py:454
 #: feedback/views/veranstalter.py:67
 msgid "Auswertungstermin"
 msgstr ""
 
-#: feedback/forms.py:64
+#: feedback/forms.py:82
 msgid ""
 "Zu diesem Termin werden die Ergebnisse versandt. Nach diesem Datum können "
 "keine Evaluationsbögen mehr abgegeben werden und die digitale Evaluation "
 "geschlossen."
 msgstr ""
 
-#: feedback/forms.py:128
+#: feedback/forms.py:146
 msgid "Datei"
 msgstr ""
 
-#: feedback/forms.py:143
+#: feedback/forms.py:161
 msgid "Das Feld für die Anrede oder Email ist leer."
 msgstr ""
 
-#: feedback/forms.py:173 feedback/models/base.py:406
+#: feedback/forms.py:191 feedback/models/base.py:406
 msgid "Ja"
 msgstr ""
 
-#: feedback/forms.py:173 feedback/models/base.py:407
+#: feedback/forms.py:191 feedback/models/base.py:407
 msgid "Nein"
 msgstr ""
 
-#: feedback/forms.py:178
+#: feedback/forms.py:196
 msgid "Auswahl"
 msgstr ""
 
-#: feedback/forms.py:208
+#: feedback/forms.py:226
 msgid "CSV Datei aus Evasys"
 msgstr ""
 
-#: feedback/forms.py:208
+#: feedback/forms.py:226
 msgid "Im Evasysseitenmenü unter dem Punkt \"Teilnahmeübersicht\" generierbar."
 msgstr ""
 
-#: feedback/forms.py:211
+#: feedback/forms.py:229
 msgid "Versende TANs per E-Mail"
 msgstr ""
 
-#: feedback/forms.py:211
+#: feedback/forms.py:229
 msgid "Verarbeitungsart"
 msgstr ""
 
-#: feedback/forms.py:215
+#: feedback/forms.py:233
 msgid ""
 "Hier wird eine E-Mail an alle Veranstalter*innen ohne Anhang versendet. Es "
 "werden die selben Ersetzungen wie beim Standardmailsystem unterstützt und "
 "zusätzlich das Feld {{ losung }}."
 msgstr ""
 
-#: feedback/forms.py:216
+#: feedback/forms.py:234
 msgid ""
 "Hier wird die gewählte Vorlage an alle Veranstalter*innen mit einer CSV "
 "Datei versendet. Es werden die selben Ersetzungen wie beim "
@@ -542,18 +554,18 @@ msgstr ""
 msgid "Zusammenfassung"
 msgstr ""
 
-#: feedback/views/veranstalter.py:212
+#: feedback/views/veranstalter.py:201
 msgid ""
 "Ihre Session ist abgelaufen. Bitte loggen Sie sich erneut über den Link ein."
 msgstr ""
 
-#: feedback/views/veranstalter.py:344
+#: feedback/views/veranstalter.py:342
 #, python-brace-format
 msgid ""
 "Evaluation der Lehrveranstaltungen - Zusammenfassung der Daten für {name}"
 msgstr ""
 
-#: feedback/views/veranstalter.py:345
+#: feedback/views/veranstalter.py:343
 msgid "Nachfolgend finder Sie Informationen zu Ihrer Bestellung"
 msgstr ""
 

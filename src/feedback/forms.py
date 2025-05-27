@@ -23,10 +23,18 @@ class VeranstaltungAnzahlForm(BestellWizardForm) :
         fields = ("anzahl",)
     
     def __init__(self, *args, **kwargs) :
+        vollerhebung = kwargs.pop('vollerhebung', False)
+
         super(VeranstaltungAnzahlForm, self).__init__(*args, **kwargs)
 
         self.fields["anzahl"] = forms.IntegerField(label=_("Anzahl der Bestellungen"), min_value=0)
-
+        
+        if not vollerhebung:
+            self.fields["anzahl"].help_text = _("Bitte geben Sie die Anzahl an Teilnehmenden an. \
+                                                Auf der nächsten Seite haben Sie die Wahl, \
+                                                ob Sie Ihre Veranstaltung evaluieren möchten.")
+        else :
+            self.fields["anzahl"].help_text = _("Bitte geben Sie die Anzahl an Teilnehmenden an.")
 
 class VeranstaltungEvaluationForm(BestellWizardForm):
     """Definiert die Form für den 1. Schritt des Wizards"""
