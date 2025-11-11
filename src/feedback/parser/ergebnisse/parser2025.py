@@ -37,10 +37,10 @@ class Parser2025(Parser):
             v_3_7=cls.parse_int(frageb[27]),
 
             v_4_1=cls.parse_int(frageb[28]),
-            v_4_2=cls.parse_int(frageb[29]),
+            v_4_2=cls.parse_geschwindigkeit16(frageb[29]),
             v_4_3=cls.parse_int(frageb[30]),
             v_4_4=cls.parse_int(frageb[31]),
-            v_4_5=cls.parse_int(frageb[32]),
+            v_4_5=cls.parse_extrazeit(frageb[32]),
             v_4_6=cls.parse_int(frageb[33]),
             v_4_7=cls.parse_int(frageb[34]),
 
@@ -59,6 +59,6 @@ class Parser2025(Parser):
             v_6_5=cls.parse_int(frageb[46]),
             v_6_6=cls.parse_int(frageb[47]),
 
-            v_8_1=cls.parse_extrazeit(frageb[50]),
-            v_8_4=cls.parse_geschwindigkeit16(frageb[53]),
+            v_8_1=cls.parse_int(frageb[50]),
+            v_8_4=cls.parse_boolean(frageb[53]),
         )

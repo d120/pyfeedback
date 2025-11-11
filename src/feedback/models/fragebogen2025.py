@@ -208,7 +208,7 @@ class Ergebnis2025(Ergebnis):
     # TODO: decimal statt float benutzen
     v_didaktik = models.FloatField(blank=True, null=True)
     v_didaktik_count = models.PositiveIntegerField(default=0)
-    v_didaktik_parts = ['v_2_4', 'v_4_6', 'v_5_1', 'v_5_2', 'v_5_3', 'v_5_4', 'v_5_5', 'v_5_6', 'v_5_7', 'v_6_1', 'v_6_4', 'v_6_6',]
+    v_didaktik_parts = ['v_vorwissen_ausreichend', 'v_4_6', 'v_5_1', 'v_5_2', 'v_5_3', 'v_5_4', 'v_5_5', 'v_5_6', 'v_5_7', 'v_6_1', 'v_6_4', 'v_6_6',]
     v_organisation = models.FloatField(blank=True, null=True)
     v_organisation_count = models.PositiveIntegerField(default=0)
     v_organisation_parts = ['v_3_1', 'v_3_2', 'v_3_3', 'v_3_4', 'v_3_6', 'v_3_7', 'v_4_4', 'v_6_2', 'v_6_3', 'v_6_5',]
@@ -217,14 +217,14 @@ class Ergebnis2025(Ergebnis):
     v_praxisbezug_motivation_parts = ['v_4_7']
     v_digitale_lehre = models.FloatField(blank=True, null=True)
     v_digitale_lehre_count = models.PositiveIntegerField(default=0)
-    v_digitale_lehre_parts = ['v_2_5']
-    v_7_5 = models.FloatField(blank=True, null=True)
-    v_7_5_count = models.PositiveIntegerField(default=0)
+    v_digitale_lehre_parts = ['v_technisch_moeglich']
+    v_8_1 = models.FloatField(blank=True, null=True)
+    v_8_1_count = models.PositiveIntegerField(default=0)
 
     v_feedbackpreis = models.FloatField(blank=True, null=True)
     v_feedbackpreis_count = models.PositiveIntegerField(default=0)
     v_feedbackpreis_parts = [
-        'v_3_2', 'v_3_6', 'v_3_8', 'v_4_4', 'v_4_6', 'v_4_7', 'v_5_2', 'v_5_4', 'v_6_1', 'v_6_2', 'v_6_3', 'v_8_1',
+        'v_3_2', 'v_3_6', 'v_4_4', 'v_4_6', 'v_4_7', 'v_5_2', 'v_5_4', 'v_5_5', 'v_6_1', 'v_6_2', 'v_6_3', 'v_8_1',
     ]
 
     ue_didaktik = models.FloatField(blank=True, null=True)
