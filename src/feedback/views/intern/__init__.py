@@ -33,6 +33,7 @@ from feedback.models import Veranstaltung, Semester, Mailvorlage, get_model, lon
     FachgebietEmail, Tutor
 from feedback.models.fragebogenUE2016 import FragebogenUE2016
 from feedback.models.fragebogenUE2020 import FragebogenUE2020
+from feedback.models.fragebogenUE2025 import FragebogenUE2025
 import feedback.parser.tan as tanparser
 
 
@@ -516,13 +517,15 @@ def sync_ergebnisse(request):
     ergebnis.objects.filter(veranstaltung__semester=semester).delete()
 
     found_something = False
-    if semester.fragebogen == '2016' or semester.fragebogen == '2020':
+    if semester.fragebogen == '2016' or semester.fragebogen == '2020' or semester.fragebogen == '2025':
         for v in Veranstaltung.objects.filter(semester=semester):
             fbs = fragebogen.objects.filter(veranstaltung=v)
             if semester.fragebogen == '2016':
                 erg = FragebogenUE2016.objects.filter(veranstaltung=v)
-            else:
+            elif semester.fragebogen == '2020':
                 erg = FragebogenUE2020.objects.filter(veranstaltung=v)
+            else:
+                erg = FragebogenUE2025.objects.filter(veranstaltung=v)
             if len(fbs):
                 found_something = True
                 data = {'veranstaltung': v, 'anzahl': len(fbs)}

@@ -26,7 +26,7 @@ class Semester(models.Model):
         ('2012', 'Fragebogen 2012'),
         ('2016', 'Fragebogen 2016'),
         ('2020', 'Fragebogen 2020'),
-
+        ('2025', 'Fragebogen 2025'),
     )
     SICHTBARKEIT_CHOICES = (
         ('ADM', _('Administratoren')),
