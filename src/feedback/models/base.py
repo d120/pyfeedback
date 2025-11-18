@@ -361,16 +361,16 @@ class Veranstaltung(models.Model):
         'pr': 'FB20Prd1',
         'se': 'FB20Sed1',
         'u': 'FB20Ud1',
-        'v': 'FB20VLd2',
-        'vu': 'FB20VLd2',
+        'v': 'FB20VLd105',
+        'vu': 'FB20VLd105',
     }
 
     EVASYS_BOGENKENNUNG_EN = {
         'pr': 'FB20Prd1',
         'se': 'FB20Sed1',
         'u': 'FB20Ud1',
-        'v': 'FB20VLd2',
-        'vu': 'FB20VLd2',
+        'v': 'FB20VLd105',
+        'vu': 'FB20VLd105',
     }
 
     BARCODE_BASE = 2 * 10 ** 11
@@ -634,7 +634,7 @@ class Veranstaltung(models.Model):
         """Eine Liste aller Veranstalter dieser Veranstaltung"""
         list = [x.full_name() for x in self.veranstalter.all()]
         return ', '.join(list)
-    
+
     @staticmethod
     def anzahl_too_few_msg() :
         return _('Anzahl der Bestellungen muss mindestens {MIN_BESTELLUNG_ANZAHL} sein. Bei weniger als {MIN_BESTELLUNG_ANZAHL} Teilnehmenden ist eine Evaluation leider nicht möglich').format(MIN_BESTELLUNG_ANZAHL=Veranstaltung.MIN_BESTELLUNG_ANZAHL)
