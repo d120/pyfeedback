@@ -202,7 +202,7 @@ class ExportVeranstaltungenTest(NonSuTestMixin, TestCase):
                                 <dispatch_report>1</dispatch_report>
                             </Task>
                             <Survey key="su-1">
-                                <survey_form>FB20VLd2</survey_form>
+                                <survey_form>FB20VLd105</survey_form>
                                 <survey_period>SS11</survey_period>
                                 <survey_type>online</survey_type>
                                 <survey_verify>0</survey_verify>
@@ -230,7 +230,7 @@ class ExportVeranstaltungenTest(NonSuTestMixin, TestCase):
                                 <dispatch_report>1</dispatch_report>
                             </Task>
                             <Survey key="su-2">
-                                <survey_form>FB20VLd2</survey_form>
+                                <survey_form>FB20VLd105</survey_form>
                                 <survey_period>SS11</survey_period>
                                 <survey_type>online</survey_type>
                                 <survey_verify>0</survey_verify>
@@ -309,7 +309,7 @@ class ExportVeranstaltungenTest(NonSuTestMixin, TestCase):
                                     <dispatch_report>1</dispatch_report>
                             </Task>
                             <Survey key="su-1">
-                                <survey_form>FB20VLd2</survey_form>
+                                <survey_form>FB20VLd105</survey_form>
                                 <survey_period>SS11</survey_period>
                                 <survey_type>online</survey_type>
                                 <survey_verify>0</survey_verify>
@@ -337,7 +337,7 @@ class ExportVeranstaltungenTest(NonSuTestMixin, TestCase):
                                     <dispatch_report>1</dispatch_report>
                             </Task>
                             <Survey key="su-2">
-                                <survey_form>FB20VLd2</survey_form>
+                                <survey_form>FB20VLd105</survey_form>
                                 <survey_period>SS11</survey_period>
                                 <survey_type>online</survey_type>
                                 <survey_verify>0</survey_verify>
@@ -410,7 +410,7 @@ class ExportVeranstaltungenTest(NonSuTestMixin, TestCase):
 	<dispatch_report>1</dispatch_report>
 	</Task>
         <Survey key="su-1">
-            <survey_form>FB20VLd2</survey_form>
+            <survey_form>FB20VLd105</survey_form>
 	    <survey_period>SS11</survey_period>
             <survey_type>online</survey_type>
 	    <survey_verify>0</survey_verify>
