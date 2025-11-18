@@ -3,7 +3,7 @@
 from django.conf import settings
 from django.test import TestCase
 
-from feedback.models import Semester, Veranstaltung, Fragebogen2008, Fragebogen2009, Fragebogen2012, Fragebogen2016
+from feedback.models import Semester, Veranstaltung, Fragebogen2008, Fragebogen2009, Fragebogen2012, Fragebogen2016, Fragebogen2025
 from feedback.parser.ergebnisse import parse_ergebnisse
 from feedback.parser.ergebnisse.parser import Parser
 
@@ -78,3 +78,6 @@ class ParserTest(TestCase):
 
     def test_parse_ergebnisse2016(self):
         self._do_parse_ergebnisse_test(20155, '2016', Fragebogen2016)
+    
+    def test_parse_ergebnisse2025(self):
+        self._do_parse_ergebnisse_test(20255, '2025', Fragebogen2025)

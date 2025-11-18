@@ -12,6 +12,8 @@ from feedback.models.fragebogen2016 import Fragebogen2016, Ergebnis2016
 from feedback.models.fragebogenUE2016 import FragebogenUE2016
 from feedback.models.fragebogen2020 import Fragebogen2020, Ergebnis2020
 from feedback.models.fragebogenUE2020 import FragebogenUE2020
+from feedback.models.fragebogen2025 import Fragebogen2025, Ergebnis2025
+from feedback.models.fragebogenUE2025 import FragebogenUE2025
 from django.core.exceptions import ObjectDoesNotExist
 
 from django.db.models import Q
