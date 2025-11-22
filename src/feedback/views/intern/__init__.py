@@ -477,6 +477,11 @@ def import_ergebnisse(request):
                 warnings, errors, vcount, fbcount = parse_ergebnisse(semester,
                                                                      TextIOWrapper(request.FILES['file'].file, encoding='UTF-8'),
                                                                      f'UE{semester.fragebogen}')
+            elif 'typ' in request.POST and request.POST['typ'] == 'seminar': 
+                warnings, errors, vcount, fbcount = parse_ergebnisse(semester,
+                                                                     TextIOWrapper(request.FILES['file'].file, encoding='UTF-8'),
+                                                                     f'SE{semester.fragebogen}')
+
             else:
                 warnings, errors, vcount, fbcount = parse_ergebnisse(semester, TextIOWrapper(request.FILES['file'].file, encoding='UTF-8'))
             if fbcount:

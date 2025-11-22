@@ -9,7 +9,7 @@ from django.utils.translation import gettext_lazy as _
 from feedback.models import Person, Veranstaltung, Semester, \
     Mailvorlage, Kommentar, Tutor, BarcodeScanner, BarcodeScannEvent, BarcodeAllowedState, \
     EmailEndung, Fragebogen2020, FragebogenUE2020, Ergebnis2020, Fragebogen2016, FragebogenUE2016, Ergebnis2016, \
-    Fragebogen2025, FragebogenUE2025, Ergebnis2025
+    Fragebogen2025, FragebogenUE2025, Ergebnis2025, FragebogenSE2025
 from feedback.models.base import Log, Fachgebiet, FachgebietEmail
 
 
@@ -258,6 +258,7 @@ class FragebogenAdmin(admin.ModelAdmin):
 admin.site.register(Person, PersonAdmin)
 admin.site.register(Veranstaltung, VeranstaltungAdmin)
 admin.site.register(Semester, SemesterAdmin)
+admin.site.register(FragebogenSE2025, FragebogenAdmin)
 admin.site.register(Fragebogen2025, FragebogenAdmin)
 admin.site.register(FragebogenUE2025, FragebogenAdmin)
 admin.site.register(Ergebnis2025, FragebogenAdmin)
