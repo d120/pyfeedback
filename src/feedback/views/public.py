@@ -4,7 +4,7 @@ from django.conf import settings
 from django.shortcuts import get_object_or_404, render
 from django.views.decorators.http import require_safe
 from feedback.views.public_class_view import barcodedrop
-from feedback.models import Semester, get_model, Veranstaltung, Kommentar
+from feedback.models import Semester, get_model, Veranstaltung, Kommentar, semester_has_seminar_model
 
 from django.conf import settings
 
@@ -46,6 +46,7 @@ def index(request):
         data['parts'] = Ergebnis.parts
         data['include_hidden'] = False
 
+
     # Sortierung
     try:
         parts = [part[0] for part in data['parts']]
@@ -72,11 +73,62 @@ def index(request):
         data['order_num'] = 0
         data['ergebnisse'] = list(ergebnisse.order_by('veranstaltung__name'))
 
+
+    if not semester_has_seminar_model(data['semester']) :
+        data['show_seminar'] = False
+    else :
+        data['show_seminar'] = True
+
+        # Seminar Ergebnisse einlesen
+        Ergebnis_SE = get_model('Ergebnis', data['semester'], is_seminar=True)
+        ergebnisse_se = Ergebnis_SE.objects.filter(veranstaltung__semester=data['semester'])
+
+        if ergebnisse_se.exists() :
+            data['se_exists'] = True
+        else :
+            data['se_exists'] = False
+
+        # anzuzeigende Informationen auswählen
+        if request.user.is_superuser or settings.DEBUG == True:
+            data['parts_se'] = Ergebnis_SE.parts + Ergebnis_SE.hidden_parts
+            data['include_hidden_se'] = True
+        else:
+            data['parts_se'] = Ergebnis_SE.parts
+            data['include_hidden_se'] = False
+
+
+        # Seminar Sortierung
+        try:
+            parts_se = [part[0] for part in data['parts_se']]
+            order_se = request.GET['order_se']
+            if not order_se in parts_se:
+                raise KeyError
+            data['order_se'] = order_se
+            data['order_num_se'] = parts_se.index(order_se) + 1
+            data['ergebnisse_se'] = list(ergebnisse_se.order_by(order_se))
+
+            # Veranstaltung mit zu kleinen Teilnehmerzahlen bei aktuellem Kriterium nach hinten sortieren
+            tail = []
+            for e in data['ergebnisse_se']:
+                count = getattr(e, order_se + '_count')
+                if count < settings.THRESH_SHOW:
+                    tail.append(e)
+
+            for e in tail:
+                data['ergebnisse_se'].remove(e)
+            data['ergebnisse_se'].extend(tail)
+
+        except KeyError:
+            data['order_se'] = 'alpha'
+            data['order_num_se'] = 0
+            data['ergebnisse_se'] = list(ergebnisse_se.order_by('veranstaltung__name'))
+
+
     return render(request, 'public/index.html', data)
 
 
 @require_safe
-def veranstaltung(request, vid=None):
+def veranstaltung(request, vid=None, seminar=False):
     # Zugangskontrolle
     if request.user.is_superuser or settings.DEBUG == True:
         authfilter = {}
@@ -92,7 +144,7 @@ def veranstaltung(request, vid=None):
     if data['v'].semester.sichtbarkeit != 'ALL':
         data['restricted'] = True
 
-    Ergebnis = get_model('Ergebnis', veranstaltung.semester)
+    Ergebnis = get_model('Ergebnis', veranstaltung.semester, is_seminar=seminar)
     if veranstaltung.typ == 'v':
         parts = Ergebnis.parts_vl
     else:
