@@ -62,9 +62,9 @@ class FragebogenSE2025(Fragebogen):
     s_7_1 = models.PositiveSmallIntegerField(blank=True, null=True)
     s_7_2 = models.PositiveSmallIntegerField(blank=True, null=True)
 
-    s_9_1 = models.CharField(max_length=1, choices=Fragebogen.NIVEAU_CHOICES, blank=True)
-    s_9_2 = models.CharField(max_length=1, choices=Fragebogen.NIVEAU_CHOICES, blank=True)
-    s_9_3 = models.CharField(max_length=1, choices=Fragebogen.NIVEAU_CHOICES, blank=True)
+    s_9_1 = models.PositiveSmallIntegerField(blank=True, null=True)
+    s_9_2 = models.PositiveSmallIntegerField(blank=True, null=True)
+    s_9_3 = models.PositiveSmallIntegerField(blank=True, null=True)
     s_9_4 = models.PositiveSmallIntegerField(blank=True, null=True)
     s_9_5 = models.PositiveSmallIntegerField(blank=True, null=True)
 
