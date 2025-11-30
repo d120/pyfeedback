@@ -66,9 +66,9 @@ class ParserSE2025(Parser):
             s_7_1=cls.parse_int(frageb[50]),
             s_7_2=cls.parse_int(frageb[51]),
             
-            s_9_1=cls.parse_niveau(frageb[53]),
-            s_9_2=cls.parse_niveau(frageb[54]),
-            s_9_3=cls.parse_niveau(frageb[55]),
+            s_9_1=cls.parse_int(frageb[56]),
+            s_9_2=cls.parse_int(frageb[56]),
+            s_9_3=cls.parse_int(frageb[56]),
             s_9_4=cls.parse_int(frageb[56]),
             s_9_5=cls.parse_int(frageb[57]),
         )
