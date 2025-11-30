@@ -27,6 +27,7 @@ class FragebogenSE2025(Fragebogen):
     s_3_3 = models.PositiveSmallIntegerField(blank=True, null=True)
     s_3_4 = models.PositiveSmallIntegerField(blank=True, null=True)
     s_3_6 = models.PositiveSmallIntegerField(blank=True, null=True)
+    s_3_5 = models.PositiveSmallIntegerField(blank=True, null=True)
     s_3_7 = models.PositiveSmallIntegerField(blank=True, null=True)
     s_3_8 = models.PositiveSmallIntegerField(blank=True, null=True)
     s_3_9 = models.PositiveSmallIntegerField(blank=True, null=True)
@@ -152,9 +153,7 @@ class ErgebnisSE2025(Ergebnis):
         ]
     ]
 
-    weight = {
-        's_feedbackpreis': [1] * 13 + [13],
-    }
+    weight = {} # adjust weight for ranking 
 
 
     # TODO: decimal statt float benutzen

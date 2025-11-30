@@ -14,14 +14,21 @@ from feedback.models.fragebogen2020 import Fragebogen2020, Ergebnis2020
 from feedback.models.fragebogenUE2020 import FragebogenUE2020
 from feedback.models.fragebogen2025 import Fragebogen2025, Ergebnis2025
 from feedback.models.fragebogenUE2025 import FragebogenUE2025
-from feedback.models.fragebogenSE2025 import FragebogenSE2025
+from feedback.models.fragebogenSE2025 import FragebogenSE2025, ErgebnisSE2025
 from django.core.exceptions import ObjectDoesNotExist
 
 from django.db.models import Q
 
 
-def get_model(model, semester):
-    mod = '%s.fragebogen%s' % (__name__, semester.fragebogen)
+def get_model(model, semester, is_seminar=False):
+    if not is_seminar :
+        mod = '%s.fragebogen%s' % (__name__, semester.fragebogen)
+    else :
+        mod = '%s.fragebogenSE%s' % (__name__, semester.fragebogen)
+    
+    if is_seminar :
+        model = model + "SE"
+
     cls = '%s%s' % (model, semester.fragebogen)
     module = __import__(mod, fromlist=(cls,))
     return getattr(module, cls)
@@ -32,6 +39,15 @@ def get_model_string(model, semester):
     cls = '%s%s' % (model, semester)
     module = __import__(mod, fromlist=(cls,))
     return getattr(module, cls)
+
+
+def semester_has_seminar_model(semester: Semester) :
+    """
+    check if given semester has a seminar model
+    """
+    SEMINAR_YEARS_LIST = ["2025",]
+    
+    return True if semester.fragebogen in SEMINAR_YEARS_LIST else False
 
 
 def long_not_ordert():
