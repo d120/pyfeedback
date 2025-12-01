@@ -6,7 +6,6 @@ services:
       - "8000:8000"
     environment:
       - SETTINGS_FILE=${SETTINGS_FILE}
-      - DEBUG=${DEBUG}
       - ALLOWED_HOSTS=${ALLOWED_HOSTS}
       - SECRET_KEY=${SECRET_KEY}
       - KEYCLOAK_CLIENT_ID=${KEYCLOAK_CLIENT_ID}
