@@ -4,21 +4,10 @@ services:
     container_name: pyfeedback-docker
     ports:
       - "8000:8000"
-    environment:
-      - SETTINGS_FILE=${SETTINGS_FILE}
-      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
-      - SECRET_KEY=${SECRET_KEY}
-      - KEYCLOAK_CLIENT_ID=${KEYCLOAK_CLIENT_ID}
-      - KEYCLOAK_SECRET=${KEYCLOAK_SECRET}
-      - KEYCLOAK_SERVER_URL=${KEYCLOAK_SERVER_URL}
-      - EMAIL_HOST=${EMAIL_HOST}
-      - EMAIL_PORT=${EMAIL_PORT}
-      - EMAIL_HOST_USER=${EMAIL_HOST_USER}
-      - EMAIL_HOST_PASSWORD=${EMAIL_HOST_PASSWORD}
     env_file:
       - .env
     volumes:
-      - db_data:/app/db/
+      - pyfeedback-db-vol:/app/db/
 
 volumes:
-  db_data:
+  pyfeedback-db-vol:
