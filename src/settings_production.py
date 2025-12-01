@@ -1,7 +1,7 @@
 from settings import *
 import os
 
-DEBUG = (os.getenv("DEBUG", "False") == "True") # os.getenv only returns a string
+DEBUG = False
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS").split(",")
 
