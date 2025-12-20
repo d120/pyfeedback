@@ -59,6 +59,6 @@ class Parser2025(Parser):
             v_6_5=cls.parse_int(frageb[46]),
             v_6_6=cls.parse_int(frageb[47]),
 
-            v_8_1=cls.parse_int(frageb[48]),
-            v_8_4=cls.parse_boolean(frageb[51]),
+            v_8_1=cls.parse_int(frageb[50]),
+            v_8_4=cls.parse_boolean(frageb[53]),
         )
