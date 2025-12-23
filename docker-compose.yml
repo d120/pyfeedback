@@ -1,0 +1,13 @@
+services:
+  django-web:
+    build: .
+    container_name: pyfeedback-docker
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - pyfeedback-db-vol:/app/db/
+
+volumes:
+  pyfeedback-db-vol:
