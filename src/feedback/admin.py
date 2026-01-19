@@ -262,22 +262,35 @@ class EmailChangeAdmin(admin.ModelAdmin):
         "created_at",
         "status",
         "person_list_to_change",
+        "dynamic_expiry_time",
     )
     list_display = (
         "old_email",
         "new_email",
+        "dynamic_expiry_time",
         "created_at",
-        "status",
-    )
+        # "status",  don't put this into here, as get_object (below) or a user action (calling EmailChange.request_is_valid())
+    )         # has to update status field. This avoids having background workers running to update the fields  
 
     readonly_fields = (
         "old_email",
         "new_email",
         "token",
+        "dynamic_expiry_time",
         "created_at",
         "status",
         "person_list_to_change",
     )
+    def get_object(self, request, object_id, from_queryset=None):
+        """
+        updates the status, when admin enters into details of an object
+        """
+        obj = super().get_object(request, object_id, from_queryset)
+
+        if obj is not None:
+            obj.request_is_valid()
+            
+        return obj
 
 
 admin.site.register(Person, PersonAdmin)

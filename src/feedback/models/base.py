@@ -752,10 +752,10 @@ class EmailChange(models.Model) :
     """
     
     class Status(models.IntegerChoices):
-        EXPIRED = 0, "The change request has been expired"
-        MAGIC_LINK_SENT = 1, "Change link has been sent to the old email"
-        OTP_SENT = 2, "New Email needs verification, OTP sent to new email"
-        COMPLETED = 3, "New email has been verified, email change has been completed"
+        EXPIRED = 0, "EXPIRED"
+        MAGIC_LINK_SENT = 1, "LINK SENT"
+        OTP_SENT = 2, "OTP SENT"
+        COMPLETED = 3, "COMPLETED SUCCESSFULLY"
 
     class Meta:
         indexes = [
@@ -785,7 +785,7 @@ class EmailChange(models.Model) :
         db_index=True,
     )
 
-    dynamic_expiry_time = models.DateTimeField(default=timezone.now)
+    dynamic_expiry_time = models.DateTimeField(default=timezone.now, help_text=_("15 Minuten nach diesem Datum ist die Anfrage nicht mehr gültig."))
 
     MINUTES_TO_EXPIRE_LINK = 15
     MINUTES_TO_EXPIRE_OTP = 15
