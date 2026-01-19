@@ -2,7 +2,7 @@
 
 from feedback.models.base import Mailvorlage, Person, Semester, Veranstaltung, \
     Tutor, BarcodeScanner, BarcodeScannEvent, BarcodeAllowedState, Log, FachgebietEmail, Fachgebiet, \
-    EmailEndung
+    EmailEndung, EmailChange
 from feedback.models.imports import ImportPerson, ImportCategory, ImportVeranstaltung
 from feedback.models.fragebogen import Fragebogen, Ergebnis, Kommentar
 from feedback.models.fragebogen2008 import Fragebogen2008, Ergebnis2008

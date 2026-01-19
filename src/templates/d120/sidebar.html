@@ -17,6 +17,9 @@
       <li class="nav-item {% block section_veranstalter %}link{% endblock %}">
         <a href="{% url 'feedback:veranstalter-index' %}" title="Zeige Seite Webinterface">{% translate "Webinterface" %}</a>
       </li>
+      <li class="nav-item ">
+        <a href="{% url 'feedback:email-change-request' %}" title="Zeige Seite E-Mail ändern">{% translate "E-Mail ändern" %}</a>
+      </li>
     </ul>
   </li>
 </ul>

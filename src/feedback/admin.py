@@ -9,7 +9,7 @@ from django.utils.translation import gettext_lazy as _
 from feedback.models import Person, Veranstaltung, Semester, \
     Mailvorlage, Kommentar, Tutor, BarcodeScanner, BarcodeScannEvent, BarcodeAllowedState, \
     EmailEndung, Fragebogen2020, FragebogenUE2020, Ergebnis2020, Fragebogen2016, FragebogenUE2016, Ergebnis2016, \
-    Fragebogen2025, FragebogenUE2025, Ergebnis2025
+    Fragebogen2025, FragebogenUE2025, Ergebnis2025, EmailChange
 from feedback.models.base import Log, Fachgebiet, FachgebietEmail
 
 
@@ -254,6 +254,31 @@ class FragebogenAdmin(admin.ModelAdmin):
     list_display = ('veranstaltung',)
     list_per_page = 500
 
+class EmailChangeAdmin(admin.ModelAdmin):
+    fields = (
+        "old_email",
+        "new_email",
+        "token",
+        "created_at",
+        "status",
+        "person_list_to_change",
+    )
+    list_display = (
+        "old_email",
+        "new_email",
+        "created_at",
+        "status",
+    )
+
+    readonly_fields = (
+        "old_email",
+        "new_email",
+        "token",
+        "created_at",
+        "status",
+        "person_list_to_change",
+    )
+
 
 admin.site.register(Person, PersonAdmin)
 admin.site.register(Veranstaltung, VeranstaltungAdmin)
@@ -274,3 +299,4 @@ admin.site.register(BarcodeScannEvent, BarcodeScannEventAdmin)
 admin.site.register(BarcodeScanner, BarcodeScannerAdmin)
 admin.site.register(Fachgebiet, FachgebietAdmin)
 admin.site.register(EmailEndung)
+admin.site.register(EmailChange, EmailChangeAdmin)

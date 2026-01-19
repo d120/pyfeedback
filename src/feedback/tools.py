@@ -2,6 +2,11 @@
 
 from django.template import TemplateSyntaxError, Template
 
+from django.core.mail import send_mail
+from django.utils.translation import gettext_lazy as _
+from django.template.loader import render_to_string
+
+from django.conf import settings
 
 # ------------------------------ Durchschnittsberechnung für das Ranking ------------------------------ #
 
@@ -129,3 +134,43 @@ def ean_checksum_valid(x):
         if x % 10 == ean_checksum_calc(x):
             result = True
     return result
+
+def send_change_email_link(to_email, link) :
+    """
+    sends mail to given email with given link as a part of email change process
+    """
+    subject = _("E-Mail-Änderungsanfrage")
+
+    message = render_to_string(
+        "emails/email_change.txt",
+        {"email": to_email, "link": link}
+    )
+
+    send_mail(
+        subject=subject,
+        message=message,
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        recipient_list=[to_email],
+        fail_silently=False,
+    )
+
+def send_change_email_otp(to_email, old_email, otp) :
+    """
+    sends mail with otp
+    """
+    subject = _("E-Mail-Änderungsanfrage OTP")
+
+    message = render_to_string(
+        "emails/email_change_otp.txt",
+        {"email": to_email, "old_email": old_email, "otp": otp}
+    )
+
+    send_mail(
+        subject=subject,
+        message=message,
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        recipient_list=[to_email],
+        fail_silently=False,
+    )
+
+

@@ -4,7 +4,7 @@ from typing import Any
 from django import forms
 from django.forms import widgets
 
-from feedback.models import Person, Veranstaltung, Kommentar, BarcodeScannEvent
+from feedback.models import Person, Veranstaltung, Kommentar, BarcodeScannEvent, EmailChange
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
@@ -232,3 +232,72 @@ class EMailTemplates(forms.Form):
     losungstemplate = forms.ModelChoiceField(Mailvorlage.objects.all(), 
     required=False, help_text=_('Hier wird eine E-Mail an alle Veranstalter*innen ohne Anhang versendet. Es werden die selben Ersetzungen wie beim Standardmailsystem unterstützt und zusätzlich das Feld {{ losung }}.'))
     tantemplate = forms.ModelChoiceField(Mailvorlage.objects.all(), required=False, help_text=_('Hier wird die gewählte Vorlage an alle Veranstalter*innen mit einer CSV Datei versendet. Es werden die selben Ersetzungen wie beim Standardmailsystem unterstützt.'))
+
+
+class EMailChangeRequestForm(forms.ModelForm) :
+    class Meta :
+        model = EmailChange
+        fields = ["old_email"]
+
+
+
+class EMailChangeForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        if self.instance.pk:
+            matching_people = Person.objects.filter(email__iexact=self.instance.old_email.strip())
+            count = matching_people.count()
+
+            if count == 1:
+                self.fields["person_list_to_change"].widget = forms.MultipleHiddenInput()
+            else :
+                self.fields["person_list_to_change"].widget = forms.CheckboxSelectMultiple()
+                self.fields["person_list_to_change"].queryset = matching_people
+                self.fields["person_list_to_change"].required = True
+
+        # double check new email
+        self.fields["new_email_check"] = forms.EmailField(
+            label=_("E-Mail nochmal eingeben :"),
+            widget=forms.EmailInput()
+        )
+
+
+    def clean(self):
+        super(EMailChangeForm, self).clean()
+        email = self.cleaned_data.get("new_email")
+        email_check = self.cleaned_data.get("new_email_check")
+
+        if email and email_check and email != email_check :
+            self.add_error('new_email_check', _("E-Mail-Adressen stimmen nicht überein."))
+
+
+        person_list = self.cleaned_data.get("person_list_to_change")
+        new_cleaned_data = self.cleaned_data
+        
+        if not person_list :
+            new_cleaned_data["person_list_to_change"] = Person.objects.filter(email__iexact=self.instance.old_email.strip())
+
+        return new_cleaned_data
+    
+    
+    class Meta:
+        model = EmailChange
+        fields = ["new_email", "person_list_to_change"]
+
+
+class EMailChangeValidateForm(forms.Form):
+    otp = forms.CharField(max_length=32, label="OTP")
+
+    def __init__(self, *args, **kwargs):
+        self.email_change = kwargs.pop("instance")
+        super().__init__(*args, **kwargs)
+
+    def clean_otp(self):
+        otp = self.cleaned_data["otp"]
+
+        if not self.email_change.verify_otp(otp):
+            raise forms.ValidationError("Invalid or expired OTP")
+
+        return otp
+

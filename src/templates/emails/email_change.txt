@@ -1,0 +1,33 @@
+{% load i18n %}
+{% blocktrans with email=email link=link %}
+
+Guten Tag,
+
+Sie haben eine Änderung Ihrer E-Mail-Adresse {{ email }} beantragt.
+
+Das Link ist nur 15 Minuten gültig.
+
+Klicken Sie auf den folgenden Link, um fortzufahren:
+
+- {{ link }}
+
+Für weitere Informationen zur Evaluation der Lehre besuchen Sie bitte unsere Webseite:
+https://www.fachschaft.informatik.tu-darmstadt.de/feedback-new/
+Fragen können Sie gerne auch direkt an uns richten unter: feedback@fachschaft.informatik.tu-darmstadt.de
+
+Mit freundlichen Grüßen,
+
+Ihr Evaluations-Team
+[Fachschaft Informatik]
+--
+Fachschaft Informatik
+Technische Universität Darmstadt
+
+Gebäude S2|02 Raum D120
+Hochschulstraße 10
+64289 Darmstadt
+
+Telefon: +49 6151 16-25522
+Web: https://www.fachschaft.informatik.tu-darmstadt.de/
+
+{% endblocktrans %}
