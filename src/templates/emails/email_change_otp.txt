@@ -5,7 +5,7 @@ Guten Tag,
 
 Ihre alte E-Mail-Adresse [{{ old_email }}] wird zu diese [{{ email }}] geändert. 
 
-Um mit der Änderung fortzufahren, geben Sie bitte diesen OTP code an :
+Um mit der Änderung fortzufahren, geben Sie bitte diesen OTP code an, OTP ist nur {{ minutes_to_expire }} Minuten gültig :
 {% endblocktrans %}
 
 {% autoescape off %}

@@ -13,6 +13,7 @@ from django.db import transaction
 from django.contrib import messages
 import uuid, logging
 from django.utils.translation import gettext_lazy as _
+from django.utils import timezone
 
 @require_safe
 def index(request):
@@ -126,6 +127,7 @@ def email_change_request(request) :
 
                 email_change.token = uuid.uuid4()
                 email_change.status = EmailChange.Status.MAGIC_LINK_SENT
+                email_change.dynamic_expiry_time = timezone.now()
                 email_change.save()
 
             # send magic link to old_email
@@ -137,7 +139,8 @@ def email_change_request(request) :
                 try :
                     tools.send_change_email_link(
                         email_change.old_email,
-                        full_email_change_path
+                        full_email_change_path,
+                        email_change.MINUTES_TO_EXPIRE_LINK,
                     )
                 except Exception :
                     logger = logging.getLogger(__name__)
@@ -197,11 +200,12 @@ def email_change(request, token=None):
             otp, hash = email_change.generate_otp_and_hash()
 
             email_change.status = EmailChange.Status.OTP_SENT
+            email_change.dynamic_expiry_time = timezone.now()
             email_change.new_email_otp_hash = hash
             email_change.save()
             form.save_m2m()
 
-            tools.send_change_email_otp(email_change.new_email, email_change.old_email, otp)
+            tools.send_change_email_otp(email_change.new_email, email_change.old_email, otp, email_change.MINUTES_TO_EXPIRE_OTP,)
 
             return redirect("feedback:email-change-validate", token=email_change.token)
 

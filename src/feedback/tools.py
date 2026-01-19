@@ -135,7 +135,7 @@ def ean_checksum_valid(x):
             result = True
     return result
 
-def send_change_email_link(to_email, link) :
+def send_change_email_link(to_email, link, minutes_to_expire) :
     """
     sends mail to given email with given link as a part of email change process
     """
@@ -143,7 +143,7 @@ def send_change_email_link(to_email, link) :
 
     message = render_to_string(
         "emails/email_change.txt",
-        {"email": to_email, "link": link}
+        {"email": to_email, "link": link, "minutes_to_expire": minutes_to_expire,}
     )
 
     send_mail(
@@ -154,7 +154,7 @@ def send_change_email_link(to_email, link) :
         fail_silently=False,
     )
 
-def send_change_email_otp(to_email, old_email, otp) :
+def send_change_email_otp(to_email, old_email, otp, minutes_to_expire) :
     """
     sends mail with otp
     """
@@ -162,7 +162,7 @@ def send_change_email_otp(to_email, old_email, otp) :
 
     message = render_to_string(
         "emails/email_change_otp.txt",
-        {"email": to_email, "old_email": old_email, "otp": otp}
+        {"email": to_email, "old_email": old_email, "otp": otp, "minutes_to_expire": minutes_to_expire,}
     )
 
     send_mail(

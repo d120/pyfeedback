@@ -785,20 +785,26 @@ class EmailChange(models.Model) :
         db_index=True,
     )
 
-    MINUTES_TO_EXPIRE = 15
+    dynamic_expiry_time = models.DateTimeField(default=timezone.now)
+
+    MINUTES_TO_EXPIRE_LINK = 15
+    MINUTES_TO_EXPIRE_OTP = 15
 
     @property
     def is_expired(self):
         """
-        Returns True if MINUTES_TO_EXPIRE mins passed OR status is already EXPIRED.
+        Returns True if minutes to expire passed OR status is already EXPIRED.
         """
         if self.status == self.Status.EXPIRED:
             return True
-        
         elif self.status == self.Status.COMPLETED:
             return False
+        elif self.status == self.Status.MAGIC_LINK_SENT :
+            expiry_limit = self.dynamic_expiry_time + datetime.timedelta(minutes=EmailChange.MINUTES_TO_EXPIRE_LINK)
 
-        expiry_limit = self.created_at + datetime.timedelta(minutes=EmailChange.MINUTES_TO_EXPIRE)
+        elif self.status == self.Status.OTP_SENT :
+            expiry_limit = self.dynamic_expiry_time + datetime.timedelta(minutes=EmailChange.MINUTES_TO_EXPIRE_OTP)
+
         return timezone.now() > expiry_limit
 
     def request_is_valid(self):
@@ -807,7 +813,7 @@ class EmailChange(models.Model) :
         """
         if self.is_expired and self.status != self.Status.EXPIRED:
             self.status = self.Status.EXPIRED
-            self.save(update_fields=['status'])
+            self.save(update_fields=['status']) # remove this part if background tasks are added
             return False
         return self.status != self.Status.EXPIRED
     
