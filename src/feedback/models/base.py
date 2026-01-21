@@ -788,6 +788,7 @@ class EmailChange(models.Model) :
     dynamic_expiry_time = models.DateTimeField(default=timezone.now, help_text=_("Ab dieser Zeitpunk wird berechnet, ob die Anfrage gültig ist."))
 
     MINUTES_TO_EXPIRE_LINK = 15
+    MINUTES_TO_EXPIRE_OTP = 15
 
     @property
     def is_expired(self):

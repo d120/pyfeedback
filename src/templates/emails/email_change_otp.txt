@@ -1,18 +1,14 @@
-{% load i18n %}
-{% blocktrans with email=email old_email=old_email %}
+
+[English below]
 
 Guten Tag,
 
 Ihre alte E-Mail-Adresse [{{ old_email }}] wird zu diese [{{ email }}] geändert. 
 
 Um mit der Änderung fortzufahren, geben Sie bitte diesen OTP code an, OTP ist nur {{ minutes_to_expire }} Minuten gültig :
-{% endblocktrans %}
 
-{% autoescape off %}
-{{ otp }}
-{% endautoescape %}
+{{ otp|safe }}
 
-{% blocktrans %}
 Für weitere Informationen zur Evaluation der Lehre besuchen Sie bitte unsere Webseite:
 https://www.fachschaft.informatik.tu-darmstadt.de/feedback-new/
 Fragen können Sie gerne auch direkt an uns richten unter: feedback@fachschaft.informatik.tu-darmstadt.de
@@ -22,6 +18,24 @@ Mit freundlichen Grüßen,
 Ihr Evaluations-Team
 [Fachschaft Informatik]
 
+---
+
+Hello,
+
+Your old email address [{{ old_email }}] will be changed to this one [{{ email }}]. 
+
+To proceed with the change, please enter this OTP code. OTP is only valid for {{ minutes_to_expire }} minutes:
+
+{{ otp }}
+
+For more information on teaching evaluation, please visit our website:
+https://www.fachschaft.informatik.tu-darmstadt.de/feedback-new/
+If you have any questions, please feel free to contact us directly at: feedback@fachschaft.informatik.tu-darmstadt.de
+
+Best regards,
+
+Your Evaluation Team
+[Fachschaft Informatik]
 --
 Fachschaft Informatik
 Technische Universität Darmstadt
@@ -32,5 +46,3 @@ Hochschulstraße 10
 
 Telefon: +49 6151 16-25522
 Web: https://www.fachschaft.informatik.tu-darmstadt.de/
-
-{% endblocktrans %}

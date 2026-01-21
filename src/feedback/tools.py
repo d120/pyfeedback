@@ -5,6 +5,7 @@ from django.template import TemplateSyntaxError, Template
 from django.core.mail import send_mail
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import render_to_string
+from django.utils.safestring import mark_safe
 
 from django.conf import settings
 
@@ -143,7 +144,7 @@ def send_change_email_link(to_email, link, minutes_to_expire) :
 
     message = render_to_string(
         "emails/email_change.txt",
-        {"email": to_email, "link": link, "minutes_to_expire": minutes_to_expire,}
+        {"email": to_email, "link": mark_safe(link), "minutes_to_expire": minutes_to_expire,}
     )
 
     send_mail(
@@ -162,7 +163,7 @@ def send_change_email_otp(to_email, old_email, otp, minutes_to_expire) :
 
     message = render_to_string(
         "emails/email_change_otp.txt",
-        {"email": to_email, "old_email": old_email, "otp": otp, "minutes_to_expire": minutes_to_expire,}
+        {"email": to_email, "old_email": old_email, "otp": mark_safe(otp), "minutes_to_expire": minutes_to_expire,}
     )
 
     send_mail(

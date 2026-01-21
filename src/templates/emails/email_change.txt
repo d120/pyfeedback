@@ -1,5 +1,5 @@
-{% load i18n %}
-{% blocktrans with email=email link=link %}
+
+[English below]
 
 Guten Tag,
 
@@ -9,7 +9,7 @@ Das Link ist nur {{ minutes_to_expire }} Minuten gültig.
 
 Klicken Sie auf den folgenden Link, um fortzufahren:
 
-- {{ link }}
+- {{ link|safe }}
 
 Für weitere Informationen zur Evaluation der Lehre besuchen Sie bitte unsere Webseite:
 https://www.fachschaft.informatik.tu-darmstadt.de/feedback-new/
@@ -18,6 +18,27 @@ Fragen können Sie gerne auch direkt an uns richten unter: feedback@fachschaft.i
 Mit freundlichen Grüßen,
 
 Ihr Evaluations-Team
+[Fachschaft Informatik]
+
+---
+
+Hello,
+
+You have requested a change for your email address {{ email }}.
+
+The link is only valid for {{ minutes_to_expire }} minutes.
+
+Click on the following link to continue:
+
+- {{ link }}
+
+For more information on teaching evaluation, please visit our website:
+https://www.fachschaft.informatik.tu-darmstadt.de/feedback-new/
+If you have any questions, please feel free to contact us directly at: feedback@fachschaft.informatik.tu-darmstadt.de
+
+Best regards,
+
+Your Evaluation Team
 [Fachschaft Informatik]
 --
 Fachschaft Informatik
@@ -29,5 +50,3 @@ Hochschulstraße 10
 
 Telefon: +49 6151 16-25522
 Web: https://www.fachschaft.informatik.tu-darmstadt.de/
-
-{% endblocktrans %}
