@@ -752,10 +752,10 @@ class EmailChange(models.Model) :
     """
     
     class Status(models.IntegerChoices):
-        EXPIRED = 0, "EXPIRED"
-        MAGIC_LINK_SENT = 1, "LINK SENT"
-        OTP_SENT = 2, "OTP SENT"
-        COMPLETED = 3, "COMPLETED SUCCESSFULLY"
+        EXPIRED = 0, _("EXPIRED")
+        MAGIC_LINK_SENT = 1, _("LINK SENT")
+        OTP_SENT = 2, _("OTP SENT")
+        COMPLETED = 3, _("COMPLETED SUCCESSFULLY")
 
     class Meta:
         indexes = [

@@ -15,6 +15,9 @@ import uuid, logging
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 
+logger = logging.getLogger(__name__)
+
+
 @require_safe
 def index(request):
     data = {}
@@ -130,8 +133,9 @@ def email_change_request(request) :
                 email_change.dynamic_expiry_time = timezone.now()
                 email_change.save()
 
-            # send magic link to old_email
-            if Person.objects.filter(email__iexact=email_change.old_email).exists() :
+            person_exists = Person.objects.filter(email__iexact=email_change.old_email).exists()
+
+            if person_exists:
                 full_email_change_path = request.build_absolute_uri(
                     reverse("feedback:email-change", kwargs={"token": email_change.token})
                 )
@@ -143,9 +147,8 @@ def email_change_request(request) :
                         email_change.MINUTES_TO_EXPIRE_LINK,
                     )
                 except Exception :
-                    logger = logging.getLogger(__name__)
                     logger.exception(
-                        "Das Senden des E-Mail-Änderungslinks an %s ist fehlgeschlagen.",
+                        _("Das Senden des E-Mail-Änderungslinks an %s ist fehlgeschlagen."),
                         email_change.old_email,
                     )
 
@@ -155,6 +158,9 @@ def email_change_request(request) :
                     )
                     
                     return redirect("feedback:email-change-request")
+            else:
+                email_change.delete()
+
 
             return render(request, "public/email_change_send_confirmation.html", {"old_email": email_change.old_email})
 
