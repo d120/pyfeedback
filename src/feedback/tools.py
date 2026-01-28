@@ -140,7 +140,7 @@ def send_change_email_link(to_email, link, minutes_to_expire) :
     """
     sends mail to given email with given link as a part of email change process
     """
-    subject = _("E-Mail-Änderungsanfrage")
+    subject = "E-Mail-Änderungsanfrage / Email change request"
 
     message = render_to_string(
         "emails/email_change.txt",
@@ -159,7 +159,7 @@ def send_change_email_otp(to_email, old_email, otp, minutes_to_expire) :
     """
     sends mail with otp
     """
-    subject = _("E-Mail-Änderungsanfrage OTP")
+    subject = "E-Mail-Änderung OTP / Email change OTP"
 
     message = render_to_string(
         "emails/email_change_otp.txt",
