@@ -1,5 +1,5 @@
 coverage==7.13.2
-Django==6.0.1
+Django==6.0.2
 django-debug-toolbar==6.2.0
 freezegun==1.5.5
 django-formtools==2.5.1
