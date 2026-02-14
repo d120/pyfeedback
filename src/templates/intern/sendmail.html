@@ -3,7 +3,7 @@
 {% block title %}{% translate "Mail versenden" %}{% endblock %}
 
 {% block extra_header %}
-<link rel="stylesheet" type="text/css" href="{% static 'jquery/chosen/chosen.min.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'chosen-js/chosen.min.css' %}" />
 {% endblock %}
 
 {% block content %}
@@ -70,9 +70,9 @@
 {% endblock %}
 
 {% block javascript_block %}
-<script src="{% static 'jquery/jquery.min.js' %}"></script>
-<script src="{% static 'jquery/jquery-ui.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'jquery/chosen/chosen.jquery.min.js' %}"></script>
+<script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
+<script src="{% static 'jquery-ui/dist/jquery-ui.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'chosen-js/chosen.jquery.min.js' %}"></script>
 <script>
   $(".chosen-select").chosen();
 </script>

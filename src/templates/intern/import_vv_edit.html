@@ -1,7 +1,7 @@
 {% extends "bestellung_base.html" %}{% load static %}{% load filter_range %}{% load i18n %}
 
 {% block extra_header %}
-<link rel="stylesheet" type="text/css" href="{% static 'jquery/jquery-ui.min.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'jquery-ui/dist/themes/base/jquery-ui.min.css' %}" />
 
 <style type="text/css">
     h2.ui-accordion-header,
@@ -92,8 +92,8 @@
 {% endblock %}
 
 {% block javascript_block %}
-<script src="{% static 'jquery/jquery.min.js' %}"></script>
-<script src="{% static 'jquery/jquery-ui.min.js' %}"></script>
+<script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
+<script src="{% static 'jquery-ui/dist/jquery-ui.min.js' %}"></script>
 
 <script src="{% static 'import_vv.js' %}"></script>
 
