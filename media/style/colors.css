@@ -9,6 +9,7 @@
 .light
 {
   --main-theme-color: #181818;
+  --main-theme-color-highlighted: #8e00d0;
   --main-background-color: #fff;
   --link-hover-color: #128341;
 }
