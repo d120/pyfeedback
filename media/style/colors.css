@@ -4,6 +4,8 @@
   --main-theme-color-highlighted: #00d061;
   --main-background-color: #181818;
   --link-hover-color: #2c2c2c;
+  --footer-bg-color: #666;
+  --footer-color: #ddd;
 }
 
 .light
@@ -12,4 +14,6 @@
   --main-theme-color-highlighted: #8e00d0;
   --main-background-color: #fff;
   --link-hover-color: #128341;
+  --footer-bg-color: #ddd;
+  --footer-color: #666;
 }

@@ -1,0 +1,43 @@
+@import url('colors.css');
+
+footer {
+    background-color: var(--footer-bg-color);
+    color: var(--footer-color);
+    margin-top: auto;
+}
+footer p {
+    line-height: 20px;
+    margin: 10px;
+}
+footer a {
+    font-weight: 700;
+    color: inherit;
+}
+footer i {
+    padding-right: 10px;
+}
+footer .row {
+    padding: 10px 0;
+}
+.footer-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+	padding: 0.5em 0;
+}
+.footer-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 0.5em 0;
+    text-align: center;
+}
+.footer-group + .footer-group:not(:last-child) {
+	margin: 0.5em 0;
+}
+@media(max-width: 470px) {
+.footer-group {
+    flex-direction: column;
+}
+}
