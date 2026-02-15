@@ -9,52 +9,52 @@
 	<link rel="stylesheet" type="text/css" href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}" />
   <link rel="stylesheet" type="text/css" href="{% static 'font-awesome/css/font-awesome.min.css' %}" />
   <link rel="stylesheet" type="text/css" href="{% static '@fontsource/libre-franklin/index.css' %}" />
-  <link rel="stylesheet" type="text/css" href="{% static 'custom.css' %}" />
-  <style>
-      a, footer a:hover, .sidebar-nav a, .sidebar-nav a:hover {
-          color:#009D81;
-      }
-      .header-navbar, .sidebar-active, .sidebar-active:hover, .sidebar-active:focus > a:hover, .sidebar-active > a:focus, #mainLogo {
-          background-color:#009D81!important;
-      }
-      .sidebar-active, .sidebar-active:hover {
-          border-left: 5px solid #009D81!important;
-      }
-  </style>
+  <link rel="stylesheet" type="text/css" href="{% static 'style/custom.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'style/header.css' %}" />
 
-	<link rel="stylesheet" type="text/css" href="{% static 'ranking.css' %}" /> {% block extra_header %}{% endblock %}
+	<link rel="stylesheet" type="text/css" href="{% static 'style/ranking.css' %}" /> {% block extra_header %}{% endblock %}
 </head>
 
-<body>
+<body class="dark">
+	<header>
+		{% include 'd120/header.html' %}
+	</header>
 
-	{% include 'd120/header.html' %}
-	<div class="container">
-		<div id="main" class="row">
-			<div class="col-lg-3 col-md-4 col-sm-5">
-				{% include 'd120/sidebar.html' %}
-			</div>
-			<div id="content" class="col-lg-9 col-md-8 col-xs-12 col-sm-7 pull-right typography">
-
-				{% if request.session.orig_uid %}
-				<div class="breadcrumbs">
-					{% blocktranslate %}Du nutzt momentan die Rechte der Veranstalter von {{veranstaltung}}.{% endblocktranslate %} <a href="{% url 'feedback:rechte_zuruecknehmen' %}">{% translate "Zu meinem Account zurückkehren." %}</a>
+	<main>
+		<div class="container">
+			<div id="main" class="row">
+				<div class="col-lg-3 col-md-4 col-sm-5">
+					{% include 'd120/sidebar.html' %}
 				</div>
-				{% endif %} {% if messages %}
-				<ul class="messagelist">
-					{% for message in messages %}
-					<li class="{{ message.tags }}">{{ message }}</li>
-					{% endfor %}
-				</ul>
-				{% endif %} {% block content %}{% endblock %}
-				<br /> {% block backlink %}{% endblock %}
+				<div id="content" class="col-lg-9 col-md-8 col-xs-12 col-sm-7 pull-right typography">
+
+					{% if request.session.orig_uid %}
+					<div class="breadcrumbs">
+						{% blocktranslate %}Du nutzt momentan die Rechte der Veranstalter von {{veranstaltung}}.{% endblocktranslate %} <a href="{% url 'feedback:rechte_zuruecknehmen' %}">{% translate "Zu meinem Account zurückkehren." %}</a>
+					</div>
+					{% endif %} {% if messages %}
+					<ul class="messagelist">
+						{% for message in messages %}
+						<li class="{{ message.tags }}">{{ message }}</li>
+						{% endfor %}
+					</ul>
+					{% endif %} {% block content %}{% endblock %}
+					<br /> {% block backlink %}{% endblock %}
+				</div>
 			</div>
 		</div>
-	</div>
+	</main>
+
+	<footer>
 		{% include 'd120/footer.html' %}
+	</footer>
+
     {% block javascript_block %}
-	<script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
-	<script src="{% static '@popperjs/core/dist/umd/popper.min.js' %}"></script>
-	<script src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
+		<script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
+		<script src="{% static '@popperjs/core/dist/umd/popper.min.js' %}"></script>
+		<script src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
+
+		<script src="{% static 'theme-button.js' %}"></script>
     {% endblock %}
 </body>
 

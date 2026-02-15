@@ -1,3 +1,5 @@
+@import url('colors.css');
+
 body {
     font-family: 'Libre Franklin', Helvetica, Arial, sans-serif;
     font-size: 15px;
@@ -11,9 +13,19 @@ body {
 body.cke_editable {
     margin: 8px;
 }
-a:hover {
-    color: #111111;
+
+
+a {
+  text-decoration: none;
+  color: var(--main-theme-color);
 }
+
+a:hover {
+  text-decoration: underline;
+  background-color: var(--link-hover-color);
+}
+
+
 footer {
     background-color: #ecf0f1;
     color: #7f8c8d;
@@ -67,11 +79,6 @@ footer .row {
     margin-bottom: 25px;
     margin-right: 25px;
 }
-#header img {
-    height: 100px;
-    margin-top: 25px;
-    margin-bottom: 25px;
-}
 #content,
 #sidebar {
     margin-top: 35px;
@@ -84,18 +91,7 @@ footer .row {
 #content {
     text-align: justify;
 }
-.navbar-logos {
-    padding: 0px;
-}
-.navbar-nav li a {
-    color: #f5f5f5;
-    font-size: 18px;
-}
-.navbar-nav li a:hover {
-    background-color: #777777;
-    background-color: rgba(0, 0, 0, .5);
-    color: #f5f5f5;
-}
+
 .breadcrumb {
     background-color: inherit;
     padding: 0;
@@ -166,13 +162,6 @@ li.sidebar-active {
         display: none;
     }
 }
-.header-navbar {
-    padding: 0;
-}
-.header-navbar-link {
-    line-height: 25px;
-    padding: 15px !important;
-}
 li.headline:hover {
     background-color: transparent;
 }
@@ -187,21 +176,7 @@ li.headline:hover {
     padding-bottom: 15px;
     margin-top: 25px;
 }
-.navbar-toggler {
-    float: none;
-    border-color: #999999;
-}
-.navbar-toggler-icon {
-    color: #999999;
-}
-.navbar-collapse {
-    padding: 0;
-}
-.navbar {
-    border-radius: 0;
-    border: 0;
-    margin-bottom: 0;
-}
+
 .additionalMargin {
     margin-bottom: 25px;
 }
@@ -216,9 +191,6 @@ li.headline:hover {
 }
 .announcement:empty {
     display: none;
-}
-.navbar-default .navbar-nav > li > a:focus {
-    color: #ffffff;
 }
 h1,h2,h3,h4,h5 {
     text-align:left;

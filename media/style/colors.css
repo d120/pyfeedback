@@ -1,0 +1,14 @@
+:root, .dark
+{
+  --main-theme-color: #e0e0e0;
+  --main-theme-color-highlighted: #00d061;
+  --main-background-color: #181818;
+  --link-hover-color: #2c2c2c;
+}
+
+.light
+{
+  --main-theme-color: #181818;
+  --main-background-color: #fff;
+  --link-hover-color: #128341;
+}
