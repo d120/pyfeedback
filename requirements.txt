@@ -3,4 +3,4 @@ Django==6.0.1
 django-debug-toolbar==6.2.0
 freezegun==1.5.5
 django-formtools==2.5.1
-django-allauth[socialaccount,keycloak]==65.14.0
+django-allauth[socialaccount,keycloak]==65.14.3
