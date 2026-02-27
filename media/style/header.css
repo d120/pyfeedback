@@ -82,3 +82,41 @@ header {
 #mainLogo:hover {
   background-color: transparent;
 }
+
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: var(--main-background-color);
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 10;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border: 1px solid #444;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown-content li a {
+  color: var(--main-theme-color);
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  font-size: 0.9rem;
+}
+
+.dropdown-content li a:hover {
+  background-color: var(--main-theme-color-highlighted);
+  color: var(--main-background-color); /* Inverts colors for contrast */
+}

@@ -9,3 +9,8 @@ btn.addEventListener('click', () => {
         body.classList.replace('dark', 'light');
     }
 });
+
+document.querySelector('.dropdown-trigger').addEventListener('click', function(e) {
+    e.preventDefault();
+    this.parentElement.querySelector('.dropdown-content').classList.toggle('show');
+});
