@@ -38,19 +38,11 @@ a:hover {
     margin-bottom: 25px;
     margin-right: 25px;
 }
-#content,
-#sidebar {
-    margin-top: 35px;
-    margin-bottom: 50px
-}
-#sidebar {
-    font-size: 18px;
-    margin-top: 50px;
-}
 #content {
+    margin-top: 35px;
+    margin-bottom: 50px;
     text-align: justify;
 }
-
 .breadcrumb {
     background-color: inherit;
     padding: 0;
@@ -61,60 +53,6 @@ a:hover {
 }
 .language-chooser{
     margin-left: 10px;
-}
-.sidebar-active,
-.sidebar-active:hover,
-.sidebar-active:focus {
-    color: #ffffff;
-}
-.sidebar-active > a:hover,
-.sidebar-active > a:focus {
-    color: #ffffff!important;
-}
-.sidebar-nav {
-    border-left: 5px solid #999999;
-}
-.sidebar-nav > li > a {
-    padding: 10px 15px 10px 0;
-}
-.sidebar-nav > li > a:focus {
-    background-color: transparent;
-}
-.sidebar-nav > li {
-    padding-left: 20px;
-    margin-left: -5px;
-    word-break: break-all;
-}
-.sidebar-nav > li:hover {
-    border-left: 5px solid #999999;
-    padding-left: 15px;
-    background-color: #eee;
-}
-li.sidebar-active {
-    padding-left: 15px;
-}
-.sidebar-nav a {
-    text-decoration: none;
-    display:block;
-}
-.sidebar-nav a:hover {
-    font-weight: bold;
-}
-.sidebar-active-link {
-    font-weight: bold;
-}
-.sidebar-active > a {
-    color: #ffffff!important;
-    text-decoration: none;
-}
-.sidebar-active > ul {
-    padding: 10px;
-    background-color: #cccccc;
-    background-color: rgba(255, 255, 255, .75);
-    margin-left: -15px;
-}
-.sidebar-active > ul li {
-    list-style-type: none;
 }
 @media (max-width: 522px) {
     #responsivelogo {
@@ -138,9 +76,6 @@ li.headline:hover {
 
 .additionalMargin {
     margin-bottom: 25px;
-}
-.menuIndent {
-    padding-left: 20px;
 }
 .announcement {
     border-left: 3px solid #b90f22;

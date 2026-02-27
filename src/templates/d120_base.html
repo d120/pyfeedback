@@ -12,6 +12,7 @@
   <link rel="stylesheet" type="text/css" href="{% static 'style/custom.css' %}" />
   <link rel="stylesheet" type="text/css" href="{% static 'style/header.css' %}" />
   <link rel="stylesheet" type="text/css" href="{% static 'style/footer.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'style/sidebar.css' %}" />
 
 	<link rel="stylesheet" type="text/css" href="{% static 'style/ranking.css' %}" /> {% block extra_header %}{% endblock %}
 </head>
@@ -24,7 +25,7 @@
 	<main>
 		<div class="container">
 			<div id="main" class="row">
-				<div class="col-lg-3 col-md-4 col-sm-5">
+				<div>
 					{% include 'd120/sidebar.html' %}
 				</div>
 				<div id="content" class="col-lg-9 col-md-8 col-xs-12 col-sm-7 pull-right typography">

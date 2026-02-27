@@ -1,0 +1,47 @@
+@import url('colors.css');
+
+#sidebar {
+    margin-top: 35px;
+    margin-bottom: 50px;
+    font-size: 18px;
+    margin-top: 50px;
+    background-color: var(--main-background-color);
+}
+
+.sidebar-active {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+}
+
+.sidebar-active li {
+    list-style: none;
+    padding: 0;
+}
+
+
+.sidebar-active li a {
+  display: block;
+  padding: 5px 15px;
+  text-decoration: none;
+  border-left: 4px solid transparent;
+}
+
+.sidebar-active li:hover a {
+  background-color: var(--link-hover-color);
+  color: var(--sidebar-link-hover-border);
+  
+  text-decoration: underline;
+  border-left: 4px solid #007bff;
+  /* padding-left: -4px;  */
+}
+
+
+.sidebar-active-item:first-child {
+    padding-top: 10px;
+}
+
+.sidebar-active-item:last-child {
+    padding-bottom: 10px;
+}
