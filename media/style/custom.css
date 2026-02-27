@@ -4,11 +4,12 @@ body {
     font-family: 'Libre Franklin', Helvetica, Arial, sans-serif;
     font-size: 15px;
     line-height: 200%;
-    color: #444444;
+    color: var(--main-theme-color);
     overflow-y: scroll;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    background-color: var(--main-background-color);
 }
 body.cke_editable {
     margin: 8px;
@@ -17,12 +18,12 @@ body.cke_editable {
 
 a {
   text-decoration: none;
-  color: var(--main-theme-color);
+  color: var(--link-color);
 }
 
 a:hover {
   text-decoration: underline;
-  background-color: var(--link-hover-color);
+  background-color: var(--link-hover-bg-color);
 }
 
 
@@ -37,19 +38,6 @@ a:hover {
     margin-top: 25px;
     margin-bottom: 25px;
     margin-right: 25px;
-}
-#content {
-    margin-top: 35px;
-    margin-bottom: 50px;
-    text-align: justify;
-}
-.breadcrumb {
-    background-color: inherit;
-    padding: 0;
-    text-align: left;
-}
-.breadcrumb>li{
-    display: inline;
 }
 .language-chooser{
     margin-left: 10px;
@@ -96,4 +84,56 @@ h1,h2,h3,h4,h5 {
 
 .table .table {
     margin-bottom:0;
+}
+
+
+
+
+.main-area {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 5%;
+    width: 100%;
+    padding: 5%;
+}
+
+.sidebar-area {
+    flex: 0.5;
+}
+
+.content-area {
+    flex: 2.5; 
+    min-width: 0;
+    text-align: justify;
+}
+
+/* Custom Message List */
+.messagelist {
+    list-style: none;
+    padding: 0;
+}
+
+.messagelist li {
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+}
+
+.messagelist li.success { background-color: #d4edda; color: #155724; }
+.messagelist li.error { background-color: #f8d7da; color: #721c24; }
+
+/* Breadcrumbs */
+.breadcrumbs {
+    background: #e9ecef;
+    padding: 10px 15px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+}
+
+.breadcrumb>li{
+    display: inline;
 }

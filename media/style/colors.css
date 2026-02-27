@@ -3,9 +3,10 @@
   --main-theme-color: #e0e0e0;
   --main-theme-color-highlighted: #00d061;
   --main-background-color: #181818;
-  --link-hover-color: #2c2c2c;
+  --link-color:#3aa2ae;
+  --link-hover-bg-color: #2c2c2c;
   --sidebar-link-hover-border: #007bff;
-  --footer-bg-color: #666;
+  --footer-bg-color: #222;
   --footer-color: #ddd;
 }
 
@@ -14,8 +15,9 @@
   --main-theme-color: #181818;
   --main-theme-color-highlighted: #8e00d0;
   --main-background-color: #fff;
-  --link-hover-color: #128341;
+  --link-color:#3aa2ae;
+  --link-hover-bg-color: #128341;
   --sidebar-link-hover-border: #ddf;
-  --footer-bg-color: #ddd;
+  --footer-bg-color: #222;
   --footer-color: #666;
 }

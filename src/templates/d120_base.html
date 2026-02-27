@@ -23,28 +23,39 @@
 	</header>
 
 	<main>
-		<div class="container">
-			<div id="main" class="row">
-				<div>
+
+			<div id="main" class="main-area">
+
+				<div class="sidebar-area">
 					{% include 'd120/sidebar.html' %}
 				</div>
-				<div id="content" class="col-lg-9 col-md-8 col-xs-12 col-sm-7 pull-right typography">
+
+				<div id="content" class="content-area">
 
 					{% if request.session.orig_uid %}
 					<div class="breadcrumbs">
 						{% blocktranslate %}Du nutzt momentan die Rechte der Veranstalter von {{veranstaltung}}.{% endblocktranslate %} <a href="{% url 'feedback:rechte_zuruecknehmen' %}">{% translate "Zu meinem Account zurückkehren." %}</a>
 					</div>
-					{% endif %} {% if messages %}
+					{% endif %}
+					
+
+					{% if messages %}
 					<ul class="messagelist">
 						{% for message in messages %}
 						<li class="{{ message.tags }}">{{ message }}</li>
 						{% endfor %}
 					</ul>
-					{% endif %} {% block content %}{% endblock %}
-					<br /> {% block backlink %}{% endblock %}
+					{% endif %}
+					
+
+					{% block content %}{% endblock %}
+					<br /> 
+					{% block backlink %}{% endblock %}
+
 				</div>
+
 			</div>
-		</div>
+
 	</main>
 
 	<footer>

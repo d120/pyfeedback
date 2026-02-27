@@ -1,17 +1,15 @@
 @import url('colors.css');
 
 #sidebar {
-    margin-top: 35px;
-    margin-bottom: 50px;
     font-size: 18px;
-    margin-top: 50px;
     background-color: var(--main-background-color);
+    border-top: 2px solid #007bff;
 }
 
 .sidebar-active {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    justify-content: space-evenly;
 
 }
 
@@ -22,19 +20,18 @@
 
 
 .sidebar-active li a {
-  display: block;
-  padding: 5px 15px;
-  text-decoration: none;
-  border-left: 4px solid transparent;
+    display: block;
+    padding: 5px 15px;
+    text-decoration: none;
+    border-left: 4px solid transparent;
 }
 
 .sidebar-active li:hover a {
-  background-color: var(--link-hover-color);
-  color: var(--sidebar-link-hover-border);
-  
-  text-decoration: underline;
-  border-left: 4px solid #007bff;
-  /* padding-left: -4px;  */
+    background-color: var(--link-hover-bg-color);
+    color: var(--sidebar-link-hover-border);
+    
+    text-decoration: underline;
+    border-left: 4px solid #007bff;
 }
 
 
