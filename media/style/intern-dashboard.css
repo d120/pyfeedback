@@ -1,0 +1,65 @@
+
+.dashboard-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 40px;
+    margin-top: 20px;
+}
+
+.dashboard-main {
+    flex: 1;
+    padding-left: 10%;
+}
+
+
+.dashboard-sidebar {
+    flex: 0.25;
+    width: 150px;
+    text-align: center;
+    position: sticky;
+    top: 20%;
+}
+
+#sidebar-label {
+    text-align: center;
+}
+
+.label-detail {
+    font-size: 0.85em;
+    color: #666;
+    line-height: 100%;
+}
+
+.progress-track {
+    height: 300px;
+    width: 40px;
+    background-color: #eeeeec;
+    margin: 0 auto;
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end; /* Ensures fill grows from bottom */
+    border: 1px solid #ddd;
+}
+
+
+.progress-fill {
+    width: 100%;
+    /* Start at 0 so it can animate up */
+    height: 0%; 
+    background-color: #009D81;
+    transition: height 1s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+}
+
+.progress-label {
+    margin-top: 10px;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.progress-detail {
+    font-size: 0.85em;
+    color: #666;
+}

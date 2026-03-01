@@ -13,6 +13,7 @@
   <link rel="stylesheet" type="text/css" href="{% static 'style/header.css' %}" />
   <link rel="stylesheet" type="text/css" href="{% static 'style/footer.css' %}" />
   <link rel="stylesheet" type="text/css" href="{% static 'style/sidebar.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'style/intern-dashboard.css' %}" />
 
 	<link rel="stylesheet" type="text/css" href="{% static 'style/ranking.css' %}" /> {% block extra_header %}{% endblock %}
 </head>
@@ -47,8 +48,10 @@
 					</ul>
 					{% endif %}
 					
-
-					{% block content %}{% endblock %}
+					<div>
+						{% block content %}{% endblock %}
+					</div>
+					
 					<br /> 
 					{% block backlink %}{% endblock %}
 
