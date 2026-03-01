@@ -30,6 +30,21 @@
 
     
     <div class="header-side-container">
+        <div class="auth-wrapper">
+            {% if user.is_authenticated %}
+                <form action="{% url 'feedback:logout' %}" method="post" class="auth-form">
+                    {% csrf_token %}
+                    <button type="submit" class="auth-btn">
+                        <i class="fa fa-sign-out"></i> {% translate "Ausloggen" %}
+                    </button>
+                </form>
+            {% else %}
+                <a href="{% url 'feedback:auth-login' %}" class="auth-btn">
+                    <i class="fa fa-sign-in"></i> {% translate "Einloggen" %}
+                </a>
+            {% endif %}
+        </div>
+
         <button id="theme-button" class="header-button header-navbar-link">
             <i id="theme-icon" class="fa fa-adjust fa-lg"></i> <span class="d-none d-sm-inline">{% translate "Stil" %}</span>
         </button>

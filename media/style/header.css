@@ -120,3 +120,26 @@ header {
   background-color: var(--main-theme-color-highlighted);
   color: var(--main-background-color); /* Inverts colors for contrast */
 }
+
+.auth-wrapper {
+    display: inline-block;
+}
+
+.auth-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    color: #009D81;
+    font: inherit;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Spaces the icon and text */
+}
+
+.auth-form {
+    display: inline;
+    margin: 0;
+}
