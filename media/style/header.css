@@ -6,9 +6,13 @@ header {
   top: 0;
   z-index: 2;
   border-bottom: 1px solid #444;
-  border-top: 14px solid #fff;
+  border-top: 11px solid #fff;
   background-color: var(--main-background-color);
   color: var(--main-theme-color);
+}
+
+.header-wrapper {
+  border-top: 3px solid var(--main-background-color);
 }
 
 .header-logo {
@@ -22,6 +26,7 @@ header {
   justify-content: space-around;
   align-items: center;
   background-color: var(--main-background-color);
+  border-top: 1px solid #fff;
 }
 
 .header-side-container {
