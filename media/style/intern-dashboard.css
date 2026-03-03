@@ -2,9 +2,6 @@
 .dashboard-container {
     display: flex;
     justify-content: space-between;
-    align-items: flex-end;
-    gap: 40px;
-    margin-top: 20px;
 }
 
 .dashboard-main {
@@ -19,6 +16,8 @@
     text-align: center;
     position: sticky;
     top: 20%;
+    align-items: flex-start;
+    display: flex;
 }
 
 #sidebar-label {

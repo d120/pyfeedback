@@ -47,17 +47,19 @@
     </div>
 
     <div class="dashboard-sidebar">
-        <h3 id="sidebar-label">{% translate "Status" %}</h3>
-        <p class="label-detail">{% translate "der Rückmeldungen durch die Veranstalter" %}</p>
-        
-        <div class="progress-track">
-            <div id="status-bar" class="progress-fill" data-value="{{ relativ_result|floatformat:-2 }}"></div>
-        </div>
+        <div>
+            <h3 id="sidebar-label">{% translate "Status" %}</h3>
+            <p class="label-detail">{% translate "der Rückmeldungen durch die Veranstalter" %}</p>
+            
+            <div class="progress-track">
+                <div id="status-bar" class="progress-fill" data-value="{{ relativ_result|floatformat:-2 }}"></div>
+            </div>
 
-        <div class="progress-label">{{ relativ_result|floatformat:-2 }} %</div>
-        <p class="progress-detail">
-            {{ ruck_veranst }} / {{ all_veranst }}
-        </p>
+            <div class="progress-label">{{ relativ_result|floatformat:-2 }} %</div>
+            <p class="progress-detail">
+                {{ ruck_veranst }} / {{ all_veranst }}
+            </p>
+        </div>
     </div>
     
 </div>
