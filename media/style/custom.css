@@ -10,7 +10,9 @@ body {
     display: flex;
     flex-direction: column;
     background-color: var(--main-background-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
+
 body.cke_editable {
     margin: 8px;
 }
@@ -41,11 +43,6 @@ a:hover {
 }
 .language-chooser{
     margin-left: 10px;
-}
-@media (max-width: 522px) {
-    #responsivelogo {
-        display: none;
-    }
 }
 li.headline:hover {
     background-color: transparent;

@@ -10,9 +10,9 @@
   <link rel="stylesheet" type="text/css" href="{% static 'font-awesome/css/font-awesome.min.css' %}" />
   <link rel="stylesheet" type="text/css" href="{% static '@fontsource/libre-franklin/index.css' %}" />
   <link rel="stylesheet" type="text/css" href="{% static 'style/custom.css' %}" />
-  <link rel="stylesheet" type="text/css" href="{% static 'style/header.css' %}" />
-  <link rel="stylesheet" type="text/css" href="{% static 'style/footer.css' %}" />
-  <link rel="stylesheet" type="text/css" href="{% static 'style/sidebar.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'style/d120/header.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'style/d120/footer.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'style/d120/sidebar.css' %}" />
   <link rel="stylesheet" type="text/css" href="{% static 'style/intern-dashboard.css' %}" />
 
 	<link rel="stylesheet" type="text/css" href="{% static 'style/ranking.css' %}" /> {% block extra_header %}{% endblock %}
@@ -25,38 +25,38 @@
 
 	<main>
 
-			<div id="main" class="main-area">
+		<div id="main" class="main-area">
 
-				<div class="sidebar-area">
-					{% include 'd120/sidebar.html' %}
+			<div class="sidebar-area">
+				{% include 'd120/sidebar.html' %}
+			</div>
+
+			<div id="content" class="content-area">
+
+				{% if request.session.orig_uid %}
+				<div class="breadcrumbs">
+					{% blocktranslate %}Du nutzt momentan die Rechte der Veranstalter von {{veranstaltung}}.{% endblocktranslate %} <a href="{% url 'feedback:rechte_zuruecknehmen' %}">{% translate "Zu meinem Account zurückkehren." %}</a>
 				</div>
+				{% endif %}
+				
 
-				<div id="content" class="content-area">
-
-					{% if request.session.orig_uid %}
-					<div class="breadcrumbs">
-						{% blocktranslate %}Du nutzt momentan die Rechte der Veranstalter von {{veranstaltung}}.{% endblocktranslate %} <a href="{% url 'feedback:rechte_zuruecknehmen' %}">{% translate "Zu meinem Account zurückkehren." %}</a>
-					</div>
-					{% endif %}
-					
-
-					{% if messages %}
-					<ul class="messagelist">
-						{% for message in messages %}
-						<li class="{{ message.tags }}">{{ message }}</li>
-						{% endfor %}
-					</ul>
-					{% endif %}
-					
-					{% block backlink %}{% endblock %}
-					<br>
-					<div>
-						{% block content %}{% endblock %}
-					</div>
-
+				{% if messages %}
+				<ul class="messagelist">
+					{% for message in messages %}
+					<li class="{{ message.tags }}">{{ message }}</li>
+					{% endfor %}
+				</ul>
+				{% endif %}
+				
+				{% block backlink %}{% endblock %}
+				<br>
+				<div>
+					{% block content %}{% endblock %}
 				</div>
 
 			</div>
+
+		</div>
 
 	</main>
 

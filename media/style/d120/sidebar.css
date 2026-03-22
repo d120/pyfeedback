@@ -3,7 +3,6 @@
 #sidebar {
     font-size: 18px;
     background-color: var(--main-background-color);
-    border-top: 2px solid #007bff;
 }
 
 .sidebar-active {
@@ -19,6 +18,7 @@
 
 
 .sidebar-active li a {
+    color: var(--sidebar-link-color);
     display: block;
     padding: 5px 15px;
     text-decoration: none;
@@ -26,11 +26,9 @@
 }
 
 .sidebar-active li:hover a {
-    background-color: var(--link-hover-bg-color);
-    color: var(--sidebar-link-hover-border);
-    
+    background-color: var(--sidebar-link-hover-bg-color);
     text-decoration: underline;
-    border-left: 4px solid #007bff;
+    border-left: 4px solid var(--main-theme-color);
 }
 
 

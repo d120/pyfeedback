@@ -2,26 +2,34 @@
 {% load static %}
 {% load translate_url %}
 
-<div class="header-wrapper">
+<div class="header-top-container-wrapper">
+
     <div class="header-top-container">
         <div class="header-side-container">
 
             <div>
                 <a id="mainLogo" href="https://www.fachschaft.informatik.tu-darmstadt.de" >
-                    <img class="header-logo" src="{% static 'img/d120_logo.svg' %}" alt="D120: Fachschaft Informatik"/>
+                    <div class="dark-only">
+                        <img class="header-logo header-logo-big" src="{% static 'img/d120-breit-transparent-dunkel-pfad.svg' %}" alt="D120: Fachschaft Informatik"/>
+                        <img class="header-logo header-logo-small" src="{% static 'img/d120-schmal-dunkel-pfad.svg' %}" alt="D120: Fachschaft Informatik"/>
+                    </div>
+                    <div class="light-only">
+                        <img class="header-logo header-logo-big" src="{% static 'img/d120-breit-transparent-hell-pfad.svg' %}" alt="D120: Fachschaft Informatik"/>
+                        <img class="header-logo header-logo-small" src="{% static 'img/d120-schmal-hell-pfad.svg' %}" alt="D120: Fachschaft Informatik"/>
+                    </div> 
                 </a>
             </div>
 
             <nav class="navigation">
                 <div>
-                    <a href="https://www.fachschaft.informatik.tu-darmstadt.de">
-                        <i class="fa fa-home fa-lg"></i> <span class="d-none d-sm-inline">{% translate "Webseite" %}</span>
+                    <a class="header-link" href="https://www.fachschaft.informatik.tu-darmstadt.de">
+                        <i class="fa fa-home fa-lg"></i> <span class="header-label">{% translate "Webseite" %}</span>
                     </a>
                 </div>
 
                 <div>
-                    <a href="https://www.informatik.tu-darmstadt.de">
-                        <i class="fa fa-university fa-lg"></i> <span class="d-none d-sm-inline">{% translate "Fachbereich" %}</span>
+                    <a class="header-link" href="https://www.informatik.tu-darmstadt.de">
+                        <i class="fa fa-university fa-lg"></i> <span class="header-label">{% translate "Fachbereich" %}</span>
                     </a>
                 </div>
             </nav>
@@ -31,52 +39,55 @@
 
         
         <div class="header-side-container">
-            <div class="auth-wrapper">
-                {% if user.is_authenticated %}
-                    <form action="{% url 'feedback:logout' %}" method="post" class="auth-form">
-                        {% csrf_token %}
-                        <button type="submit" class="auth-btn">
-                            <i class="fa fa-sign-out"></i> {% translate "Ausloggen" %}
-                        </button>
-                    </form>
-                {% else %}
-                    <a href="{% url 'feedback:auth-login' %}" class="auth-btn">
-                        <i class="fa fa-sign-in"></i> {% translate "Einloggen" %}
+            <nav class="navigation">
+                <div class="auth-wrapper">
+                    {% if user.is_authenticated %}
+                        <form action="{% url 'feedback:logout' %}" method="post" class="auth-form">
+                            {% csrf_token %}
+                            <button type="submit" class="header-button">
+                                <i class="fa fa-sign-out fa-lg"></i> <span class="header-label">{% translate "Ausloggen" %}</span>
+                            </button>
+                        </form>
+                    {% else %}
+                        <a href="{% url 'feedback:auth-login' %}" class="header-button">
+                            <i class="fa fa-sign-in fa-lg"></i> <span class="header-label">{% translate "Einloggen" %}</span>
+                        </a>
+                    {% endif %}
+                </div>
+
+                <button id="theme-button" class="header-button">
+                    <i id="theme-icon" class="fa fa-adjust fa-lg"></i> <span class="header-label">{% translate "Stil" %}</span>
+                </button>
+
+                <div class="dropdown">
+                    <a class="header-link dropdown-trigger" href="#">
+                        {% get_current_language as CURRENT_LANG %}
+                        {% get_language_info for CURRENT_LANG as lang %}
+                        <i class="fa fa-globe fa-lg"></i> 
+                        <span class="header-label">{{ lang.name_local }}</span>
                     </a>
-                {% endif %}
-            </div>
+                    <ul class="dropdown-content">
+                        {% get_available_languages as LANGUAGES %}
+                        {% get_language_info_list for LANGUAGES as languages %}
+                        {% for language in languages %}
+                            <li>
+                                <a class="dropdown-item" href="{% translate_url language.code %}">
+                                    {{ language.name_local }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </nav>
 
-            <button id="theme-button" class="header-button header-navbar-link">
-                <i id="theme-icon" class="fa fa-adjust fa-lg"></i> <span class="d-none d-sm-inline">{% translate "Stil" %}</span>
-            </button>
-
-            <div class="dropdown">
-                <a class="dropdown-trigger header-navbar-link" href="#">
-                    {% get_current_language as CURRENT_LANG %}
-                    {% get_language_info for CURRENT_LANG as lang %}
-                    <i class="fa fa-globe fa-lg"></i> 
-                    <span class="d-none d-sm-inline">{{ lang.name_local }}</span>
+            <div>
+                <a href="https://www.tu-darmstadt.de" id="responsivelogo">
+                    <img class="header-logo header-logo-big" src="{% static 'img/tud.svg' %}" alt="Technische Universität Darmstadt" />
+                    <img class="header-logo header-logo-small" src="{% static 'img/tud_small.svg' %}" alt="Technische Universität Darmstadt" />
                 </a>
-                <ul class="dropdown-content">
-                    {% get_available_languages as LANGUAGES %}
-                    {% get_language_info_list for LANGUAGES as languages %}
-                    {% for language in languages %}
-                        <li>
-                            <a href="{% translate_url language.code %}">
-                                {{ language.name_local }}
-                            </a>
-                        </li>
-                    {% endfor %}
-                </ul>
             </div>
-
-            <a href="https://www.tu-darmstadt.de" id="responsivelogo">
-                <img class="header-logo" src="{% static 'img/tu_da_logo.svg' %}" alt="Technische Universität Darmstadt" />
-            </a>
 
         </div>
-        
     </div>
+
 </div>
-
-

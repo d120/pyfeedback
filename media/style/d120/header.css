@@ -1,0 +1,201 @@
+@import url('../colors.css');
+
+header {
+  background-color: var(--main-background-color);
+  color: var(--main-theme-color);
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  border-top: 14px solid var(--main-theme-color);
+  border-bottom: 1px solid var(--main-theme-color);
+}
+
+/* navbar and container */
+.header-top-container-wrapper {
+  border-top: 3px solid var(--main-background-color);
+}
+
+.header-top-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  background-color: var(--main-background-color);
+  border-top: 1px solid var(--main-theme-color);
+}
+
+.header-side-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  gap: calc(10px + 1vw);
+}
+
+.navigation {
+  display: flex;
+  flex-direction: row;
+}
+
+/* general link and button */
+
+.header-label {
+    display: none;
+}
+
+@media (min-width: 576px) {
+    .header-label {
+        display: inline;
+    }
+}
+
+.header-link {
+  text-decoration: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--header-link-highlight);
+  padding: 1rem 1.5rem; 
+  font-size: 1rem; 
+  line-height: 1.2;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+}
+
+
+.header-button {
+  background-color: transparent;
+  color: var(--header-link-highlight);
+  border: none;
+  text-decoration: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 1rem 1.5rem; 
+  font-size: 1rem; 
+  line-height: 1.2;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+}
+
+@media (max-width: 991px) and (min-width: 576px) {
+  .header-link, .header-button {
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    gap: 2px;
+  }
+  
+  .header-label {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 575px) {
+  .header-label {
+    display: none;
+  }
+}
+
+.header-link:hover, .header-button:hover {
+  text-decoration: none;
+  background-color: var(--header-link-highlight-bg);
+  border-top: 1px solid var(--main-theme-color);
+  border-bottom: 1px solid var(--main-theme-color);
+}
+
+/* language dropdown menu */
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: var(--header-dropdown-bg);
+  min-width: 160px;
+  z-index: 10;
+  list-style: none;
+  padding: 5px;
+  margin: 0;
+  border: 1px solid var(--header-dropdown-border);
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown-item {
+  color: var(--main-theme-color);
+  text-decoration: none;
+  display: block;
+  font-size: 0.9rem;
+  padding: 5px 15px;
+  border-left: 4px solid transparent;
+}
+
+.dropdown-item:hover {
+  background-color: var(--header-dropdown-li-bg-highlight);
+
+  border-left: 4px solid var(--header-dropdown-li-side-border);
+}
+
+
+/* login stuff */
+
+.auth-wrapper {
+    display: inline-block;
+}
+
+.auth-form {
+    display: inline;
+    margin: 0;
+}
+
+/* fachsschaft logo behaviour (also respnsive) */
+
+.header-logo {
+  max-height: 80px;
+  display: none;
+  width: auto;
+}
+
+@media (min-width: 480px) and (max-width: 767px) {
+  .header-logo-small {
+    display: block;
+  }
+}
+
+@media (min-width: 768px) {
+  .header-logo-big {
+    display: block;
+  }
+}
+
+
+@keyframes hue {
+  from {
+    filter: brightness(4) hue-rotate(0deg);
+  }
+  to {
+    filter: brightness(4) hue-rotate(360deg);
+  }
+}
+
+#mainLogo {
+  animation: 16s linear 0s infinite normal both running hue;
+  background-color: transparent;
+  display: block;
+}
+
+#mainLogo:hover {
+  background-color: transparent;
+}

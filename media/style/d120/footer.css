@@ -2,7 +2,7 @@
 
 footer {
     background-color: var(--footer-bg-color);
-    color: var(--footer-color);
+    color: var(--main-theme-color);
     margin-top: auto;
 }
 footer p {
