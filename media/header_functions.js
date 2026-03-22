@@ -1,13 +1,18 @@
-const btn = document.getElementById('theme-button');
+window.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('theme-button');
 
-btn.addEventListener('click', () => {
-    const body = document.body;
+    if (!btn) return;
+    
+    btn.addEventListener('click', () => {
+        const html = document.documentElement;
+        const isDark = html.classList.contains('dark');
+        const newTheme = isDark ? 'light' : 'dark';
 
-    if (body.classList.contains('light')) {
-        body.classList.replace('light', 'dark');
-    } else {
-        body.classList.replace('dark', 'light');
-    }
+        html.classList.remove('light', 'dark');
+        html.classList.add(newTheme);
+
+        localStorage.setItem('theme', newTheme);
+    });
 });
 
 document.querySelector('.dropdown-trigger').addEventListener('click', function(e) {

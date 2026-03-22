@@ -7,30 +7,38 @@
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 
 	<link rel="stylesheet" type="text/css" href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}" />
-  <link rel="stylesheet" type="text/css" href="{% static 'font-awesome/css/font-awesome.min.css' %}" />
-  <link rel="stylesheet" type="text/css" href="{% static '@fontsource/libre-franklin/index.css' %}" />
-  <link rel="stylesheet" type="text/css" href="{% static 'style/custom.css' %}" />
-  <link rel="stylesheet" type="text/css" href="{% static 'style/d120/header.css' %}" />
-  <link rel="stylesheet" type="text/css" href="{% static 'style/d120/footer.css' %}" />
-  <link rel="stylesheet" type="text/css" href="{% static 'style/d120/sidebar.css' %}" />
-  <link rel="stylesheet" type="text/css" href="{% static 'style/intern-dashboard.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'font-awesome/css/font-awesome.min.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static '@fontsource/libre-franklin/index.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'style/custom.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'style/d120/header.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'style/d120/footer.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'style/d120/sidebar.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'style/intern-dashboard.css' %}" />
 
 	<link rel="stylesheet" type="text/css" href="{% static 'style/ranking.css' %}" /> {% block extra_header %}{% endblock %}
+
+	<script>
+		// this makes sure that theme is set before loading DOM
+		(function() {
+			const saved = localStorage.getItem('theme');
+			const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+			
+			const theme = saved || (systemDark ? 'dark' : 'light');
+			document.documentElement.classList.add(theme);
+		})();
+	</script>
 </head>
 
-<body class="dark">
+<body>
 	<header>
 		{% include 'd120/header.html' %}
 	</header>
 
 	<main>
-
 		<div id="main" class="main-area">
-
 			<div class="sidebar-area">
 				{% include 'd120/sidebar.html' %}
 			</div>
-
 			<div id="content" class="content-area">
 
 				{% if request.session.orig_uid %}
@@ -38,7 +46,6 @@
 					{% blocktranslate %}Du nutzt momentan die Rechte der Veranstalter von {{veranstaltung}}.{% endblocktranslate %} <a href="{% url 'feedback:rechte_zuruecknehmen' %}">{% translate "Zu meinem Account zurückkehren." %}</a>
 				</div>
 				{% endif %}
-				
 
 				{% if messages %}
 				<ul class="messagelist">
@@ -53,11 +60,8 @@
 				<div>
 					{% block content %}{% endblock %}
 				</div>
-
 			</div>
-
 		</div>
-
 	</main>
 
 	<footer>
