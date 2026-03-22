@@ -44,15 +44,10 @@
     display: none;
 }
 
-body.dark .dark-only {
+html.dark .dark-only {
     display: block;
 }
 
-body.light .light-only {
+html.light .light-only {
     display: block;
-}
-
-@media (prefers-color-scheme: dark) {
-  .light-version { display: none; }
-  .dark-version { display: block; }
 }
