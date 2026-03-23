@@ -1,4 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>{% load static %}{% load i18n %}
+{% load static %}
+{% load i18n %}
+
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 
@@ -10,12 +13,14 @@
 	<link rel="stylesheet" type="text/css" href="{% static 'font-awesome/css/font-awesome.min.css' %}" />
 	<link rel="stylesheet" type="text/css" href="{% static '@fontsource/libre-franklin/index.css' %}" />
 	<link rel="stylesheet" type="text/css" href="{% static 'style/custom.css' %}" />
+	
 	<link rel="stylesheet" type="text/css" href="{% static 'style/d120/header.css' %}" />
 	<link rel="stylesheet" type="text/css" href="{% static 'style/d120/footer.css' %}" />
 	<link rel="stylesheet" type="text/css" href="{% static 'style/d120/sidebar.css' %}" />
-	<link rel="stylesheet" type="text/css" href="{% static 'style/intern-dashboard.css' %}" />
 
-	<link rel="stylesheet" type="text/css" href="{% static 'style/ranking.css' %}" /> {% block extra_header %}{% endblock %}
+	<link rel="stylesheet" type="text/css" href="{% static 'style/ranking.css' %}" /> 
+	
+	{% block extra_header %}{% endblock %}
 
 	<script>
 		// this makes sure that theme is set before loading DOM

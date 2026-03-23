@@ -1,6 +1,11 @@
 {% extends "bestellung_base.html" %}
 {% load i18n %}
 {% load static %}
+
+{% block extra_header %}
+    <link rel="stylesheet" type="text/css" href="{% static 'style/intern-dashboard.css' %}" />
+{% endblock %}
+
 {% block title %}
     {% translate "Interner Bereich" %}
 {% endblock %}
