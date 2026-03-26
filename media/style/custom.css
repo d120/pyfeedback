@@ -10,7 +10,6 @@ body {
     display: flex;
     flex-direction: column;
     background-color: var(--main-background-color);
-    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 body.cke_editable {
@@ -103,6 +102,10 @@ h1,h2,h3,h4,h5 {
     flex: 3.5; 
     min-width: 0;
     text-align: justify;
+}
+
+#backlink {
+    text-align: right;
 }
 
 /* Custom Message List */

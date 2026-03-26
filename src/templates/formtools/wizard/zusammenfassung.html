@@ -1,44 +1,19 @@
 {% extends "formtools/wizard/base.html" %}{% load static %}
 {% load i18n %}
 
+<!-- not used tutor elements are commented out -->
+
 {% block child_extra_header %}
-    <link rel="stylesheet" type="text/css" href="{% static 'style/tutoren.css' %}" />
+    <!-- <link rel="stylesheet" type="text/css" href="{% static 'style/tutoren.css' %}" /> -->
+    <link rel="stylesheet" href="{% static 'style/formtools/zusammenfassung.css' %}">
 
-    <script type="text/javascript" src="{% static 'jquery/dist/jquery.min.js' %}"></script>
+    <!-- <script type="text/javascript" src="{% static 'jquery/dist/jquery.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'jquery-ui/dist/jquery-ui.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'tutoren.js' %}"></script>
-
-    <style>
-        .summary_table {
-            border-spacing: 5px;
-        }
-        .summary_table th {
-            text-align: left;
-            vertical-align: top;
-        }
-        .summary_table td p {
-            margin-bottom: 0px;
-        }
-        .tutoren_title {
-            font-weight: bold;
-            font-size: 12px;
-            margin-left: 5px;
-            margin-bottom: 0px;
-        }
-        .summary-label:first-letter {
-            text-transform: uppercase;
-        }
-        #table_tutoren_csvview {
-            margin-bottom: 8px;
-        }
-        #table_tutoren_csvview table {
-            border: 1px solid #636363;
-        }
-    </style>
+    <script type="text/javascript" src="{% static 'tutoren.js' %}"></script> -->
 {% endblock %}
 
 {% block feedback_veranstalter_form %}
-    <h2>{% translate "Zusammenfassung der Fragebogenbestellung" %}</h2>
+    <h2 class="form-main-header">{% translate "Zusammenfassung der Fragebogenbestellung" %}</h2>
 
     <table class="summary_table">
         {% for form_data in all_form_data %}
@@ -57,19 +32,19 @@
         {% endfor %}
 
     </table>
-    {% if tutoren_csv %}
+    <!-- {% if tutoren_csv %}
         <p class="tutoren_title">{% translate "Tutoren" %}</p>
         <div id="table_tutoren_csvview">{{ tutoren_csv }}</div>
-    {% endif %}
+    {% endif %} -->
 {% endblock %}
 
-{% block javascript_block %}
-<script>
+{% block extra_javascript_block %}
+<!-- <script>
     $(document).ready(function() {
         create_csv_table(
             $("#table_tutoren_csvview"),
             $("#table_tutoren_csvview").text()
         );
     });
-</script>
+</script> -->
 {% endblock %}

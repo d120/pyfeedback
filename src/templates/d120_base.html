@@ -59,9 +59,11 @@
 					{% endfor %}
 				</ul>
 				{% endif %}
+
+				<div id="backlink">
+					{% block backlink %}{% endblock %}
+				</div>
 				
-				{% block backlink %}{% endblock %}
-				<br>
 				<div>
 					{% block content %}{% endblock %}
 				</div>
@@ -79,6 +81,7 @@
 		<script src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
 
 		<script src="{% static 'header_functions.js' %}"></script>
+		{% block extra_javascript_block %}{% endblock %}
     {% endblock %}
 </body>
 

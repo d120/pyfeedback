@@ -1,11 +1,11 @@
-{% extends "bestellung_base.html" %}
+{% extends "formtools/wizard/base.html" %}
 {% load i18n %}
 
 {% block content %}
-    <h3>{% translate "Die Bestellung wurde entgegengenommen" %}</h3>
+    <h3 class="form-main-header ">{% translate "Die Bestellung wurde entgegengenommen" %}</h3>
 
     <form action = "{% url 'feedback:veranstalter-logout' %}" method="post">
         {% csrf_token %}
-        <button type="submit" class="btn btn-link p-0" style="color: #009D81;">{% translate "Ausloggen" %}</button>
+        <button class="form-button form-button-forward" type="submit">{% translate "Ausloggen" %}</button>
     </form>
 {% endblock %}

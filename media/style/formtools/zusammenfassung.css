@@ -1,0 +1,57 @@
+@import url('../colors.css');
+
+.summary_table {
+    border-collapse: collapse; 
+    width: 100%;
+    max-width: 900px;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.summary_table tr {
+    border-bottom: 1px solid var(--form-not-highlighted);
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.summary_table th, 
+.summary_table td {
+    text-align: left;
+    vertical-align: top;
+    padding: 10px 20px 10px 5px;
+}
+
+.summary_table td {
+    flex: 1;
+    min-width: 250px;
+    word-break: break-word;
+}
+
+.summary-label {
+    width: 200px;
+    flex-shrink: 0;
+}
+
+.summary_table td p {
+    margin-bottom: 0px;
+}
+
+.summary-label:first-letter {
+    text-transform: uppercase;
+}
+
+.tutoren_title {
+    font-weight: bold;
+    font-size: 12px;
+    margin-left: 5px;
+    margin-bottom: 0px;
+}
+
+#table_tutoren_csvview {
+    margin-bottom: 8px;
+}
+
+#table_tutoren_csvview table {
+    border: 1px solid var(--form-not-highlighted);
+}

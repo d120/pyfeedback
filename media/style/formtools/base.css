@@ -1,0 +1,180 @@
+@import url("../colors.css");
+
+/* other stuff */
+
+.required-field {
+    color: var(--form-required);
+}
+
+#veranstaltung-info {
+    font-size: 14px;
+}
+
+#veranstaltung-name {
+    color: var(--form-highlight);
+}
+
+/* Progressbar and container */
+
+.progressbar_container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    margin: 10px;
+}
+
+.progressbar_container .progress_bar_item:last-child {
+    border-right: 0;
+}
+
+.progress_bar_item {
+    padding: 5px;
+    background-color: var(--form-not-highlighted);
+    cursor: default;
+    border: none;
+    border-right: 1px dashed var(--main-background-color);
+}
+.progress_bar_item.item_active {
+    background-color: var(--form-main-color);
+    cursor: pointer;
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+}
+.item_disabled_active {
+    background-color: var(--form-progressbar-disabled-active);
+    color: var(--main-theme-color);
+}
+.progress_bar_item.item_active:hover {
+    background-color: var(--form-main-color-hover);
+    border-top: 1px solid var(--main-theme-color);
+    border-bottom: 1px solid var(--main-theme-color);
+}
+
+
+/* form button */
+
+.form-button {
+    border: none;
+    text-decoration: none;
+    padding: 0.5rem 1rem; 
+    font-size: 1rem;
+    line-height: 1.2;
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+}
+
+.form-button-forward {
+    background-color: var(--form-main-color);
+}
+
+.form-button-forward:hover {
+    background-color: var(--form-main-color-hover);
+    text-decoration: none;
+    border-top: 1px solid var(--main-theme-color);
+    border-bottom: 1px solid var(--main-theme-color);
+}
+
+.form-button-back {
+    background-color: var(--form-back-button);
+}
+
+.form-button-back:hover {
+    background-color: var(--form-back-button-hover);
+    text-decoration: none;
+    border-top: 1px solid var(--main-theme-color);
+    border-bottom: 1px solid var(--main-theme-color);
+}
+
+
+/* form elements */
+
+.form-main-header {
+    color: var(--form-highlight);
+    font-style: italic;
+    font-weight: 800;
+    font-size: 1.5rem;
+    letter-spacing: -0.5px;
+    margin-bottom: 1.5rem;
+    margin-top: 1.5rem;
+    border-bottom: 3px solid var(--form-highlight);
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+select {
+    background-color: var(--main-background-color);
+    color: var(--main-theme-color);
+    border: 1px solid var(--form-main-color);
+}
+
+table {
+    border-spacing: 100px;
+}
+table th {
+    vertical-align: top;
+}
+table .helptext {
+    color: rgba(184, 87, 0, 0.8);
+}
+
+.wizard_form_table label.required:after {
+    color: var(--form-not-highlighted);
+    content: '*'
+}
+
+input[type="number"] {
+    color: var(--main-theme-color);
+    background-color: var(--main-background-color);
+    border: 1px solid var(--form-main-color);
+    -moz-appearance: textfield; /* removes up and down arrows */
+    appearance: textfield;
+}
+
+input::-webkit-outer-spin-button, /* removes up and down arrows for other browsers */
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--form-main-color);
+    box-shadow: 0 0 7px var(--form-main-color);
+}
+
+input[type="radio"] {
+    accent-color: var(--form-main-color);
+    cursor: pointer;
+}
+
+input[type="checkbox"] {
+    color: var(--main-theme-color);
+    accent-color: var(--form-main-color);
+    border: none;
+    cursor: pointer;
+}
+
+input[type="checkbox"]::before {
+    background-color: var(--main-background-color);
+}
+
+input[type="date"] {
+    color: var(--main-theme-color);
+    background-color: var(--main-background-color);
+    border: 1px solid var(--form-main-color);
+}
+
+textarea {
+    color: var(--main-theme-color);
+    background-color: var(--main-background-color);
+    border: 1px solid var(--form-main-color);
+}
+
+textarea:focus {
+    outline: none;
+    border-color: var(--form-main-color);
+    box-shadow: 0 0 7px var(--form-main-color);
+}

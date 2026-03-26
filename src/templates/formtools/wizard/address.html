@@ -6,11 +6,11 @@
 {% endblock %}
 
 {% block feedback_veranstalter_form %}
-    <h3>{% translate "Erfassung der Daten des Verantwortlichen: " %}<b class="verantwortlich">{{ basisdaten.verantwortlich }}</b></h3>
+    <h3 class="form-main-header">{% translate "Erfassung der Daten des Verantwortlichen: " %}<b class="verantwortlich">{{ basisdaten.verantwortlich }}</b></h3>
     {{ wizard.form }}
 {% endblock %}
 
-{% block javascript_block %}
+{% block extra_javascript_block %}
 <script>
     $(document).ready(function() {
         var verantwortlich = $(".verantwortlich").text();
