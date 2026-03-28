@@ -1,4 +1,9 @@
 {% load i18n %}
+{% load static %}
+
+{% block extra_header %}
+  <link rel="stylesheet" type="text/css" href="{% static 'style/d120/sidebar.css' %}" />
+{% endblock %}
 
 <nav id="sidebar">
   <ul class="sidebar-active">

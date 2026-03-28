@@ -3,13 +3,13 @@
 body {
     font-family: var(--font-main);
     font-size: 15px;
-    line-height: 200%;
     color: var(--main-theme-color);
+    background-color: var(--main-background-color);
+    line-height: 200%;
     overflow-y: scroll;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    background-color: var(--main-background-color);
 }
 
 /* main page layout */
@@ -19,7 +19,6 @@ body {
     flex-direction: row;
     align-items: flex-start;
     gap: 5%;
-    width: 100%;
     padding: 5%;
 }
 

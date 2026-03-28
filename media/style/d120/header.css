@@ -59,8 +59,8 @@ header {
   justify-content: center;
   gap: 8px;
   color: var(--header-link-highlight);
-  padding: 1rem 1.5rem; 
-  font-size: 1rem; 
+  padding: 1rem 1.5rem;
+  font-size: 1rem;
   line-height: 1.2;
   border-top: 1px solid transparent;
   border-bottom: 1px solid transparent;
@@ -77,8 +77,8 @@ header {
   justify-content: center;
   align-items: center;
   gap: 8px;
-  padding: 1rem 1.5rem; 
-  font-size: 1rem; 
+  padding: 1rem 1.5rem;
+  font-size: 1rem;
   line-height: 1.2;
   border-top: 1px solid transparent;
   border-bottom: 1px solid transparent;
@@ -91,7 +91,7 @@ header {
     text-align: center;
     gap: 2px;
   }
-  
+
   .header-label {
     font-size: 0.8rem;
   }
