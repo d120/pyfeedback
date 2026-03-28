@@ -1,6 +1,7 @@
 @import url('../colors.css');
 
 header {
+  font-family: var(--font-second);
   background-color: var(--main-background-color);
   color: var(--main-theme-color);
   width: 100%;

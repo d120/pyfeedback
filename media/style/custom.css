@@ -1,7 +1,7 @@
 @import url('colors.css');
 
 body {
-    font-family: 'Libre Franklin', Helvetica, Arial, sans-serif;
+    font-family: var(--font-main);
     font-size: 15px;
     line-height: 200%;
     color: var(--main-theme-color);
@@ -12,78 +12,7 @@ body {
     background-color: var(--main-background-color);
 }
 
-body.cke_editable {
-    margin: 8px;
-}
-
-
-a {
-  text-decoration: none;
-  color: var(--link-color);
-}
-
-a:hover {
-  text-decoration: underline;
-  background-color: var(--link-hover-bg-color);
-}
-
-
-.right {
-    float: right;
-    margin-top: 25px;
-    margin-bottom: 25px;
-    margin-left: 25px;
-}
-.left {
-    float: left;
-    margin-top: 25px;
-    margin-bottom: 25px;
-    margin-right: 25px;
-}
-.language-chooser{
-    margin-left: 10px;
-}
-li.headline:hover {
-    background-color: transparent;
-}
-.rss-plugin {
-    margin-top: 50px;
-}
-.feed-entry-date {
-    text-align: right;
-}
-.feed-entry {
-    border-bottom: 2px solid #444444;
-    padding-bottom: 15px;
-    margin-top: 25px;
-}
-
-.additionalMargin {
-    margin-bottom: 25px;
-}
-.announcement {
-    border-left: 3px solid #b90f22;
-    background-color: #f9d6d6;
-    margin-top: 25px;
-    padding: 20px 20px 10px 20px;
-}
-.announcement:empty {
-    display: none;
-}
-h1,h2,h3,h4,h5 {
-    text-align:left;
-}
-
-.table h1,h2,h3,h4,h5 {
-    margin-top:5px;
-}
-
-.table .table {
-    margin-bottom:0;
-}
-
-
-
+/* main page layout */
 
 .main-area {
     display: flex;
@@ -108,7 +37,8 @@ h1,h2,h3,h4,h5 {
     text-align: right;
 }
 
-/* Custom Message List */
+/* message lists  */
+
 .messagelist {
     list-style: none;
     padding: 0;
@@ -125,8 +55,9 @@ h1,h2,h3,h4,h5 {
 .messagelist li.success { background-color: #d4edda; color: #155724; }
 .messagelist li.error { background-color: #f8d7da; color: #721c24; }
 
-/* Breadcrumbs */
-.breadcrumbs {
+/* breadcrumb */
+
+.breadcrumb {
     background: #e9ecef;
     padding: 10px 15px;
     border-radius: 4px;
@@ -134,6 +65,26 @@ h1,h2,h3,h4,h5 {
     font-size: 0.9rem;
 }
 
-.breadcrumb>li{
-    display: inline;
+/* main general elements */
+
+a {
+  text-decoration: none;
+  color: var(--link-color);
+}
+
+a:hover {
+  text-decoration: underline;
+  background-color: var(--link-hover-bg-color);
+}
+
+h1,h2,h3,h4,h5 {
+    text-align:left;
+}
+
+.table h1,h2,h3,h4,h5 {
+    margin-top:5px;
+}
+
+.table .table {
+    margin-bottom:0;
 }

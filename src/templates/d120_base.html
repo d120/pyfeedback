@@ -47,7 +47,7 @@
 			<div id="content" class="content-area">
 
 				{% if request.session.orig_uid %}
-				<div class="breadcrumbs">
+				<div class="breadcrumb">
 					{% blocktranslate %}Du nutzt momentan die Rechte der Veranstalter von {{veranstaltung}}.{% endblocktranslate %} <a href="{% url 'feedback:rechte_zuruecknehmen' %}">{% translate "Zu meinem Account zurückkehren." %}</a>
 				</div>
 				{% endif %}
