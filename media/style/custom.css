@@ -19,11 +19,12 @@ body {
     flex-direction: row;
     align-items: flex-start;
     gap: 5%;
-    padding: 5%;
+    padding: 3%;
 }
 
 .sidebar-area {
     flex: 1;
+    padding-left: 0%;
 }
 
 .content-area {

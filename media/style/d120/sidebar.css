@@ -14,7 +14,8 @@
 
 .sidebar-active li {
     list-style: none;
-    padding: 0;
+    padding-right: 15%;
+    padding-left: 5%;
 }
 
 
