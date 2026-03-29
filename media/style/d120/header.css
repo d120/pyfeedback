@@ -197,9 +197,11 @@ header {
 #mainLogo {
   animation: 16s linear 0s infinite normal both running hue;
   background-color: transparent;
+  border: 0;
   display: block;
 }
 
 #mainLogo:hover {
   background-color: transparent;
+  border: 0;
 }
