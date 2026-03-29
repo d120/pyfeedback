@@ -64,6 +64,10 @@
   --link-hover: #c4b5fd;
   --link-bottom: #444;
 
+  --button-primary: #a29bfe;
+  --button-primary-hover: #c4b5fd;
+  --button-secondary-bg-hover: #222;
+
   --footer-bg-color: #222;
 }
 
@@ -104,6 +108,10 @@
   --link-color:#5f27cd;
   --link-hover: #341f97;
   --link-bottom: #ccc;
+
+  --button-primary: #5f27cd;
+  --button-primary-hover: #341f97;
+  --button-secondary-bg-hover: #ddd;
 
   --footer-bg-color: #eee;
 }
