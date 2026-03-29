@@ -104,6 +104,7 @@ header {
 }
 
 .header-link:hover, .header-button:hover {
+  color: var(--header-link-highlight);
   text-decoration: none;
   background-color: var(--header-link-highlight-bg);
   border-top: 1px solid var(--main-theme-color);
@@ -141,11 +142,13 @@ header {
   font-size: 0.9rem;
   padding: 5px 15px;
   border-left: 4px solid transparent;
+  border-bottom: 2px solid var(--sidebar-link-hover-bg-color);
 }
 
 .dropdown-item:hover {
+  color: var(--main-theme-color);
   background-color: var(--header-dropdown-li-bg-highlight);
-
+  border-bottom: 2px solid var(--sidebar-link-hover-bg-color);
   border-left: 4px solid var(--header-dropdown-li-side-border);
 }
 

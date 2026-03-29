@@ -68,13 +68,15 @@ body {
 /* main general elements */
 
 a {
-  text-decoration: none;
   color: var(--link-color);
+  text-decoration: none;
+  border-bottom: 2px solid var(--link-bottom);
+  transition: all 0.2s ease;
 }
 
 a:hover {
-  text-decoration: underline;
-  background-color: var(--link-hover-bg-color);
+  color: var(--link-hover);
+  border-bottom-color: var(--link-hover);
 }
 
 h1,h2,h3,h4,h5 {
@@ -87,4 +89,17 @@ h1,h2,h3,h4,h5 {
 
 .table .table {
     margin-bottom:0;
+}
+
+h1 {
+    color: var(--form-highlight);
+    font-style: italic;
+    font-weight: 800;
+    font-size: 1.5rem;
+    letter-spacing: -0.5px;
+    margin-bottom: 1.5rem;
+    margin-top: 1.5rem;
+    border-bottom: 3px solid var(--form-highlight);
+    display: inline-block;
+    padding-bottom: 5px;
 }
