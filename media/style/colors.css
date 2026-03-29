@@ -33,6 +33,7 @@
 
   /* Color Variables */
   --main-theme-color: #e0e0e0;
+  --main-secondary-bg-color: #444;
   --main-background-color: #181818;
   --warning: #f00;
   
@@ -55,6 +56,10 @@
   --form-back-button: #7e7e7e;
   --form-back-button-hover: #5f5f5f;
 
+  --progressbar-detail-color: #888;
+  --progressbar-start-color: #6c5ce7;
+  --progressbar-end-color: #a29bfe;
+
   --link-color:#3aa2ae;
   --link-hover-bg-color: #2c2c2c;
 
@@ -68,6 +73,7 @@
 
   /* Color Variables */
   --main-theme-color: #181818;
+  --main-secondary-bg-color: #777;
   --main-background-color: #fff;
   --warning: #f00;
 
@@ -89,6 +95,10 @@
   --form-progressbar-disabled-active: #b5e2e7; 
   --form-back-button: #9e9e9e;
   --form-back-button-hover: #757575;
+
+  --progressbar-detail-color: #999;
+  --progressbar-start-color: #5f27cd;
+  --progressbar-end-color: #9c88ff;
 
   --link-color:#3aa2ae;
   --link-hover-bg-color: #c3c3c3;

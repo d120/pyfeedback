@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block extra_header %}
-    <link rel="stylesheet" type="text/css" href="{% static 'style/intern-dashboard.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'style/intern/index.css' %}" />
 {% endblock %}
 
 {% block title %}
@@ -12,24 +12,41 @@
 
 {% block content %}
 
-<div class="dashboard-container">
-    
+
+<div class="dashboard-wrapper">
     <div class="dashboard-main">
         <h1>{% translate "Interner Bereich" %}</h1>
         
-        <br>
+        <div class="dashboard-progressbar">
+            <h3 id="progressbar-label">
+                {% translate "Status" %}
+                <span class="label-detail">{% translate "der Rückmeldungen durch die Veranstalter" %}</span>
+            </h3>
+            
+            <div class="progress-track">
+                <div id="status-bar" class="progress-fill" data-value="{{ relativ_result|floatformat:-2 }}"></div>
+                <div class="progress-inside">{{ relativ_result|floatformat:-2 }} %</div>
+            </div>
 
-        <ul>
-            <li><a href="{% url 'admin:index' %}" target="_blank">{% translate "Verwaltung der Daten" %}</a></li>
-            <li><a href="{% url 'feedback:rechte-uebernehmen' %}">{% translate "zu Veranstalter-Account wechseln" %}</a></li>
-            <li><a href="{% url 'feedback:sendmail' %}">{% translate "Mail an Veranstalter verschicken" %}</a></li>
-            <li><a href="{% url 'feedback:fragebogensprache' %}">{% translate "Zuordnung Veranstaltungen zu Fragebogensprache" %}</a></li>
-            <li><a href="{% url 'feedback:lange_ohne_evaluation' %}">{% translate "Veranstaltungen die lange nicht mehr evaluiert wurden" %}</a></li>
-            <li><a href="{% url 'feedback:free-questions' %}">{% translate "Liste der Veranstaltungen mit freien Fragen" %}</a></li>
-        </ul>
+            <p class="progress-detail">
+                {{ ruck_veranst }} / {{ all_veranst }}
+            </p>
+        </div>
 
-        <br>
+        <div>
+            <h3 style="padding: 0 5%;">{% translate "Allgemeines" %}</h3>
+            <ul class="dashboard-links">
+                <li><a href="{% url 'admin:index' %}" target="_blank">{% translate "Verwaltung der Daten" %}</a></li>
+                <li><a href="{% url 'feedback:rechte-uebernehmen' %}">{% translate "zu Veranstalter-Account wechseln" %}</a></li>
+                <li><a href="{% url 'feedback:sendmail' %}">{% translate "Mail an Veranstalter verschicken" %}</a></li>
+                <li><a href="{% url 'feedback:fragebogensprache' %}">{% translate "Zuordnung Veranstaltungen zu Fragebogensprache" %}</a></li>
+                <li><a href="{% url 'feedback:lange_ohne_evaluation' %}">{% translate "Veranstaltungen die lange nicht mehr evaluiert wurden" %}</a></li>
+                <li><a href="{% url 'feedback:free-questions' %}">{% translate "Liste der Veranstaltungen mit freien Fragen" %}</a></li>
+            </ul>
+        </div>
+    </div>
 
+    <div class="dashboard-side">
         <h3>{% translate "Ablauf" %}</h3>
         <p>{% blocktranslate %}Dies sind nicht alle nötigen Schritte; siehe <a href="https://www.d120.de/bookstack/books/feedback/page/feedback-ablauf%C3%BCbersicht" target="_blank">Ablauf im bookstack</a>.{% endblocktranslate %}</p>
 
@@ -48,39 +65,21 @@
             <li><a href="{% url 'admin:feedback_semester_change' cur_semester.id %}" target="_blank">{% translate "Ergebnisse veröffentlichen" %}</a>{% blocktranslate %} (aktuell: sichtbar für {{cur_semester.get_sichtbarkeit_display}}){% endblocktranslate %}</li>
             {% endif %}
         </ol>
-
     </div>
-
-    <div class="dashboard-sidebar">
-        <div>
-            <h3 id="sidebar-label">{% translate "Status" %}</h3>
-            <p class="label-detail">{% translate "der Rückmeldungen durch die Veranstalter" %}</p>
-            
-            <div class="progress-track">
-                <div id="status-bar" class="progress-fill" data-value="{{ relativ_result|floatformat:-2 }}"></div>
-            </div>
-
-            <div class="progress-label">{{ relativ_result|floatformat:-2 }} %</div>
-            <p class="progress-detail">
-                {{ ruck_veranst }} / {{ all_veranst }}
-            </p>
-        </div>
-    </div>
-    
 </div>
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const bar = document.getElementById('status-bar');
         const targetValue = bar.getAttribute('data-value');
-        
+
         setTimeout(() => {
             const safeValue = targetValue.replace(',', '.');
-            bar.style.height = safeValue + "%";
-        }, 100); 
+            bar.style.width = safeValue + "%";
+        }, 100);
     });
 </script>
 
 {% endblock %}
 
-{% block backlink %}<!-- kein Backlink -->{% endblock %}
+{% block backlink %}{% endblock %}
