@@ -33,6 +33,11 @@ footer .row {
     margin: 0.5em 0;
     text-align: center;
 }
+
+#github-icon, #github-icon:hover {
+    border: 0;
+}
+
 .footer-group + .footer-group:not(:last-child) {
 	margin: 0.5em 0;
 }
