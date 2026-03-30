@@ -146,6 +146,32 @@ input[type="file"]::file-selector-button:hover {
     background-color: var(--button-primary-hover);
 }
 
+/* select and option */
+
+select {
+    font-size: 1rem;
+    padding: 0.5rem 2rem 0.5rem 1rem;
+    line-height: 1.2;
+    cursor: pointer;
+
+    color: var(--button-primary);
+    background-color: var(--main-background-color);
+    border: 1px solid var(--main-secondary-bg-color);
+    border-radius: 4px;
+
+    transition: all 0.2s ease;
+}
+
+select:hover {
+    border-color: var(--button-primary-hover);
+}
+
+select:focus {
+    outline: none;
+    border-color: var(--button-primary-hover);
+    box-shadow: 0 0 0 2px var(--header-dropdown-li-bg-highlight);
+}
+
 /* headers */
 
 h1,h2,h3,h4,h5 {

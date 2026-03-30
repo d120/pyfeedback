@@ -8,10 +8,17 @@
 
 <p>{% translate "Hier kann eine alle evaluierten Veranstaltungen des gewählten Semesters enthaltende XML-Datei erzeugt werden, die in EvaSys importiert werden kann." %}</p>
 <p>
-<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+<form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
     {% include 'includes/semesterauswahl.html' %}
-    <input type="submit" name="xml_veranstaltung" value="{% translate "XML für Veranstaltungen erzeugen" %}" />
-    <input type="submit" name="xml_ubung" value="{% translate "XML für Übungen erzeugen" %}" />
+    
+    <button type="submit" name="xml_veranstaltung" class="primary">
+        {% translate 'XML für Veranstaltungen erzeugen' %}
+    </button>
+
+    <button type="submit" name="xml_ubung" class="primary">
+        {% translate 'XML für Übungen erzeugen' %}
+    </button>
 </form>
 </p>
 {% endblock %}

@@ -82,6 +82,7 @@ header {
   line-height: 1.2;
   border-top: 1px solid transparent;
   border-bottom: 1px solid transparent;
+  border-radius: 0;
 }
 
 @media (max-width: 991px) and (min-width: 576px) {
