@@ -65,7 +65,9 @@ body {
     font-size: 0.9rem;
 }
 
-/* main general elements */
+/* === main general elements === */
+
+/* anchor */
 
 a {
     color: var(--link-color);
@@ -79,6 +81,8 @@ a:hover {
     border-bottom-color: var(--link-hover);
 }
 
+/* primary and secondary buttons */
+
 button {
     cursor: pointer;
     text-decoration: none;
@@ -86,6 +90,8 @@ button {
     font-size: 1rem;
     line-height: 1.2;
     border: 1px solid transparent;
+    border-radius: 4px;
+    transition: all 0.2s ease;
 }
 
 button.primary {
@@ -108,6 +114,39 @@ button.secondary:hover {
     background-color: var(--button-secondary-bg-hover);
     border-color: var(--button-primary-hover);
 }
+
+/* input file */
+
+input[type="file"] {
+    color: var(--main-theme-color);
+    background-color: transparent;
+    border: 1px solid var(--form-not-highlighted);
+    border-radius: 4px;
+    padding: 4px;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+}
+
+input[type="file"]:hover {
+    border-color: var(--button-primary-hover);
+}
+
+input[type="file"]::file-selector-button {
+    color: var(--main-background-color);
+    background-color: var(--button-primary);
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    margin-right: 15px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+input[type="file"]::file-selector-button:hover {
+    background-color: var(--button-primary-hover);
+}
+
+/* headers */
 
 h1,h2,h3,h4,h5 {
     text-align:left;
