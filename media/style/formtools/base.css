@@ -54,46 +54,10 @@
 }
 
 
-/* form button */
-
-.form-button {
-    border: none;
-    text-decoration: none;
-    padding: 0.5rem 1rem; 
-    font-size: 1rem;
-    line-height: 1.2;
-    border-top: 1px solid transparent;
-    border-bottom: 1px solid transparent;
-}
-
-.form-button-forward {
-    background-color: var(--form-main-color);
-}
-
-.form-button-forward:hover {
-    background-color: var(--form-main-color-hover);
-    text-decoration: none;
-    border-top: 1px solid var(--main-theme-color);
-    border-bottom: 1px solid var(--main-theme-color);
-}
-
-.form-button-back {
-    background-color: var(--form-back-button);
-}
-
-.form-button-back:hover {
-    background-color: var(--form-back-button-hover);
-    text-decoration: none;
-    border-top: 1px solid var(--main-theme-color);
-    border-bottom: 1px solid var(--main-theme-color);
-}
-
-
 /* form elements */
 
 .form-main-header {
     color: var(--form-highlight);
-    font-style: italic;
     font-weight: 800;
     font-size: 1.5rem;
     letter-spacing: -0.5px;
