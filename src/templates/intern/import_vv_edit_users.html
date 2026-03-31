@@ -11,11 +11,11 @@
             <h2>{% blocktranslate %}Es sind noch {{ persons.count }} Personendaten zu bearbeiten.{% endblocktranslate %}</h2>
 
                 {% for p in persons %}
-                            <h2>
-                                <a href="{% url 'feedback:import_vv_edit_users_update' pk=p.id %}">
-                                    {{p.full_name}}
-                                </a>
-                            </h2>
+                    <h2>
+                        <a href="{% url 'feedback:import_vv_edit_users_update' pk=p.id %}">
+                            {{p.full_name}}
+                        </a>
+                    </h2>
                 {% endfor %}
         </form>
 

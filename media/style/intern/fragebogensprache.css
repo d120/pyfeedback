@@ -1,4 +1,4 @@
-@import url('../colors.css');
+@import url('../color-font.css');
 
 table.border {
     border-collapse: collapse;
@@ -33,7 +33,6 @@ table.border tr.row2 {
     background-color: var(--main-secondary-bg-color);
 }
 
-/* Styling those bracket indicators to look like modern status boxes */
 .status-box {
     display: inline-block;
     width: 18px;

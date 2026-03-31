@@ -37,7 +37,7 @@ body {
     text-align: right;
 }
 
-/* message lists  */
+/* message lists, breadcrumb etc  */
 
 .messagelist {
     list-style: none;
@@ -55,14 +55,21 @@ body {
 .messagelist li.success { background-color: #d4edda; color: #155724; }
 .messagelist li.error { background-color: #f8d7da; color: #721c24; }
 
-/* breadcrumb */
-
 .breadcrumb {
     background: #e9ecef;
     padding: 10px 15px;
     border-radius: 4px;
     margin-bottom: 20px;
     font-size: 0.9rem;
+}
+
+.warning {
+    color: var(--warning);
+}
+
+.warning:hover {
+    color: var(--warning);
+    border-color: var(--warning);
 }
 
 /* === main general elements === */
@@ -94,6 +101,14 @@ button {
     transition: all 0.2s ease;
 }
 
+button:disabled,
+button[disabled] {
+    cursor: not-allowed;
+    opacity: 0.5;
+    filter: saturate(0.5); /* Optional: desaturates colors slightly */
+    pointer-events: none;  /* Prevents hover/click states from triggering */
+}
+
 button.primary {
     color: var(--main-background-color);
     background-color: var(--button-primary);
@@ -115,12 +130,19 @@ button.secondary:hover {
     border-color: var(--button-primary-hover);
 }
 
+/* Ensure secondary border and text look appropriately muted */
+button.secondary:disabled {
+    background-color: transparent;
+    /* Opacity usually handles this, but you can explicitly force it: */
+    border-color: var(--button-primary); 
+}
+
 button.small {
     padding: 0.2rem 0.6rem;
     font-size: 0.75rem;
 }
 
-/* input file, text */
+/* input file, text, email */
 
 input[type="file"] {
     color: var(--main-theme-color);
@@ -151,7 +173,7 @@ input[type="file"]::file-selector-button:hover {
     background-color: var(--button-primary-hover);
 }
 
-input[type="text"] {
+input[type="text"], input[type="email"] {
     color: var(--main-theme-color);
     background-color: transparent;
     border: 1px solid var(--form-not-highlighted);
@@ -163,11 +185,14 @@ input[type="text"] {
 }
 
 input[type="text"]:focus, 
-input[type="text"]:hover {
+input[type="text"]:hover,
+input[type="email"]:focus,
+input[type="email"]:hover {
     border-color: var(--button-primary-hover);
 }
 
-input[type="text"]:disabled {
+input[type="text"]:disabled,
+input[type="email"]:disabled {
     color: var(--form-not-highlighted); 
     border-color: var(--form-not-highlighted);
     cursor: not-allowed;
