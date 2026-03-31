@@ -115,7 +115,12 @@ button.secondary:hover {
     border-color: var(--button-primary-hover);
 }
 
-/* input file */
+button.small {
+    padding: 0.2rem 0.6rem;
+    font-size: 0.75rem;
+}
+
+/* input file, text */
 
 input[type="file"] {
     color: var(--main-theme-color);
@@ -146,7 +151,76 @@ input[type="file"]::file-selector-button:hover {
     background-color: var(--button-primary-hover);
 }
 
-/* select and option */
+input[type="text"] {
+    color: var(--main-theme-color);
+    background-color: transparent;
+    border: 1px solid var(--form-not-highlighted);
+    border-radius: 4px;
+    padding: 8px 16px;
+    outline: none;
+    transition: border-color 0.2s ease;
+    box-sizing: border-box;
+}
+
+input[type="text"]:focus, 
+input[type="text"]:hover {
+    border-color: var(--button-primary-hover);
+}
+
+input[type="text"]:disabled {
+    color: var(--form-not-highlighted); 
+    border-color: var(--form-not-highlighted);
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+input[type="radio"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 1px solid var(--form-not-highlighted);
+    border-radius: 50%;
+    background-color: transparent;
+    cursor: pointer;
+    position: relative;
+    transition: border-color 0.2s ease;
+    vertical-align: middle;
+}
+
+input[type="radio"]:checked {
+    border-color: var(--button-primary);
+}
+
+/* Dot for checked state */
+input[type="radio"]:checked::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: var(--button-primary);
+}
+
+input[type="radio"]:hover {
+    border-color: var(--button-primary-hover);
+}
+
+label {
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--main-theme-color);
+}
+
+
+/* select, option, fieldset */
+
+fieldset {
+    border: none;
+}
 
 select {
     font-size: 1rem;
