@@ -309,7 +309,7 @@ def get_demo_context(request):
     :param request: POST
     :return: RequestContext, String, String
     """
-    color_span = '<span style="color:blue">{}</span>'
+    color_span = '<span class="mail-context-highlight">{}</span>'
     link_veranstalter = 'https://www.fachschaft.informatik.tu-darmstadt.de%s' % reverse('feedback:veranstalter-login')
     link_suffix_format = '?vid=%d&token=%s'
     demo_context = RequestContext(request, {

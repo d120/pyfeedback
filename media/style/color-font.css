@@ -68,6 +68,7 @@
   --button-secondary-bg-hover: #222;
 
   --unattended-course: #7f7f14;
+  --mail-context-highlight: #00ffff;
 
   --footer-bg-color: #222;
 }
@@ -114,6 +115,7 @@
   --button-secondary-bg-hover: #ddd;
 
   --unattended-course: #ffff00;
+  --mail-context-highlight: #0000ff;
 
   --footer-bg-color: #eee;
 }

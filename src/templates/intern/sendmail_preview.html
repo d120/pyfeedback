@@ -1,5 +1,10 @@
 {% extends "bestellung_base.html" %}
 {% load i18n %}
+{% load static %}
+
+{% block extra_header %}
+    <link rel="stylesheet" type="text/css" href="{% static 'style/intern/sendmail_preview.css' %}" />
+{% endblock %}
 
 {% block title %}{% translate "Mail versenden" %}{% endblock %}
 
@@ -8,7 +13,11 @@
 
     <form method="post" action="">
         {% csrf_token %}
-        <h2>{% blocktranslate %}Vorschau (Ersetzte Begriffe sind <span style="color: blue;">blau markiert</span>){% endblocktranslate %}</h2>
+        <h2>
+            {% blocktranslate %}
+                Vorschau (Ersetzte Begriffe sind <span class="mail-context-highlight">blau markiert</span>)
+            {% endblocktranslate %}
+        </h2>
         <p>
             <label><em>{% translate "Absender:" %}</em></label>
             {{ from }}
@@ -33,7 +42,7 @@
         <input type="hidden" name="body" value="{{ body }}" />
         <input type="hidden" name="tutoren" value="{{ tutoren }}" />
 
-        <input type="submit" name="aendern" value="{% translate "Ändern" %}" />
-        <input type="submit" name="senden" value="{% translate "Mails senden" %}" />
+        <button class="secondary" type="submit" name="aendern">{% translate "Ändern" %}</button>
+        <button class="primary" type="submit" name="senden">{% translate "Mails senden" %}</button>
     </form>
 {% endblock %}
