@@ -23,7 +23,7 @@
     {% element form method="post" no_visible_fields=True %}
         {% slot actions %}
             {% csrf_token %}
-            {% element button type="submit" %}
+            {% element button type="submit" class="primary" %}
                 {% trans "Continue" %}
             {% endelement %}
         {% endslot %}

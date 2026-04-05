@@ -37,7 +37,7 @@
   --main-background-color: #181818;
   --main-secondary-bg-color: #2c2c2c;
   --warning: #f00;
-  
+
   --header-link-highlight: #00d061;
   --header-link-highlight-bg: #2c2c2c;
   --header-dropdown-border: #bbb;
@@ -94,12 +94,12 @@
   --sidebar-link-color:#181818;
   --sidebar-link-hover-bg-color: #e3e3e3;
 
-  --form-required: #ff5f5f; 
-  --form-highlight: #00a84e; 
-  --form-not-highlighted: #d1d1d1; 
-  --form-main-color: #3aa3ae; 
+  --form-required: #ff5f5f;
+  --form-highlight: #00a84e;
+  --form-not-highlighted: #d1d1d1;
+  --form-main-color: #3aa3ae;
   --form-main-color-hover: #2e828b;
-  --form-progressbar-disabled-active: #b5e2e7; 
+  --form-progressbar-disabled-active: #b5e2e7;
 
   --progressbar-detail-color: #999;
   --progressbar-start-color: #5f27cd;
@@ -114,7 +114,7 @@
   --button-secondary-bg-hover: #ddd;
 
   --unattended-course: #ffff00;
-  
+
   --footer-bg-color: #eee;
 }
 

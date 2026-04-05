@@ -28,7 +28,7 @@ body {
 }
 
 .content-area {
-    flex: 3.5; 
+    flex: 3.5;
     min-width: 0;
     text-align: justify;
 }
@@ -93,7 +93,7 @@ a:hover {
 button {
     cursor: pointer;
     text-decoration: none;
-    padding: 0.5rem 1rem; 
+    padding: 0.5rem 1rem;
     font-size: 1rem;
     line-height: 1.2;
     border: 1px solid transparent;
@@ -105,8 +105,8 @@ button:disabled,
 button[disabled] {
     cursor: not-allowed;
     opacity: 0.5;
-    filter: saturate(0.5); /* Optional: desaturates colors slightly */
-    pointer-events: none;  /* Prevents hover/click states from triggering */
+    filter: saturate(0.5);
+    pointer-events: none;
 }
 
 button.primary {
@@ -130,11 +130,9 @@ button.secondary:hover {
     border-color: var(--button-primary-hover);
 }
 
-/* Ensure secondary border and text look appropriately muted */
 button.secondary:disabled {
     background-color: transparent;
-    /* Opacity usually handles this, but you can explicitly force it: */
-    border-color: var(--button-primary); 
+    border-color: var(--button-primary);
 }
 
 button.small {
@@ -184,7 +182,7 @@ input[type="text"], input[type="email"] {
     box-sizing: border-box;
 }
 
-input[type="text"]:focus, 
+input[type="text"]:focus,
 input[type="text"]:hover,
 input[type="email"]:focus,
 input[type="email"]:hover {
@@ -193,7 +191,7 @@ input[type="email"]:hover {
 
 input[type="text"]:disabled,
 input[type="email"]:disabled {
-    color: var(--form-not-highlighted); 
+    color: var(--form-not-highlighted);
     border-color: var(--form-not-highlighted);
     cursor: not-allowed;
     opacity: 0.6;
@@ -241,10 +239,26 @@ label {
 }
 
 
-/* select, option, fieldset */
+/* select, option, fieldset, textarea */
 
 fieldset {
     border: none;
+}
+
+textarea {
+    color: var(--main-theme-color);
+    background-color: transparent;
+    border: 1px solid var(--form-not-highlighted);
+    border-radius: 4px;
+    padding: 8px 16px;
+    outline: none;
+    transition: border-color 0.2s ease;
+    box-sizing: border-box;
+}
+
+textarea:focus,
+textarea:hover {
+    border-color: var(--button-primary-hover);
 }
 
 select {
@@ -276,14 +290,14 @@ select:focus {
 h1,h2,h3,h4,h5 {
     text-align:left;
 }
-
+/*
 .table h1,h2,h3,h4,h5 {
     margin-top:5px;
 }
 
 .table .table {
     margin-bottom:0;
-}
+} */
 
 h1 {
     color: var(--form-highlight);

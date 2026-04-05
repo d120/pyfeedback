@@ -1,9 +1,12 @@
-{% extends "bestellung_base.html" %}{% load static %}{% load i18n %}
+{% extends "bestellung_base.html" %}
+{% load i18n %}
+{% load static %}
 
 {% block title %}{% translate "Mail versenden" %}{% endblock %}
 
 {% block extra_header %}
-<link rel="stylesheet" type="text/css" href="{% static 'chosen-js/chosen.min.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'chosen-js/chosen.min.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'style/intern/sendmail.css' %}" />
 {% endblock %}
 
 {% block content %}
@@ -14,7 +17,7 @@
     <p>
         <label for="selectRecipient" >
             {% translate "Mail senden an Veranstalter der Veranstaltung mit Bestellstatus:" %}
-            <select multiple class="chosen-select" style="width: 175px;" data-placeholder="Wähle einen Status..." id="selectRecipient" name="recipient">
+            <select multiple class="chosen-select" data-placeholder="Wähle einen Status..." id="selectRecipient" name="recipient">
 		    {{recipient_selected}}
                 {% for choice in veranstaltung_status_choices %}
                     <option {% if recipient_selected and choice.0 in recipient_selected %} selected {% endif %}value="{{ choice.0 }}">{{ choice.1 }}</option>
@@ -42,7 +45,7 @@
                 <option value="{{ v.id }}">{{ v }}</option>
             {% endfor %}
         </select>
-        <input type="submit" name="uebernehmen" value="{% translate "Vorlage übernehmen" %}" />
+        <button class="secondary" type="submit" name="uebernehmen">{% translate "Vorlage übernehmen" %}</button>
     </p>
 
     <p>
@@ -52,11 +55,11 @@
 
     <p>
         <label for="body">{% translate "Mailtext:" %}</label><br />
-        <textarea class="fullwidth" cols="70" rows="20" name="body" id="body">{{ body }}</textarea>
+        <textarea cols="70" rows="20" name="body" id="body">{{ body }}</textarea>
     </p>
 
     <p>
-        <input type="submit" name="vorschau" value="{% translate "Vorschau" %}" />
+        <button class="primary" type="submit" name="vorschau">{% translate "Vorschau" %}</button>
     </p>
 </form>
 
@@ -71,9 +74,9 @@
 
 <!-- replavce with extra_javascript_block -->
 {% block javascript_block %}
-<script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
-<script src="{% static 'jquery-ui/dist/jquery-ui.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'chosen-js/chosen.jquery.min.js' %}"></script>
+<script src="{% static 'jquery/jquery.min.js' %}"></script>
+<script src="{% static 'jquery/jquery-ui.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'jquery/chosen/chosen.jquery.min.js' %}"></script>
 <script>
   $(".chosen-select").chosen();
 </script>

@@ -1,0 +1,132 @@
+@import url('../color-font.css');
+
+/*
+    to force chosen.min.css look similliar to other elements
+    !important is unfortunately necessary
+*/
+
+/* the main container / box area */
+.chosen-container-multi .chosen-choices {
+    color: var(--button-primary) !important;
+    background-color: var(--main-background-color) !important;
+    background-image: none !important;
+    border: 1px solid var(--main-secondary-bg-color) !important;
+    border-radius: 4px !important;
+
+    font-size: 1rem !important;
+    padding: 0.25rem 0.5rem !important;
+    line-height: 1.2 !important;
+    cursor: pointer !important;
+
+    transition: all 0.2s ease !important;
+    box-shadow: none !important;
+}
+
+/* hover state */
+.chosen-container-multi:hover .chosen-choices {
+    border-color: var(--button-primary-hover) !important;
+}
+
+/* focus state (when the input is active) */
+.chosen-container-active .chosen-choices {
+    border-color: var(--button-primary-hover) !important;
+    box-shadow: 0 0 0 2px var(--header-dropdown-li-bg-highlight) !important;
+    outline: none !important;
+}
+
+/* styling the "tags" (selected items) */
+.chosen-container-multi .chosen-choices li.search-choice {
+    color: var(--button-primary) !important;
+    background-image: none !important;
+    background: transparent !important;
+    border: 1px solid var(--button-primary);
+
+    padding: 3px 20px 3px 5px !important;
+    margin: 3px 5px 3px 0 !important;
+
+    box-shadow: none !important;
+}
+
+/* the dropdown list styling */
+.chosen-container .chosen-drop {
+    border: 1px solid var(--main-secondary-bg-color) !important;
+    background: var(--main-background-color) !important;
+    border-radius: 0 0 4px 4px !important;
+}
+
+/* the default state of items in the dropdown (not hovered) */
+.chosen-container .chosen-results li {
+    color: var(--button-primary) !important;
+    line-height: 1.2 !important;
+    padding: 8px 12px !important;
+    transition: all 0.2s ease;
+}
+
+/* items that are already selected (inside the dropdown list) */
+.chosen-container .chosen-results li.result-selected {
+    color: var(--main-secondary-bg-color) !important;
+    background-color: var(--main-background-color) !important;
+    cursor: default !important;
+    display: none;
+}
+
+/* 'no results' text */
+.chosen-container .chosen-results li.no-results {
+    color: var(--button-primary) !important;
+    background: var(--main-background-color) !important;
+    font-size: 1rem !important;
+    padding: 8px 12px !important;
+}
+
+/* highlighted result (hovering over options) */
+.chosen-container .chosen-results li.highlighted {
+    color: var(--button-primary) !important;
+    background-color: var(--header-dropdown-li-bg-highlight) !important;
+    background-image: none !important;
+}
+
+/* resetting the search input text */
+.chosen-container-multi .chosen-choices li.search-field input[type="text"] {
+    color: var(--button-primary) !important;
+    font-family: var(--font-main) !important;
+}
+
+/* 'X' container */
+.chosen-container-multi .chosen-choices li.search-choice .search-choice-close {
+    background: none !important;
+    text-decoration: none !important;
+    border: none !important;
+
+    top: 50% !important;
+    transform: translateY(-50%);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 12px;
+    height: 12px;
+}
+
+/* 'X' itself */
+.chosen-container-multi .chosen-choices li.search-choice .search-choice-close::before {
+    /* \00d7 is the CSS escape for the multiplication symbol × */
+    content: '\00d7' !important;
+    color: var(--main-theme-color) !important;
+    background-color: var(--main-background-color) !important;
+
+    font-weight: bold;
+    font-family: var(--font-main) !important;
+    font-size: 16px !important;
+    line-height: 1 !important;
+
+    text-decoration: none !important;
+    opacity: 0.6;
+    transition: all 0.2s ease;
+}
+
+/* hover for 'X' */
+.chosen-container-multi .chosen-choices li.search-choice .search-choice-close:hover::before {
+    color: var(--button-primary-hover) !important;
+    opacity: 1;
+}
