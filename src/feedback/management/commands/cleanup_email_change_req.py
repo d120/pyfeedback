@@ -12,11 +12,11 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
             now = timezone.now()
-            
+
             # EXPIRED
             limit_7d = now - timedelta(days=7)
             cond_1 = Q(
-                status=EmailChange.Status.EXPIRED, 
+                status=EmailChange.Status.EXPIRED,
                 dynamic_expiry_time__lt=limit_7d
             )
 
