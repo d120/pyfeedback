@@ -116,28 +116,28 @@ button[disabled] {
 
 button.primary {
     color: var(--main-background-color);
-    background-color: var(--button-primary);
+    background-color: var(--accent-color);
 }
 
 button.primary:hover {
-    background-color: var(--button-primary-hover);
+    background-color: var(--accent-color-hover);
 }
 
 button.secondary {
-    color: var(--button-primary);
+    color: var(--accent-color);
     background-color: transparent;
-    border-color: var(--button-primary);
+    border-color: var(--accent-color);
 }
 
 button.secondary:hover {
-    color: var(--button-primary-hover);
+    color: var(--accent-color-hover);
     background-color: var(--button-secondary-bg-hover);
-    border-color: var(--button-primary-hover);
+    border-color: var(--accent-color-hover);
 }
 
 button.secondary:disabled {
     background-color: transparent;
-    border-color: var(--button-primary);
+    border-color: var(--accent-color);
 }
 
 button.small {
@@ -158,12 +158,12 @@ input[type="file"] {
 }
 
 input[type="file"]:hover {
-    border-color: var(--button-primary-hover);
+    border-color: var(--accent-color-hover);
 }
 
 input[type="file"]::file-selector-button {
     color: var(--main-background-color);
-    background-color: var(--button-primary);
+    background-color: var(--accent-color);
     border: none;
     border-radius: 4px;
     padding: 8px 16px;
@@ -173,7 +173,7 @@ input[type="file"]::file-selector-button {
 }
 
 input[type="file"]::file-selector-button:hover {
-    background-color: var(--button-primary-hover);
+    background-color: var(--accent-color-hover);
 }
 
 input[type="text"], input[type="email"] {
@@ -191,7 +191,7 @@ input[type="text"]:focus,
 input[type="text"]:hover,
 input[type="email"]:focus,
 input[type="email"]:hover {
-    border-color: var(--button-primary-hover);
+    border-color: var(--accent-color-hover);
 }
 
 input[type="text"]:disabled,
@@ -217,7 +217,7 @@ input[type="radio"] {
 }
 
 input[type="radio"]:checked {
-    border-color: var(--button-primary);
+    border-color: var(--accent-color);
 }
 
 /* Dot for checked state */
@@ -230,17 +230,17 @@ input[type="radio"]:checked::after {
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background-color: var(--button-primary);
+    background-color: var(--accent-color);
 }
 
 input[type="radio"]:hover {
-    border-color: var(--button-primary-hover);
+    border-color: var(--accent-color-hover);
 }
 
 input[type="number"] {
     color: var(--main-theme-color);
     background-color: var(--main-background-color);
-    border: 1px solid var(--button-primary);
+    border: 1px solid var(--accent-color);
     -moz-appearance: textfield;
     appearance: textfield;
 }
@@ -248,7 +248,7 @@ input[type="number"] {
 input[type="number"]:focus,
 input[type="number"]:hover {
     outline: none;
-    border-color: var(--button-primary-hover);
+    border-color: var(--accent-color-hover);
 }
 
 input::-webkit-outer-spin-button,
@@ -259,7 +259,7 @@ input::-webkit-inner-spin-button {
 
 input[type="checkbox"] {
     color: var(--main-theme-color);
-    accent-color: var(--button-primary);
+    accent-color: var(--accent-color);
     border: none;
     cursor: pointer;
 }
@@ -270,18 +270,18 @@ input[type="checkbox"]::before {
 
 input[type="checkbox"]:focus,
 input[type="checkbox"]:hover {
-    border-color: var(--button-primary-hover);
+    border-color: var(--accent-color-hover);
 }
 
 input[type="date"] {
     color: var(--main-theme-color);
     background-color: var(--main-background-color);
-    border: 1px solid var(--button-primary);
+    border: 1px solid var(--accent-color);
 }
 
 input[type="date"]:focus,
 input[type="date"]:hover {
-    border-color: var(--button-primary-hover);
+    border-color: var(--accent-color-hover);
     outline: none;
 }
 
@@ -311,7 +311,7 @@ textarea {
 
 textarea:focus,
 textarea:hover {
-    border-color: var(--button-primary-hover);
+    border-color: var(--accent-color-hover);
 }
 
 select {
@@ -320,7 +320,7 @@ select {
     line-height: 1.2;
     cursor: pointer;
 
-    color: var(--button-primary);
+    color: var(--accent-color);
     background-color: var(--main-background-color);
     border: 1px solid var(--main-secondary-bg-color);
     border-radius: 4px;
@@ -329,12 +329,12 @@ select {
 }
 
 select:hover {
-    border-color: var(--button-primary-hover);
+    border-color: var(--accent-color-hover);
 }
 
 select:focus {
     outline: none;
-    border-color: var(--button-primary-hover);
+    border-color: var(--accent-color-hover);
     box-shadow: 0 0 0 2px var(--header-dropdown-li-bg-highlight);
 }
 

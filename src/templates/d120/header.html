@@ -16,7 +16,7 @@
                     <div class="light-only">
                         <img class="header-logo header-logo-big" src="{% static 'img/d120-breit-transparent-hell-pfad.svg' %}" alt="D120: Fachschaft Informatik"/>
                         <img class="header-logo header-logo-small" src="{% static 'img/d120-schmal-hell-pfad.svg' %}" alt="D120: Fachschaft Informatik"/>
-                    </div> 
+                    </div>
                 </a>
             </div>
 
@@ -33,11 +33,10 @@
                     </a>
                 </div>
             </nav>
-            
+
         </div>
 
 
-        
         <div class="header-side-container">
             <nav class="navigation">
                 <div class="auth-wrapper">
@@ -63,7 +62,7 @@
                     <a class="header-link dropdown-trigger" href="#">
                         {% get_current_language as CURRENT_LANG %}
                         {% get_language_info for CURRENT_LANG as lang %}
-                        <i class="fa fa-globe fa-lg"></i> 
+                        <i class="fa fa-globe fa-lg"></i>
                         <span class="header-label">{{ lang.name_local }}</span>
                     </a>
                     <ul class="dropdown-content">

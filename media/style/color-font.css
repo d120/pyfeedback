@@ -67,8 +67,8 @@
   --link-hover: #c4b5fd;
   --link-bottom: #444;
 
-  --button-primary: #a29bfe;
-  --button-primary-hover: #c4b5fd;
+  --accent-color: #a29bfe;
+  --accent-color-hover: #c4b5fd;
   --button-secondary-bg-hover: #222;
 
   --unattended-course: #7f7f14;
@@ -118,8 +118,8 @@
   --link-hover: #5323b4;
   --link-bottom: #ccc;
 
-  --button-primary: #5f27cd;
-  --button-primary-hover: #5323b4;
+  --accent-color: #5f27cd;
+  --accent-color-hover: #5323b4;
   --button-secondary-bg-hover: #ddd;
 
   --unattended-course: #ffff00;

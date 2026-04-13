@@ -25,7 +25,7 @@
 
 .ui-accordion .ui-accordion-header-active {
     color: var(--main-theme-color);
-    border-color: var(--button-primary);
+    border-color: var(--accent-color);
     background: transparent;
     font-weight: bold;
 }
@@ -34,7 +34,7 @@
     background: transparent;
     color: var(--main-theme-color);
     box-sizing: content-box;
-    border: 1px solid var(--button-primary);
+    border: 1px solid var(--accent-color);
     border-top: none;
     padding: 20px;
     line-height: 1.6;

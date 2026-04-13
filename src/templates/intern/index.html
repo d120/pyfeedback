@@ -16,13 +16,13 @@
 
 <div class="dashboard-wrapper">
     <div class="dashboard-main">
-        
+
         <div class="dashboard-progressbar">
             <h3 id="progressbar-label">
                 {% translate "Status" %}
                 <span class="label-detail">{% translate "der Rückmeldungen durch die Veranstalter" %}</span>
             </h3>
-            
+
             <div class="progress-track">
                 <div id="status-bar" class="progress-fill" data-value="{{ relativ_result|floatformat:-2 }}"></div>
                 <div class="progress-inside">{{ relativ_result|floatformat:-2 }} %</div>

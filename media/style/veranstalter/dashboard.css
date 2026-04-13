@@ -2,12 +2,12 @@
 
 
 .header_veranst {
-    color: var(--button-primary);
+    color: var(--accent-color);
 }
 
 .status-badge {
     display: inline-block;
-    color: var(--button-primary);
+    color: var(--accent-color);
     border: 1px solid var(--form-not-highlighted);
     background-color: var(--main-secondary-bg-color);
     padding: 4px 12px;

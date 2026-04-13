@@ -34,7 +34,7 @@
         {{ form.as_p }}
         <div>
             {% if view.get_id.1 %}
-                <button type="button" class="secondary" 
+                <button type="button" class="secondary"
                         onclick="location.href='{% url 'feedback:import_vv_edit_users_update' pk=view.get_id.1 %}'">
                     {% translate "Zurück" %}
                 </button>&nbsp;
@@ -45,7 +45,7 @@
             {% endif %}
 
             {% if view.get_id.0 %}
-                <button type="button" class="secondary" 
+                <button type="button" class="secondary"
                         onclick="location.href='{% url 'feedback:import_vv_edit_users_update' pk=view.get_id.0 %}'">
                     {% translate "Überspringen" %}
                 </button>&nbsp;
