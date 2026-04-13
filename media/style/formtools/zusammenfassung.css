@@ -1,7 +1,7 @@
 @import url('../color-font.css');
 
 .summary_table {
-    border-collapse: collapse; 
+    border-collapse: collapse;
     width: 100%;
     max-width: 900px;
     margin-bottom: 15px;
@@ -15,7 +15,7 @@
     width: 100%;
 }
 
-.summary_table th, 
+.summary_table th,
 .summary_table td {
     text-align: left;
     vertical-align: top;

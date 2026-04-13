@@ -12,6 +12,11 @@ body {
     flex-direction: column;
 }
 
+::selection {
+    color: var(--selection-color);
+    background-color: var(--selection-bg);
+}
+
 /* main page layout */
 
 .main-area {

@@ -26,31 +26,45 @@
     margin: 10px;
 }
 
-.progressbar_container .progress_bar_item:last-child {
-    border-right: 0;
-}
-
 .progress_bar_item {
-    padding: 5px;
+    all: unset;
+
+    cursor: pointer;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    line-height: 1.2;
+    transition: all 0.2s ease;
+
+    color: var(--main-background-color);
     background-color: var(--form-not-highlighted);
-    cursor: default;
     border: none;
     border-right: 1px dashed var(--main-background-color);
 }
+
 .progress_bar_item.item_active {
-    background-color: var(--form-main-color);
+    background-color: var(--form-progressbar-active);
     cursor: pointer;
     border-top: 1px solid transparent;
     border-bottom: 1px solid transparent;
 }
+
+.progress_bar_item.item_active:hover {
+    background-color: var(--form-progressbar-active-hover);
+}
+
+.progressbar_container .progress_bar_item:last-child {
+    border-right: 0;
+    border-radius: 0 5px 5px 0;
+}
+
+.progressbar_container .progress_bar_item:first-child {
+    border-radius: 5px 0 0 5px;
+}
+
 .item_disabled_active {
     background-color: var(--form-progressbar-disabled-active);
     color: var(--main-theme-color);
-}
-.progress_bar_item.item_active:hover {
-    background-color: var(--form-main-color-hover);
-    border-top: 1px solid var(--main-theme-color);
-    border-bottom: 1px solid var(--main-theme-color);
 }
 
 
@@ -68,22 +82,6 @@
     padding-bottom: 5px;
 }
 
-select {
-    background-color: var(--main-background-color);
-    color: var(--main-theme-color);
-    border: 1px solid var(--form-main-color);
-}
-
-table {
-    border-spacing: 100px;
-}
-table th {
-    vertical-align: top;
-}
-table .helptext {
-    color: rgba(184, 87, 0, 0.8);
-}
-
 .wizard_form_table label.required:after {
     color: var(--form-not-highlighted);
     content: '*'
@@ -93,25 +91,14 @@ input[type="number"] {
     color: var(--main-theme-color);
     background-color: var(--main-background-color);
     border: 1px solid var(--form-main-color);
-    -moz-appearance: textfield; /* removes up and down arrows */
+    -moz-appearance: textfield;
     appearance: textfield;
 }
 
-input::-webkit-outer-spin-button, /* removes up and down arrows for other browsers */
+input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
-}
-
-input:focus {
-    outline: none;
-    border-color: var(--form-main-color);
-    box-shadow: 0 0 7px var(--form-main-color);
-}
-
-input[type="radio"] {
-    accent-color: var(--form-main-color);
-    cursor: pointer;
 }
 
 input[type="checkbox"] {
@@ -125,20 +112,19 @@ input[type="checkbox"]::before {
     background-color: var(--main-background-color);
 }
 
+input[type="checkbox"]:focus,
+input[type="checkbox"]:hover {
+    border-color: var(--button-primary-hover);
+}
+
 input[type="date"] {
     color: var(--main-theme-color);
     background-color: var(--main-background-color);
     border: 1px solid var(--form-main-color);
 }
 
-textarea {
-    color: var(--main-theme-color);
-    background-color: var(--main-background-color);
-    border: 1px solid var(--form-main-color);
-}
-
-textarea:focus {
+input[type="date"]:focus,
+input[type="date"]:hover {
+    border-color: var(--button-primary-hover);
     outline: none;
-    border-color: var(--form-main-color);
-    box-shadow: 0 0 7px var(--form-main-color);
 }
