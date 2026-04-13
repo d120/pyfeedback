@@ -8,15 +8,15 @@
 <head>
 	<title>{% block title %}{% translate "Leere Seite" %}{% endblock %}{% translate " - Evaluation der Lehre" %}</title>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-	
+
 	<link rel="stylesheet" type="text/css" href="{% static 'style/d120/header.css' %}" />
 	<link rel="stylesheet" type="text/css" href="{% static 'style/d120/footer.css' %}" />
 
 	<link rel="stylesheet" type="text/css" href="{% static 'font-awesome/css/font-awesome.min.css' %}" />
-	
+
 	<link rel="stylesheet" type="text/css" href="{% static 'style/custom.css' %}" />
-	<link rel="stylesheet" type="text/css" href="{% static 'style/ranking.css' %}" /> 
-	
+	<link rel="stylesheet" type="text/css" href="{% static 'style/ranking.css' %}" />
+
 	{% block extra_header %}{% endblock %}
 
 	<script>
@@ -24,7 +24,7 @@
 		(function() {
 			const saved = localStorage.getItem('theme');
 			const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-			
+
 			const theme = saved || (systemDark ? 'dark' : 'light');
 			document.documentElement.classList.add(theme);
 		})();
@@ -60,7 +60,7 @@
 				<div id="backlink">
 					{% block backlink %}{% endblock %}
 				</div>
-				
+
 				<div>
 					{% block content %}{% endblock %}
 				</div>

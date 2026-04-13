@@ -1,0 +1,86 @@
+@import url('../color-font.css');
+
+
+.header_veranst {
+    color: var(--button-primary);
+}
+
+.status-badge {
+    display: inline-block;
+    color: var(--button-primary);
+    border: 1px solid var(--form-not-highlighted);
+    background-color: var(--main-secondary-bg-color);
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+/* Table Styling */
+.dashboardTable {
+    width: 75%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: 14px;
+    border: 1px solid var(--form-not-highlighted);
+}
+
+.dashboardTable th,
+.dashboardTable td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--form-not-highlighted);
+}
+
+.dashboardTable th {
+    background-color: var(--main-secondary-bg-color);
+    font-weight: 600;
+}
+
+/* Nested Tutor Table */
+.tableTutoren {
+    width: 75%;
+    border-collapse: collapse;
+    font-size: 13px;
+    background-color: transparent;
+}
+
+.main-order-table > tbody > tr > th,
+.main-order-table > tr > th {
+    width: 30%;
+    white-space: nowrap;
+}
+
+.tableTutoren th {
+    width: auto;
+    background-color: transparent;
+    border-bottom: 2px solid var(--form-not-highlighted);
+}
+
+/* Layout Containers */
+.orderHeadContainer {
+    display: flex;
+    width: 75%;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 2rem;
+    border-bottom: 1px solid var(--form-not-highlighted);
+    padding-bottom: 0.5rem;
+}
+
+.subHeaderDashboard {
+    margin: 0;
+}
+
+.dashboardOrderContainer {
+    margin-top: 1rem;
+    overflow-x: auto;
+}
+
+.empty-state {
+    width: 75%;
+    margin-top: 2rem;
+    padding: 2rem 0;
+    text-align: center;
+    border: 2px dashed var(--form-not-highlighted);
+    border-radius: 8px;
+}

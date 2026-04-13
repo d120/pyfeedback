@@ -6,6 +6,6 @@
 
     <form action = "{% url 'feedback:veranstalter-logout' %}" method="post">
         {% csrf_token %}
-        <button class="form-button form-button-forward" type="submit">{% translate "Ausloggen" %}</button>
+        <button class="secondary" type="submit">{% translate "Ausloggen" %}</button>
     </form>
 {% endblock %}
