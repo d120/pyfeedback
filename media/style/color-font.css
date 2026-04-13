@@ -54,8 +54,7 @@
   --form-required: #ffbcbc;
   --form-highlight: #00d061;
   --form-not-highlighted: #444;
-  --form-main-color: #a29bfe;
-  --form-main-color-hover: #c4b5fd;
+
   --form-progressbar-active: #a29bfe;
   --form-progressbar-active-hover: #c4b5fd;
   --form-progressbar-disabled-active: #774fc6;
@@ -106,8 +105,7 @@
   --form-required: #ff5f5f;
   --form-highlight: #00a84e;
   --form-not-highlighted: #d1d1d1;
-  --form-main-color: #5f27cd;
-  --form-main-color-hover: #5323b4;
+
   --form-progressbar-active: #5f27cd;
   --form-progressbar-active-hover: #5323b4;
   --form-progressbar-disabled-active: #774fc6;
