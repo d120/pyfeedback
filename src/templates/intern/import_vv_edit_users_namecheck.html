@@ -10,17 +10,17 @@
 
 {% block content %}
     <h1>{% translate "Personendaten vervollständigen" %}</h1>
-    
+
     {% with similar_person.0 as old %}
     {% with person_new as new %}
-        
+
         <div class="comparison-container">
-            
+
             <div class="comparison-column">
                 <h2>{% translate "Die ähnliche Person" %}</h2>
                 <p><strong>{% translate "Name: " %}</strong>{{ old.full_name }}</p>
                 <p><strong>{% translate "E-Mail: " %}</strong>{{ old.email }}</p>
-                
+
                 <h2 class="section-title">{% translate "Lehrveranstaltungen" %}</h2>
                 {% for v in old_veranstaltungen %}
                     <p>{{ v.name }} &nbsp; <span class="semester-tag">{{ v.semester }}</span></p>
@@ -31,25 +31,25 @@
                 <h2>{% translate "Die neue Person" %}</h2>
                 <p><strong>{% translate "Name: " %}</strong>{{ new.full_name }}</p>
                 <p><strong>{% translate "E-Mail: " %}</strong>{{ new.email }}</p>
-                
+
                 <h2 class="section-title">{% translate "Lehrveranstaltungen" %}</h2>
                 {% for v in new_veranstaltungen %}
                     <p>{{ v.name }} &nbsp; <span class="semester-tag">{{ v.semester }}</span></p>
                 {% endfor %}
             </div>
-            
+
         </div>
 
         <form action="" method="post" class="action-form">
             {% csrf_token %}
             <input type="hidden" name="id_old" value="{{ old.id }}" />
             <input type="hidden" name="id_new" value="{{ new.id }}" />
-            
+
             <button type="submit" name="similar" class="primary">
                 {% translate "Zusammenführen" %}
             </button>
 
-            <button type="button" class="secondary" 
+            <button type="button" class="secondary"
                     onclick="location.href='{% url 'feedback:import_vv_edit_users_update' pk=new.id %}'">
                 {% translate "Ignorieren" %}
             </button>

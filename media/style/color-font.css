@@ -74,6 +74,9 @@
   --unattended-course: #7f7f14;
   --mail-context-highlight: #00ffff;
 
+  --ranking-selected: #a29bfe;
+  --ranking-invalid: #888;
+
   --footer-bg-color: #222;
 }
 
@@ -124,6 +127,9 @@
 
   --unattended-course: #ffff00;
   --mail-context-highlight: #0000ff;
+
+  --ranking-selected: #5f27cd;
+  --ranking-invalid: #888;
 
   --footer-bg-color: #eee;
 }
