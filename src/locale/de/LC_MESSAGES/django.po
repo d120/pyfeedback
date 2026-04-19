@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-22 00:16+0100\n"
+"POT-Creation-Date: 2026-04-19 23:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -542,7 +542,7 @@ msgid ""
 msgstr ""
 
 #: src/feedback/models/base.py:788
-msgid "Ab dieser Zeitpunk wird berechnet, ob die Anfrage gültig ist."
+msgid "Ab diesem Zeitpunk wird berechnet, ob die Anfrage gültig ist."
 msgstr ""
 
 #: src/feedback/models/base.py:839
@@ -561,14 +561,6 @@ msgstr ""
 msgid "Erlaubte Zustände"
 msgstr ""
 
-#: src/feedback/tools.py:143
-msgid "E-Mail-Änderungsanfrage"
-msgstr ""
-
-#: src/feedback/tools.py:162
-msgid "E-Mail-Änderungsanfrage OTP"
-msgstr ""
-
 #: src/feedback/views/public.py:151
 #, python-format
 msgid "Das Senden des E-Mail-Änderungslinks an %s ist fehlgeschlagen."
@@ -580,9 +572,12 @@ msgid ""
 "versuchen Sie es später erneut."
 msgstr ""
 
-#: src/feedback/views/public.py:189 src/feedback/views/public.py:196
-#: src/feedback/views/public.py:248
+#: src/feedback/views/public.py:189 src/feedback/views/public.py:248
 msgid "Das Link ist nicht gültig."
+msgstr ""
+
+#: src/feedback/views/public.py:196
+msgid "Der Link ist nicht gültig."
 msgstr ""
 
 #: src/feedback/views/public.py:240
@@ -1770,7 +1765,7 @@ msgstr ""
 #: src/templates/public/email_change_validate.html:11
 msgid ""
 "\n"
-"        Geben Sie unten Einmalpassword (OTP) ein, um die Änderung "
+"        Geben Sie unten das Einmalpassword (OTP) ein, um die Änderung "
 "abzuschließen.\n"
 "    "
 msgstr ""

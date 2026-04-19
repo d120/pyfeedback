@@ -5,7 +5,7 @@ Guten Tag,
 
 Sie haben eine Änderung Ihrer E-Mail-Adresse {{ email }} beantragt.
 
-Das Link ist nur {{ minutes_to_expire }} Minuten gültig.
+Der Link ist nur {{ minutes_to_expire }} Minuten gültig.
 
 Klicken Sie auf den folgenden Link, um fortzufahren:
 

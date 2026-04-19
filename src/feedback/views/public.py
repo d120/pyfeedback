@@ -120,7 +120,7 @@ def veranstaltung(request, vid=None):
 
 @require_http_methods(('HEAD', 'GET', 'POST'))
 def email_change_request(request) :
-    
+
     if request.method == 'POST':
         form = EMailChangeRequestForm(request.POST)
 
@@ -156,7 +156,7 @@ def email_change_request(request) :
                         request,
                         _("Beim Versenden der Bestätigungs-E-Mail ist ein Problem aufgetreten. Bitte versuchen Sie es später erneut.")
                     )
-                    
+
                     return redirect("feedback:email-change-request")
             else:
                 email_change.delete()
@@ -166,9 +166,9 @@ def email_change_request(request) :
 
     else:
         form = EMailChangeRequestForm()
-    
+
     return render(request, "public/email_change_request.html", {"form": form})
-        
+
 
 
 @require_http_methods(("HEAD", "GET", "POST"))
@@ -176,7 +176,7 @@ def email_change(request, token=None):
     if token is None:
         return redirect("feedback:email-change-request")
 
-    try: 
+    try:
         email_change = get_object_or_404(
             EmailChange,
             token=token,
@@ -184,16 +184,16 @@ def email_change(request, token=None):
 
         if not email_change.request_is_valid() :
             raise Exception("Link is no longer valid")
-        
+
     except Exception :
         messages.error(request, _("Das Link ist nicht gültig."))
         return redirect("feedback:email-change-request")
-    
+
     if not email_change.status == EmailChange.Status.MAGIC_LINK_SENT :
         if email_change.status == EmailChange.Status.OTP_SENT :
             return redirect("feedback:email-change-validate",token=email_change.token)
         else :
-            messages.error(request, _("Das Link ist nicht gültig."))
+            messages.error(request, _("Der Link ist nicht gültig."))
             return redirect("feedback:email-change-request")
 
 
@@ -226,7 +226,7 @@ def email_change_validate(request, token=None):
     if token is None:
         return redirect("feedback:email-change-request")
 
-    try: 
+    try:
         email_change = get_object_or_404(
             EmailChange,
             token=token,
@@ -234,12 +234,12 @@ def email_change_validate(request, token=None):
 
         if not email_change.request_is_valid() :
             raise Exception("Request is no longer valid")
-        
-    
+
+
     except Exception :
         messages.error(request, _("Das Link ist nicht mehr gültig."))
         return redirect("feedback:email-change-request")
-    
+
     if not email_change.status == EmailChange.Status.OTP_SENT :
         if email_change.status == EmailChange.Status.MAGIC_LINK_SENT :
             messages.error(request, _("Sie müssen eine neue E-Mail eingeben."))
@@ -268,7 +268,7 @@ def email_change_validate(request, token=None):
                 )
 
             return render(request, "public/email_change_complete.html", {"new_email": email_change.new_email,})
-        
+
     else:
         form = EMailChangeValidateForm(instance=email_change)
 

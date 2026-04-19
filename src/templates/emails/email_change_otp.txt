@@ -3,9 +3,9 @@
 
 Guten Tag,
 
-Ihre alte E-Mail-Adresse [{{ old_email }}] wird zu diese [{{ email }}] geändert. 
+Ihre alte E-Mail-Adresse [{{ old_email }}] wird zu [{{ email }}] geändert.
 
-Um mit der Änderung fortzufahren, geben Sie bitte diesen OTP code an, OTP ist nur {{ minutes_to_expire }} Minuten gültig :
+Um mit der Änderung fortzufahren, geben Sie bitte diesen OTP Code ein. Dieser OTP Code ist nur für {{ minutes_to_expire }} Minuten gültig :
 
 {{ otp|safe }}
 
@@ -22,9 +22,9 @@ Ihr Evaluations-Team
 
 Hello,
 
-Your old email address [{{ old_email }}] will be changed to this one [{{ email }}]. 
+Your old email address [{{ old_email }}] will be changed to this one [{{ email }}].
 
-To proceed with the change, please enter this OTP code. OTP is only valid for {{ minutes_to_expire }} minutes:
+To proceed with the change, please enter this OTP code. The OTP code is only valid for {{ minutes_to_expire }} minutes:
 
 {{ otp }}
 

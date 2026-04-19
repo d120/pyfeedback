@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-22 00:16+0100\n"
+"POT-Creation-Date: 2026-04-19 23:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -573,8 +573,9 @@ msgid ""
 msgstr "Please select all persons whose email address should be changed."
 
 #: src/feedback/models/base.py:788
-msgid "Ab dieser Zeitpunk wird berechnet, ob die Anfrage gültig ist."
-msgstr "From this point on, the system calculates whether the request is valid."
+msgid "Ab diesem Zeitpunk wird berechnet, ob die Anfrage gültig ist."
+msgstr ""
+"From this point on, the system calculates whether the request is valid."
 
 #: src/feedback/models/base.py:839
 msgid "E-Mail-Änderung"
@@ -592,14 +593,6 @@ msgstr "Permitted state"
 msgid "Erlaubte Zustände"
 msgstr "Permitted states"
 
-#: src/feedback/tools.py:143
-msgid "E-Mail-Änderungsanfrage"
-msgstr "Email change request"
-
-#: src/feedback/tools.py:162
-msgid "E-Mail-Änderungsanfrage OTP"
-msgstr "Email change requests"
-
 #: src/feedback/views/public.py:151
 #, python-format
 msgid "Das Senden des E-Mail-Änderungslinks an %s ist fehlgeschlagen."
@@ -609,11 +602,15 @@ msgstr "Sending the email change link to %s failed."
 msgid ""
 "Beim Versenden der Bestätigungs-E-Mail ist ein Problem aufgetreten. Bitte "
 "versuchen Sie es später erneut."
-msgstr "There was a problem sending the confirmation email. Please try again later."
+msgstr ""
+"There was a problem sending the confirmation email. Please try again later."
 
-#: src/feedback/views/public.py:189 src/feedback/views/public.py:196
-#: src/feedback/views/public.py:248
+#: src/feedback/views/public.py:189 src/feedback/views/public.py:248
 msgid "Das Link ist nicht gültig."
+msgstr "The link is not valid."
+
+#: src/feedback/views/public.py:196
+msgid "Der Link ist nicht gültig."
 msgstr "The link is not valid."
 
 #: src/feedback/views/public.py:240
@@ -1861,8 +1858,8 @@ msgid ""
 "    "
 msgstr ""
 "\n"
-"       Enter your new email address below. You will receive a one-time password "
-"(OTP) to confirm your new email address.\n"
+"       Enter your new email address below. You will receive a one-time "
+"password (OTP) to confirm your new email address.\n"
 "    "
 
 #: src/templates/public/email_change.html:18
@@ -1878,8 +1875,8 @@ msgid ""
 "    "
 msgstr ""
 "\n"
-"       You have successfully changed your email address. "
-"Your new email address is: %(new_email)s\n"
+"       You have successfully changed your email address. Your new email "
+"address is: %(new_email)s\n"
 "    "
 
 #: src/templates/public/email_change_request.html:11
@@ -1896,7 +1893,8 @@ msgstr ""
 "\n"
 "       Enter your old email address below. You will receive a link to change "
 "your email address. If you no longer have access to your old email address, "
-"please contact <a href=\"mailto:feedback@fachschaft.informatik.tu-darmstadt.de\">Feedback-Team</a>.\n"
+"please contact <a href=\"mailto:feedback@fachschaft.informatik.tu-"
+"darmstadt.de\">Feedback-Team</a>.\n"
 "    "
 
 #: src/templates/public/email_change_request.html:19
@@ -1919,22 +1917,22 @@ msgid ""
 "    "
 msgstr ""
 "\n"
-"   If [<u>%(old_email)s</u>] is registered with the website, you will receive "
-"an email to change your email address. \n "
-"If you no longer have access to this email address, please "
-"contact the <a href=\"mailto:feedback@fachschaft.informatik.tu-darmstadt.de\">Feedback-Team</a>.\n"
+"   If [<u>%(old_email)s</u>] is registered with the website, you will "
+"receive an email to change your email address. \n"
+" If you no longer have access to this email address, please contact the <a "
+"href=\"mailto:feedback@fachschaft.informatik.tu-darmstadt.de\">Feedback-"
+"Team</a>.\n"
 "    "
 
 #: src/templates/public/email_change_validate.html:11
 msgid ""
 "\n"
-"        Geben Sie unten Einmalpassword (OTP) ein, um die Änderung "
+"        Geben Sie unten das Einmalpassword (OTP) ein, um die Änderung "
 "abzuschließen.\n"
 "    "
 msgstr ""
 "\n"
-"Enter the one-time password (OTP) below to complete the change."
-"    "
+"Enter the one-time password (OTP) below to complete the change.    "
 
 #: src/templates/public/email_change_validate.html:18
 msgid "Verifizieren"
@@ -2415,3 +2413,9 @@ msgstr "to the admin-login"
 #: src/templates/veranstalter/not_authenticated.html:24
 msgid "zum E-Mail ändern"
 msgstr "Change E-Mail"
+
+#~ msgid "E-Mail-Änderungsanfrage"
+#~ msgstr "Email change request"
+
+#~ msgid "E-Mail-Änderungsanfrage OTP"
+#~ msgstr "Email change requests"
