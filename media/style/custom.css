@@ -42,26 +42,67 @@ body {
     text-align: right;
 }
 
-/* message lists, breadcrumb etc  */
+/* message list, errer list, breadcrumb, warning */
+
+.messagelist li,
+.errorlist,
+blockquote,
+.comment-box {
+    padding: 12px 15px;
+    margin: 15px 0;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
 
 .messagelist {
     list-style: none;
     padding: 0;
+    margin: 0;
 }
 
 .messagelist li {
-    padding: 10px 15px;
-    margin-bottom: 10px;
-    border-radius: 4px;
-    background-color: #f8f9fa;
-    border: 1px solid #ddd;
+    background-color: var(--msg-default-bg);
+    color: var(--msg-default-text);
+    border: 1px solid var(--msg-default-border);
 }
 
-.messagelist li.success { background-color: #d4edda; color: #155724; }
-.messagelist li.error { background-color: #f8d7da; color: #721c24; }
+.messagelist li.success {
+    background-color: var(--msg-success-bg);
+    color: var(--msg-success-text);
+    border-color: var(--msg-success-border);
+}
+
+.messagelist li.error {
+    background-color: var(--msg-error-bg);
+    color: var(--msg-error-text);
+    border-color: var(--msg-error-border);
+}
+
+.errorlist {
+    list-style: none;
+    background-color: var(--msg-error-bg);
+    color: var(--msg-error-text);
+    border: 1px solid var(--msg-error-border);
+    font-size: 0.9rem;
+}
+
+.errorlist li {
+    margin-bottom: 5px;
+}
+
+.errorlist li:last-child {
+    margin-bottom: 0;
+}
+
+blockquote, .comment-box {
+    border: 1px solid transparent; /* Keeps box alignment consistent with bordered items */
+    border-left: 4px solid var(--main-theme-color);
+    font-style: italic;
+    background-color: rgba(0, 0, 0, 0.02); /* Optional: slight tint to match list "feel" */
+}
 
 .breadcrumb {
-    background: #e9ecef;
+    background: var(--main-background-color);
     padding: 10px 15px;
     border-radius: 4px;
     margin-bottom: 20px;

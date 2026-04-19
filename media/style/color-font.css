@@ -27,6 +27,8 @@
 
 
 :root, .dark {
+  color-scheme: light dark;
+
   /* Font Family Variables */
   --font-main: "Roboto", sans-serif;
   --font-second: "Roboto Slab", serif;
@@ -78,9 +80,24 @@
   --ranking-invalid: #888;
 
   --footer-bg-color: #222;
+
+  --msg-default-bg: #1a1c1e;
+  --msg-default-text: #e9ecef;
+  --msg-default-border: #373a3c;
+
+  --msg-success-bg: #0f2d16;
+  --msg-success-text: #b7e4c7;
+  --msg-success-border: #1b4324;
+
+  --msg-error-bg: #332b00;
+  --msg-error-text: #ffec99;
+  --msg-error-border: #665200;
+
 }
 
 .light {
+  color-scheme: light dark;
+
   /* Font Family Variables */
   --font-main: "Roboto", sans-serif;
   --font-second: "Roboto Slab", serif;
@@ -132,6 +149,18 @@
   --ranking-invalid: #888;
 
   --footer-bg-color: #eee;
+
+  --msg-default-bg: #f8f9fa;
+  --msg-default-text: #212529;
+  --msg-default-border: #dee2e6;
+
+  --msg-success-bg: #d4edda;
+  --msg-success-text: #155724;
+  --msg-success-border: #c3e6cb;
+
+  --msg-error-bg: #fff3cd;
+  --msg-error-text: #856404;
+  --msg-error-border: #ffeeba;
 }
 
 .dark-only, .light-only {
