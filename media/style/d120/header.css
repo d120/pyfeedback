@@ -15,6 +15,7 @@ header {
 /* navbar and container */
 .header-top-container-wrapper {
   border-top: 3px solid var(--main-background-color);
+  width: 100%;
 }
 
 .header-top-container {
@@ -24,6 +25,8 @@ header {
   align-items: center;
   background-color: var(--main-background-color);
   border-top: 1px solid var(--main-theme-color);
+  width: 100%;
+  min-height: 60px;
 }
 
 .header-side-container {
@@ -31,7 +34,8 @@ header {
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
-  gap: calc(10px + 1vw);
+  gap: calc(5px + 0.5vw);
+  max-width: 100%;
 }
 
 .navigation {
@@ -59,7 +63,7 @@ header {
   justify-content: center;
   gap: 8px;
   color: var(--header-link-highlight);
-  padding: 1rem 1.5rem;
+  padding: 0.8rem 1rem;
   font-size: 1rem;
   line-height: 1.2;
   border-top: 1px solid transparent;
@@ -77,7 +81,7 @@ header {
   justify-content: center;
   align-items: center;
   gap: 8px;
-  padding: 1rem 1.5rem;
+  padding: 0.8rem 1rem;
   font-size: 1rem;
   line-height: 1.2;
   border-top: 1px solid transparent;
@@ -91,16 +95,24 @@ header {
     justify-content: center;
     text-align: center;
     gap: 2px;
+    padding: 0.5rem 0.8rem;
   }
 
   .header-label {
-    font-size: 0.8rem;
+    display: inline;
+    font-size: 0.75rem;
   }
 }
 
-@media (max-width: 575px) {
+@media (min-width: 992px) {
+  .header-link, .header-button {
+    flex-direction: row;
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+  }
+
   .header-label {
-    display: none;
+    font-size: 1rem;
   }
 }
 
@@ -168,20 +180,27 @@ header {
 /* fachsschaft logo behaviour (also respnsive) */
 
 .header-logo {
-  max-height: 80px;
   display: none;
-  width: auto;
+  width: 40px;
+  height: 40px;
 }
 
-@media (min-width: 480px) and (max-width: 767px) {
+@media (min-width: 480px) {
   .header-logo-small {
     display: block;
+    width: 60px;
+    height: 60px;
   }
 }
 
 @media (min-width: 768px) {
+  .header-logo-small {
+    display: none;
+  }
   .header-logo-big {
     display: block;
+    width: 200px;
+    height: 80px;
   }
 }
 
