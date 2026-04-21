@@ -8,14 +8,19 @@ from django.utils.translation import gettext_lazy as _
 from django.db.utils import OperationalError
 from django.urls import reverse
 from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
 from django.db.models import Q
 
 from feedback.tools import ean_checksum_calc, ean_checksum_valid
 from django.contrib.auth.models import User
+from django.contrib.auth.hashers import make_password, check_password
 
-from django.utils import formats
+from django.utils import formats, timezone
 
 import datetime
+import uuid
+import string
+import secrets
 
 
 class Semester(models.Model):
@@ -738,6 +743,101 @@ class Mailvorlage(models.Model):
         verbose_name = _('Mailvorlage')
         verbose_name_plural = verbose_name + 'n'
         ordering = ['subject']
+        app_label = 'feedback'
+
+
+class EmailChange(models.Model) :
+    """
+    Used to keep track of email change requests
+    """
+    
+    class Status(models.IntegerChoices):
+        EXPIRED = 0, _("EXPIRED")
+        MAGIC_LINK_SENT = 1, _("LINK SENT")
+        OTP_SENT = 2, _("OTP SENT")
+        COMPLETED = 3, _("COMPLETED SUCCESSFULLY")
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["token"]),
+        ]
+
+    token = models.UUIDField(editable=False, default=uuid.uuid4, unique=True)
+
+    old_email = models.EmailField(blank=False, validators=[validate_email], verbose_name=_("Alte E-Mail"))
+    new_email = models.EmailField(blank=False, validators=[validate_email], verbose_name=_("Neue E-Mail"))
+
+    person_list_to_change = models.ManyToManyField(
+        Person,
+        related_name="email_change_list",
+        verbose_name=_("Personen"),
+        help_text=_("Bitte wählen Sie alle Personen aus, deren E-Mail-Adresse geändert werden soll."),
+        blank=True,
+    )
+
+    new_email_otp_hash = models.CharField(blank=True, max_length=128)
+
+    created_at = models.DateTimeField(auto_now_add=True, editable=False)
+
+    status = models.PositiveSmallIntegerField(
+        choices=Status.choices,
+        default=Status.MAGIC_LINK_SENT,
+        db_index=True,
+    )
+
+    dynamic_expiry_time = models.DateTimeField(default=timezone.now, help_text=_("Ab diesem Zeitpunk wird berechnet, ob die Anfrage gültig ist."))
+
+    MINUTES_TO_EXPIRE_LINK = 15
+    MINUTES_TO_EXPIRE_OTP = 15
+
+    @property
+    def is_expired(self):
+        """
+        Returns True if minutes to expire passed OR status is already EXPIRED.
+        """
+        if self.status == self.Status.EXPIRED:
+            return True
+        elif self.status == self.Status.COMPLETED:
+            return False
+        elif self.status == self.Status.MAGIC_LINK_SENT :
+            expiry_limit = self.dynamic_expiry_time + datetime.timedelta(minutes=EmailChange.MINUTES_TO_EXPIRE_LINK)
+
+        elif self.status == self.Status.OTP_SENT :
+            expiry_limit = self.dynamic_expiry_time + datetime.timedelta(minutes=EmailChange.MINUTES_TO_EXPIRE_OTP)
+
+        return timezone.now() > expiry_limit
+
+    def request_is_valid(self):
+        """
+        Call this method in view to check validity of request.
+        """
+        if self.is_expired and self.status != self.Status.EXPIRED:
+            self.status = self.Status.EXPIRED
+            self.save(update_fields=['status']) # remove this part if background tasks are added
+            return False
+        return self.status != self.Status.EXPIRED
+    
+
+    def generate_otp_and_hash(self, length=16) :
+        """
+        Generates a complex one-time password and its hash.
+        """
+        alphabet = (
+            string.ascii_letters +
+            string.digits +
+            "!@#$%^&*()-_=+[]{}:?"
+        )
+
+        otp = ''.join(secrets.choice(alphabet) for _ in range(length))
+
+        return otp, make_password(otp)
+
+    def verify_otp(self, otp: str) -> bool:
+        return check_password(otp, self.new_email_otp_hash)
+
+    class Meta:
+        verbose_name = _('E-Mail-Änderung')
+        verbose_name_plural = _('E-Mail-Änderungen')
         app_label = 'feedback'
 
 

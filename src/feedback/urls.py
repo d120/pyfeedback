@@ -10,7 +10,7 @@ import feedback.views.intern.vv
 import feedback.views.intern.auth
 from django.views.decorators.csrf import csrf_exempt
 import django.contrib.auth.views
-from django.urls import reverse_lazy, re_path
+from django.urls import reverse_lazy, re_path, path
 from django.conf import settings
 from feedback.views.veranstalter import VeranstalterWizard
 from django.utils.translation import get_language
@@ -26,6 +26,9 @@ urlpatterns = [
 urlpatterns += [
     re_path(r'^ergebnisse/(?P<vid>\d+)/$', feedback.views.public.veranstaltung, name='public-veranstaltung'),
     re_path(r'^ergebnisse/$', feedback.views.public.index, name='public-results'),
+    re_path(r'^email-change/$', feedback.views.public.email_change_request, name='email-change-request'),
+    path('email-change/<uuid:token>/', feedback.views.public.email_change, name='email-change'),
+    path('email-change/validate/<uuid:token>/', feedback.views.public.email_change_validate, name='email-change-validate'),
 ]
 
 urlpatterns += [re_path(r'^deadlines/$', VeranstaltungsDeadlines.as_view(), name='Deadlines'),

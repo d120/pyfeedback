@@ -1,0 +1,18 @@
+{% extends "ergebnisse_base.html" %}
+{% load i18n %}
+{% block title %}{% translate "Change Email" %}{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+    <h2>{% translate "E-Mail Ändern" %}</h2>
+    <br>
+
+    <p>{% blocktranslate %}
+        Wenn [<u>{{ old_email }}</u>] bei der Website registriert ist, erhalten Sie eine E-Mail, um Ihre E-Mail-Adresse zu ändern. 
+        Falls Sie keinen Zugriff mehr auf diese E-Mail-Adresse haben, melden Sie sich bitte beim <a href="mailto:feedback@fachschaft.informatik.tu-darmstadt.de">Feedback-Team</a>.
+    {% endblocktranslate %}</p>
+
+
+</div>
+{% endblock %}

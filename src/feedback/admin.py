@@ -9,7 +9,7 @@ from django.utils.translation import gettext_lazy as _
 from feedback.models import Person, Veranstaltung, Semester, \
     Mailvorlage, Kommentar, Tutor, BarcodeScanner, BarcodeScannEvent, BarcodeAllowedState, \
     EmailEndung, Fragebogen2020, FragebogenUE2020, Ergebnis2020, Fragebogen2016, FragebogenUE2016, Ergebnis2016, \
-    Fragebogen2025, FragebogenUE2025, Ergebnis2025
+    Fragebogen2025, FragebogenUE2025, Ergebnis2025, EmailChange
 from feedback.models.base import Log, Fachgebiet, FachgebietEmail
 
 
@@ -254,6 +254,44 @@ class FragebogenAdmin(admin.ModelAdmin):
     list_display = ('veranstaltung',)
     list_per_page = 500
 
+class EmailChangeAdmin(admin.ModelAdmin):
+    fields = (
+        "old_email",
+        "new_email",
+        "token",
+        "created_at",
+        "status",
+        "person_list_to_change",
+        "dynamic_expiry_time",
+    )
+    list_display = (
+        "old_email",
+        "new_email",
+        "dynamic_expiry_time",
+        "created_at",
+        # "status",  don't put this into here, as get_object (below) or a user action (calling EmailChange.request_is_valid())
+    )         # has to update status field. This avoids having background workers running to update the fields  
+
+    readonly_fields = (
+        "old_email",
+        "new_email",
+        "token",
+        "dynamic_expiry_time",
+        "created_at",
+        "status",
+        "person_list_to_change",
+    )
+    def get_object(self, request, object_id, from_queryset=None):
+        """
+        updates the status, when admin enters into details of an object
+        """
+        obj = super().get_object(request, object_id, from_queryset)
+
+        if obj is not None:
+            obj.request_is_valid()
+            
+        return obj
+
 
 admin.site.register(Person, PersonAdmin)
 admin.site.register(Veranstaltung, VeranstaltungAdmin)
@@ -274,3 +312,4 @@ admin.site.register(BarcodeScannEvent, BarcodeScannEventAdmin)
 admin.site.register(BarcodeScanner, BarcodeScannerAdmin)
 admin.site.register(Fachgebiet, FachgebietAdmin)
 admin.site.register(EmailEndung)
+admin.site.register(EmailChange, EmailChangeAdmin)

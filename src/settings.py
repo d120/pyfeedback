@@ -183,6 +183,12 @@ ACCOUNT_EMAIL_VERIFICATION = 'none'
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+    },
     'filters': {
         'require_debug_false': {
             '()': 'django.utils.log.RequireDebugFalse'
@@ -198,6 +204,14 @@ LOGGING = {
             'level':'DEBUG',
             'class':'logging.StreamHandler',
         },
+        'file_all': {
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_PATH, 'all.log'),
+            'maxBytes': 1024 * 1024 * 5,
+            'backupCount': 5,
+            'formatter': 'verbose',
+        },
     },
     'loggers': {
         'django.request': {
@@ -208,6 +222,11 @@ LOGGING = {
         'auth': {
             'handlers': ['console'],
             'level': 'DEBUG',
+        },
+        '': {
+            'handlers': ['file_all'],
+            'level': 'INFO',
+            'propagate': True,
         },
     }
 }

@@ -2,10 +2,10 @@
 
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.test import TestCase, override_settings
+from django.test import TestCase, override_settings, Client
 
 from feedback.models import Semester, Ergebnis2009, Veranstaltung, \
-    Kommentar, Person, BarcodeScanner, BarcodeAllowedState
+    Kommentar, Person, BarcodeScanner, BarcodeAllowedState, EmailChange
 
 from feedback.tests.test_views_veranstalter import login_veranstalter
 from feedback.tests import redirect_urls
@@ -13,6 +13,13 @@ import json
 from freezegun import freeze_time
 import datetime
 from django.utils.translation import get_language
+
+import uuid
+from django.urls import reverse
+from django.utils import timezone, translation
+from unittest import mock
+from django.contrib.messages import get_messages
+
 
 
 @override_settings(ROOT_URLCONF=redirect_urls)
@@ -234,6 +241,121 @@ class PublicVeranstaltungTest(TestCase):
         response = self.client.get(f'/{get_language()}/ergebnisse/{self.v.id}/', **{'REMOTE_USER':'testuser'})
         ctx = response.context
         self.assertEqual(ctx['restricted'], True)
+
+class EmailChangeSystemTest(TestCase):
+
+    def setUp(self):
+        self.client = Client()
+        self.old_email = "old@example.com"
+        self.new_email = "new@example.com"
+        
+        self.person = Person.objects.create(email=self.old_email)
+        
+        self.request_url = reverse("feedback:email-change-request")
+
+    def test_request_get_renders_template(self):
+        """Test if the initial request form loads."""
+        response = self.client.get(self.request_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "public/email_change_request.html")
+
+    @mock.patch('feedback.tools.send_change_email_link')
+    def test_request_post_success(self, mock_send_link):
+        """Test successful creation of a change request and email trigger."""
+        response = self.client.post(self.request_url, {'old_email': self.old_email})
+        
+        email_change = EmailChange.objects.get(old_email=self.old_email)
+        self.assertEqual(email_change.status, EmailChange.Status.MAGIC_LINK_SENT)
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "public/email_change_send_confirmation.html")
+        mock_send_link.assert_called_once()
+
+    @mock.patch('feedback.tools.send_change_email_link')
+    def test_request_post_person_not_exists(self, mock_send_link):
+        """Logic says if person doesn't exist, delete the EmailChange record."""
+        response = self.client.post(self.request_url, {'old_email': 'ghost@example.com'})
+        
+        self.assertEqual(EmailChange.objects.count(), 0)
+        mock_send_link.assert_not_called()
+        self.assertEqual(response.status_code, 200)
+
+    def test_email_change_invalid_token(self):
+        """Test that a non-existent token triggers a redirect with warning."""
+
+        with translation.override('de'):
+            url = reverse("feedback:email-change", kwargs={'token': uuid.uuid4()})
+            response = self.client.get(url, follow=True)
+            self.assertContains(response, "Das Link ist nicht gültig.")
+
+    @mock.patch('feedback.tools.send_change_email_otp')
+    def test_email_change_submit_new_email(self, mock_send_otp):
+        """Test submitting the new email address via the magic link."""
+
+        email_change = EmailChange.objects.create(
+            old_email=self.old_email,
+            token=uuid.uuid4(),
+            status=EmailChange.Status.MAGIC_LINK_SENT,
+            dynamic_expiry_time=timezone.now()
+        )
+        url = reverse("feedback:email-change", kwargs={'token': email_change.token})
+
+        # mock 'request_is_valid' to return True and 'generate_otp_and_hash'
+        with mock.patch.object(EmailChange, 'request_is_valid', return_value=True):
+            with mock.patch.object(EmailChange, 'generate_otp_and_hash', return_value=('123456', 'fake_hash')):
+                response = self.client.post(url, {'new_email': self.new_email, 'new_email_check': self.new_email})
+                
+                email_change.refresh_from_db()
+                self.assertEqual(email_change.status, EmailChange.Status.OTP_SENT)
+                self.assertRedirects(response, reverse("feedback:email-change-validate", kwargs={'token': email_change.token}))
+                mock_send_otp.assert_called_once()
+
+
+    def test_validation_complete_flow(self):
+        """Test that entering the correct OTP updates the Person's email."""
+
+        email_change = EmailChange.objects.create(
+            old_email=self.old_email,
+            new_email=self.new_email,
+            token=uuid.uuid4(),
+            status=EmailChange.Status.OTP_SENT,
+            dynamic_expiry_time=timezone.now()
+        )
+
+        email_change.person_list_to_change.add(self.person)
+        
+        url = reverse("feedback:email-change-validate", kwargs={'token': email_change.token})
+
+        # mock form validation to succeed
+        with mock.patch('feedback.forms.EMailChangeValidateForm.is_valid', return_value=True):
+            response = self.client.post(url, {'otp': '123456'})
+            
+            self.person.refresh_from_db()
+            email_change.refresh_from_db()
+            
+            self.assertEqual(self.person.email, self.new_email)
+            self.assertEqual(email_change.status, EmailChange.Status.COMPLETED)
+            self.assertEqual(response.status_code, 200)
+            self.assertTemplateUsed(response, "public/email_change_complete.html")
+
+    def test_expired_link_redirects(self):
+        """Test that an expired request_is_valid() redirects to request page."""
+        email_change = EmailChange.objects.create(
+            old_email=self.old_email,
+            token=uuid.uuid4(),
+            status=EmailChange.Status.MAGIC_LINK_SENT,
+            dynamic_expiry_time=timezone.now()
+        )
+        url = reverse("feedback:email-change", kwargs={'token': email_change.token})
+        
+        with translation.override('de'):
+            with mock.patch.object(EmailChange, 'request_is_valid', return_value=False):
+                response = self.client.get(url, follow=True)
+                self.assertRedirects(response, reverse("feedback:email-change-request"))
+                
+                # verify error message appeared
+                messages = list(get_messages(response.wsgi_request))
+                self.assertTrue(any("nicht gültig" in str(m) for m in messages))
 
 
 class PublicDropBarcode(TestCase):

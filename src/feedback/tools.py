@@ -2,6 +2,12 @@
 
 from django.template import TemplateSyntaxError, Template
 
+from django.core.mail import send_mail
+from django.utils.translation import gettext_lazy as _
+from django.template.loader import render_to_string
+from django.utils.safestring import mark_safe
+
+from django.conf import settings
 
 # ------------------------------ Durchschnittsberechnung für das Ranking ------------------------------ #
 
@@ -129,3 +135,43 @@ def ean_checksum_valid(x):
         if x % 10 == ean_checksum_calc(x):
             result = True
     return result
+
+def send_change_email_link(to_email, link, minutes_to_expire) :
+    """
+    sends mail to given email with given link as a part of email change process
+    """
+    subject = "E-Mail-Änderungsanfrage / Email change request"
+
+    message = render_to_string(
+        "emails/email_change.txt",
+        {"email": to_email, "link": mark_safe(link), "minutes_to_expire": minutes_to_expire,}
+    )
+
+    send_mail(
+        subject=subject,
+        message=message,
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        recipient_list=[to_email],
+        fail_silently=False,
+    )
+
+def send_change_email_otp(to_email, old_email, otp, minutes_to_expire) :
+    """
+    sends mail with otp
+    """
+    subject = "E-Mail-Änderung OTP / Email change OTP"
+
+    message = render_to_string(
+        "emails/email_change_otp.txt",
+        {"email": to_email, "old_email": old_email, "otp": mark_safe(otp), "minutes_to_expire": minutes_to_expire,}
+    )
+
+    send_mail(
+        subject=subject,
+        message=message,
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        recipient_list=[to_email],
+        fail_silently=False,
+    )
+
+

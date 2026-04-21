@@ -1,0 +1,21 @@
+{% extends "ergebnisse_base.html" %}
+{% load i18n %}
+{% block title %}{% translate "Change Email" %}{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+    <h2>{% translate "Email Ändern" %}</h2>
+    <br>
+
+    <p>{% blocktranslate %}
+        Geben Sie unten das Einmalpassword (OTP) ein, um die Änderung abzuschließen.
+    {% endblocktranslate %}</p>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="{% translate "Verifizieren" %}">
+    </form>
+</div>
+{% endblock %}
