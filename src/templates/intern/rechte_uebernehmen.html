@@ -10,7 +10,7 @@
 <p>{% translate "Das System bietet dir nach der Rechteübernahme auf jeder Seite die Rückkehr zu deinem Account an." %}</p>
 <p>
 <form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
-<select size="1" name="vid">
+<select class="select-dynamic" size="1" name="vid">
 {% for v in veranstaltungen %}
 	<option value="{{v.id}}">{{v}}</option>
 {% endfor %}

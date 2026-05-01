@@ -3,7 +3,7 @@
 #sidebar {
     font-family: var(--font-second);
     font-size: 18px;
-    background-color: var(--main-background-color);
+    background-color: transparent;
 }
 
 .sidebar-active {

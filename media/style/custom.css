@@ -48,7 +48,7 @@ body {
 .errorlist,
 blockquote,
 .comment-box {
-    padding: 12px 15px;
+    padding: 10px 12px;
     margin: 15px 0;
     border-radius: 4px;
     box-sizing: border-box;
@@ -83,7 +83,7 @@ blockquote,
     background-color: var(--msg-error-bg);
     color: var(--msg-error-text);
     border: 1px solid var(--msg-error-border);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
 }
 
 .errorlist li {
@@ -95,18 +95,18 @@ blockquote,
 }
 
 blockquote, .comment-box {
-    border: 1px solid transparent; /* Keeps box alignment consistent with bordered items */
+    border: 1px solid transparent;
     border-left: 4px solid var(--main-theme-color);
     font-style: italic;
-    background-color: rgba(0, 0, 0, 0.02); /* Optional: slight tint to match list "feel" */
+    background-color: rgba(0, 0, 0, 0.02);
 }
 
 .breadcrumb {
     background: var(--main-background-color);
-    padding: 10px 15px;
+    padding: 8px 12px;
     border-radius: 4px;
     margin-bottom: 20px;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
 }
 
 .warning {
@@ -139,8 +139,8 @@ a:hover {
 button {
     cursor: pointer;
     text-decoration: none;
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
     line-height: 1.2;
     border: 1px solid transparent;
     border-radius: 4px;
@@ -182,8 +182,8 @@ button.secondary:disabled {
 }
 
 button.small {
-    padding: 0.2rem 0.6rem;
-    font-size: 0.75rem;
+    padding: 0.15rem 0.5rem;
+    font-size: 0.7rem;
 }
 
 /* input file, text, email */
@@ -193,7 +193,9 @@ input[type="file"] {
     background-color: transparent;
     border: 1px solid var(--form-not-highlighted);
     border-radius: 4px;
-    padding: 4px;
+    padding: 0.4rem;
+    font-size: 0.9rem;
+    line-height: 1.2;
     cursor: pointer;
     transition: border-color 0.2s ease;
 }
@@ -207,8 +209,10 @@ input[type="file"]::file-selector-button {
     background-color: var(--accent-color);
     border: none;
     border-radius: 4px;
-    padding: 8px 16px;
-    margin-right: 15px;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+    line-height: 1.2;
+    margin-right: 12px;
     cursor: pointer;
     transition: background-color 0.2s ease;
 }
@@ -222,7 +226,9 @@ input[type="text"], input[type="email"] {
     background-color: transparent;
     border: 1px solid var(--form-not-highlighted);
     border-radius: 4px;
-    padding: 8px 16px;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+    line-height: 1.2;
     outline: none;
     transition: border-color 0.2s ease;
     box-sizing: border-box;
@@ -246,8 +252,8 @@ input[type="email"]:disabled {
 input[type="radio"] {
     appearance: none;
     -webkit-appearance: none;
-    width: 18px;
-    height: 18px;
+    width: 1.05rem;
+    height: 1.05rem;
     border: 1px solid var(--form-not-highlighted);
     border-radius: 50%;
     background-color: transparent;
@@ -268,8 +274,8 @@ input[type="radio"]:checked::after {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 10px;
-    height: 10px;
+    width: 0.5rem;
+    height: 0.5rem;
     border-radius: 50%;
     background-color: var(--accent-color);
 }
@@ -282,6 +288,9 @@ input[type="number"] {
     color: var(--main-theme-color);
     background-color: var(--main-background-color);
     border: 1px solid var(--accent-color);
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+    line-height: 1.2;
     -moz-appearance: textfield;
     appearance: textfield;
 }
@@ -299,10 +308,13 @@ input::-webkit-inner-spin-button {
 }
 
 input[type="checkbox"] {
+    width: 1rem;
+    height: 1rem;
     color: var(--main-theme-color);
     accent-color: var(--accent-color);
     border: none;
     cursor: pointer;
+    vertical-align: middle;
 }
 
 input[type="checkbox"]::before {
@@ -318,6 +330,9 @@ input[type="date"] {
     color: var(--main-theme-color);
     background-color: var(--main-background-color);
     border: 1px solid var(--accent-color);
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+    line-height: 1.2;
 }
 
 input[type="date"]:focus,
@@ -328,7 +343,7 @@ input[type="date"]:hover {
 
 label {
     cursor: pointer;
-    font-size: 14px;
+    font-size: 0.9rem;
     color: var(--main-theme-color);
 }
 
@@ -344,10 +359,11 @@ textarea {
     background-color: transparent;
     border: 1px solid var(--form-not-highlighted);
     border-radius: 4px;
-    padding: 8px 16px;
+    padding: 6px 12px;
     outline: none;
     transition: border-color 0.2s ease;
     box-sizing: border-box;
+    font-size: 0.9rem;
 }
 
 textarea:focus,
@@ -356,8 +372,8 @@ textarea:hover {
 }
 
 select {
-    font-size: 1rem;
-    padding: 0.5rem 2rem 0.5rem 1rem;
+    font-size: 0.9rem;
+    padding: 0.4rem 1.8rem 0.4rem 0.8rem;
     line-height: 1.2;
     cursor: pointer;
 
@@ -379,7 +395,12 @@ select:focus {
     box-shadow: 0 0 0 2px var(--header-dropdown-li-bg-highlight);
 }
 
-/* headers */
+.select-dynamic {
+    width: auto;
+    min-width: 110px;
+    max-width: 100%;
+    display: inline-block;
+}
 
 h1,h2,h3,h4,h5 {
     text-align:left;
@@ -396,10 +417,10 @@ h1,h2,h3,h4,h5 {
 h1 {
     color: var(--form-highlight);
     font-weight: 800;
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     letter-spacing: -0.5px;
-    margin-bottom: 1.5rem;
-    margin-top: 1.5rem;
+    margin-bottom: 1.25rem;
+    margin-top: 1.25rem;
     border-bottom: 3px solid var(--form-highlight);
     display: inline-block;
     padding-bottom: 5px;
