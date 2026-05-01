@@ -80,10 +80,7 @@ class Parser(object):
 
     @staticmethod
     def parse_geschwindigkeit16(data):
-        x = Parser._mapping({"1": "3", "2": "2", "3": "1", "4": "2", "5": "3"}, data)
-        if x == "":
-            x = None
-        return x
+        return Parser._mapping({"1": "3", "2": "2", "3": "1", "4": "2", "5": "3"}, data)
 
     @staticmethod
     def parse_niveau(data):
