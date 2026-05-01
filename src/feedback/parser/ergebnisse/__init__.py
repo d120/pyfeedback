@@ -1,5 +1,32 @@
 # coding=utf-8
 
+import re
+
+
+def clean_veranstaltung_name(name):
+    pattern = r"\(\d{2}-\d{2}-.*\)"
+
+    dic = {
+        "&amp;": "&",
+        "&auml;": "ä",
+        "&Auml;": "Ä",
+        "&ouml;": "ö",
+        "&Ouml;": "Ö",
+        "&uuml;": "ü",
+        "&Uuml;": "Ü",
+        "&szlig;": "ß",
+    }
+
+    # remove suffix with modul number
+    clean_name = re.sub(pattern, "", name).strip()
+
+    # replace html characters
+    for ch in dic.keys():
+        if ch in clean_name:
+            clean_name = clean_name.replace(ch, dic.get(ch))
+
+    return clean_name
+
 
 # TODO: Fehlerbehandlung bei kaputten Dateien
 def parse_ergebnisse(semester, csvfile, ueparser=None):
@@ -28,11 +55,13 @@ def parse_ergebnisse(semester, csvfile, ueparser=None):
         veranstaltung = converted[:grenzVeranstFragebogen]
         fragebogen = converted[grenzVeranstFragebogen:]
 
+        veranstaltung_name = veranstaltung[5]
+
         # Bögen pro Veranstaltung zusammensuchen
-        if veranstaltung[5] in combined:
-            combined[veranstaltung[5]]["f"].append(fragebogen)
+        if veranstaltung_name in combined:
+            combined[veranstaltung_name]["f"].append(fragebogen)
         else:
-            combined[veranstaltung[5]] = {"v": veranstaltung, "f": [fragebogen]}
+            combined[veranstaltung_name] = {"v": veranstaltung, "f": [fragebogen]}
 
     # Speicherung der Daten
     warnings = []
@@ -47,12 +76,16 @@ def parse_ergebnisse(semester, csvfile, ueparser=None):
     for veranst in list(combined.values()):
         try:
             v = Veranstaltung.objects.get(
-                name=veranst["v"][5], lv_nr=veranst["v"][6], semester=semester
+                name=clean_veranstaltung_name(veranst["v"][5]),
+                lv_nr=veranst["v"][6],
+                semester=semester,
             )
 
         except Veranstaltung.DoesNotExist:
             try:
-                v = Veranstaltung.objects.get(name=veranst["v"][5], semester=semester)
+                v = Veranstaltung.objects.get(
+                    name=clean_veranstaltung_name(veranst["v"][5]), semester=semester
+                )
                 warnings.append(
                     (
                         'Die Veranstaltung "%s" hat in der Datenbank die '
@@ -73,7 +106,7 @@ def parse_ergebnisse(semester, csvfile, ueparser=None):
                             + 'der Datenbank den Namen "%s", in der CSV-Datei aber "%s". Die Ergebnisse '
                             + "wurden trotzdem importiert."
                         )
-                        % (v.lv_nr, v.name, veranst["v"][5])
+                        % (v.lv_nr, v.name, clean_veranstaltung_name(veranst["v"][5]))
                     )
 
                 except Veranstaltung.DoesNotExist:
@@ -82,7 +115,7 @@ def parse_ergebnisse(semester, csvfile, ueparser=None):
                             'Die Veranstaltung "%s" (%s) existiert im System nicht und '
                             + "wurde deshalb nicht importiert!"
                         )
-                        % (veranst["v"][5], veranst["v"][6])
+                        % (clean_veranstaltung_name(veranst["v"][5]), veranst["v"][6])
                     )
                     continue
 
