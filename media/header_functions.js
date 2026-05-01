@@ -1,17 +1,20 @@
 window.addEventListener('DOMContentLoaded', () => {
     const btn = document.getElementById('theme-button');
-
     if (!btn) return;
-    
+
+    const root = document.documentElement;
+
+    const applyTheme = (theme) => {
+        root.classList.remove('light', 'dark');
+        root.classList.add(theme);
+    };
+
     btn.addEventListener('click', () => {
-        const html = document.documentElement;
-        const isDark = html.classList.contains('dark');
-        const newTheme = isDark ? 'light' : 'dark';
+        const current = root.classList.contains('dark') ? 'dark' : 'light';
+        const next = current === 'dark' ? 'light' : 'dark';
 
-        html.classList.remove('light', 'dark');
-        html.classList.add(newTheme);
-
-        localStorage.setItem('theme', newTheme);
+        applyTheme(next);
+        localStorage.setItem('theme', next);
     });
 });
 

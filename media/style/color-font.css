@@ -27,7 +27,7 @@
 
 
 :root, .dark {
-  color-scheme: light dark;
+  color-scheme: dark;
 
   /* Font Family Variables */
   --font-main: "Roboto", sans-serif;
@@ -96,7 +96,7 @@
 }
 
 .light {
-  color-scheme: light dark;
+  color-scheme: light;
 
   /* Font Family Variables */
   --font-main: "Roboto", sans-serif;
