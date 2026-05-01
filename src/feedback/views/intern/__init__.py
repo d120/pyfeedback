@@ -29,7 +29,7 @@ from feedback.forms import UploadFileForm
 from feedback.forms import UploadTANCSV, SendOrPDF, EMailTemplates
 from feedback.parser.ergebnisse import parse_ergebnisse
 from feedback.views import public
-from feedback.models import Veranstaltung, Semester, Mailvorlage, get_model, long_not_ordert, \
+from feedback.models import Veranstaltung, Semester, Mailvorlage, get_model, long_not_ordert, semester_has_seminar_model, \
     FachgebietEmail, Tutor
 from feedback.models.fragebogenUE2016 import FragebogenUE2016
 from feedback.models.fragebogenUE2020 import FragebogenUE2020
@@ -477,6 +477,11 @@ def import_ergebnisse(request):
                 warnings, errors, vcount, fbcount = parse_ergebnisse(semester,
                                                                      TextIOWrapper(request.FILES['file'].file, encoding='UTF-8'),
                                                                      f'UE{semester.fragebogen}')
+            elif 'typ' in request.POST and request.POST['typ'] == 'seminar': 
+                warnings, errors, vcount, fbcount = parse_ergebnisse(semester,
+                                                                     TextIOWrapper(request.FILES['file'].file, encoding='UTF-8'),
+                                                                     f'SE{semester.fragebogen}')
+
             else:
                 warnings, errors, vcount, fbcount = parse_ergebnisse(semester, TextIOWrapper(request.FILES['file'].file, encoding='UTF-8'))
             if fbcount:
@@ -526,6 +531,7 @@ def sync_ergebnisse(request):
                 erg = FragebogenUE2020.objects.filter(veranstaltung=v)
             else:
                 erg = FragebogenUE2025.objects.filter(veranstaltung=v)
+
             if len(fbs):
                 found_something = True
                 data = {'veranstaltung': v, 'anzahl': len(fbs)}
@@ -549,6 +555,27 @@ def sync_ergebnisse(request):
                     data[part[0]] = result
                     data[part[0] + '_count'] = count
                 ergebnis.objects.create(**data)
+    
+    # results seminar
+    if semester_has_seminar_model(semester) :
+        fragebogen_se = get_model('Fragebogen', semester, is_seminar=True)
+        ergebnis_se = get_model('Ergebnis', semester, is_seminar=True)
+
+        ergebnis_se.objects.filter(veranstaltung__semester=semester).delete()
+
+        for v in Veranstaltung.objects.filter(semester=semester) :
+            fbs = fragebogen_se.objects.filter(veranstaltung=v)
+
+            if len(fbs) :
+                found_something = True
+                data = {'veranstaltung': v, 'anzahl': len(fbs)}
+
+                for part in ergebnis_se.parts + ergebnis_se.hidden_parts :
+                    result, count = tools.get_average(ergebnis_se, fbs, part[0])
+                    data[part[0]] = result
+                    data[part[0] + '_count'] = count
+                ergebnis_se.objects.create(**data)
+
 
     if not found_something:
         messages.warning(request, 'Für das %s liegen keine Ergebnisse vor.' % semester)

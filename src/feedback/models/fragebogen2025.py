@@ -173,12 +173,12 @@ class Ergebnis2025(Ergebnis):
             [
                 '3.2 Die Vorlesungsmaterialien (Folien, Skripte, Tafelanschrieb, Lehrbücher,e-Learning, etc.) haben das Lernen wirkungsvoll unterstützt.',
                 '3.6 Der Lehrende war auch außerhalb der Veranstaltung ansprechbar.',
-                '3.8 Die Vorlesung motivierte dazu, sich außerhalb der Veranstaltungselbstständig mit den behandelten Themen auseinander zu setzen.', # not in fragebogen?
                 '4.4 Die Vorlesung war inhaltlich gut strukturiert, ein roter Faden war erkennbar.',
                 '4.6 Der Stoff wurde anhand von Beispielen verdeutlicht.',
                 '4.7 Der Bezug zwischen Theorie und praktischem Arbeiten / praktischen Anwendungen wurde hergestellt.',
                 '5.2 Die Lehrkraft hat Kompliziertes verständlich dargelegt.',
                 '5.4 Die Lernziele der Veranstaltung sind mir klar geworden.',
+                '5.5 Die Vorlesung motivierte dazu, sich außerhalb der Veranstaltungselbstständig mit den behandelten Themen auseinander zu setzen.',
                 '6.1 Der Lehrende regte gezielt zur eigenen Mitarbeit / zum Mitdenken in der Veranstaltung an.',
                 '6.2 Die (Zwischen-)Fragen der Studierenden wurden angemessen beantwortet.',
                 '6.3 Die Lehrkraft zeigte sich gut vorbereitet.',
