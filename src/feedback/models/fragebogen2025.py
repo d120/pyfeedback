@@ -34,7 +34,7 @@ class Fragebogen2025(Fragebogen):
     v_3_7 = models.PositiveSmallIntegerField(blank=True, null=True)
 
     v_4_1 = models.PositiveSmallIntegerField(blank=True, null=True)
-    v_4_2 = models.PositiveSmallIntegerField(blank=True, null=True)
+    v_4_2 = models.CharField(max_length=1, blank=True)
     v_4_3 = models.PositiveSmallIntegerField(blank=True, null=True)
     v_4_4 = models.PositiveSmallIntegerField(blank=True, null=True)
     v_4_5 = models.CharField(max_length=1, choices=Fragebogen.STUNDEN_NACHBEARBEITUNG, blank=True)
@@ -122,7 +122,7 @@ class Ergebnis2025(Ergebnis):
             ]
         ],
     ]
-    
+
     parts_ue = [
         ['ue_didaktik', 'Übung: Didaktik',
          ['4.1 Die Übung war inhaltlich gut strukturiert.',
