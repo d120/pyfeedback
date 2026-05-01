@@ -4,9 +4,8 @@
 
 {% block content %}
 
-<div class="container mt-5">
-    <h2>{% translate "Email Ändern" %}</h2>
-    <br>
+<div>
+    <h1>{% translate "Email Ändern" %}</h1>
 
     <p>{% blocktranslate %}
         Geben Sie unten Ihre neue E-Mail-Adresse ein. Sie erhalten ein Einmalpasswort (OTP), um Ihre neue E-Mail-Adresse zu bestätigen.
@@ -15,7 +14,7 @@
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" value="{% translate "OTP Anfordern" %}">
+        <button class="primary" type="submit">{% translate "OTP Anfordern" %}</button>
     </form>
 </div>
 {% endblock %}

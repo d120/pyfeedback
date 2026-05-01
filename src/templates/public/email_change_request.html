@@ -4,19 +4,18 @@
 
 {% block content %}
 
-<div class="container mt-5">
-    <h2>{% translate "Email Ändern" %}</h2>
-    <br>
+<div>
+    <h1>{% translate "Email Ändern" %}</h1>
 
     <p>{% blocktranslate %}
-        Geben Sie unten Ihre alte E-Mail-Adresse ein. Sie erhalten einen Link, um Ihre E-Mail zu ändern. 
+        Geben Sie unten Ihre alte E-Mail-Adresse ein. Sie erhalten einen Link, um Ihre E-Mail zu ändern.
         Sollten Sie keinen Zugriff mehr auf Ihre alte E-Mail-Adresse haben, melden Sie sich bitte beim <a href="mailto:feedback@fachschaft.informatik.tu-darmstadt.de">Feedback-Team</a>.
     {% endblocktranslate %}</p>
 
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" value="{% translate "Änderung anfordern" %}">
+        <button class="primary" type="submit">{% translate "Änderung anfordern" %}</button>
     </form>
 </div>
 {% endblock %}

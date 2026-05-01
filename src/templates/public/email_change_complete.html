@@ -4,12 +4,11 @@
 
 {% block content %}
 
-<div class="container mt-5">
-    <h2>{% translate "Email Ändern" %}</h2>
-    <br>
+<div>
+    <h1>{% translate "Email Ändern" %}</h1>
 
     <p>{% blocktranslate %}
-        Sie haben Ihre E-Mail-Adresse erfolgreich geändert. Ihre neue E-Mail-Adresse ist : {{ new_email }}
+        Sie haben Ihre E-Mail-Adresse erfolgreich geändert. Ihre neue E-Mail-Adresse ist : [ {{ new_email }} ]
     {% endblocktranslate %}</p>
 
 </div>

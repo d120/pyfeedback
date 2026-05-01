@@ -4,9 +4,8 @@
 
 {% block content %}
 
-<div class="container mt-5">
-    <h2>{% translate "Email Ändern" %}</h2>
-    <br>
+<div>
+    <h1>{% translate "Email Ändern" %}</h1>
 
     <p>{% blocktranslate %}
         Geben Sie unten das Einmalpassword (OTP) ein, um die Änderung abzuschließen.
@@ -15,7 +14,7 @@
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" value="{% translate "Verifizieren" %}">
+        <button class="primary" type="submit">{% translate "Verifizieren" %}</button>
     </form>
 </div>
 {% endblock %}
