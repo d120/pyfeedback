@@ -1,0 +1,427 @@
+@import url('colors.css');
+
+body {
+    font-family: var(--font-main);
+    font-size: 15px;
+    color: var(--main-theme-color);
+    background-color: var(--main-background-color);
+    line-height: 200%;
+    overflow-y: scroll;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+::selection {
+    color: var(--selection-color);
+    background-color: var(--selection-bg);
+}
+
+/* main page layout */
+
+.main-area {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 5%;
+    padding: 3%;
+}
+
+.sidebar-area {
+    flex: 1;
+    padding-left: 0%;
+}
+
+.content-area {
+    flex: 3.5;
+    min-width: 0;
+    text-align: justify;
+}
+
+#backlink {
+    text-align: right;
+}
+
+/* message list, errer list, breadcrumb, warning */
+
+.messagelist li,
+.errorlist,
+blockquote,
+.comment-box {
+    padding: 10px 12px;
+    margin: 15px 0;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.messagelist {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.messagelist li {
+    background-color: var(--msg-default-bg);
+    color: var(--msg-default-text);
+    border: 1px solid var(--msg-default-border);
+}
+
+.messagelist li.success {
+    background-color: var(--msg-success-bg);
+    color: var(--msg-success-text);
+    border-color: var(--msg-success-border);
+}
+
+.messagelist li.error {
+    background-color: var(--msg-error-bg);
+    color: var(--msg-error-text);
+    border-color: var(--msg-error-border);
+}
+
+.errorlist {
+    list-style: none;
+    background-color: var(--msg-error-bg);
+    color: var(--msg-error-text);
+    border: 1px solid var(--msg-error-border);
+    font-size: 0.85rem;
+}
+
+.errorlist li {
+    margin-bottom: 5px;
+}
+
+.errorlist li:last-child {
+    margin-bottom: 0;
+}
+
+blockquote, .comment-box {
+    border: 1px solid transparent;
+    border-left: 4px solid var(--main-theme-color);
+    font-style: italic;
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+.breadcrumb {
+    background: var(--main-background-color);
+    padding: 8px 12px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    font-size: 0.85rem;
+}
+
+.warning {
+    color: var(--warning);
+}
+
+.warning:hover {
+    color: var(--warning);
+    border-color: var(--warning);
+}
+
+/* === main general elements === */
+
+/* anchor */
+
+a {
+    color: var(--link-color);
+    text-decoration: none;
+    border-bottom: 2px solid var(--link-bottom);
+    transition: all 0.2s ease;
+}
+
+a:hover {
+    color: var(--link-hover);
+    border-bottom-color: var(--link-hover);
+}
+
+/* primary and secondary buttons */
+
+button {
+    cursor: pointer;
+    text-decoration: none;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+    line-height: 1.2;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+button:disabled,
+button[disabled] {
+    cursor: not-allowed;
+    opacity: 0.5;
+    filter: saturate(0.5);
+    pointer-events: none;
+}
+
+button.primary {
+    color: var(--main-background-color);
+    background-color: var(--accent-color);
+}
+
+button.primary:hover {
+    background-color: var(--accent-color-hover);
+}
+
+button.secondary {
+    color: var(--accent-color);
+    background-color: transparent;
+    border-color: var(--accent-color);
+}
+
+button.secondary:hover {
+    color: var(--accent-color-hover);
+    background-color: var(--button-secondary-bg-hover);
+    border-color: var(--accent-color-hover);
+}
+
+button.secondary:disabled {
+    background-color: transparent;
+    border-color: var(--accent-color);
+}
+
+button.small {
+    padding: 0.15rem 0.5rem;
+    font-size: 0.7rem;
+}
+
+/* input file, text, email */
+
+input[type="file"] {
+    color: var(--main-theme-color);
+    background-color: transparent;
+    border: 1px solid var(--form-not-highlighted);
+    border-radius: 4px;
+    padding: 0.4rem;
+    font-size: 0.9rem;
+    line-height: 1.2;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+}
+
+input[type="file"]:hover {
+    border-color: var(--accent-color-hover);
+}
+
+input[type="file"]::file-selector-button {
+    color: var(--main-background-color);
+    background-color: var(--accent-color);
+    border: none;
+    border-radius: 4px;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+    line-height: 1.2;
+    margin-right: 12px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+input[type="file"]::file-selector-button:hover {
+    background-color: var(--accent-color-hover);
+}
+
+input[type="text"], input[type="email"] {
+    color: var(--main-theme-color);
+    background-color: transparent;
+    border: 1px solid var(--form-not-highlighted);
+    border-radius: 4px;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+    line-height: 1.2;
+    outline: none;
+    transition: border-color 0.2s ease;
+    box-sizing: border-box;
+}
+
+input[type="text"]:focus,
+input[type="text"]:hover,
+input[type="email"]:focus,
+input[type="email"]:hover {
+    border-color: var(--accent-color-hover);
+}
+
+input[type="text"]:disabled,
+input[type="email"]:disabled {
+    color: var(--form-not-highlighted);
+    border-color: var(--form-not-highlighted);
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+input[type="radio"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 1.05rem;
+    height: 1.05rem;
+    border: 1px solid var(--form-not-highlighted);
+    border-radius: 50%;
+    background-color: transparent;
+    cursor: pointer;
+    position: relative;
+    transition: border-color 0.2s ease;
+    vertical-align: middle;
+}
+
+input[type="radio"]:checked {
+    border-color: var(--accent-color);
+}
+
+/* Dot for checked state */
+input[type="radio"]:checked::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background-color: var(--accent-color);
+}
+
+input[type="radio"]:hover {
+    border-color: var(--accent-color-hover);
+}
+
+input[type="number"] {
+    color: var(--main-theme-color);
+    background-color: var(--main-background-color);
+    border: 1px solid var(--accent-color);
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+    line-height: 1.2;
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+input[type="number"]:focus,
+input[type="number"]:hover {
+    outline: none;
+    border-color: var(--accent-color-hover);
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="checkbox"] {
+    width: 1rem;
+    height: 1rem;
+    color: var(--main-theme-color);
+    accent-color: var(--accent-color);
+    border: none;
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+input[type="checkbox"]::before {
+    background-color: var(--main-background-color);
+}
+
+input[type="checkbox"]:focus,
+input[type="checkbox"]:hover {
+    border-color: var(--accent-color-hover);
+}
+
+input[type="date"] {
+    color: var(--main-theme-color);
+    background-color: var(--main-background-color);
+    border: 1px solid var(--accent-color);
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+    line-height: 1.2;
+}
+
+input[type="date"]:focus,
+input[type="date"]:hover {
+    border-color: var(--accent-color-hover);
+    outline: none;
+}
+
+label {
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: var(--main-theme-color);
+}
+
+
+/* select, option, fieldset, textarea */
+
+fieldset {
+    border: none;
+}
+
+textarea {
+    color: var(--main-theme-color);
+    background-color: transparent;
+    border: 1px solid var(--form-not-highlighted);
+    border-radius: 4px;
+    padding: 6px 12px;
+    outline: none;
+    transition: border-color 0.2s ease;
+    box-sizing: border-box;
+    font-size: 0.9rem;
+}
+
+textarea:focus,
+textarea:hover {
+    border-color: var(--accent-color-hover);
+}
+
+select {
+    font-size: 0.9rem;
+    padding: 0.4rem 1.8rem 0.4rem 0.8rem;
+    line-height: 1.2;
+    cursor: pointer;
+
+    color: var(--accent-color);
+    background-color: var(--main-background-color);
+    border: 1px solid var(--main-secondary-bg-color);
+    border-radius: 4px;
+
+    transition: all 0.2s ease;
+}
+
+select:hover {
+    border-color: var(--accent-color-hover);
+}
+
+select:focus {
+    outline: none;
+    border-color: var(--accent-color-hover);
+    box-shadow: 0 0 0 2px var(--header-dropdown-li-bg-highlight);
+}
+
+.select-dynamic {
+    width: auto;
+    min-width: 110px;
+    max-width: 100%;
+    display: inline-block;
+}
+
+h1,h2,h3,h4,h5 {
+    text-align:left;
+}
+/*
+.table h1,h2,h3,h4,h5 {
+    margin-top:5px;
+}
+
+.table .table {
+    margin-bottom:0;
+} */
+
+h1 {
+    color: var(--form-highlight);
+    font-weight: 800;
+    font-size: 1.4rem;
+    letter-spacing: -0.5px;
+    margin-bottom: 1.25rem;
+    margin-top: 1.25rem;
+    border-bottom: 3px solid var(--form-highlight);
+    display: inline-block;
+    padding-bottom: 5px;
+}

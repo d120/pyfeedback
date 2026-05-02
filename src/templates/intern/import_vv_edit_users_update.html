@@ -8,14 +8,25 @@
     <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ formset.management_form }}
-        <h2>{% blocktranslate %}Es sind noch {{ person.persons_to_edit.count }} Personendaten zu bearbeiten.{% endblocktranslate %}</h2>
+        <h2>
+            {% blocktranslate %}
+            Es sind noch {{ person.persons_to_edit.count }} Personendaten zu bearbeiten.
+            {% endblocktranslate %}
+        </h2>
+
         <h2>{{ person.full_name }}</h2>
-        <h2><a href="http://www.google.com/search?q={{person.full_name}}+tu+darmstadt" target="_blank>">
-            {% translate "Auf Google suchen." %}</a></h2>
+        <h2>
+            <a href="http://www.google.com/search?q={{person.full_name}}+tu+darmstadt" target="_blank>">
+                {% translate "Auf Google suchen." %}
+            </a>
+        </h2>
 
         {% if view.has_similar_name %}
-            <p><a style="color: red" href="{% url 'feedback:import_vv_edit_users_update_namecheck' pk=person.id %}">
-                {% translate "Es existiert eine Person, die ähnlich zu dieser ist." %}</a></p>
+            <p>
+                <a class="warning" href="{% url 'feedback:import_vv_edit_users_update_namecheck' pk=person.id %}">
+                    {% translate "Es existiert eine Person, die ähnlich zu dieser ist." %}
+                </a>
+            </p>
         {% else %}
             <p></p>
         {% endif %}
@@ -23,19 +34,30 @@
         {{ form.as_p }}
         <div>
             {% if view.get_id.1 %}
-                <input type="button" name="back" value="{% translate "Zurück" %}"
-                       onclick="location.href='{% url 'feedback:import_vv_edit_users_update' pk=view.get_id.1 %}'"/>&nbsp;
+                <button type="button" class="secondary"
+                        onclick="location.href='{% url 'feedback:import_vv_edit_users_update' pk=view.get_id.1 %}'">
+                    {% translate "Zurück" %}
+                </button>&nbsp;
             {% else %}
-                <input type="button" name="back" value="{% translate "Zurück" %}" disabled="disabled" />&nbsp;
+                <button type="button" class="secondary" disabled>
+                    {% translate "Zurück" %}
+                </button>&nbsp;
             {% endif %}
 
             {% if view.get_id.0 %}
-                <input type="button" name="jump" value="{% translate "Überspringen" %}"
-                       onclick="location.href='{% url 'feedback:import_vv_edit_users_update' pk=view.get_id.0 %}'"/>&nbsp;
+                <button type="button" class="secondary"
+                        onclick="location.href='{% url 'feedback:import_vv_edit_users_update' pk=view.get_id.0 %}'">
+                    {% translate "Überspringen" %}
+                </button>&nbsp;
             {% else %}
-                <input type="button" name="jump" value="{% translate "Überspringen" %}" disabled="disabled" />&nbsp;
+                <button type="button" class="secondary" disabled>
+                    {% translate "Überspringen" %}
+                </button>&nbsp;
             {% endif %}
-            <input type="submit" name="submit" value="{% translate "Speichern & Weiter" %}" />
+
+            <button type="submit" name="submit" class="primary">
+                {% translate "Speichern & Weiter" %}
+            </button>
         </div>
     </form>
     <br>

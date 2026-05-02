@@ -1,0 +1,22 @@
+@import url('../color-font.css');
+
+#ranking_details th {
+	padding-left: 5px;
+	padding-right: 5px;
+	text-align: left;
+}
+
+#ranking_details td {
+	text-align: center;
+}
+
+#ranking_details a {
+    color: var(--main-theme-color);
+    white-space: nowrap;
+}
+
+#ranking_details a:hover {
+    color: var(--main-theme-color);
+    border-color: var(--main-theme-color);
+    white-space: nowrap;
+}

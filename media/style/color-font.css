@@ -1,0 +1,176 @@
+@font-face {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fonts/roboto.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Roboto";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fonts/roboto-italic.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Roboto Slab";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fonts/roboto-slab.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+
+:root, .dark {
+  color-scheme: dark;
+
+  /* Font Family Variables */
+  --font-main: "Roboto", sans-serif;
+  --font-second: "Roboto Slab", serif;
+
+  /* Color Variables */
+  --main-theme-color: #e0e0e0;
+  --main-secondary-theme-color: #aaaaaa;
+  --main-background-color: #181818;
+  --main-secondary-bg-color: #2c2c2c;
+  --warning: #f00;
+
+  --selection-bg: #00d061;
+  --selection-color: #181818;
+
+  --header-link-highlight: #00d061;
+  --header-link-highlight-bg: #2c2c2c;
+  --header-dropdown-border: #bbb;
+  --header-dropdown-bg: #181818;
+  --header-dropdown-li-bg-highlight: #444;
+  --header-dropdown-li-side-border: #e0e0e0;
+
+  --sidebar-link-color:#e0e0e0;
+  --sidebar-link-hover-bg-color: #2c2c2c;
+
+  --form-required: #ffbcbc;
+  --form-highlight: #00d061;
+  --form-not-highlighted: #444;
+
+  --form-progressbar-active: #a29bfe;
+  --form-progressbar-active-hover: #c4b5fd;
+  --form-progressbar-disabled-active: #774fc6;
+
+  --progressbar-detail-color: #888;
+  --progressbar-start-color: #6c5ce7;
+  --progressbar-end-color: #a29bfe;
+
+  --link-color:#a29bfe;
+  --link-hover: #c4b5fd;
+  --link-bottom: #444;
+
+  --accent-color: #a29bfe;
+  --accent-color-hover: #c4b5fd;
+  --button-secondary-bg-hover: #222;
+
+  --unattended-course: #7f7f14;
+  --mail-context-highlight: #00ffff;
+
+  --ranking-selected: #a29bfe;
+  --ranking-invalid: #888;
+
+  --footer-bg-color: #222;
+
+  --msg-default-bg: #1a1c1e;
+  --msg-default-text: #e9ecef;
+  --msg-default-border: #373a3c;
+
+  --msg-success-bg: #0f2d16;
+  --msg-success-text: #b7e4c7;
+  --msg-success-border: #1b4324;
+
+  --msg-error-bg: #332b00;
+  --msg-error-text: #ffec99;
+  --msg-error-border: #665200;
+
+}
+
+.light {
+  color-scheme: light;
+
+  /* Font Family Variables */
+  --font-main: "Roboto", sans-serif;
+  --font-second: "Roboto Slab", serif;
+
+  /* Color Variables */
+  --main-theme-color: #181818;
+  --main-secondary-theme-color: #303030;
+  --main-background-color: #fff;
+  --main-secondary-bg-color: #e3e3e3;
+  --warning: #f00;
+
+  --selection-bg: #00d061;
+  --selection-color: #181818;
+
+  --header-link-highlight: #00a84e;
+  --header-link-highlight-bg: #e3e3e3;
+  --header-dropdown-border: #181818;
+  --header-dropdown-bg: #fff;
+  --header-dropdown-li-bg-highlight: #e3e3e3;
+  --header-dropdown-li-side-border: #181818;
+
+  --sidebar-link-color:#181818;
+  --sidebar-link-hover-bg-color: #e3e3e3;
+
+  --form-required: #ff5f5f;
+  --form-highlight: #00a84e;
+  --form-not-highlighted: #d1d1d1;
+
+  --form-progressbar-active: #5f27cd;
+  --form-progressbar-active-hover: #5323b4;
+  --form-progressbar-disabled-active: #774fc6;
+
+  --progressbar-detail-color: #999;
+  --progressbar-start-color: #5f27cd;
+  --progressbar-end-color: #9c88ff;
+
+  --link-color:#5f27cd;
+  --link-hover: #5323b4;
+  --link-bottom: #ccc;
+
+  --accent-color: #5f27cd;
+  --accent-color-hover: #5323b4;
+  --button-secondary-bg-hover: #ddd;
+
+  --unattended-course: #ffff00;
+  --mail-context-highlight: #0000ff;
+
+  --ranking-selected: #5f27cd;
+  --ranking-invalid: #888;
+
+  --footer-bg-color: #eee;
+
+  --msg-default-bg: #f8f9fa;
+  --msg-default-text: #212529;
+  --msg-default-border: #dee2e6;
+
+  --msg-success-bg: #d4edda;
+  --msg-success-text: #155724;
+  --msg-success-border: #c3e6cb;
+
+  --msg-error-bg: #fff3cd;
+  --msg-error-text: #856404;
+  --msg-error-border: #ffeeba;
+}
+
+.dark-only, .light-only {
+    display: none;
+}
+
+html.dark .dark-only {
+    display: block;
+}
+
+html.light .light-only {
+    display: block;
+}

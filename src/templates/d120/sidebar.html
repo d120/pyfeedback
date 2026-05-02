@@ -1,27 +1,29 @@
 {% load i18n %}
-<nav class="navbar navbar-light">
-<div id="sidebar" class="collapse navbar-collapse d-sm-inline">
-<ul class="nav sidebar-nav flex-column">
-  <li class="nav-item sidebar-active">
-    <a href="https://www.fachschaft.informatik.tu-darmstadt.de/feedback-new/" title="Gehe zur Seite &quot;Feedback&quot;">{% translate "Feedback" %}</a>
-    <ul id="menuIndent">
-      <li class="nva-item link">
-        <a href="https://www.fachschaft.informatik.tu-darmstadt.de/feedback-faq/" title="Zeige Seite FAQ">{% translate "FAQ" %}</a>
-      </li>
-      <li class="nav-item link">
-        <a href="https://www.fachschaft.informatik.tu-darmstadt.de/hall-of-fame/" title="Zeige Seite Hall of Fame">{% translate "Hall of Fame" %}</a>
-      </li>
-      <li class="nav-item {% block section_ergebnisse %}link{% endblock %}">
-        <a href="{% if request.user.is_superuser %}{% url 'feedback:intern-ergebnisse' %}{% else %}{% url 'feedback:public-results' %}{% endif %}" title="Zeige Seite Ergebnisse">{% translate "Ergebnisse" %}</a>
-      </li>
-      <li class="nav-item {% block section_veranstalter %}link{% endblock %}">
-        <a href="{% url 'feedback:veranstalter-index' %}" title="Zeige Seite Webinterface">{% translate "Webinterface" %}</a>
-      </li>
-      <li class="nav-item ">
-        <a href="{% url 'feedback:email-change-request' %}" title="Zeige Seite E-Mail ändern">{% translate "E-Mail ändern" %}</a>
-      </li>
-    </ul>
-  </li>
-</ul>
-</div>
+{% load static %}
+
+{% block extra_header %}
+  <link rel="stylesheet" type="text/css" href="{% static 'style/d120/sidebar.css' %}" />
+{% endblock %}
+
+<nav id="sidebar">
+  <ul class="sidebar-active">
+    <li class="sidebar-active-item">
+      <a href="https://www.fachschaft.informatik.tu-darmstadt.de/feedback-new/" title="Gehe zur Seite &quot;Feedback&quot;">{% translate "Feedback" %}</a>
+    </li>
+    <li class="sidebar-active-item">
+      <a href="https://www.fachschaft.informatik.tu-darmstadt.de/feedback-faq/" title="Zeige Seite FAQ">{% translate "FAQ" %}</a>
+    </li>
+    <li class="sidebar-active-item">
+      <a href="https://www.fachschaft.informatik.tu-darmstadt.de/hall-of-fame/" title="Zeige Seite Hall of Fame">{% translate "Hall of Fame" %}</a>
+    </li>
+    <li class="sidebar-active-item">
+      <a href="{% if request.user.is_superuser %}{% url 'feedback:intern-ergebnisse' %}{% else %}{% url 'feedback:public-results' %}{% endif %}" title="Zeige Seite Ergebnisse">{% translate "Ergebnisse" %}</a>
+    </li>
+    <li class="sidebar-active-item">
+      <a href="{% url 'feedback:veranstalter-index' %}" title="Zeige Seite Webinterface">{% translate "Webinterface" %}</a>
+    </li>
+    <li class="sidebar-active-item">
+      <a href="{% url 'feedback:email-change-request' %}" title="Zeige Seite E-Mail ändern">{% translate "E-Mail ändern" %}</a>
+    </li>
+  </ul>
 </nav>

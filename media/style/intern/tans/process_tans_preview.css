@@ -1,0 +1,57 @@
+@import url('../../color-font.css');
+
+.preview-box {
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border-radius: 4px;
+    border: 1px solid var(--accent-color);
+}
+
+.preview-text {
+    padding: 15px;
+    border-radius: 4px;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    font-family: monospace;
+}
+
+
+/* Badge Styling */
+.badge {
+    display: inline-block;
+    padding: 2px 8px;
+    font-size: 0.8rem;
+    border-radius: 10px;
+    margin-left: 5px;
+    border: 1px solid var(--accent-color);
+}
+
+/* Collapse Logic */
+.collapse-content {
+    display: none;
+    margin-top: 15px;
+}
+
+.collapse-content.show {
+    display: block;
+}
+
+.card-inner {
+    padding: 15px;
+    border-radius: 4px;
+}
+
+/* Form Layout (Replaces float-left/right) */
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.push-right {
+    margin-left: auto;
+}
+
+.form-table {
+    width: 100%;
+}

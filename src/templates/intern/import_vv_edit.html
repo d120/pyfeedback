@@ -1,51 +1,34 @@
-{% extends "bestellung_base.html" %}{% load static %}{% load filter_range %}{% load i18n %}
+{% extends "bestellung_base.html" %}
+{% load static %}
+{% load filter_range %}
+{% load i18n %}
 
 {% block extra_header %}
-<link rel="stylesheet" type="text/css" href="{% static 'jquery-ui/dist/themes/base/jquery-ui.min.css' %}" />
-
-<style type="text/css">
-    h2.ui-accordion-header,
-    h3.ui-accordion-header,
-    h4.ui-accordion-header,
-    h5.ui-accordion-header h6.ui-accordion-header {
-        margin-bottom: 0
-    }
-
-    .mark_unmark {
-        margin-bottom: 0.9em;
-        margin-top: -0.9em;
-        font-size: 80%
-    }
-
-    .foo {
-        border: 1px solid green;
-    }
-
-    .unattended_course {
-        background-color: #FFFF00;
-    }
-
-    .ui-accordion-content {
-        box-sizing: content-box;
-    }
-</style>
+    <link rel="stylesheet" type="text/css" href="{% static 'jquery-ui/dist/themes/base/jquery-ui.min.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'style/intern/import_vv_edit.css' %}" />
 {% endblock %}
 
-{% block title %}{% translate "Vorlesungsverzeichnis importieren" %}{% endblock %}
+{% block title %}
+    {% translate "Vorlesungsverzeichnis importieren" %}
+{% endblock %}
 
 {% block content %}
 <h1>{% translate "Vorlesungsverzeichnis importieren" %}</h1>
 
 <noscript>
-    <p>{% translate "Bitte JavaScript aktivieren, um bequemer durch das Verzeichnis navigieren und Veranstaltungen auswählen zu
-        können!" %}</p>
+    <p>
+        {% translate "Bitte JavaScript aktivieren, um bequemer durch das Verzeichnis navigieren und Veranstaltungen auswählen zu können!" %}
+    </p>
 </noscript>
 
 <p>{% translate "Im Folgenden können die zu importierenden Veranstaltungen ausgewählt werden." %}</p>
 
-<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+<form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
     <p>
-        {% include 'includes/semesterauswahl.html' %}<br />
+        {% include 'includes/semesterauswahl.html' %}
+        <br />
         {% translate "Falls das Semester, für das Veranstaltungen importiert werden sollen, nicht in der Auswahlliste steht, muss es zunächst über die Datenbank-Administration hinzugefügt werden." %}
     </p>
 
@@ -67,36 +50,39 @@
 
         <h3><a href="#">{{ category.name }}</a></h3>
         <div>
-            <div class="mark_unmark"><a href="#" class="markall">{% translate "Alle markieren" %}</a> | <a href="#" class="unmarkall">{% translate "Markierungen aufheben" %}</a></div>
+            <div class="mark_unmark">
+                <a href="#" class="markall">{% translate "Alle markieren" %}</a> | <a href="#" class="unmarkall">{% translate "Markierungen aufheben" %}</a>
+            </div>
             <ul>
                 {% for iv in category.ivs.all %}
-                    <li style="list-style-type: none" class="{{ iv.is_attended_course | yesno:"attended_course,unattended_course" }} ">
+                    <li style="list-style-type: none" class="{{ iv.is_attended_course | yesno:'attended_course,unattended_course' }} ">
                         <input class="checkbox" type="checkbox" id="v{{iv.id}}" name="v" value="{{iv.id}}" />
                         <label for="v{{iv.id}}">{{ iv }}</label>
                     </li>
                 {% endfor %}
             </ul>
 
-            {% endfor %}
-            {% for i in 0|range:remaining_close_tags %}
-        </div>
-        </div>
-        {% endfor %}
+    {% endfor %}
 
-        <div>
-            <input type="submit" name="submit" value="{% translate "Weiter" %}" />&nbsp;
-            <input type="reset" name="reset" value="{% translate "Zurücksetzen" %}" />
+    {% for i in 0|range:remaining_close_tags %}
         </div>
+    </div>
+    {% endfor %}
+
+    <br>
+
+    <div>
+        <button class="primary" type="submit" name="submit">{% translate "Weiter" %}</button>&nbsp;
+        <button class="secondary" type="reset" name="reset">{% translate "Zurücksetzen" %}</button>
+    </div>
 </form>
 
 {% endblock %}
 
+<!-- replavce with extra_javascript_block -->
 {% block javascript_block %}
-<script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
-<script src="{% static 'jquery-ui/dist/jquery-ui.min.js' %}"></script>
+<script src="{% static 'jquery/jquery.min.js' %}"></script>
+<script src="{% static 'jquery/jquery-ui.min.js' %}"></script>
 
 <script src="{% static 'import_vv.js' %}"></script>
-
-<script
-    src="https://www.fachschaft.informatik.tu-darmstadt.de/static/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
 {% endblock %}

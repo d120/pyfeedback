@@ -1,0 +1,27 @@
+@import url('../color-font.css');
+
+#past-sem-data-table {
+    border-collapse: collapse;
+    border: 1px solid var(--form-not-highlighted);
+    width: auto;
+    margin: 10px 0 10px 0;
+}
+
+#past-sem-data-table th,
+#past-sem-data-table td {
+    border-left: 1px solid var(--form-not-highlighted);
+    border-right: 1px solid var(--form-not-highlighted);
+    padding: 5px 5px;
+}
+
+#past-sem-data-table th {
+    border-bottom: 2px solid var(--form-not-highlighted);
+}
+
+#past-sem-data-table td {
+    border-bottom: none;
+}
+
+.table-text {
+    text-align: justify;
+}

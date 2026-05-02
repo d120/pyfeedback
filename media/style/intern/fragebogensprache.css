@@ -1,0 +1,44 @@
+@import url('../color-font.css');
+
+table.border {
+    border-collapse: collapse;
+    color: var(--main-theme-color);
+    background-color: var(--main-background-color);
+    margin: 1rem 0;
+}
+
+table.border th {
+    font-family: var(--font-second);
+    background-color: var(--main-secondary-bg-color);
+    color: var(--main-theme-color);
+    text-align: left;
+    padding: 12px 15px;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.05rem;
+    border-bottom: 2px solid var(--accent-color);
+}
+
+table.border td {
+    padding: 12px 15px;
+    vertical-align: middle;
+}
+
+table.border tr.row1 {
+    background-color: var(--main-background-color);
+}
+
+table.border tr.row2 {
+    background-color: var(--main-secondary-bg-color);
+}
+
+.status-box {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border: 1px solid var(--main-theme-color);
+    border-radius: 3px;
+    vertical-align: middle;
+}
+
