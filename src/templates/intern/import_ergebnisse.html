@@ -16,14 +16,21 @@
 <br />
 <fieldset>
 <input type="radio" name="typ" id="standard" value="standard" checked/>
-<label for ="standard">{% translate "Vorlesung (2009-2020)" %}</label>
+<label for ="standard">{% translate "Vorlesung (2009-2025)" %}</label>
 <p>
 
 </p>
 <input type="radio" name="typ" id="uebung" value="uebung" />
-<label for ="uebung">{% translate "Übung (2016-2020)" %}</label>
+<label for ="uebung">{% translate "Übung (2016-2025)" %}</label>
+<p>
+
+</p>
+<input type="radio" name="typ" id="seminar" value="seminar" />
+<label for ="seminar">{% translate "Seminar 2025" %}</label>
+
 </fieldset>
 {{ form }}
+<br>
 <input type="submit" name="submit" value="{% translate "Hochladen" %}" /> 
 </form>
 </p>

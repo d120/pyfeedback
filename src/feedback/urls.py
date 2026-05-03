@@ -25,6 +25,7 @@ urlpatterns = [
 # öffentliche Views
 urlpatterns += [
     re_path(r'^ergebnisse/(?P<vid>\d+)/$', feedback.views.public.veranstaltung, name='public-veranstaltung'),
+    re_path(r'^ergebnisse/(?P<vid>\d+)/(?P<seminar>seminar)/$', feedback.views.public.veranstaltung, name='public-veranstaltung'),
     re_path(r'^ergebnisse/$', feedback.views.public.index, name='public-results'),
     re_path(r'^email-change/$', feedback.views.public.email_change_request, name='email-change-request'),
     path('email-change/<uuid:token>/', feedback.views.public.email_change, name='email-change'),
