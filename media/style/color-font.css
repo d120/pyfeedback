@@ -89,9 +89,13 @@
   --msg-success-text: #b7e4c7;
   --msg-success-border: #1b4324;
 
-  --msg-error-bg: #332b00;
-  --msg-error-text: #ffec99;
-  --msg-error-border: #665200;
+  --msg-warning-bg: #332b00;
+  --msg-warning-text: #ffec99;
+  --msg-warning-border: #665200;
+
+  --msg-error-bg: #2d0f0f;
+  --msg-error-text: #f8d7da;
+  --msg-error-border: #431b1b;
 
 }
 
@@ -158,9 +162,13 @@
   --msg-success-text: #155724;
   --msg-success-border: #c3e6cb;
 
-  --msg-error-bg: #fff3cd;
-  --msg-error-text: #856404;
-  --msg-error-border: #ffeeba;
+  --msg-warning-bg: #fff3cd;
+  --msg-warning-text: #856404;
+  --msg-warning-border: #ffeeba;
+
+  --msg-error-bg: #f8d7da;
+  --msg-error-text: #721c24;
+  --msg-error-border: #f5c6cb;
 }
 
 .dark-only, .light-only {

@@ -78,6 +78,12 @@ blockquote,
     border-color: var(--msg-error-border);
 }
 
+.messagelist li.warning {
+    background-color: var(--msg-warning-bg);
+    color: var(--msg-warning-text);
+    border-color: var(--msg-warning-border);
+}
+
 .errorlist {
     list-style: none;
     background-color: var(--msg-error-bg);
@@ -111,11 +117,6 @@ blockquote, .comment-box {
 
 .warning {
     color: var(--warning);
-}
-
-.warning:hover {
-    color: var(--warning);
-    border-color: var(--warning);
 }
 
 /* === main general elements === */
