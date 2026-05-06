@@ -1,16 +1,13 @@
 ## Stage 1: build stage
 FROM python:3.13-slim AS builder
 
-RUN mkdir /app
-
-WORKDIR /app
-
+ARG DEBIAN_FRONTEND=noninteractive
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# install packages and node
-RUN pip install --upgrade pip
+WORKDIR /app
 
+# install packages and node
 RUN apt-get update && apt-get install -y \
     curl \
     gnupg \
@@ -21,28 +18,31 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # install pip requirements
-COPY requirements.txt /app/
-
-RUN pip install --no-cache-dir -r requirements.txt
+COPY requirements.txt .
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
 
 # install node_modules
 COPY package*.json ./
-
 RUN npm i
 
 ## Stage 2: production stage
 FROM python:3.13-slim
 
+ARG DEBIAN_FRONTEND=noninteractive
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
 RUN useradd -m -r appuser && \
     mkdir /app && \
     chown -R appuser /app
 
-# Copy the python dependencies and node_modules from the builder stage
+# Copy dependencies from builder
 COPY --from=builder /usr/local/lib/python3.13/site-packages/ /usr/local/lib/python3.13/site-packages/
 COPY --from=builder /usr/local/bin/ /usr/local/bin/
-COPY --from=builder  /app/node_modules/ /app/node_modules/
+COPY --from=builder /app/node_modules/ /app/node_modules/
 
-# install gettext for translations (compiling)
+# install gettext for translations
 RUN apt-get update && apt-get install -y gettext \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
@@ -52,19 +52,21 @@ WORKDIR /app
 # copy the code
 COPY --chown=appuser:appuser . .
 
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
-
 WORKDIR /app/src
 
-# switch to non-root user
 USER appuser
 
 # compile translations 
 RUN django-admin compilemessages
 
-# migrate db changes
-RUN python manage.py migrate --no-input
+# --- Runtime Setup ---
+USER root
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+USER appuser
+
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
 EXPOSE 8000
 
