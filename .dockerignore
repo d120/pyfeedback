@@ -19,9 +19,12 @@ pyenv
 settings_secret.py
 static/*
 venv/
+.venv
 .vscode/*
 .python-version
 
 node_modules/
 
 *.mo
+
+.env

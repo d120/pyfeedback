@@ -69,4 +69,4 @@ RUN python manage.py migrate --no-input
 EXPOSE 8000
 
 # start applicaiton with gunicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "wsgi:application"]
+CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:8000 --workers ${GUNICORN_WORKERS:-3} wsgi:application"]
