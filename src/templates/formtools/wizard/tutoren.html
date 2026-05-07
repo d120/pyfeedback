@@ -2,7 +2,7 @@
 {% load i18n %}
 
 {% block feedback_veranstalter_form %}
-    <h3>{% translate "Erfassung der Tutoren" %}</h3>
+    <h3 class="form-main-header">{% translate "Erfassung der Tutoren" %}</h3>
     <p>
         {% translate "Der Fragebögen zur Übung enthält tutorenspezifische Fragen.
         Die Antworten können für jeden Tutor bzw. Übungsgruppe individuell ausgewertet werden.
@@ -56,7 +56,7 @@
 
 {% endblock %}
 
-{% block javascript_block %}
+{% block extra_javascript_block %}
 <script>
     $(document).ready(function() {
         $("#confirm_csv").click(function() {

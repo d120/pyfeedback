@@ -1,0 +1,228 @@
+@import url('../color-font.css');
+
+header {
+  font-family: var(--font-second);
+  background-color: var(--main-background-color);
+  color: var(--main-theme-color);
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  border-top: 14px solid var(--main-theme-color);
+  border-bottom: 1px solid var(--main-theme-color);
+}
+
+/* navbar and container */
+.header-top-container-wrapper {
+  border-top: 3px solid var(--main-background-color);
+  width: 100%;
+}
+
+.header-top-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  background-color: var(--main-background-color);
+  border-top: 1px solid var(--main-theme-color);
+  width: 100%;
+  min-height: 60px;
+}
+
+.header-side-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  gap: calc(5px + 0.5vw);
+  max-width: 100%;
+}
+
+.navigation {
+  display: flex;
+  flex-direction: row;
+}
+
+/* general link and button */
+
+.header-label {
+    display: none;
+}
+
+@media (min-width: 576px) {
+    .header-label {
+        display: inline;
+    }
+}
+
+.header-link {
+  text-decoration: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--header-link-highlight);
+  padding: 0.8rem 1rem;
+  font-size: 1rem;
+  line-height: 1.2;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+}
+
+
+.header-button {
+  background-color: transparent;
+  color: var(--header-link-highlight);
+  border: none;
+  text-decoration: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 0.8rem 1rem;
+  font-size: 1rem;
+  font-weight: normal;
+  line-height: 1.2;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  border-radius: 0;
+}
+
+@media (max-width: 991px) and (min-width: 576px) {
+  .header-link, .header-button {
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    gap: 2px;
+    padding: 0.5rem 0.8rem;
+  }
+
+  .header-label {
+    display: inline;
+    font-size: 0.75rem;
+  }
+}
+
+@media (min-width: 992px) {
+  .header-link, .header-button {
+    flex-direction: row;
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+  }
+
+  .header-label {
+    font-size: 1rem;
+  }
+}
+
+.header-link:hover, .header-button:hover {
+  color: var(--header-link-highlight);
+  text-decoration: none;
+  background-color: var(--header-link-highlight-bg);
+  border-top: 1px solid var(--main-theme-color);
+  border-bottom: 1px solid var(--main-theme-color);
+}
+
+/* language dropdown menu */
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: var(--header-dropdown-bg);
+  min-width: 160px;
+  z-index: 10;
+  list-style: none;
+  padding: 5px;
+  margin: 0;
+  border: 1px solid var(--header-dropdown-border);
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown-item {
+  color: var(--main-theme-color);
+  text-decoration: none;
+  display: block;
+  font-size: 0.9rem;
+  padding: 5px 15px;
+  border-left: 4px solid transparent;
+  border-bottom: 2px solid var(--sidebar-link-hover-bg-color);
+}
+
+.dropdown-item:hover {
+  color: var(--main-theme-color);
+  background-color: var(--header-dropdown-li-bg-highlight);
+  border-bottom: 2px solid var(--sidebar-link-hover-bg-color);
+  border-left: 4px solid var(--header-dropdown-li-side-border);
+}
+
+
+/* login stuff */
+
+.auth-wrapper {
+    display: inline-block;
+}
+
+.auth-form {
+    display: inline;
+    margin: 0;
+}
+
+/* fachsschaft logo behaviour (also respnsive) */
+
+.header-logo {
+  display: none;
+  width: 40px;
+  height: 40px;
+}
+
+@media (min-width: 480px) {
+  .header-logo-small {
+    display: block;
+    width: 60px;
+    height: 60px;
+  }
+}
+
+@media (min-width: 768px) {
+  .header-logo-small {
+    display: none;
+  }
+  .header-logo-big {
+    display: block;
+    width: 200px;
+    height: 80px;
+  }
+}
+
+
+@keyframes hue {
+  from {
+    filter: brightness(4) hue-rotate(0deg);
+  }
+  to {
+    filter: brightness(4) hue-rotate(360deg);
+  }
+}
+
+#mainLogo {
+  animation: 16s linear 0s infinite normal both running hue;
+  background-color: transparent;
+  border: 0;
+  display: block;
+}
+
+#mainLogo:hover {
+  background-color: transparent;
+  border: 0;
+}

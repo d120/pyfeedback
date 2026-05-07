@@ -1,0 +1,14 @@
+@import url('../color-font.css');
+
+#evaluation-warning {
+    border: 1px solid var(--warning);
+    padding: 10px;
+}
+
+#datenschutz-p {
+    font-size: 1.3em;
+}
+
+#vollerhebung-p {
+    text-align: justify;
+}

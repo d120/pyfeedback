@@ -1,5 +1,10 @@
 {% extends "bestellung_base.html" %}
 {% load i18n %}
+{% load static %}
+
+{% block extra_header %}
+    <link rel="stylesheet" type="text/css" href="{% static 'style/intern/fragebogensprache.css' %}" />
+{% endblock %}
 
 {% block title %}{% translate "Zuordnung Veranstaltungen zu Sprache des Fragebogens" %}{% endblock %}
 
@@ -7,23 +12,27 @@
 <h1>{% translate "Zuordnung Veranstaltungen zu Sprache des Fragebogens" %}</h1>
 
 <table class="border">
-	<tr>
-		<th>{% translate "Veranstaltung" %}</th>
-		<th>{% translate "Sprache" %}</th>
-		<th>{% translate "Anzahl" %}</th>
-		<th>{% translate "Typ" %}</th>
-		<th>{% translate "gedruckt" %}</th>
-		<th>{% translate "zurück" %}</th>
-	</tr>
-{% for v in veranstaltungen %}
-	<tr class="cycle {% cycle 'row1' 'row2' %}">
-		<td>{{v.name}}</td>
-		<td>{% if v.sprache %}{{v.get_sprache_display}}{% else %}?{% endif %}</td>
-		<td>{{v.anzahl}}</td>
-		<td>{{v.typ}}</td>
-		<td>[<span style="margin-left:12px;">]</span></td>
-		<td>[<span style="margin-left:12px;">]</span></td>
-	</tr>
-{% endfor %}
+    <thead>
+        <tr>
+            <th>{% translate "Veranstaltung" %}</th>
+            <th>{% translate "Sprache" %}</th>
+            <th>{% translate "Anzahl" %}</th>
+            <th>{% translate "Typ" %}</th>
+            <th>{% translate "Gedruckt" %}</th>
+            <th>{% translate "Zurück" %}</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for v in veranstaltungen %}
+        <tr class="{% cycle 'row1' 'row2' %}">
+            <td><strong>{{ v.name }}</strong></td>
+            <td>{% if v.sprache %}{{ v.get_sprache_display }}{% else %}?{% endif %}</td>
+            <td>{{ v.anzahl }}</td>
+            <td>{{ v.typ }}</td>
+            <td><span class="status-box"></span></td>
+            <td><span class="status-box"></span></td>
+        </tr>
+    {% endfor %}
+    </tbody>
 </table>
 {% endblock %}

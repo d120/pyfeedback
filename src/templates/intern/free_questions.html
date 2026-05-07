@@ -5,7 +5,7 @@
 {% block title %}{% translate "Freie Fragen Liste" %}{% endblock %}
 
 {% block extra_header %}
-    <script type="text/javascript" src="{% static "copy.js" %}"></script>
+    <script type="text/javascript" src="{% static 'copy.js' %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -18,18 +18,18 @@
         <ul>
             {% if v.freiefrage1 %}
                 <li>
-                    <button class="btn btn-outline-secondary btn-sm" onclick="copyToClipboard(this)" data-text="{{v.freiefrage1}}">
+                    <button class="secondary small" onclick="copyToClipboard(this)" data-text="{{v.freiefrage1}}">
                         <i class="fa fa-clipboard"></i> Copy
                     </button>
-                    <span class="ms-2">{% translate "Frage 1" %} : {{v.freiefrage1}}</span>
+                    <span>{% translate "Frage 1" %} : {{v.freiefrage1}}</span>
                 </li>
             {% endif %}
             {% if v.freiefrage2 %}
                 <li>
-                    <button class="btn btn-outline-secondary btn-sm" onclick="copyToClipboard(this)" data-text="{{v.freiefrage2}}">
+                    <button class="secondary small" onclick="copyToClipboard(this)" data-text="{{v.freiefrage2}}">
                         <i class="fa fa-clipboard"></i> Copy
                     </button>
-                    <span class="ms-2">{% translate "Frage 2" %} : {{v.freiefrage2}}</span>
+                    <span>{% translate "Frage 2" %} : {{v.freiefrage2}}</span>
                 </li>
             {% endif %}
         </ul>

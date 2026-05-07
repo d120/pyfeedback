@@ -1,0 +1,89 @@
+@import url("../colors.css");
+
+/* other stuff */
+
+.required-field {
+    color: var(--form-required);
+}
+
+#veranstaltung-info {
+    font-size: 14px;
+}
+
+#veranstaltung-name {
+    color: var(--form-highlight);
+}
+
+/* Progressbar and container */
+
+.progressbar_container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    margin: 10px;
+}
+
+.progress_bar_item {
+    all: unset;
+
+    cursor: pointer;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    line-height: 1.2;
+    transition: all 0.2s ease;
+
+    color: var(--main-background-color);
+    background-color: var(--form-not-highlighted);
+    border: none;
+    border-right: 1px dashed var(--main-background-color);
+}
+
+.progress_bar_item.item_active {
+    background-color: var(--form-progressbar-active);
+    cursor: pointer;
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+}
+
+.progress_bar_item.item_active:hover {
+    background-color: var(--form-progressbar-active-hover);
+}
+
+.progressbar_container .progress_bar_item:last-child {
+    border-right: 0;
+    border-radius: 0 5px 5px 0;
+}
+
+.progressbar_container .progress_bar_item:first-child {
+    border-radius: 5px 0 0 5px;
+}
+
+.item_disabled_active {
+    background-color: var(--form-progressbar-disabled-active);
+    color: var(--main-theme-color);
+}
+
+
+/* form elements */
+
+.form-main-header {
+    color: var(--form-highlight);
+    font-weight: 800;
+    font-size: 1.5rem;
+    letter-spacing: -0.5px;
+    margin-bottom: 1.5rem;
+    margin-top: 1.5rem;
+    border-bottom: 3px solid var(--form-highlight);
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+.wizard_form_table label.required:after {
+    color: var(--form-not-highlighted);
+    content: '*'
+}
+

@@ -7,142 +7,113 @@
 {% endblock %}
 
 {% block extra_header %}
-    <style>
-        .header_veranst {
-            color: #5b5b5b;
-        }
-        .subHeaderDashboard {
-            margin: 15px 0px;
-            font-size: 13px;
-            font-weight: bold;
-
-        }
-        .borderLine {
-            border: 1px solid #767676;
-            padding: 5px;
-        }
-        .dashboardTable {
-            font-size: 13px;
-            margin: 0px;
-            padding: 5px;
-        }
-        .dashboardTableBordered {
-            border: 1px solid #767676;
-        }
-        .dashboardTable td {
-            padding: 10px;
-            text-align: left;
-        }
-        .dashboardTable th {
-            text-align: left;
-            padding: 3px 5px;
-            vertical-align: top;
-        }
-        .dashboardOrderContainer {
-            display: inline-block;
-        }
-        .tableTutoren td {
-            font-weight: normal;
-        }
-        .orderHeadContainer .orderButton {
-            margin-top: 14px;
-            margin-left: 10px;
-            padding: 2px;
-        }
-        .orderHeadContainer {
-            overflow: hidden;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="{% static 'style/veranstalter/dashboard.css' %}" />
 {% endblock %}
 
 {% block content %}
 
     <h1>
-        <span class="header_veranst">{{ veranstaltung.name }} - </span>
-        {% translate "Dashboard" %}
+        <span class="header_veranst">{{ veranstaltung.name }}</span> - {% translate "Dashboard" %}
     </h1>
 
-    <form action = "{% url 'feedback:veranstalter-logout' %}" method="post">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-link p-0" style="color: #009D81;">{% translate "Ausloggen" %}</button>
-    </form>
+    <section>
+        <h4>{% translate "Status" %}</h4>
+        <span class="status-badge">{{ veranstaltung.get_status_display }}</span>
+    </section>
 
-    <p class="subHeaderDashboard">{% translate "Status" %}</p>
-    <span class="borderLine">{{ veranstaltung.get_status_display }}</span>
-
-    <p class="subHeaderDashboard">{% translate "Log" %}</p>
-    <table class="dashboardTable dashboardTableBordered">
-        <tr>
-            <th>{% translate "Datum" %}</th>
-            <th>{% translate "Status" %}</th>
-        </tr>
-        {% for log in logs %}
-        <tr>
-            <td>{{ log.timestamp }}</td>
-            <td>{{ log.get_status_display }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-
-    {% if bestellung %}
-        <div class="orderHeadContainer">
-            <span style="display: block; float: left" class="subHeaderDashboard">{% translate "Aktuelle Bestellung" %}</span>
-            {% if allow_order %}
-                <button class="orderButton" onclick="window.location='{% url 'feedback:veranstalter-bestellung' %}';">{% translate "Bestellung ändern" %}</button>
-            {% endif %}
-        </div>
-        <div class="dashboardOrderContainer dashboardTableBordered">
-
+    <section>
+        <h4>{% translate "Log" %}</h4>
+        <div>
             <table class="dashboardTable">
-                {% for row in bestellung %}
-                <tr>
-                    <th>{{ row.0 }}</th>
-                    <td>{{ row.1 | linebreaksbr}}</td>
-                </tr>
-                {% endfor %}
-                {% if tutoren %}
-                <tr>
-                    <th>{% translate "Tutoren" %}</th>
-                    <th>
-                        <table class="tableTutoren">
-                            <tr>
-                                <th>{% translate "Num" %}</th>
-                                <th>{% translate "Vorname" %}</th>
-                                <th>{% translate "Nachname" %}</th>
-                                <th>{% translate "Email" %}</th>
-                                <th>{% translate "Anmerkung" %}</th>
-                            </tr>
-                            {% for tutor in tutoren %}
-                                <tr>
-                                    <td>{{ tutor.nummer }}</td>
-                                    <td>{{ tutor.vorname }}</td>
-                                    <td>{{ tutor.nachname }}</td>
-                                    <td>{{ tutor.email }}</td>
-                                    <td>{{ tutor.anmerkung }}</td>
-                                </tr>
-                            {% endfor %}
-                        </table>
-                    </th>
-                </tr>
-                {% endif %}
+                <thead>
+                    <tr>
+                        <th>{% translate "Datum" %}</th>
+                        <th>{% translate "Status" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for log in logs %}
+                    <tr>
+                        <td>{{ log.timestamp }}</td>
+                        <td>{{ log.get_status_display }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
             </table>
         </div>
+    </section>
+
+    {% if bestellung %}
+        <section>
+            <div class="orderHeadContainer">
+                <h4 class="subHeaderDashboard">{% translate "Aktuelle Bestellung" %}</h4>
+                {% if allow_order %}
+                    <button class="primary" onclick="window.location='{% url 'feedback:veranstalter-bestellung' %}';">
+                        {% translate "Bestellung ändern" %}
+                    </button>
+                {% endif %}
+            </div>
+
+            <div class="dashboardOrderContainer">
+                <table class="dashboardTable main-order-table">
+                    {% for row in bestellung %}
+                    <tr>
+                        <th>{{ row.0 }}</th>
+                        <td>{{ row.1 | linebreaksbr}}</td>
+                    </tr>
+                    {% endfor %}
+
+                    {% if tutoren %}
+                    <tr>
+                        <th>{% translate "Tutoren" %}</th>
+                        <td>
+                            <table class="tableTutoren">
+                                <thead>
+                                    <tr>
+                                        <th>{% translate "Num" %}</th>
+                                        <th>{% translate "Vorname" %}</th>
+                                        <th>{% translate "Nachname" %}</th>
+                                        <th>{% translate "Email" %}</th>
+                                        <th>{% translate "Anmerkung" %}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for tutor in tutoren %}
+                                        <tr>
+                                            <td>{{ tutor.nummer }}</td>
+                                            <td>{{ tutor.vorname }}</td>
+                                            <td>{{ tutor.nachname }}</td>
+                                            <td>{{ tutor.email }}</td>
+                                            <td>{{ tutor.anmerkung }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    {% endif %}
+                </table>
+            </div>
+        </section>
     {% else %}
         {% if allow_order %}
-            <button style="padding: 2px; background-color: #4CAF50; margin:2px; color:white; border: 1px solid black;" onclick="window.location='{% url 'feedback:veranstalter-bestellung' %}';">{% translate "Bestellung durchführen" %}</button>
+            <div class="empty-state">
+                <button class="primary" onclick="window.location='{% url 'feedback:veranstalter-bestellung' %}';">
+                    {% translate "Bestellung durchführen" %}
+                </button>
+            </div>
         {% endif %}
     {% endif %}
 
-
 {% endblock %}
+
 {% block backlink %}
     <!-- kein Backlink -->
 {% endblock %}
 
-{% block javascript_block %}
+{% block extra_javascript_block %}
 <script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
-<script src="{% static '@popperjs/core/dist/umd/popper.min.js' %}"></script>
-<script src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
+
 <script>
     {% if bestellung %}
     $(document).ready(function() {

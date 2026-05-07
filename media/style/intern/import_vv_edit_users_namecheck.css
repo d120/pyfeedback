@@ -1,0 +1,40 @@
+@import url('../color-font.css');
+
+.comparison-container {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--main-theme-color);
+    padding-bottom: 2rem;
+}
+
+.comparison-column {
+    flex: 1;
+    min-width: 0;
+}
+
+.section-title {
+    margin-top: 1.5rem;
+}
+
+.semester-tag {
+    color: var(--main-secondary-theme-color);
+    font-style: italic;
+}
+
+.action-form {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.footer-navigation {
+    margin-top: 3rem;
+    padding-top: 1rem;
+}
+
+@media (max-width: 768px) {
+    .comparison-container {
+        flex-direction: column;
+    }
+}

@@ -1,8 +1,15 @@
-{% extends "ergebnisse_base.html" %} 
+{% extends "ergebnisse_base.html" %}
 {% load i18n %}
-{% block title %}{{ v.name }} ({{ v.semester.short }}){% endblock %} {% block extra_header %}{% load static %}
-<script type="text/javascript" src="{% static 'ranking.js' %}"></script>
-{% endblock %} {% block content %}
+{% load static %}
+
+{% block title %}{{ v.name }} ({{ v.semester.short }}){% endblock %}
+
+{% block extra_header %}
+    <script type="text/javascript" src="{% static 'ranking.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'style/public/veranstaltung.css' %}" />
+{% endblock %}
+
+{% block content %}
 <h1>{{ v.name }} ({{ v.semester.short }})</h1>
 <p><a href="{% url 'feedback:public-results' %}?semester={{ v.semester.semester }}">{% translate "zurück zur Übersicht" %}</a></p>
 
@@ -19,7 +26,7 @@
     </tr>
     {% for part, ergebnis in parts %}
     <tr>
-        <th><a href="javascript:;" onclick="toggle('kategorie{{ forloop.counter }}');" style="color: black; white-space: nowrap;">{{ part.1 }}</a>
+        <th><a href="javascript:;" onclick="toggle('kategorie{{ forloop.counter }}');">{{ part.1 }}</a>
             <span id="kategorie{{ forloop.counter }}" style="display: none; font-weight: normal;">
     {% for question in part.2 %}
     <br />{{ question }}

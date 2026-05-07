@@ -627,7 +627,7 @@ class SendmailTest(NonSuTestMixin, TestCase):
         self.assertTrue(response.context['vorschau'])
 
         # ----- Vorschau: Check if the replacements are highlighted ----- #
-        color_span = '<span style="color:blue">{}</span>'
+        color_span = '<span class="mail-context-highlight">{}</span>'
         self.assertEqual(color_span.format('Grundlagen der Agrarphilosophie I'), response.context['veranstaltung'])
         link_veranstalter = 'https://www.fachschaft.informatik.tu-darmstadt.de%s' % reverse('feedback:veranstalter-login')
         link_suffix_format = '?vid=%d&token=%s'

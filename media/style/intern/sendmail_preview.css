@@ -1,0 +1,5 @@
+@import url('../color-font.css');
+
+.mail-context-highlight {
+    color: var(--mail-context-highlight);
+}
