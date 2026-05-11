@@ -1,4 +1,4 @@
-coverage==7.13.5
+coverage==7.14.0
 Django==6.0.4
 django-debug-toolbar==6.3.0
 freezegun==1.5.5
