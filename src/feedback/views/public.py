@@ -14,6 +14,7 @@ from django.contrib import messages
 import uuid, logging
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
+import ipaddress
 
 logger = logging.getLogger(__name__)
 
@@ -28,8 +29,21 @@ def index(request):
     if request.user.is_superuser or settings.DEBUG == True:
         authfilter = {}
     else:
-        if not request.META['REMOTE_ADDR'].startswith('130.83.'):
+        remote_addr = request.META.get('REMOTE_ADDR')
+
+        allowed_networks = settings.TU_IP_RANGE
+
+        is_allowed = False
+        if remote_addr:
+            try:
+                client_ip = ipaddress.ip_address(remote_addr)
+                is_allowed = any(client_ip in network for network in allowed_networks)
+            except ValueError:
+                is_allowed = False
+
+        if not is_allowed:
             return render(request, 'public/unauth.html')
+
         authfilter = {'sichtbarkeit': 'ALL'}
 
     # Semesterliste laden
