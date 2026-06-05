@@ -28,17 +28,15 @@ class VvParserTest(TransactionTestCase):
                 'category_cache': {}
             }
 
-        # Empty inputs
         ctx = get_fresh_context()
         self.assertSequenceEqual(stage_instructors('', ctx), [])
         self.assertEqual(ctx['staged_people'], set())
 
         ctx = get_fresh_context()
         self.assertSequenceEqual(stage_instructors(' \t', ctx), [])
-        # Optional check: ' \t' stripped results in empty string, returning []
+
         self.assertEqual(ctx['staged_people'], set())
 
-        # single name without a first name
         ctx = get_fresh_context()
         expected_tuples = [('', 'Jemand')]
 
@@ -46,7 +44,6 @@ class VvParserTest(TransactionTestCase):
         self.assertSequenceEqual(result, expected_tuples)
         self.assertEqual(ctx['staged_people'], {('', 'Jemand')})
 
-        # Multiple complex names separated by semicolons
         ctx = get_fresh_context()
         expected_tuples = [
             ('', 'Jemand'),
