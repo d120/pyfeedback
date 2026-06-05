@@ -4,7 +4,7 @@ from django.conf import settings
 from django.test import TransactionTestCase
 
 from feedback.models import ImportPerson, ImportCategory, ImportVeranstaltung
-from feedback.parser.vv import parse_vv_xml, parse_vv_clear, parse_instructors
+from feedback.parser.vv import parse_vv_xml, parse_vv_clear, stage_instructors
 
 
 class VvParserTest(TransactionTestCase):
@@ -19,17 +19,48 @@ class VvParserTest(TransactionTestCase):
         self.assertFalse(ImportCategory.objects.exists())
         self.assertFalse(ImportVeranstaltung.objects.exists())
 
-    def test_parse_instructors(self):
-        p = []
-        self.assertSequenceEqual(parse_instructors(''), [])
-        self.assertSequenceEqual(parse_instructors(' \t'), [])
+    def test_stage_instructors(self):
+        # empty mock context
+        def get_fresh_context():
+            return {
+                'staged_people': set(),
+                'staged_veranstaltungen': [],
+                'category_cache': {}
+            }
 
-        p.append(ImportPerson.objects.create(nachname='Jemand'))
-        self.assertSequenceEqual(parse_instructors('Jemand'), p)
+        # Empty inputs
+        ctx = get_fresh_context()
+        self.assertSequenceEqual(stage_instructors('', ctx), [])
+        self.assertEqual(ctx['staged_people'], set())
 
-        p.append(ImportPerson.objects.create(vorname='Brian', nachname='Cohen'))
-        p.append(ImportPerson.objects.create(vorname='Anna Maria', nachname='Musterfrau'))
-        self.assertSequenceEqual(parse_instructors('Jemand; Brian Cohen; Anna Maria Musterfrau'), p)
+        ctx = get_fresh_context()
+        self.assertSequenceEqual(stage_instructors(' \t', ctx), [])
+        # Optional check: ' \t' stripped results in empty string, returning []
+        self.assertEqual(ctx['staged_people'], set())
+
+        # single name without a first name
+        ctx = get_fresh_context()
+        expected_tuples = [('', 'Jemand')]
+
+        result = stage_instructors('Jemand', ctx)
+        self.assertSequenceEqual(result, expected_tuples)
+        self.assertEqual(ctx['staged_people'], {('', 'Jemand')})
+
+        # Multiple complex names separated by semicolons
+        ctx = get_fresh_context()
+        expected_tuples = [
+            ('', 'Jemand'),
+            ('Brian', 'Cohen'),
+            ('Anna Maria', 'Musterfrau')
+        ]
+
+        result = stage_instructors('Jemand; Brian Cohen; Anna Maria Musterfrau', ctx)
+        self.assertSequenceEqual(result, expected_tuples)
+
+        self.assertEqual(
+            ctx['staged_people'], 
+            {('', 'Jemand'), ('Brian', 'Cohen'), ('Anna Maria', 'Musterfrau')}
+        )
 
     def _get_cat_or_fail(self, name, parent):
         try:
