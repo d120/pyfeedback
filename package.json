@@ -8,7 +8,6 @@
   "private": true,
   "dependencies": {
     "chosen-js": "^1.8.7",
-    "font-awesome": "^4.7.0",
     "jquery": "^3.6.1",
     "jquery-ui": "^1.14.1"
   }
