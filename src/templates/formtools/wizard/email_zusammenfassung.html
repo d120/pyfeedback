@@ -20,24 +20,8 @@
         .summary_table td p {
             margin-bottom: 0px;
         }
-        .tutoren_title {
-            font-weight: bold;
-            font-size: 16px;
-            margin-left: 5px;
-            margin-bottom: 0px;
-        }
         .summary-label:first-letter {
             text-transform: uppercase;
-        }
-        #table_tutoren_csvview {
-            margin-bottom: 8px;
-        }
-        #table_tutoren_csvview table {
-            border-spacing: 10px;
-            border: 1px solid #636363;
-        }
-        #table_tutoren_csvview th, #table_tutoren_csvview td {
-            text-align: left;
         }
     </style>
 </head>
@@ -62,28 +46,5 @@
         {% endfor %}
 
     </table>
-    {% if tutoren %}
-        <p class="tutoren_title">{% translate "Tutoren" %}</p>
-        <div id="table_tutoren_csvview">
-            <table>
-                <tr>
-                    <th>{% translate "Num" %}</th>
-                    <th>{% translate "Vorname" %}</th>
-                    <th>{% translate "Nachname" %}</th>
-                    <th>{% translate "Email" %}</th>
-                    <th>{% translate "Anmerkung" %}</th>
-                </tr>
-                {% for tutor in tutoren %}
-                    <tr>
-                        <td>{{ tutor.nummer }}</td>
-                        <td>{{ tutor.vorname }}</td>
-                        <td>{{ tutor.nachname }}</td>
-                        <td>{{ tutor.email }}</td>
-                        <td>{{ tutor.anmerkung }}</td>
-                    </tr>
-                {% endfor %}
-            </table>
-        </div>
-    {% endif %}
 </body>
 </html>
