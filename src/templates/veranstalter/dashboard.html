@@ -48,9 +48,14 @@
             <div class="orderHeadContainer">
                 <h4 class="subHeaderDashboard">{% translate "Aktuelle Bestellung" %}</h4>
                 {% if allow_order %}
-                    <button class="primary" onclick="window.location='{% url 'feedback:veranstalter-bestellung' %}';">
-                        {% translate "Bestellung ändern" %}
-                    </button>
+                    <div class="table-buttons">
+                        <button class="secondary" onclick="window.location='{% url 'feedback:veranstalter-nicht-eval' %}';">
+                            {% translate "Nicht Evaluieren" %}
+                        </button>
+                        <button class="primary" onclick="window.location='{% url 'feedback:veranstalter-bestellung' %}';">
+                            {% translate "Bestellung ändern" %}
+                        </button>
+                    </div>
                 {% endif %}
             </div>
 
@@ -98,6 +103,10 @@
     {% else %}
         {% if allow_order %}
             <div class="empty-state">
+                <button class="secondary" onclick="window.location='{% url 'feedback:veranstalter-nicht-eval' %}';">
+                    {% translate "Nicht Evaluieren" %}
+                </button>
+
                 <button class="primary" onclick="window.location='{% url 'feedback:veranstalter-bestellung' %}';">
                     {% translate "Bestellung durchführen" %}
                 </button>

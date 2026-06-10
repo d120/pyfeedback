@@ -83,4 +83,17 @@
     text-align: center;
     border: 2px dashed var(--form-not-highlighted);
     border-radius: 8px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.table-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
 }
