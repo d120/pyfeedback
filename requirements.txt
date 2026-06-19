@@ -1,6 +1,6 @@
 coverage==7.14.1
 Django==6.0.6
-django-debug-toolbar==6.3.0
+django-debug-toolbar==7.0.0
 freezegun==1.5.5
 django-formtools==2.6.1
 django-allauth[socialaccount,keycloak]==65.18.0
