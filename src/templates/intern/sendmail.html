@@ -27,17 +27,6 @@
     </p>
 
     <p>
-        <label for="selectTutoren">
-            {% translate "Mail auch an die Tutoren der jeweiligen Veranstaltungen schicken?" %}
-            <select id="selectTutoren" name="tutoren">
-                {% for choice in tutoren_choices %}
-                    <option value="{{ choice.0 }}">{{ choice.1 }}</option>
-                {% endfor %}
-            </select>
-        </label>
-    </p>
-
-    <p>
         <label for="vorlage">{% translate "Vorlage:" %}</label><br />
         <select size="1" name="vorlage" id="vorlage">
             <option value="" selected="selected">---</option>

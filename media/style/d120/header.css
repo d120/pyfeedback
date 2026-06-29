@@ -56,6 +56,7 @@ header {
 }
 
 .header-link {
+  font-family: var(--font-second);
   text-decoration: none;
   display: flex;
   flex-wrap: wrap;
@@ -68,10 +69,13 @@ header {
   line-height: 1.2;
   border-top: 1px solid transparent;
   border-bottom: 1px solid transparent;
+  min-height: 20px;
+  min-width: 20px;
 }
 
 
 .header-button {
+  font-family: var(--font-second);
   background-color: transparent;
   color: var(--header-link-highlight);
   border: none;
@@ -88,6 +92,16 @@ header {
   border-top: 1px solid transparent;
   border-bottom: 1px solid transparent;
   border-radius: 0;
+  min-height: 20px;
+  min-width: 20px;
+}
+
+.header-link .fa-solid, 
+.header-button .fa-solid,
+.header-link .fa-brands,
+.header-button .fa-brands {
+  vertical-align: middle;
+  display: inline-block;
 }
 
 @media (max-width: 991px) and (min-width: 576px) {
@@ -99,10 +113,20 @@ header {
     padding: 0.5rem 0.8rem;
   }
 
-  .header-label {
+  .header-link .header-label,
+  .header-button .header-label {
     display: inline;
     font-size: 0.75rem;
   }
+
+  .header-link .fa-solid,
+  .header-button .fa-solid,
+  .header-link .fa-brands,
+  .header-button .fa-brands {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
 }
 
 @media (min-width: 992px) {
@@ -112,8 +136,17 @@ header {
     font-size: 1rem;
   }
 
-  .header-label {
+  .header-link .header-label,
+  .header-button .header-label {
     font-size: 1rem;
+  }
+
+  .header-link .fa-solid,
+  .header-button .fa-solid,
+  .header-link .fa-brands,
+  .header-button .fa-brands {
+    margin-top: 5px;
+    margin-bottom: 5px;
   }
 }
 

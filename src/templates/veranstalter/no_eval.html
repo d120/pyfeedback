@@ -1,0 +1,39 @@
+{% extends "bestellung_base.html" %}
+{% load i18n %}
+{% block title %}
+    {% translate "Nicht Evaluieren" %}
+{% endblock %}
+
+{% block content %}
+    {% if not veranstaltung.semester.vollerhebung %}
+        <h1>{% translate "Möchten Sie wirklich nicht evaluieren?" %}</h1>
+
+        <p>{% translate "Folgende Veranstaltung wird dieses Semester nicht evaluiert" %}: {{ veranstaltung.name }}</p>
+
+        <br>
+
+        <form action="{% url 'feedback:veranstalter-nicht-eval' %}" method="POST">
+            {% csrf_token %}
+            <button type="button" class="secondary" onclick="window.location.href='{% url 'feedback:veranstalter-index' %}';">
+                    {% translate "Abbrechen" %}
+            </button>
+
+            <button class="primary" type="submit">{% translate "Nicht Evaluieren" %}</button>
+        </form>
+    {% else %}
+        <h1>{% translate "Vollerhebung" %}</h1>
+        <p>
+            {% translate 'Da dieses Semester eine Vollerhebung stattfindet, müssen Sie die Veranstaltung evaluieren. Detaillierte Angaben dazu finden Sie unter <i>"Bestellung durchführen"</i>.' %}
+        </p>
+
+        <br>
+
+        <button type="button" class="secondary" onclick="window.location.href='{% url 'feedback:veranstalter-index' %}';">
+                {% translate "Zurück" %}
+        </button>
+
+        <button class="primary" onclick="window.location='{% url 'feedback:veranstalter-bestellung' %}';">
+            {% translate "Bestellung durchführen" %}
+        </button>
+    {% endif %}
+{% endblock %}

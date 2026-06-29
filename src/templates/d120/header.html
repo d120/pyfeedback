@@ -23,13 +23,13 @@
             <nav class="navigation">
                 <div>
                     <a class="header-link" href="https://www.fachschaft.informatik.tu-darmstadt.de">
-                        <i class="fa fa-home fa-lg"></i> <span class="header-label">{% translate "Webseite" %}</span>
+                        <i class="fa-solid fa-home fa-lg"></i> <span class="header-label">{% translate "Webseite" %}</span>
                     </a>
                 </div>
 
                 <div>
                     <a class="header-link" href="https://www.informatik.tu-darmstadt.de">
-                        <i class="fa fa-university fa-lg"></i> <span class="header-label">{% translate "Fachbereich" %}</span>
+                        <i class="fa-solid fa-building-columns fa-lg"></i> <span class="header-label">{% translate "Fachbereich" %}</span>
                     </a>
                 </div>
             </nav>
@@ -44,25 +44,25 @@
                         <form action="{% url 'feedback:logout' %}" method="post" class="auth-form">
                             {% csrf_token %}
                             <button type="submit" class="header-button">
-                                <i class="fa fa-sign-out fa-lg"></i> <span class="header-label">{% translate "Ausloggen" %}</span>
+                                <i class="fa-solid fa-right-from-bracket fa-lg"></i> <span class="header-label">{% translate "Ausloggen" %}</span>
                             </button>
                         </form>
                     {% else %}
                         <a href="{% url 'feedback:auth-login' %}" class="header-button">
-                            <i class="fa fa-sign-in fa-lg"></i> <span class="header-label">{% translate "Einloggen" %}</span>
+                            <i class="fa-solid fa-right-to-bracket fa-lg"></i> <span class="header-label">{% translate "Einloggen" %}</span>
                         </a>
                     {% endif %}
                 </div>
 
                 <button id="theme-button" class="header-button">
-                    <i id="theme-icon" class="fa fa-adjust fa-lg"></i> <span class="header-label">{% translate "Stil" %}</span>
+                    <i id="theme-icon" class="fa-solid fa-circle-half-stroke fa-lg"></i> <span class="header-label">{% translate "Stil" %}</span>
                 </button>
 
                 <div class="dropdown">
                     <a class="header-link dropdown-trigger" href="#">
                         {% get_current_language as CURRENT_LANG %}
                         {% get_language_info for CURRENT_LANG as lang %}
-                        <i class="fa fa-globe fa-lg"></i>
+                        <i class="fa-solid fa-globe fa-lg"></i>
                         <span class="header-label">{{ lang.name_local }}</span>
                     </a>
                     <ul class="dropdown-content">

@@ -175,10 +175,15 @@
     display: none;
 }
 
-html.dark .dark-only {
-    display: block;
+@media (prefers-color-scheme: dark) {
+    .dark-only { display: block; }
+}
+@media (prefers-color-scheme: light) {
+    .light-only { display: block; }
 }
 
-html.light .light-only {
-    display: block;
-}
+html.dark .dark-only { display: block; }
+html.dark .light-only { display: none; }
+
+html.light .light-only { display: block; }
+html.light .dark-only { display: none; }

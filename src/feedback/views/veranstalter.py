@@ -2,11 +2,13 @@
 
 from django import forms
 from django.conf import settings
-from django.views.decorators.http import require_safe
+from django.views.decorators.http import require_safe, require_http_methods
+from django.views.decorators.csrf import csrf_protect
 from django.contrib import auth
 from django.http import HttpRequest, HttpResponseRedirect, Http404
 from django.urls import reverse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.db import transaction
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
@@ -75,6 +77,39 @@ def veranstalter_dashboard(request):
 
     return render(request, 'veranstalter/dashboard.html', data)
 
+@require_http_methods(('GET', 'POST'))
+@csrf_protect
+def veranstalter_no_eval(request) :
+    if 'vid' not in request.session:
+        raise Http404(_('Ihre Session ist abgelaufen. Bitte loggen Sie sich erneut über den Link ein.'))
+
+    if request.method == 'POST':
+        try:
+            with transaction.atomic():
+                instance = Veranstaltung.objects.get(id=request.session['vid'])
+                instance.evaluieren = False
+                instance.status = instance.STATUS_KEINE_EVALUATION
+                instance.save()
+                instance.log(request.user, is_frontend=True)
+
+            messages.success(request, _("Veranstaltung wird nicht evaluiert."))
+            return redirect(reverse("feedback:veranstalter-index"))
+
+        except Veranstaltung.DoesNotExist:
+            messages.error(request, _("Die Veranstaltung existiert nicht."))
+            return redirect(reverse("feedback:veranstalter-index"))
+        except Exception as e:
+            messages.error(request, _("Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut."))
+            return redirect(reverse("feedback:veranstalter-index"))
+
+    else :
+        veranstaltung = Veranstaltung.objects.get(id=request.session['vid'])
+
+        data = {
+            "veranstaltung": veranstaltung,
+        }
+
+        return render(request, "veranstalter/no_eval.html", data)
 
 # ---------------------------------------- START WIZARD ---------------------------------------- #
 

@@ -322,13 +322,12 @@ def get_demo_context(request):
 def set_up_choices():
     """
     Setzt die Auswahlmöglichkeiten für die View.
-    :return: List, List
+    :return: List
     """
-    tutoren_choices = [(False, 'Nein'), (True, 'Ja')]
     status_choices = [(0, 'Alle Veranstaltungen')]
     for choice_key, choice in Veranstaltung.STATUS_CHOICES:
         status_choices.append((choice_key, choice))
-    return status_choices, tutoren_choices
+    return status_choices
 
 
 def add_sekretaerin_mail(recipients, veranstaltung):
@@ -355,9 +354,8 @@ def sendmail(request):
         'vorlagen': Mailvorlage.objects.all(),
     }
 
-    status_choices, tutoren_choices = set_up_choices()
+    status_choices = set_up_choices()
     data['veranstaltung_status_choices'] = status_choices
-    data['tutoren_choices'] = tutoren_choices
 
     if request.method == 'POST':
 
@@ -365,7 +363,6 @@ def sendmail(request):
             semester = Semester.objects.get(semester=request.POST['semester'])
             data['subject'] = request.POST['subject']
             data['body'] = request.POST['body']
-            data['tutoren'] = request.POST['tutoren']
 
             if 'recipient' in request.POST.keys():
                 data['recipient'] = process_status_post_data_from(request.POST.getlist('recipient'))
@@ -399,7 +396,6 @@ def sendmail(request):
             data['vorschau'] = True
             data['from'] = settings.DEFAULT_FROM_EMAIL
             data['to'] = "Veranstalter von %d Veranstaltungen" % len(veranstaltungen)
-            data['is_tutoren'] = "und den Tutoren dieser Veranstaltungen"
             data['body_rendered'] = tools.render_email(data['body'], demo_context)
 
             for status in data['recipient']:
@@ -427,12 +423,7 @@ def sendmail(request):
                 body = tools.render_email(data['body'], context)
                 recipients = [person.email for person in v.veranstalter.all() if person.email]
 
-                if data['tutoren'] == 'True':
-                    emails = Tutor.objects.filter(veranstaltung=v).values('email')
-                    for dic in emails:
-                        recipients.append(dic['email'])
-                else:
-                    add_sekretaerin_mail(recipients, v)
+                add_sekretaerin_mail(recipients, v)
 
                 if not recipients:
                     messages.warning(request,
@@ -450,11 +441,8 @@ def sendmail(request):
             # Mails senden
             send_mass_mail(mails)
 
-            if data['tutoren'] == 'True':
-                messages.success(request,
-                                 '%d Veranstaltungen wurden erfolgreich, samt Tutoren, benachrichtigt.' % (len(mails) - 1))
-            else:
-                messages.success(request, '%d Veranstaltungen wurden erfolgreich benachrichtigt.' % (len(mails) - 1))
+            messages.success(request, '%d Veranstaltungen wurden erfolgreich benachrichtigt.' % (len(mails) - 1))
+
             return HttpResponseRedirect(reverse('feedback:intern-index'))
 
     return render(request, 'intern/sendmail.html', data)
