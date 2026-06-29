@@ -25,7 +25,6 @@ class VvParserTest(TransactionTestCase):
             return {
                 'staged_people': set(),
                 'staged_veranstaltungen': [],
-                'category_cache': {}
             }
 
         ctx = get_fresh_context()
