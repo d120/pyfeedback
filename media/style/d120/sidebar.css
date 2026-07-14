@@ -1,0 +1,47 @@
+@import url('../color-font.css');
+
+#sidebar {
+    font-family: var(--font-second);
+    font-size: 18px;
+    background-color: transparent;
+}
+
+.sidebar-active {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.sidebar-active li {
+    list-style: none;
+    padding-left: 5%;
+    padding-right: 0;
+}
+
+.sidebar-active li a {
+    color: var(--sidebar-link-color);
+    display: block;
+
+    width: 90%;
+    max-width: 90%;
+
+    padding: 5px 15px;
+    margin-right: 5px;
+    text-decoration: none;
+    border-left: 4px solid transparent;
+    border-bottom: 2px solid var(--sidebar-link-hover-bg-color);
+}
+
+.sidebar-active li:hover a {
+    background-color: var(--sidebar-link-hover-bg-color);
+    text-decoration: underline;
+    border-left: 4px solid var(--main-theme-color);
+}
+
+.sidebar-active-item:first-child {
+    padding-top: 10px;
+}
+
+.sidebar-active-item:last-child {
+    padding-bottom: 10px;
+}

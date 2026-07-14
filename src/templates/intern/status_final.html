@@ -6,11 +6,12 @@
 {% endblock %}
 
 {% block content %}
-    <h2>{% translate "Bestellphase abschließen" %}?</h2>
+    <h1>{% translate "Bestellphase abschließen" %}</h1>
     <p>{% translate "Sie sind dabei die Bestellphase zu beenden. Möchten Sie das wirklich tun?" %}</p>
     <form action="" method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        &nbsp;<input type="submit" name="submit" value="{% translate "Bestätigen" %}" />
+
+        <button class="primary" type="submit" name="submit">{% translate "Bestätigen" %}</button>
     </form>
 {% endblock %}

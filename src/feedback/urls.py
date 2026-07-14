@@ -45,6 +45,7 @@ urlpatterns += [
         name='veranstalter-logout'),
 
     re_path(r'^veranstalter/bestellung', VeranstalterWizard.as_view(), name='veranstalter-bestellung'),
+    re_path(r'^veranstalter/nicht-eval', feedback.views.veranstalter.veranstalter_no_eval, name='veranstalter-nicht-eval'),
     re_path(r'^veranstalter/', feedback.views.veranstalter.veranstalter_dashboard, name='veranstalter-index')
 ]
 

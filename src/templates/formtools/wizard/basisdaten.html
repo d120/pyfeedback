@@ -1,20 +1,25 @@
 {% extends "formtools/wizard/base.html" %}
 {% load i18n %}
+{% load static %}
+
+{% block child_extra_header %}
+    <link rel="stylesheet" href="{% static 'style/formtools/basisdaten.css' %}">
+{% endblock %}
 
 {% block feedback_veranstalter_pre_form %}
-    <h3>{% translate "Erfassung der Basisdaten" %}</h3>
+    <h3 class="form-main-header">{% translate "Erfassung der Basisdaten" %}</h3>
     {% if past_semester_data %}
-        <table style="border: 1px solid #636363;">
+        <table id="past-sem-data-table">
             <tr>
-                <th>{% translate "Veranstaltung" %}</th>
-                <th>{% translate "Bestellte Bögen" %}</th>
-                <th>{% translate "Rückläufe" %}</th>
+                <th class="table-text">{% translate "Veranstaltung" %}</th>
+                <th class="table-text">{% translate "Bestellte Bögen" %}</th>
+                <th class="table-text">{% translate "Rückläufe" %}</th>
             </tr>
             {% for data in past_semester_data %}
                 <tr>
-                    <td>{{ data.veranstaltung }}</td>
-                    <td align="center">{{ data.anzahl_bestellung }}</td>
-                    <td align="center">{{ data.anzahl_ruecklauf }}</td>
+                    <td class="table-text">{{ data.veranstaltung }}</td>
+                    <td class="table-text">{{ data.anzahl_bestellung }}</td>
+                    <td class="table-text">{{ data.anzahl_ruecklauf }}</td>
                 </tr>
             {% endfor %}
         </table>

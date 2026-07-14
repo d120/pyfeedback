@@ -7,6 +7,7 @@ from django.test import TestCase
 from feedback.models import Person, Veranstaltung, Tutor
 from feedback.tests.tools import get_veranstaltung, login_veranstalter
 from django.utils.translation import get_language
+from django.urls import reverse
 
 class VeranstalterLoginTest(TestCase):
     def setUp(self):
@@ -35,6 +36,37 @@ class VeranstalterLoginTest(TestCase):
                                                             'token': self.v.access_token})
         self.assertEqual(response.status_code, 302)
 
+class VeranstalterNoEvalShortcut(TestCase):
+    def setUp(self):
+        _, self.v = get_veranstaltung('vu')
+        User.objects.create_user(settings.USERNAME_VERANSTALTER)
+
+        self.url = reverse("feedback:veranstalter-nicht-eval")
+        self.template_path = "veranstalter/no_eval.html"
+        self.c = login_veranstalter(self.v)
+
+    def test_ok(self):
+        response = self.c.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, self.template_path)
+
+    def test_not_logged_in(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 404)
+
+    def test_post_ok(self):
+        response = self.c.post(self.url)
+        self.v.refresh_from_db()
+        self.assertFalse(self.v.evaluieren)
+        self.assertEqual(self.v.status, Veranstaltung.STATUS_KEINE_EVALUATION)
+
+    def test_post_not_logged_in(self):
+        response = self.client.post(self.url)
+        self.assertEqual(response.status_code, 404)
+
+        self.v.refresh_from_db()
+        self.assertTrue(self.v.evaluieren)
+        self.assertEqual(self.v.status, Veranstaltung.STATUS_BESTELLUNG_GEOEFFNET)
 
 class VeranstalterIndexTest(TestCase):
     def setUp(self):

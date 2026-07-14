@@ -1,5 +1,11 @@
 {% extends "ergebnisse_base.html" %}
 {% load i18n %}
+{% load static %}
+
+{% block extra_header %}
+    <link rel="stylesheet" type="text/css" href="{% static 'style/public/index.css' %}" />
+{% endblock %}
+
 {% block title %}{% translate "Ergebnisse" %} ({{ semester }}){% endblock %} {% block content %}
 <h1>{% blocktranslate %}Feedback-Ergebnisse ({{ semester }}){% endblocktranslate %}</h1>
 

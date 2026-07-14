@@ -4,6 +4,7 @@
 # determine if this is a production system
 import os
 import sys
+import ipaddress
 from django.utils.translation import gettext_lazy as _
 
 DEBUG = True
@@ -247,6 +248,12 @@ TESTDATA_PATH = BASE_PATH + 'testdata/'
 # Ranking
 THRESH_SHOW = 5
 THRESH_VALID = 20
+
+TU_IP_RANGE = [
+    ipaddress.ip_network('130.83.0.0/16'),
+    ipaddress.ip_network('2001:41b8:800::/40'),
+]
+
 
 DEFAULT_FROM_EMAIL = "Feedback-Team <feedback@fachschaft.informatik.tu-darmstadt.de>"
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
