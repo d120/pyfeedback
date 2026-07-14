@@ -1,11 +1,11 @@
 from settings import *
-import settings_secret as secrets
+import os
 
-DEBUG = False
+DEBUG = (os.getenv("DEBUG", "False") == "True") # os.getenv only returns a string
 
-ALLOWED_HOSTS = ['.fachschaft.informatik.tu-darmstadt.de', '.d120.de']
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS").split(",")
 
-SECRET_KEY = secrets.SECRET_KEY
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 
 URL_PREFIX = 'feedback/'
@@ -20,10 +20,10 @@ SOCIALACCOUNT_PROVIDERS = {
             {
                 "provider_id": "keycloak",
                 "name": "Keycloak",
-                "client_id": secrets.KEYCLOAK_CLIENT_ID,
-                "secret": secrets.KEYCLOAK_SECRET,
+                "client_id": os.getenv("KEYCLOAK_CLIENT_ID"),
+                "secret": os.getenv("KEYCLOAK_SECRET"),
                 "settings": {
-                    "server_url": secrets.KEYCLOAK_SERVER_URL,
+                    "server_url": os.getenv("KEYCLOAK_SERVER_URL"),
                 },
             }
         ]
@@ -33,11 +33,11 @@ SOCIALACCOUNT_PROVIDERS = {
 # @see https://docs.djangoproject.com/es/1.9/topics/email/
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-EMAIL_HOST = 'mail.d120.de'
-EMAIL_PORT = 587
+EMAIL_HOST = os.getenv("EMAIL_HOST")
+EMAIL_PORT = int(os.getenv("EMAIL_PORT"))
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'pyfeedback'
-EMAIL_HOST_PASSWORD = secrets.EMAIL_HOST_PASSWORD
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 
 SESSION_COOKIE_PATH = '/feedback'
 SESSION_COOKIE_SECURE = True
