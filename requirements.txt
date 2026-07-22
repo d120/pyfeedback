@@ -4,3 +4,5 @@ django-debug-toolbar==7.0.0
 freezegun==1.5.5
 django-formtools==2.7
 django-allauth[socialaccount]==65.18.0
+gunicorn==26.0.0
+whitenoise[brotli]==6.12.0
