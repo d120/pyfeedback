@@ -117,7 +117,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'feedback.auth.FSDebugRemoteUserMiddleware',
     'allauth.account.middleware.AccountMiddleware',
-    # 'whitenoise.middleware.WhiteNoiseMiddleware', # while DEBUG=False servers static files, Note:first pip install whitenoise
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 if not TESTING:
     MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
@@ -202,15 +202,8 @@ LOGGING = {
             'class': 'django.utils.log.AdminEmailHandler'
         },
         'console': {
-            'level':'DEBUG',
-            'class':'logging.StreamHandler',
-        },
-        'file_all': {
             'level': 'INFO',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(BASE_PATH, 'all.log'),
-            'maxBytes': 1024 * 1024 * 5,
-            'backupCount': 5,
+            'class': 'logging.StreamHandler',
             'formatter': 'verbose',
         },
     },
@@ -225,7 +218,7 @@ LOGGING = {
             'level': 'DEBUG',
         },
         '': {
-            'handlers': ['file_all'],
+            'handlers': ['console'],
             'level': 'INFO',
             'propagate': True,
         },
