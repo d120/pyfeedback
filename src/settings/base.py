@@ -1,15 +1,12 @@
 # coding=utf-8
 # Django settings for feedback project.
 
-# determine if this is a production system
 import os
 import sys
 import ipaddress
 from django.utils.translation import gettext_lazy as _
 
-DEBUG = True
-
-# default is False, make True to see exeptions when DEBUG = False
+# make True to see exeptions when DEBUG = False
 DEBUG_PROPAGATE_EXCEPTIONS = False
 
 ADMINS = (
@@ -19,7 +16,7 @@ ADMINS = (
 MANAGERS = ADMINS
 EMAIL_SUBJECT_PREFIX = ''
 
-BASE_PATH = os.path.dirname(os.path.abspath(__file__)) + '/../'
+BASE_PATH = os.path.dirname(os.path.abspath(__file__)) + '/../../'
 
 DATABASES = {
     'default': {
@@ -109,8 +106,8 @@ TESTING = any(arg in sys.argv for arg in ['test', 'check'])
 # überschreiben!
 
 MIDDLEWARE = [
-    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
