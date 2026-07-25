@@ -18,9 +18,12 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
-COPY requirements.txt .
+COPY pyproject.toml ./
+
+COPY src ./src
+
 RUN pip install --root-user-action ignore --upgrade pip && \
-    pip install --root-user-action ignore --no-cache-dir -r requirements.txt
+    pip install --root-user-action ignore --no-cache-dir .
 
 # ==========================================
 # Final Production Image
