@@ -4,6 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pyfeedback"
+version = "3.0.0"
 description = "Web application to assist feedback for modules at TU Darmstadt"
 readme = "README.md"
 requires-python = ">=3.13"
@@ -34,10 +35,14 @@ source = ["src"]
 omit = [
     "*/migrations/*",
     "*/tests/*",
+    "*/tests.py",
+    "*/tests_*.py",
     "src/manage.py",
     "src/wsgi.py",
+    "src/asgi.py",
 ]
 
 [tool.coverage.report]
+precision = 2
 show_missing = true
 fail_under = 100
