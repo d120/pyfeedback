@@ -5,6 +5,7 @@ import os
 import sys
 import ipaddress
 from django.utils.translation import gettext_lazy as _
+import importlib.util
 
 # make True to see exeptions when DEBUG = False
 DEBUG_PROPAGATE_EXCEPTIONS = False
@@ -116,7 +117,10 @@ MIDDLEWARE = [
     'allauth.account.middleware.AccountMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
-if not TESTING:
+
+HAS_DEBUG_TOOLBAR = importlib.util.find_spec("debug_toolbar") is not None
+
+if not TESTING and HAS_DEBUG_TOOLBAR :
     MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
 
 ROOT_URLCONF = 'urls'
@@ -155,7 +159,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.openid_connect',
 ]
 
-if not TESTING:
+if not TESTING and HAS_DEBUG_TOOLBAR :
     INSTALLED_APPS += ['debug_toolbar']
 
 AUTHENTICATION_BACKENDS = (
