@@ -41,6 +41,7 @@ omit = [
     "src/wsgi.py",
     "src/asgi.py",
     "*/locale/*",
+    "*/settings/*",
 ]
 
 [tool.coverage.report]
