@@ -1,5 +1,5 @@
 # Feedback-Software
-![Build Status](https://github.com/d120/pyfeedback/workflows/Test/badge.svg?branch=master)
+[![Test](https://github.com/d120/pyfeedback/actions/workflows/django.yml/badge.svg?branch=master)](https://github.com/d120/pyfeedback/actions/workflows/django.yml)
 [![Coverage Status](https://coveralls.io/repos/github/d120/pyfeedback/badge.svg?branch=master)](https://coveralls.io/github/d120/pyfeedback?branch=master)
 
 
