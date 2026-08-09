@@ -45,5 +45,5 @@ Use `python src/manage.py runserver --settings=settings.prod` to run production 
 
 ## Docker
 
-- DJANGO_SETTINGS_MODULE: `settings.prod` or `settings.dev`. Docker uses wsgi.py, making `settings.prod` *default*.
+- DJANGO_SETTINGS_MODULE: `settings.prod` or `settings.dev`. `settings.prod` runs with wsgi.py and gunicorn, `settings.dev` with manage.py
 - GUNICORN_WORKERS: *default* 3 workers
