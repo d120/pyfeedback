@@ -1,5 +1,6 @@
 # Feedback-Software
 [![Test](https://github.com/d120/pyfeedback/actions/workflows/django.yml/badge.svg?branch=master)](https://github.com/d120/pyfeedback/actions/workflows/django.yml)
+[![Docker Build](https://github.com/d120/pyfeedback/actions/workflows/docker-build.yml/badge.svg?branch=master)](https://github.com/d120/pyfeedback/actions/workflows/docker-build.yml)
 [![Coverage Status](https://coveralls.io/repos/github/d120/pyfeedback/badge.svg?branch=master)](https://coveralls.io/github/d120/pyfeedback?branch=master)
 
 
