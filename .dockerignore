@@ -19,7 +19,7 @@ pyenv
 settings_secret.py
 static/*
 venv/
-.venv/
+.venv
 .vscode/*
 .python-version
 

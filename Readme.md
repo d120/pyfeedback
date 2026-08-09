@@ -1,5 +1,6 @@
 # Feedback-Software
-![Build Status](https://github.com/d120/pyfeedback/workflows/Test/badge.svg?branch=master)
+[![Test](https://github.com/d120/pyfeedback/actions/workflows/django.yml/badge.svg?branch=master)](https://github.com/d120/pyfeedback/actions/workflows/django.yml)
+[![Docker Build](https://github.com/d120/pyfeedback/actions/workflows/docker-build.yml/badge.svg?branch=master)](https://github.com/d120/pyfeedback/actions/workflows/docker-build.yml)
 [![Coverage Status](https://coveralls.io/repos/github/d120/pyfeedback/badge.svg?branch=master)](https://coveralls.io/github/d120/pyfeedback?branch=master)
 
 
@@ -16,13 +17,18 @@ To use pyfeedback the following tools have to be installed:
 
 ## Preparing development environment
 
-* Create a virtualenv with `python -m venv venv`
-* Activate the virtualenv with `source venv/bin/activate`
-* Install all requirements with `pip install -r requirements.txt`
+* Create a virtualenv with `python -m venv .venv`
+* Activate the virtualenv with `source .venv/bin/activate`
+* Install all requirements with `pip install -e ".[dev]"`
 * Create the test database with `python src/manage.py migrate`
 * Compile translations with `(cd src && django-admin compilemessages)`
 * Install frontend dependencies with `npm i`
 * Start the development server with `python src/manage.py runserver`
+
+## Production
+- Use `pip install .` to install dependencies.
+- Docker: make sure to set `DJANGO_SETTINGS_MODULE=settings.prod` in .env
+- Without docker: `gunicorn wsgi:application`
 
 ## Tests
 pyfeedback is using a test driven development and tries to get to 100% coverage. Tests can be run with
@@ -30,3 +36,15 @@ pyfeedback is using a test driven development and tries to get to 100% coverage.
 python src/manage.py test feedback
 ```
 Do not implement new functionality without providing a test for it.
+
+## Settings
+
+`src/manage.py` uses settings.dev, `src/wsgi.py` uses settings.prod
+
+Use `python src/manage.py runserver --settings=settings.prod` to run production settings during development.
+
+
+## Docker
+
+- DJANGO_SETTINGS_MODULE: `settings.prod` or `settings.dev`. `settings.prod` runs with wsgi.py and gunicorn, `settings.dev` with manage.py
+- GUNICORN_WORKERS: *default* 3 workers

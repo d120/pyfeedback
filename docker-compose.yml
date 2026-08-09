@@ -1,0 +1,13 @@
+services:
+  pyfeedback:
+    build: .
+    container_name: pyfeedback-docker
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - pyfeedback-db:/app/db/
+
+volumes:
+  pyfeedback-db:

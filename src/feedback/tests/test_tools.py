@@ -1,11 +1,19 @@
 # coding=utf-8
 
+from django.core import mail
 from django.template import Context
-from django.test import TestCase
+from django.test import TestCase, override_settings
 
 from feedback.models import Fragebogen2009, Ergebnis2009, Fragebogen2012, Ergebnis2012
 from feedback.tests.tools import get_veranstaltung
-from feedback.tools import get_average, render_email, ean_checksum_calc, ean_checksum_valid
+from feedback.tools import (
+    get_average,
+    render_email,
+    ean_checksum_calc,
+    ean_checksum_valid,
+    send_change_email_link,
+    send_change_email_otp,
+)
 
 
 class GetAverageTest(TestCase):
@@ -52,6 +60,7 @@ class GetAverageTest(TestCase):
         self.assertSequenceEqual(get_average(Ergebnis2009, self.f[:2], 'v_feedbackpreis'), [None, 0])
 
 
+@override_settings(DEFAULT_FROM_EMAIL='test@example.com')
 class ToolsTest(TestCase):
     def test_render_email(self):
         template = 'Die Antwort ist {{op}} {{antwort}}.'
@@ -65,3 +74,52 @@ class ToolsTest(TestCase):
         self.assertEqual(ean_checksum_calc(200000151700), 0)
         self.assertEqual(ean_checksum_calc(2000001517000), 0)
         self.assertTrue(ean_checksum_valid(2000001517000))
+
+    def test_ean_invalid_length(self):
+        self.assertFalse(ean_checksum_valid(1234567))
+        self.assertFalse(ean_checksum_valid(123456789))
+
+    def test_ean_invalid_checksum(self):
+        self.assertFalse(ean_checksum_valid(2000001517001))
+
+    def test_send_change_email_link(self):
+        send_change_email_link(
+            'new@example.com',
+            'https://example.com/change-email/abc',
+            15,
+        )
+
+        self.assertEqual(len(mail.outbox), 1)
+
+        email = mail.outbox[0]
+        self.assertEqual(
+            email.subject,
+            'E-Mail-Änderungsanfrage / Email change request',
+        )
+        self.assertEqual(email.from_email, 'test@example.com')
+        self.assertEqual(email.to, ['new@example.com'])
+        self.assertIn('new@example.com', email.body)
+        self.assertIn('https://example.com/change-email/abc', email.body)
+        self.assertIn('15', email.body)
+
+    def test_send_change_email_otp(self):
+        send_change_email_otp(
+            'new@example.com',
+            'old@example.com',
+            '123456',
+            10,
+        )
+
+        self.assertEqual(len(mail.outbox), 1)
+
+        email = mail.outbox[0]
+        self.assertEqual(
+            email.subject,
+            'E-Mail-Änderung OTP / Email change OTP',
+        )
+        self.assertEqual(email.from_email, 'test@example.com')
+        self.assertEqual(email.to, ['new@example.com'])
+        self.assertIn('new@example.com', email.body)
+        self.assertIn('old@example.com', email.body)
+        self.assertIn('123456', email.body)
+        self.assertIn('10', email.body)

@@ -1,15 +1,13 @@
 # coding=utf-8
 # Django settings for feedback project.
 
-# determine if this is a production system
 import os
 import sys
 import ipaddress
 from django.utils.translation import gettext_lazy as _
+import importlib.util
 
-DEBUG = True
-
-# default is False, make True to see exeptions when DEBUG = False
+# make True to see exeptions when DEBUG = False
 DEBUG_PROPAGATE_EXCEPTIONS = False
 
 ADMINS = (
@@ -19,7 +17,7 @@ ADMINS = (
 MANAGERS = ADMINS
 EMAIL_SUBJECT_PREFIX = ''
 
-BASE_PATH = os.path.dirname(os.path.abspath(__file__)) + '/../'
+BASE_PATH = os.path.dirname(os.path.abspath(__file__)) + '/../../'
 
 DATABASES = {
     'default': {
@@ -109,17 +107,20 @@ TESTING = any(arg in sys.argv for arg in ['test', 'check'])
 # überschreiben!
 
 MIDDLEWARE = [
-    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'feedback.auth.FSDebugRemoteUserMiddleware',
     'allauth.account.middleware.AccountMiddleware',
-    # 'whitenoise.middleware.WhiteNoiseMiddleware', # while DEBUG=False servers static files, Note:first pip install whitenoise
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
-if not TESTING:
+
+HAS_DEBUG_TOOLBAR = importlib.util.find_spec("debug_toolbar") is not None
+
+if not TESTING and HAS_DEBUG_TOOLBAR :
     MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
 
 ROOT_URLCONF = 'urls'
@@ -158,7 +159,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.openid_connect',
 ]
 
-if not TESTING:
+if not TESTING and HAS_DEBUG_TOOLBAR :
     INSTALLED_APPS += ['debug_toolbar']
 
 AUTHENTICATION_BACKENDS = (
@@ -202,15 +203,8 @@ LOGGING = {
             'class': 'django.utils.log.AdminEmailHandler'
         },
         'console': {
-            'level':'DEBUG',
-            'class':'logging.StreamHandler',
-        },
-        'file_all': {
             'level': 'INFO',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(BASE_PATH, 'all.log'),
-            'maxBytes': 1024 * 1024 * 5,
-            'backupCount': 5,
+            'class': 'logging.StreamHandler',
             'formatter': 'verbose',
         },
     },
@@ -225,7 +219,7 @@ LOGGING = {
             'level': 'DEBUG',
         },
         '': {
-            'handlers': ['file_all'],
+            'handlers': ['console'],
             'level': 'INFO',
             'propagate': True,
         },
