@@ -1,6 +1,7 @@
 # ==========================================
 # Build Node.js Dependencies
 # ==========================================
+
 FROM node:22-slim AS node-builder
 
 WORKDIR /app
@@ -11,6 +12,7 @@ RUN npm ci --only=production
 # ==========================================
 # Build Python Dependencies
 # ==========================================
+
 FROM python:3.13-slim AS python-builder
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -28,18 +30,22 @@ RUN pip install --root-user-action ignore --upgrade pip && \
 # ==========================================
 # Final Production Image
 # ==========================================
+
 FROM python:3.13-slim AS production
 
 ARG DEBIAN_FRONTEND=noninteractive
+
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    gettext \
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        gettext \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 # non-root user
+
 RUN useradd -m -r appuser
 
 WORKDIR /app
@@ -54,7 +60,11 @@ COPY --chown=appuser:appuser . .
 COPY --chown=appuser:appuser entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
+RUN mkdir -p /app/static && \
+    chown appuser:appuser /app/static
+
 # Build static assets & translations as non-root user
+
 USER appuser
 
 RUN django-admin compilemessages && \
